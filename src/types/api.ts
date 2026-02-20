@@ -128,6 +128,11 @@ export interface AiSearchResponse {
   matches: WineMatch[]
 }
 
+export interface ScanResponse {
+  parsed: ParsedWine
+  matches: WineMatch[]
+}
+
 export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string

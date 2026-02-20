@@ -16,6 +16,7 @@ import { apiFetch, ApiError } from '../../api/client'
 import { colors, chartColors } from '../../theme/colors'
 import AddWineModal from './AddWineModal'
 import PairingChatModal from './PairingChatModal'
+import ScanWineModal from './ScanWineModal'
 import type {
   StatsResponse,
   InventoryLot,
@@ -87,6 +88,7 @@ export const HomeScreen = () => {
   // New modals
   const [showAddWineModal, setShowAddWineModal] = useState(false)
   const [showPairingModal, setShowPairingModal] = useState(false)
+  const [showScanModal, setShowScanModal] = useState(false)
 
   // Consume form
   const [consumeLot, setConsumeLot] = useState<InventoryLot | null>(null)
@@ -268,7 +270,7 @@ export const HomeScreen = () => {
 
         {/* Quick Actions */}
         <Text style={styles.sectionTitle}>Quick Actions</Text>
-        <View style={styles.quickActions}>
+        <View style={styles.quickActionsGrid}>
           <TouchableOpacity
             style={styles.quickActionButton}
             onPress={() => setShowConsumeModal(true)}
@@ -287,6 +289,16 @@ export const HomeScreen = () => {
               <Text style={styles.quickActionEmoji}>➕</Text>
             </View>
             <Text style={styles.quickActionLabel}>Add a{'\n'}bottle</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.quickActionButton}
+            onPress={() => setShowScanModal(true)}
+          >
+            <View style={[styles.quickActionIcon, { backgroundColor: '#e0e7ff' }]}>
+              <Text style={styles.quickActionEmoji}>📷</Text>
+            </View>
+            <Text style={styles.quickActionLabel}>Scan a{'\n'}label</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -463,6 +475,16 @@ export const HomeScreen = () => {
         visible={showPairingModal}
         onClose={() => setShowPairingModal(false)}
       />
+
+      {/* Scan Wine Modal */}
+      <ScanWineModal
+        visible={showScanModal}
+        onClose={() => setShowScanModal(false)}
+        onSuccess={() => {
+          setShowScanModal(false)
+          fetchStats() // Refresh stats
+        }}
+      />
     </View>
   )
 }
@@ -567,13 +589,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 16,
   },
-  quickActions: {
-    flexDirection: 'row',
+  quickActionsGrid: {
     paddingHorizontal: 16,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 12,
   },
   quickActionButton: {
-    flex: 1,
+    width: '48%',
     backgroundColor: colors.white,
     borderRadius: 16,
     borderWidth: 1,

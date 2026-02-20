@@ -26,9 +26,10 @@ interface AddWineModalProps {
   visible: boolean
   onClose: () => void
   onSuccess: () => void
+  prefillData?: ParsedWine | null
 }
 
-const AddWineModal = ({ visible, onClose, onSuccess }: AddWineModalProps) => {
+const AddWineModal = ({ visible, onClose, onSuccess, prefillData }: AddWineModalProps) => {
   const [searchText, setSearchText] = useState('')
   const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<AiSearchResponse | null>(null)
@@ -64,10 +65,19 @@ const AddWineModal = ({ visible, onClose, onSuccess }: AddWineModalProps) => {
   useEffect(() => {
     if (visible) {
       fetchDropdownData()
+      if (prefillData) {
+        // Prefill form and go directly to full form
+        setProducer(prefillData.producer)
+        setWineName(prefillData.wineName)
+        setVintage(prefillData.vintage?.toString() || '')
+        setColor(prefillData.color)
+        setAppellation(prefillData.appellation || '')
+        setShowFullForm(true)
+      }
     } else {
       resetForm()
     }
-  }, [visible])
+  }, [visible, prefillData])
 
   const fetchDropdownData = async () => {
     try {
