@@ -173,8 +173,8 @@ const AddWineModal = ({ visible, onClose, onSuccess, prefillData }: AddWineModal
           vintage: vintage ? parseInt(vintage, 10) : null,
           quantity: parseInt(quantity, 10),
           purchasePricePerBottle: purchasePrice || null,
-          purchaseDate: purchaseDate || null,
-          source: source || null,
+          purchaseDate: purchaseDate ? `${purchaseDate}T00:00:00.000Z` : null,
+          purchaseSource: source || null,
         },
       })
       onSuccess()
@@ -224,8 +224,8 @@ const AddWineModal = ({ visible, onClose, onSuccess, prefillData }: AddWineModal
           formatId: selectedFormat,
           vintage: vintage ? parseInt(vintage, 10) : null,
           quantity: parseInt(quantity, 10),
-          purchasePricePerBottle: purchasePrice ? parseFloat(purchasePrice) : null,
-          purchaseDate: purchaseDate || null,
+          purchasePricePerBottle: purchasePrice || null,
+          purchaseDate: purchaseDate ? `${purchaseDate}T00:00:00.000Z` : null,
           purchaseSource: source || null,
         },
       })

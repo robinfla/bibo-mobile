@@ -42,7 +42,7 @@ const getWineColor = (color: string): string =>
   WINE_COLORS[color.toLowerCase()] ?? colors.muted[400]
 
 export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProps) => {
-  const [step, setStep] = useState<'choose' | 'preview' | 'scanning' | 'results'>('choose')
+  const [step, setStep] = useState<'launching' | 'choose' | 'preview' | 'scanning' | 'results' | 'manual-search' | 'manual-searching'>('launching')
   const [cameraLaunched, setCameraLaunched] = useState(false)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [selectedImageBase64, setSelectedImageBase64] = useState<string | null>(null)
@@ -55,8 +55,12 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
   const [isConsuming, setIsConsuming] = useState(false)
   const [consumeError, setConsumeError] = useState<string | null>(null)
 
+  // Manual search state
+  const [manualSearchText, setManualSearchText] = useState('')
+  const [manualSearchResults, setManualSearchResults] = useState<ScanResponse | null>(null)
+
   const resetModal = useCallback(() => {
-    setStep('choose')
+    setStep('launching')
     setSelectedImage(null)
     setSelectedImageBase64(null)
     setScanResults(null)
@@ -65,6 +69,8 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
     setPrefillData(null)
     setIsConsuming(false)
     setConsumeError(null)
+    setManualSearchText('')
+    setManualSearchResults(null)
   }, [])
 
   const handleClose = useCallback(() => {
@@ -102,8 +108,8 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
         handleClose()
       }
     } catch {
-      // Camera failed — fall back to choose screen
-      setStep('choose')
+      // Camera failed — close
+      handleClose()
     }
   }
 
@@ -221,10 +227,29 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
     }
   }
 
-  const addAsNewWine = () => {
-    if (scanResults?.parsed) {
-      setPrefillData(scanResults.parsed)
+  const addAsNewWine = (parsed?: ParsedWine) => {
+    const data = parsed || scanResults?.parsed || manualSearchResults?.parsed
+    if (data) {
+      setPrefillData(data)
       setShowAddModal(true)
+    }
+  }
+
+  const handleManualSearch = async () => {
+    if (!manualSearchText.trim()) return
+    setStep('manual-searching')
+    try {
+      const results = await apiFetch<ScanResponse>('/api/wines/ai-search', {
+        method: 'POST',
+        body: { text: manualSearchText.trim() },
+      })
+      setManualSearchResults(results)
+      setScanResults(results)
+      setStep('results')
+    } catch (e) {
+      const msg = e instanceof ApiError ? e.message : 'Search failed'
+      Alert.alert('Error', msg)
+      setStep('manual-search')
     }
   }
 
@@ -356,45 +381,80 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
               </View>
             ))}
             
-            <TouchableOpacity style={styles.addNewButton} onPress={addAsNewWine}>
-              <Text style={styles.addNewButtonText}>Add as new wine</Text>
+            <TouchableOpacity style={styles.addNewButton} onPress={() => addAsNewWine()}>
+              <Text style={styles.addNewButtonText}>Add as new wine instead</Text>
             </TouchableOpacity>
           </>
         ) : (
           <>
             <Text style={styles.sectionTitle}>Wine not found in your cellar</Text>
-            <TouchableOpacity style={styles.addToCellarButton} onPress={addAsNewWine}>
+            <TouchableOpacity style={styles.addToCellarButton} onPress={() => addAsNewWine()}>
               <Text style={styles.addToCellarButtonText}>Add to cellar</Text>
             </TouchableOpacity>
           </>
         )}
 
-        <TouchableOpacity style={styles.cancelButton} onPress={handleClose}>
-          <Text style={styles.cancelText}>Done</Text>
+        {/* Manual search fallback */}
+        <TouchableOpacity style={styles.manualSearchLink} onPress={() => setStep('manual-search')}>
+          <Text style={styles.manualSearchLinkText}>Not your wine? Try manual search instead</Text>
         </TouchableOpacity>
       </ScrollView>
     )
   }
 
+  const renderManualSearchStep = () => (
+    <View style={styles.stepContainer}>
+      <Text style={styles.modalTitle}>Manual Search</Text>
+      <Text style={styles.subtitle}>Describe your wine and we'll find it with AI</Text>
+
+      <TextInput
+        style={styles.manualSearchInput}
+        value={manualSearchText}
+        onChangeText={setManualSearchText}
+        placeholder="e.g. Mullineux Old Vines White 2024"
+        placeholderTextColor={colors.muted[400]}
+        autoFocus
+        onSubmitEditing={handleManualSearch}
+      />
+
+      <View style={styles.buttonRow}>
+        <TouchableOpacity style={styles.secondaryButton} onPress={() => setStep('results')}>
+          <Text style={styles.secondaryButtonText}>Back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.primaryButton, !manualSearchText.trim() && styles.buttonDisabled]}
+          onPress={handleManualSearch}
+          disabled={!manualSearchText.trim()}
+        >
+          <Text style={styles.primaryButtonText}>Search</Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity style={styles.manualSearchLink} onPress={() => addAsNewWine(scanResults?.parsed || undefined)}>
+        <Text style={styles.manualSearchLinkText}>Skip search — add wine manually</Text>
+      </TouchableOpacity>
+    </View>
+  )
+
   return (
     <>
-      <Modal visible={visible} transparent animationType={step === 'choose' && cameraLaunched ? 'none' : 'slide'}>
+      <Modal visible={visible} transparent animationType={step === 'launching' || (step === 'choose' && cameraLaunched) ? 'none' : 'slide'}>
         <TouchableOpacity
-          style={[styles.modalOverlay, step === 'choose' && cameraLaunched && { backgroundColor: 'transparent' }]}
+          style={[styles.modalOverlay, (step === 'launching' || (step === 'choose' && cameraLaunched)) && { backgroundColor: 'transparent' }]}
           activeOpacity={1}
           onPress={handleClose}
         >
-          {!(step === 'choose' && cameraLaunched) && (
+          {step !== 'launching' && !(step === 'choose' && cameraLaunched) && (
             <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
-              {step !== 'choose' && (
-                <TouchableOpacity style={styles.modalCloseIcon} onPress={handleClose}>
-                  <Text style={styles.modalCloseText}>✕</Text>
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity style={styles.modalCloseIcon} onPress={handleClose}>
+                <Text style={styles.modalCloseText}>✕</Text>
+              </TouchableOpacity>
               {step === 'choose' && renderChooseStep()}
               {step === 'preview' && renderPreviewStep()}
               {step === 'scanning' && renderScanningStep()}
               {step === 'results' && renderResultsStep()}
+              {step === 'manual-search' && renderManualSearchStep()}
+              {step === 'manual-searching' && renderScanningStep()}
             </TouchableOpacity>
           )}
         </TouchableOpacity>
@@ -683,6 +743,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     marginTop: 8,
+  },
+  manualSearchLink: {
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginTop: 4,
+  },
+  manualSearchLinkText: {
+    color: colors.primary[600],
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  manualSearchInput: {
+    backgroundColor: colors.muted[50],
+    borderWidth: 1,
+    borderColor: colors.muted[300],
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
+    color: colors.muted[900],
+    width: '100%',
+    marginBottom: 16,
+  },
+  buttonDisabled: {
+    opacity: 0.5,
   },
 })
 
