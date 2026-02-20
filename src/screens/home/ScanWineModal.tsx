@@ -186,9 +186,9 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
     setConsumeError(null)
 
     try {
-      // First get inventory for this wine to find available lots
+      // Search by wine name only (combined search is too strict for ilike)
       const inventory = await apiFetch<{ lots: InventoryLot[] }>('/api/inventory', {
-        query: { search: `${match.producer.name} ${match.wine.name}`, inStock: 'true' },
+        query: { search: match.wine.name, inStock: 'true', limit: 50 },
       })
 
       const availableLots = inventory.lots.filter(lot => lot.wineId === match.wine.id && lot.quantity > 0)
