@@ -195,26 +195,41 @@ const AddWineModal = ({ visible, onClose, onSuccess, prefillData }: AddWineModal
 
     setIsSubmitting(true)
     try {
-      await apiFetch('/api/wines', {
+      // 1. Create or find producer
+      const producerResult = await apiFetch<{ id: number }>('/api/producers', {
         method: 'POST',
         body: {
-          producer,
-          wineName,
-          color,
-          regionId: selectedRegion,
-          appellation: appellation || null,
-          grapeIds: selectedGrapes,
-          inventory: {
-            cellarId: selectedCellar,
-            formatId: selectedFormat,
-            vintage: vintage ? parseInt(vintage, 10) : null,
-            quantity: parseInt(quantity, 10),
-            purchasePricePerBottle: purchasePrice || null,
-            purchaseDate: purchaseDate || null,
-            source: source || null,
-          },
+          name: producer,
+          regionId: selectedRegion || null,
         },
       })
+
+      // 2. Create wine
+      const wineResult = await apiFetch<{ id: number }>('/api/wines', {
+        method: 'POST',
+        body: {
+          name: wineName,
+          producerId: producerResult.id,
+          color,
+          grapeIds: selectedGrapes.map(id => ({ grapeId: id })),
+        },
+      })
+
+      // 3. Create inventory lot
+      await apiFetch('/api/inventory', {
+        method: 'POST',
+        body: {
+          wineId: wineResult.id,
+          cellarId: selectedCellar,
+          formatId: selectedFormat,
+          vintage: vintage ? parseInt(vintage, 10) : null,
+          quantity: parseInt(quantity, 10),
+          purchasePricePerBottle: purchasePrice ? parseFloat(purchasePrice) : null,
+          purchaseDate: purchaseDate || null,
+          purchaseSource: source || null,
+        },
+      })
+
       onSuccess()
       onClose()
     } catch (e) {

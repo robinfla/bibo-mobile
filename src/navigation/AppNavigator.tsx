@@ -33,10 +33,8 @@ const ChartIcon = ({ color }: { color: string }) => (
   <Text style={{ fontSize: 20, color }}>📊</Text>
 )
 
-const ScanIcon = () => (
-  <View style={styles.scanButton}>
-    <Text style={{ fontSize: 24, color: colors.white }}>📷</Text>
-  </View>
+const ScanIcon = ({ color }: { color: string }) => (
+  <Text style={{ fontSize: 20, color }}>📷</Text>
 )
 
 // Dummy screen — scan tab never actually renders, it opens a modal
@@ -147,7 +145,7 @@ const AuthenticatedTabs = () => {
             },
           }}
           options={{
-            tabBarLabel: () => null,
+            tabBarLabel: 'Scan',
             tabBarIcon: ScanIcon,
           }}
         />
@@ -195,19 +193,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.muted[50],
-  },
-  scanButton: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: colors.primary[600],
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    shadowColor: colors.primary[600],
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
   },
 })

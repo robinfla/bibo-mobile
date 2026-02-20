@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   View,
   Text,
@@ -43,6 +43,7 @@ const getWineColor = (color: string): string =>
 
 export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProps) => {
   const [step, setStep] = useState<'choose' | 'preview' | 'scanning' | 'results'>('choose')
+  const [cameraLaunched, setCameraLaunched] = useState(false)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [selectedImageBase64, setSelectedImageBase64] = useState<string | null>(null)
   const [scanResults, setScanResults] = useState<ScanResponse | null>(null)
@@ -68,8 +69,43 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
 
   const handleClose = useCallback(() => {
     resetModal()
+    setCameraLaunched(false)
     onClose()
   }, [resetModal, onClose])
+
+  // Auto-launch camera when modal opens
+  useEffect(() => {
+    if (visible && !cameraLaunched) {
+      setCameraLaunched(true)
+      takePhotoAuto()
+    }
+  }, [visible])
+
+  const takePhotoAuto = async () => {
+    const hasPermission = await requestPermissions()
+    if (!hasPermission) return
+
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ['images'],
+        quality: 0.8,
+        base64: true,
+      })
+
+      if (!result.canceled && result.assets[0]) {
+        setSelectedImage(result.assets[0].uri)
+        setSelectedImageBase64(result.assets[0].base64 || null)
+        setStep('preview')
+        setError(null)
+      } else {
+        // User cancelled camera — close modal
+        handleClose()
+      }
+    } catch {
+      // Camera failed — fall back to choose screen
+      setStep('choose')
+    }
+  }
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync()
