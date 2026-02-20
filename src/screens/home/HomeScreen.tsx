@@ -16,7 +16,7 @@ import { apiFetch, ApiError } from '../../api/client'
 import { colors, chartColors } from '../../theme/colors'
 import AddWineModal from './AddWineModal'
 import PairingChatModal from './PairingChatModal'
-import ScanWineModal from './ScanWineModal'
+// ScanWineModal moved to bottom tab bar
 import type {
   StatsResponse,
   InventoryLot,
@@ -88,7 +88,7 @@ export const HomeScreen = () => {
   // New modals
   const [showAddWineModal, setShowAddWineModal] = useState(false)
   const [showPairingModal, setShowPairingModal] = useState(false)
-  const [showScanModal, setShowScanModal] = useState(false)
+  // scan modal moved to tab bar
 
   // Consume form
   const [consumeLot, setConsumeLot] = useState<InventoryLot | null>(null)
@@ -270,7 +270,7 @@ export const HomeScreen = () => {
 
         {/* Quick Actions */}
         <Text style={styles.sectionTitle}>Quick Actions</Text>
-        <View style={styles.quickActionsGrid}>
+        <View style={styles.quickActions}>
           <TouchableOpacity
             style={styles.quickActionButton}
             onPress={() => setShowConsumeModal(true)}
@@ -289,16 +289,6 @@ export const HomeScreen = () => {
               <Text style={styles.quickActionEmoji}>➕</Text>
             </View>
             <Text style={styles.quickActionLabel}>Add a{'\n'}bottle</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.quickActionButton}
-            onPress={() => setShowScanModal(true)}
-          >
-            <View style={[styles.quickActionIcon, { backgroundColor: '#e0e7ff' }]}>
-              <Text style={styles.quickActionEmoji}>📷</Text>
-            </View>
-            <Text style={styles.quickActionLabel}>Scan a{'\n'}label</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -476,15 +466,7 @@ export const HomeScreen = () => {
         onClose={() => setShowPairingModal(false)}
       />
 
-      {/* Scan Wine Modal */}
-      <ScanWineModal
-        visible={showScanModal}
-        onClose={() => setShowScanModal(false)}
-        onSuccess={() => {
-          setShowScanModal(false)
-          fetchStats() // Refresh stats
-        }}
-      />
+      {/* Scan moved to bottom tab bar */}
     </View>
   )
 }
@@ -589,14 +571,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 16,
   },
-  quickActionsGrid: {
-    paddingHorizontal: 16,
+  quickActions: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    paddingHorizontal: 16,
     gap: 12,
   },
   quickActionButton: {
-    width: '48%',
+    flex: 1,
     backgroundColor: colors.white,
     borderRadius: 16,
     borderWidth: 1,

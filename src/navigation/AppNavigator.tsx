@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useAuth } from '../auth/AuthContext'
@@ -9,6 +9,7 @@ import { HomeScreen } from '../screens/home/HomeScreen'
 import { InventoryScreen } from '../screens/inventory/InventoryScreen'
 import { InventoryDetailScreen } from '../screens/inventory/InventoryDetailScreen'
 import { AnalyticsScreen } from '../screens/analytics/AnalyticsScreen'
+import { ScanWineModal } from '../screens/home/ScanWineModal'
 import type { InventoryLot } from '../types/api'
 
 type InventoryStackParamList = {
@@ -31,6 +32,16 @@ const ListIcon = ({ color }: { color: string }) => (
 const ChartIcon = ({ color }: { color: string }) => (
   <Text style={{ fontSize: 20, color }}>📊</Text>
 )
+
+const ScanIcon = () => (
+  <View style={styles.scanButton}>
+    <Text style={{ fontSize: 24, color: colors.white }}>📷</Text>
+  </View>
+)
+
+// Dummy screen — scan tab never actually renders, it opens a modal
+const DummyScreen = () => <View />;
+
 
 const AnalyticsStack = createNativeStackNavigator()
 
@@ -87,49 +98,76 @@ const InventoryStackScreen = () => (
   </InventoryStack.Navigator>
 )
 
-const AuthenticatedTabs = () => (
-  <Tab.Navigator
-    screenOptions={{
-      headerShown: false,
-      tabBarStyle: {
-        backgroundColor: colors.white,
-        borderTopColor: colors.muted[200],
-        borderTopWidth: 1,
-      },
-      tabBarActiveTintColor: colors.primary[600],
-      tabBarInactiveTintColor: colors.muted[400],
-      tabBarLabelStyle: {
-        fontSize: 12,
-        fontWeight: '600',
-      },
-    }}
-  >
-    <Tab.Screen
-      name="HomeTab"
-      component={HomeStackScreen}
-      options={{
-        tabBarLabel: 'Home',
-        tabBarIcon: HomeIcon,
-      }}
-    />
-    <Tab.Screen
-      name="InventoryTab"
-      component={InventoryStackScreen}
-      options={{
-        tabBarLabel: 'Inventory',
-        tabBarIcon: ListIcon,
-      }}
-    />
-    <Tab.Screen
-      name="AnalyticsTab"
-      component={AnalyticsStackScreen}
-      options={{
-        tabBarLabel: 'Analytics',
-        tabBarIcon: ChartIcon,
-      }}
-    />
-  </Tab.Navigator>
-)
+const AuthenticatedTabs = () => {
+  const [showScan, setShowScan] = useState(false)
+
+  return (
+    <>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: colors.white,
+            borderTopColor: colors.muted[200],
+            borderTopWidth: 1,
+            height: 60,
+            paddingBottom: 6,
+          },
+          tabBarActiveTintColor: colors.primary[600],
+          tabBarInactiveTintColor: colors.muted[400],
+          tabBarLabelStyle: {
+            fontSize: 11,
+            fontWeight: '600',
+          },
+        }}
+      >
+        <Tab.Screen
+          name="HomeTab"
+          component={HomeStackScreen}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: HomeIcon,
+          }}
+        />
+        <Tab.Screen
+          name="InventoryTab"
+          component={InventoryStackScreen}
+          options={{
+            tabBarLabel: 'Inventory',
+            tabBarIcon: ListIcon,
+          }}
+        />
+        <Tab.Screen
+          name="ScanTab"
+          component={DummyScreen}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault()
+              setShowScan(true)
+            },
+          }}
+          options={{
+            tabBarLabel: () => null,
+            tabBarIcon: ScanIcon,
+          }}
+        />
+        <Tab.Screen
+          name="AnalyticsTab"
+          component={AnalyticsStackScreen}
+          options={{
+            tabBarLabel: 'Analytics',
+            tabBarIcon: ChartIcon,
+          }}
+        />
+      </Tab.Navigator>
+      <ScanWineModal
+        visible={showScan}
+        onClose={() => setShowScan(false)}
+        onSuccess={() => setShowScan(false)}
+      />
+    </>
+  )
+}
 
 const LoadingScreen = () => (
   <View style={styles.loading}>
@@ -157,5 +195,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.muted[50],
+  },
+  scanButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.primary[600],
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    shadowColor: colors.primary[600],
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
 })
