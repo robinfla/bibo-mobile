@@ -8,6 +8,7 @@ import { LoginScreen } from '../screens/LoginScreen'
 import { HomeScreen } from '../screens/home/HomeScreen'
 import { InventoryScreen } from '../screens/inventory/InventoryScreen'
 import { InventoryDetailScreen } from '../screens/inventory/InventoryDetailScreen'
+import { AnalyticsScreen } from '../screens/analytics/AnalyticsScreen'
 import type { InventoryLot } from '../types/api'
 
 type InventoryStackParamList = {
@@ -25,6 +26,28 @@ const HomeIcon = ({ color }: { color: string }) => (
 
 const ListIcon = ({ color }: { color: string }) => (
   <Text style={{ fontSize: 20, color }}>☰</Text>
+)
+
+const ChartIcon = ({ color }: { color: string }) => (
+  <Text style={{ fontSize: 20, color }}>📊</Text>
+)
+
+const AnalyticsStack = createNativeStackNavigator()
+
+const AnalyticsStackScreen = () => (
+  <AnalyticsStack.Navigator
+    screenOptions={{
+      headerStyle: { backgroundColor: colors.white },
+      headerTitleStyle: { fontWeight: '700', color: colors.muted[900] },
+      headerShadowVisible: false,
+    }}
+  >
+    <AnalyticsStack.Screen
+      name="AnalyticsMain"
+      component={AnalyticsScreen}
+      options={{ title: 'Analytics' }}
+    />
+  </AnalyticsStack.Navigator>
 )
 
 const HomeStackScreen = () => (
@@ -95,6 +118,14 @@ const AuthenticatedTabs = () => (
       options={{
         tabBarLabel: 'Inventory',
         tabBarIcon: ListIcon,
+      }}
+    />
+    <Tab.Screen
+      name="AnalyticsTab"
+      component={AnalyticsStackScreen}
+      options={{
+        tabBarLabel: 'Analytics',
+        tabBarIcon: ChartIcon,
       }}
     />
   </Tab.Navigator>

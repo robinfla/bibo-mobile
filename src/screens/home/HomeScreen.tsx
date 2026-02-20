@@ -10,7 +10,7 @@ import {
   RefreshControl,
   Modal,
 } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
+// LinearGradient removed — using solid bg for now
 import { useAuth } from '../../auth/AuthContext'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors, chartColors } from '../../theme/colors'
@@ -242,12 +242,7 @@ export const HomeScreen = () => {
         keyboardShouldPersistTaps="handled"
       >
         {/* Hero */}
-        <LinearGradient
-          colors={[colors.primary[600], colors.primary[800]]}
-          style={styles.hero}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
+        <View style={styles.hero}>
           <View style={styles.heroHeader}>
             <View>
               <Text style={styles.heroGreeting}>Hello {userName} 👋</Text>
@@ -263,7 +258,7 @@ export const HomeScreen = () => {
             <Text style={styles.bottleCountLabel}>Number of bottles</Text>
             <Text style={styles.bottleCountValue}>{stats?.totals.bottles ?? 0}</Text>
           </View>
-        </LinearGradient>
+        </View>
 
         {/* Quick Actions */}
         <Text style={styles.sectionTitle}>Quick Actions</Text>
@@ -299,16 +294,7 @@ export const HomeScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Charts */}
-        {stats && (
-          <>
-            <Text style={styles.sectionTitle}>Your Cellar</Text>
-            <BarChart title="By Color" items={buildColorChart(stats.byColor)} />
-            <BarChart title="By Cellar" items={buildCellarChart(stats.byCellar)} />
-            <BarChart title="By Region (Top 5)" items={buildRegionChart(stats.byRegion)} />
-            <BarChart title="By Vintage (Top 5)" items={buildVintageChart(stats.byVintage)} />
-          </>
-        )}
+        {/* Charts moved to Analytics tab */}
       </ScrollView>
 
       {/* Consume Search Modal */}
@@ -499,8 +485,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 24,
     paddingBottom: 28,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+    backgroundColor: colors.muted[50],
   },
   heroHeader: {
     flexDirection: 'row',
@@ -510,27 +495,29 @@ const styles = StyleSheet.create({
   heroGreeting: {
     fontSize: 24,
     fontWeight: '700',
-    color: colors.white,
+    color: colors.muted[900],
   },
   heroSubtitle: {
     fontSize: 14,
-    color: 'rgba(255,255,255,0.7)',
+    color: colors.muted[500],
     marginTop: 4,
   },
   logoutButton: {
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.3)',
+    borderColor: colors.muted[300],
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
   logoutText: {
-    color: 'rgba(255,255,255,0.8)',
+    color: colors.muted[600],
     fontSize: 13,
     fontWeight: '600',
   },
   bottleCountCard: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.muted[200],
     borderRadius: 16,
     padding: 16,
     marginTop: 20,
@@ -540,12 +527,12 @@ const styles = StyleSheet.create({
   bottleCountLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: 'rgba(255,255,255,0.7)',
+    color: colors.muted[500],
   },
   bottleCountValue: {
     fontSize: 36,
     fontWeight: '800',
-    color: colors.white,
+    color: colors.muted[900],
     marginTop: 4,
   },
 
