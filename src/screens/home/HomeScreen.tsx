@@ -14,6 +14,8 @@ import {
 import { useAuth } from '../../auth/AuthContext'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors, chartColors } from '../../theme/colors'
+import AddWineModal from './AddWineModal'
+import PairingChatModal from './PairingChatModal'
 import type {
   StatsResponse,
   InventoryLot,
@@ -81,6 +83,10 @@ export const HomeScreen = () => {
   const [searchResults, setSearchResults] = useState<InventoryLot[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // New modals
+  const [showAddWineModal, setShowAddWineModal] = useState(false)
+  const [showPairingModal, setShowPairingModal] = useState(false)
 
   // Consume form
   const [consumeLot, setConsumeLot] = useState<InventoryLot | null>(null)
@@ -275,7 +281,7 @@ export const HomeScreen = () => {
 
           <TouchableOpacity
             style={styles.quickActionButton}
-            onPress={() => {/* TODO: Add wine */}}
+            onPress={() => setShowAddWineModal(true)}
           >
             <View style={[styles.quickActionIcon, { backgroundColor: colors.secondary?.[100] ?? '#dcfce7' }]}>
               <Text style={styles.quickActionEmoji}>➕</Text>
@@ -285,7 +291,7 @@ export const HomeScreen = () => {
 
           <TouchableOpacity
             style={styles.quickActionButton}
-            onPress={() => {/* TODO: Get inspiration */}}
+            onPress={() => setShowPairingModal(true)}
           >
             <View style={[styles.quickActionIcon, { backgroundColor: '#fef3c7' }]}>
               <Text style={styles.quickActionEmoji}>💡</Text>
@@ -441,6 +447,22 @@ export const HomeScreen = () => {
           </View>
         </View>
       </Modal>
+
+      {/* Add Wine Modal */}
+      <AddWineModal
+        visible={showAddWineModal}
+        onClose={() => setShowAddWineModal(false)}
+        onSuccess={() => {
+          setShowAddWineModal(false)
+          fetchStats() // Refresh stats
+        }}
+      />
+
+      {/* Pairing Chat Modal */}
+      <PairingChatModal
+        visible={showPairingModal}
+        onClose={() => setShowPairingModal(false)}
+      />
     </View>
   )
 }
@@ -628,8 +650,7 @@ const styles = StyleSheet.create({
   // Search Modal
   searchModalContent: {
     backgroundColor: colors.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderRadius: 20,
     padding: 20,
     maxHeight: '80%',
   },
@@ -690,12 +711,12 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
   modalContent: {
     backgroundColor: colors.white,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderRadius: 20,
     padding: 24,
     maxHeight: '85%',
   },

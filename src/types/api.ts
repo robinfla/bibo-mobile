@@ -85,3 +85,54 @@ export interface InventoryQueryParams {
   limit?: number
   offset?: number
 }
+
+export interface Cellar {
+  id: number
+  name: string
+}
+
+export interface Format {
+  id: number
+  name: string
+  volumeMl: number
+}
+
+export interface Region {
+  id: number
+  name: string
+}
+
+export interface Grape {
+  id: number
+  name: string
+}
+
+export interface ParsedWine {
+  producer: string
+  wineName: string
+  vintage: number | null
+  color: string
+  region: string | null
+  appellation: string | null
+}
+
+export interface WineMatch {
+  wine: { id: number; name: string; color: string }
+  producer: { id: number; name: string }
+  region: { id: number; name: string } | null
+  score: number
+}
+
+export interface AiSearchResponse {
+  parsed: ParsedWine
+  matches: WineMatch[]
+}
+
+export interface ChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+export interface PairingResponse {
+  reply: string
+}
