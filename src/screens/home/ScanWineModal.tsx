@@ -379,16 +379,25 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
   return (
     <>
       <Modal visible={visible} transparent animationType={step === 'choose' && cameraLaunched ? 'none' : 'slide'}>
-        <View style={[styles.modalOverlay, step === 'choose' && cameraLaunched && { backgroundColor: 'transparent' }]}>
+        <TouchableOpacity
+          style={[styles.modalOverlay, step === 'choose' && cameraLaunched && { backgroundColor: 'transparent' }]}
+          activeOpacity={1}
+          onPress={handleClose}
+        >
           {!(step === 'choose' && cameraLaunched) && (
-            <View style={styles.modalContent}>
+            <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
+              {step !== 'choose' && (
+                <TouchableOpacity style={styles.modalCloseIcon} onPress={handleClose}>
+                  <Text style={styles.modalCloseText}>✕</Text>
+                </TouchableOpacity>
+              )}
               {step === 'choose' && renderChooseStep()}
               {step === 'preview' && renderPreviewStep()}
               {step === 'scanning' && renderScanningStep()}
               {step === 'results' && renderResultsStep()}
-            </View>
+            </TouchableOpacity>
           )}
-        </View>
+        </TouchableOpacity>
       </Modal>
 
       <AddWineModal
@@ -417,6 +426,23 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 24,
     maxHeight: '85%',
+  },
+  modalCloseIcon: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+    zIndex: 10,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.muted[100],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalCloseText: {
+    fontSize: 16,
+    color: colors.muted[600],
+    fontWeight: '600',
   },
   stepContainer: {
     alignItems: 'center',
