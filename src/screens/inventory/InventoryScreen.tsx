@@ -467,25 +467,41 @@ export const InventoryScreen = () => {
     </View>
   )
 
-  const renderLot = useCallback(({ item }: { item: InventoryLot }) => (
-    <TouchableOpacity
-      style={styles.lotCard}
-      onPress={() => navigation.navigate('InventoryDetail', { lot: item })}
-      activeOpacity={0.7}
-    >
-      <View style={[styles.colorDot, { backgroundColor: getWineColor(item.wineColor) }]} />
-      <View style={styles.lotInfo}>
-        <Text style={styles.lotName} numberOfLines={1}>{item.wineName}</Text>
-        <Text style={styles.lotMeta}>
-          {item.producerName} · {item.vintage ?? 'NV'}
-        </Text>
-      </View>
-      <View style={styles.lotRight}>
-        <Text style={styles.lotQty}>{item.quantity}</Text>
-        <Text style={styles.lotQtyLabel}>btl</Text>
-      </View>
-    </TouchableOpacity>
-  ), [navigation])
+  const MATURITY_BADGES: Record<string, { label: string; bg: string; fg: string }> = {
+    too_early: { label: 'Too Young', bg: '#dbeafe', fg: '#1e40af' },
+    approaching: { label: 'Approaching', bg: '#e0e7ff', fg: '#3730a3' },
+    ready: { label: 'Ready', bg: '#dcfce7', fg: '#166534' },
+    peak: { label: 'Peak', bg: '#fef9c3', fg: '#854d0e' },
+    declining: { label: 'Declining', bg: '#fed7aa', fg: '#9a3412' },
+    past: { label: 'Past', bg: '#fecaca', fg: '#991b1b' },
+    unknown: { label: '', bg: 'transparent', fg: 'transparent' },
+  }
+
+  const renderLot = useCallback(({ item }: { item: InventoryLot }) => {
+    const badge = item.maturity ? MATURITY_BADGES[item.maturity.status] : null
+    return (
+      <TouchableOpacity
+        style={styles.lotCard}
+        onPress={() => navigation.navigate('InventoryDetail', { lot: item })}
+        activeOpacity={0.7}
+      >
+        <View style={[styles.colorDot, { backgroundColor: getWineColor(item.wineColor) }]} />
+        <View style={styles.lotInfo}>
+          <Text style={styles.lotName} numberOfLines={1}>{item.wineName}</Text>
+          <Text style={styles.lotMeta}>
+            {item.producerName} · {item.vintage ?? 'NV'}
+            {badge && badge.label ? (
+              <Text style={{ color: badge.fg, fontSize: 11 }}> · {badge.label}</Text>
+            ) : null}
+          </Text>
+        </View>
+        <View style={styles.lotRight}>
+          <Text style={styles.lotQty}>{item.quantity}</Text>
+          <Text style={styles.lotQtyLabel}>btl</Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }, [navigation])
 
   const keyExtractor = useCallback((item: InventoryLot) => String(item.id), [])
 
