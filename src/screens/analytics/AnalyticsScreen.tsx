@@ -2,11 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react'
 import {
   View,
   Text,
+  TextInput,
   StyleSheet,
   ScrollView,
   ActivityIndicator,
   RefreshControl,
   TouchableOpacity,
+  Modal,
 } from 'react-native'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors, chartColors } from '../../theme/colors'
@@ -95,6 +97,13 @@ export const AnalyticsScreen = () => {
   const [isLoadingEvents, setIsLoadingEvents] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [expandedEvent, setExpandedEvent] = useState<number | null>(null)
+
+  // Add tasting notes form
+  const [editingEvent, setEditingEvent] = useState<InventoryEvent | null>(null)
+  const [editScore, setEditScore] = useState('')
+  const [editComment, setEditComment] = useState('')
+  const [editPairing, setEditPairing] = useState('')
+  const [isSavingNote, setIsSavingNote] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
 
   const fetchStats = useCallback(async () => {
@@ -140,6 +149,32 @@ export const AnalyticsScreen = () => {
   useEffect(() => { 
     loadData() 
   }, [loadData])
+
+  const openAddNote = (ev: InventoryEvent) => {
+    setEditingEvent(ev)
+    setEditScore(ev.rating ? String(ev.rating) : '')
+    setEditComment(ev.tastingNotes || '')
+    setEditPairing(ev.pairing || '')
+  }
+
+  const saveNote = async () => {
+    if (!editingEvent) return
+    setIsSavingNote(true)
+    try {
+      const scoreNum = parseInt(editScore, 10)
+      await apiFetch(`/api/inventory/${editingEvent.lotId}/tasting-notes`, {
+        method: 'POST',
+        body: {
+          score: !isNaN(scoreNum) ? scoreNum : null,
+          comment: editComment.trim() || null,
+          pairing: editPairing.trim() || null,
+        },
+      })
+      setEditingEvent(null)
+      await fetchEvents()
+    } catch { /* */ }
+    finally { setIsSavingNote(false) }
+  }
 
   useEffect(() => {
     if (activeTab === 'consumption' && events.length === 0) {
@@ -383,7 +418,14 @@ export const AnalyticsScreen = () => {
                                 </View>
                               ) : null}
                               {!event.rating && !event.tastingNotes && !event.pairing && (
-                                <Text style={styles.noDetailsText}>No tasting notes recorded</Text>
+                                <TouchableOpacity style={styles.addNoteButton} onPress={() => openAddNote(event)}>
+                                  <Text style={styles.addNoteButtonText}>+ Add tasting notes</Text>
+                                </TouchableOpacity>
+                              )}
+                              {(event.rating || event.tastingNotes || event.pairing) && (
+                                <TouchableOpacity style={styles.editNoteLink} onPress={() => openAddNote(event)}>
+                                  <Text style={styles.editNoteLinkText}>Edit notes</Text>
+                                </TouchableOpacity>
                               )}
                             </View>
                           )}
@@ -428,6 +470,85 @@ export const AnalyticsScreen = () => {
         {activeTab === 'finance' && renderFinanceTab()}
         {activeTab === 'consumption' && renderConsumptionTab()}
       </ScrollView>
+
+      {/* Add/Edit Tasting Notes Modal */}
+      <Modal visible={!!editingEvent} transparent animationType="slide">
+        <TouchableOpacity
+          style={styles.noteModalOverlay}
+          activeOpacity={1}
+          onPress={() => setEditingEvent(null)}
+        >
+          <TouchableOpacity activeOpacity={1} style={styles.noteModalContent}>
+            <View style={styles.noteModalHeader}>
+              <Text style={styles.noteModalTitle}>
+                {editingEvent?.rating || editingEvent?.tastingNotes ? 'Edit' : 'Add'} Tasting Notes
+              </Text>
+              <TouchableOpacity onPress={() => setEditingEvent(null)}>
+                <Text style={styles.noteModalClose}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            {editingEvent && (
+              <View style={styles.noteModalWine}>
+                <Text style={styles.noteModalWineName}>{editingEvent.wineName}</Text>
+                <Text style={styles.noteModalWineMeta}>
+                  {editingEvent.producerName} · {editingEvent.vintage ?? 'NV'}
+                </Text>
+              </View>
+            )}
+
+            <ScrollView keyboardShouldPersistTaps="handled">
+              <Text style={styles.noteLabel}>Score (0-100)</Text>
+              <TextInput
+                style={styles.noteInput}
+                value={editScore}
+                onChangeText={setEditScore}
+                placeholder="e.g. 88"
+                placeholderTextColor={colors.muted[400]}
+                keyboardType="number-pad"
+                maxLength={3}
+              />
+
+              <Text style={styles.noteLabel}>Tasting Notes</Text>
+              <TextInput
+                style={[styles.noteInput, styles.noteTextArea]}
+                value={editComment}
+                onChangeText={setEditComment}
+                placeholder="Describe the wine..."
+                placeholderTextColor={colors.muted[400]}
+                multiline
+                numberOfLines={3}
+              />
+
+              <Text style={styles.noteLabel}>Food Pairing</Text>
+              <TextInput
+                style={styles.noteInput}
+                value={editPairing}
+                onChangeText={setEditPairing}
+                placeholder="What did you pair it with?"
+                placeholderTextColor={colors.muted[400]}
+              />
+            </ScrollView>
+
+            <View style={styles.noteButtons}>
+              <TouchableOpacity style={styles.noteCancelBtn} onPress={() => setEditingEvent(null)}>
+                <Text style={styles.noteCancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.noteSaveBtn, isSavingNote && { opacity: 0.5 }]}
+                onPress={saveNote}
+                disabled={isSavingNote}
+              >
+                {isSavingNote ? (
+                  <ActivityIndicator color={colors.white} size="small" />
+                ) : (
+                  <Text style={styles.noteSaveText}>Save</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
     </View>
   )
 }
@@ -698,5 +819,124 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.muted[400],
     fontStyle: 'italic',
+  },
+  addNoteButton: {
+    backgroundColor: colors.primary[600],
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    alignSelf: 'flex-start',
+  },
+  addNoteButtonText: {
+    color: colors.white,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  editNoteLink: {
+    marginTop: 8,
+  },
+  editNoteLinkText: {
+    color: colors.primary[600],
+    fontSize: 13,
+    fontWeight: '600',
+  },
+
+  // Tasting notes modal
+  noteModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  noteModalContent: {
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: 24,
+    maxHeight: '80%',
+  },
+  noteModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  noteModalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.muted[900],
+  },
+  noteModalClose: {
+    fontSize: 20,
+    color: colors.muted[400],
+    padding: 4,
+  },
+  noteModalWine: {
+    backgroundColor: colors.muted[50],
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.muted[200],
+    padding: 12,
+    marginBottom: 16,
+  },
+  noteModalWineName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.muted[900],
+  },
+  noteModalWineMeta: {
+    fontSize: 14,
+    color: colors.muted[500],
+    marginTop: 2,
+  },
+  noteLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.muted[700],
+    marginBottom: 6,
+    marginTop: 12,
+  },
+  noteInput: {
+    backgroundColor: colors.muted[50],
+    borderWidth: 1,
+    borderColor: colors.muted[300],
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    fontSize: 15,
+    color: colors.muted[900],
+  },
+  noteTextArea: {
+    minHeight: 80,
+    textAlignVertical: 'top',
+  },
+  noteButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 20,
+  },
+  noteCancelBtn: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: colors.muted[300],
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  noteCancelText: {
+    color: colors.muted[700],
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  noteSaveBtn: {
+    flex: 1,
+    backgroundColor: colors.primary[600],
+    borderRadius: 8,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  noteSaveText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: '600',
   },
 })
