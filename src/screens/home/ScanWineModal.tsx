@@ -43,8 +43,7 @@ const getWineColor = (color: string): string =>
   WINE_COLORS[color.toLowerCase()] ?? colors.muted[400]
 
 export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProps) => {
-  const [step, setStep] = useState<'launching' | 'choose' | 'preview' | 'scanning' | 'results' | 'manual-search' | 'manual-searching' | 'tasting'>('launching')
-  const [cameraLaunched, setCameraLaunched] = useState(false)
+  const [step, setStep] = useState<'choose' | 'preview' | 'scanning' | 'results' | 'manual-search' | 'manual-searching' | 'tasting'>('choose')
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [selectedImageBase64, setSelectedImageBase64] = useState<string | null>(null)
   const [scanResults, setScanResults] = useState<ScanResponse | null>(null)
@@ -68,7 +67,7 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
   const [manualSearchResults, setManualSearchResults] = useState<ScanResponse | null>(null)
 
   const resetModal = useCallback(() => {
-    setStep('launching')
+    setStep('choose')
     setSelectedImage(null)
     setSelectedImageBase64(null)
     setScanResults(null)
@@ -90,43 +89,8 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
 
   const handleClose = useCallback(() => {
     resetModal()
-    setCameraLaunched(false)
     onClose()
   }, [resetModal, onClose])
-
-  // Auto-launch camera when modal opens
-  useEffect(() => {
-    if (visible && !cameraLaunched) {
-      setCameraLaunched(true)
-      takePhotoAuto()
-    }
-  }, [visible])
-
-  const takePhotoAuto = async () => {
-    const hasPermission = await requestPermissions()
-    if (!hasPermission) return
-
-    try {
-      const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ['images'],
-        quality: 0.8,
-        base64: true,
-      })
-
-      if (!result.canceled && result.assets[0]) {
-        setSelectedImage(result.assets[0].uri)
-        setSelectedImageBase64(result.assets[0].base64 || null)
-        setStep('preview')
-        setError(null)
-      } else {
-        // User cancelled camera — close modal
-        handleClose()
-      }
-    } catch {
-      // Camera failed — close
-      handleClose()
-    }
-  }
 
   const requestPermissions = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync()
@@ -290,35 +254,26 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
     }
   }
 
-  const renderChooseStep = () => {
-    // If camera hasn't returned yet, render nothing (avoid flash)
-    if (cameraLaunched) return null
+  const renderChooseStep = () => (
+    <View style={styles.stepContainer}>
+      <Text style={styles.modalTitle}>Scan Wine Label</Text>
+      <Text style={styles.subtitle}>Take a photo or upload from your library</Text>
 
-    return (
-      <View style={styles.stepContainer}>
-        <Text style={styles.modalTitle}>Scan Wine Label</Text>
-        <Text style={styles.subtitle}>Choose how to add your wine photo</Text>
+      <TouchableOpacity style={styles.optionButton} onPress={takePhoto}>
+        <View style={[styles.optionIcon, { backgroundColor: colors.primary[100] }]}>
+          <Text style={styles.optionEmoji}>📷</Text>
+        </View>
+        <Text style={styles.optionLabel}>Take a Photo</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity style={styles.optionButton} onPress={takePhoto}>
-          <View style={[styles.optionIcon, { backgroundColor: colors.primary[100] }]}>
-            <Text style={styles.optionEmoji}>📷</Text>
-          </View>
-          <Text style={styles.optionLabel}>Take a Photo</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.optionButton} onPress={chooseFromLibrary}>
-          <View style={[styles.optionIcon, { backgroundColor: colors.secondary?.[100] ?? '#dcfce7' }]}>
-            <Text style={styles.optionEmoji}>📱</Text>
-          </View>
-          <Text style={styles.optionLabel}>Choose from Library</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.cancelButton} onPress={handleClose}>
-          <Text style={styles.cancelText}>Cancel</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
+      <TouchableOpacity style={styles.optionButton} onPress={chooseFromLibrary}>
+        <View style={[styles.optionIcon, { backgroundColor: colors.secondary?.[100] ?? '#dcfce7' }]}>
+          <Text style={styles.optionEmoji}>🖼️</Text>
+        </View>
+        <Text style={styles.optionLabel}>Upload from Library</Text>
+      </TouchableOpacity>
+    </View>
+  )
 
   const renderPreviewStep = () => (
     <View style={styles.stepContainer}>
@@ -568,26 +523,24 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
 
   return (
     <>
-      <Modal visible={visible} transparent animationType={step === 'launching' || (step === 'choose' && cameraLaunched) ? 'none' : 'slide'}>
+      <Modal visible={visible} transparent animationType="slide">
         <TouchableOpacity
-          style={[styles.modalOverlay, (step === 'launching' || (step === 'choose' && cameraLaunched)) && { backgroundColor: 'transparent' }]}
+          style={styles.modalOverlay}
           activeOpacity={1}
           onPress={handleClose}
         >
-          {step !== 'launching' && !(step === 'choose' && cameraLaunched) && (
-            <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
-              <TouchableOpacity style={styles.modalCloseIcon} onPress={handleClose}>
-                <Text style={styles.modalCloseText}>✕</Text>
-              </TouchableOpacity>
-              {step === 'choose' && renderChooseStep()}
-              {step === 'preview' && renderPreviewStep()}
-              {step === 'scanning' && renderScanningStep()}
-              {step === 'results' && renderResultsStep()}
-              {step === 'tasting' && renderTastingStep()}
-              {step === 'manual-search' && renderManualSearchStep()}
-              {step === 'manual-searching' && renderScanningStep()}
+          <TouchableOpacity activeOpacity={1} style={styles.modalContent}>
+            <TouchableOpacity style={styles.modalCloseIcon} onPress={handleClose}>
+              <Text style={styles.modalCloseText}>✕</Text>
             </TouchableOpacity>
-          )}
+            {step === 'choose' && renderChooseStep()}
+            {step === 'preview' && renderPreviewStep()}
+            {step === 'scanning' && renderScanningStep()}
+            {step === 'results' && renderResultsStep()}
+            {step === 'tasting' && renderTastingStep()}
+            {step === 'manual-search' && renderManualSearchStep()}
+            {step === 'manual-searching' && renderScanningStep()}
+          </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
 
