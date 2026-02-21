@@ -9,6 +9,7 @@ import { HomeScreen } from '../screens/home/HomeScreen'
 import { InventoryScreen } from '../screens/inventory/InventoryScreen'
 import { InventoryDetailScreen } from '../screens/inventory/InventoryDetailScreen'
 import { AnalyticsScreen } from '../screens/analytics/AnalyticsScreen'
+import { ProfileScreen } from '../screens/ProfileScreen'
 import { ScanWineModal } from '../screens/home/ScanWineModal'
 import type { InventoryLot } from '../types/api'
 
@@ -70,7 +71,12 @@ const HomeStackScreen = () => (
     <HomeStack.Screen
       name="HomeMain"
       component={HomeScreen}
-      options={{ title: 'Home' }}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={{ headerShown: false }}
     />
   </HomeStack.Navigator>
 )

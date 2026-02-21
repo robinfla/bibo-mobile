@@ -10,7 +10,7 @@ import {
   RefreshControl,
   Modal,
 } from 'react-native'
-// LinearGradient removed — using solid bg for now
+import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../../auth/AuthContext'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors, chartColors } from '../../theme/colors'
@@ -72,7 +72,8 @@ const BarChart = ({ title, items }: { title: string; items: BarChartItem[] }) =>
 }
 
 export const HomeScreen = () => {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
+  const navigation = useNavigation<any>()
   const [stats, setStats] = useState<StatsResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -249,17 +250,23 @@ export const HomeScreen = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         keyboardShouldPersistTaps="handled"
       >
-        {/* Top Bar */}
-        <View style={styles.topBar}>
-          <View style={styles.topBarSpacer} />
-          <Text style={styles.topBarGreeting}>Hello {userName} 👋</Text>
-          <TouchableOpacity onPress={logout} style={styles.logoutButton}>
-            <Text style={styles.logoutIcon}>⏻</Text>
-          </TouchableOpacity>
-        </View>
-
         {/* Hero */}
         <View style={styles.hero}>
+          <View style={styles.heroRow}>
+            <View>
+              <Text style={styles.heroGreeting}>Hello {userName} 👋</Text>
+              <Text style={styles.heroSubtitle}>Welcome back to your cellar</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.avatar}
+              onPress={() => navigation.navigate('Profile')}
+            >
+              <Text style={styles.avatarText}>
+                {userName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           {/* Bottle count */}
           <View style={styles.bottleCountCard}>
             <Text style={styles.bottleCountLabel}>Number of bottles</Text>
@@ -505,46 +512,41 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // Top Bar
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 8,
-    backgroundColor: colors.muted[50],
-  },
-  topBarSpacer: {
-    width: 36,
-  },
-  topBarGreeting: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: colors.muted[900],
-    textAlign: 'center',
-    flex: 1,
-  },
-  logoutButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logoutIcon: {
-    fontSize: 18,
-    color: colors.muted[600],
-  },
-
   // Hero
   hero: {
     paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingTop: 20,
     paddingBottom: 28,
     backgroundColor: colors.muted[50],
+  },
+  heroRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  heroGreeting: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: colors.muted[900],
+  },
+  heroSubtitle: {
+    fontSize: 14,
+    color: colors.muted[500],
+    marginTop: 2,
+  },
+  avatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: colors.primary[600],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatarText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.white,
   },
   bottleCountCard: {
     backgroundColor: colors.white,
