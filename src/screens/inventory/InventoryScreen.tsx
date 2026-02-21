@@ -132,20 +132,6 @@ export const InventoryScreen = () => {
     priceMin > 0 ||
     priceMax < 200
 
-  const applyFilters = (f: FilterState) => {
-    setSortOption(f.sort)
-    setSelectedColor(f.color)
-    setMaturity(f.maturity || '')
-    setSelectedProducer(f.producerId)
-    setSelectedRegion(f.regionId)
-    setSelectedCellar(f.cellarId)
-    setSelectedVintage(f.vintage)
-    setPriceMin(f.priceMin)
-    setPriceMax(f.priceMax)
-    setOffset(0)
-    setShowFilterModal(false)
-  }
-
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const fetchIdRef = useRef(0)
   const [debouncedSearch, setDebouncedSearch] = useState('')
@@ -161,20 +147,33 @@ export const InventoryScreen = () => {
     }
   }, [search])
 
-  const fetchInventory = useCallback(async (currentOffset: number) => {
+  // Core fetch — accepts explicit overrides so applyFilters can call directly
+  const fetchInventoryWithParams = useCallback(async (params: {
+    offset: number
+    search?: string
+    maturity?: string
+    producerId?: number
+    regionId?: number
+    color?: string
+    vintage?: number
+    cellarId?: number
+    priceMin: number
+    priceMax: number
+    sort: SortOption
+  }) => {
     const fetchId = ++fetchIdRef.current
     try {
       const query: InventoryQueryParams = {
         limit: PAGE_SIZE,
-        offset: currentOffset,
+        offset: params.offset,
       }
-      if (debouncedSearch.trim()) query.search = debouncedSearch.trim()
-      if (maturity) query.maturity = maturity
-      if (selectedProducer) query.producerId = selectedProducer
-      if (selectedRegion) query.regionId = selectedRegion
-      if (selectedColor) query.color = selectedColor
-      if (selectedVintage) query.vintage = selectedVintage
-      if (selectedCellar) query.cellarId = selectedCellar
+      if (params.search?.trim()) query.search = params.search.trim()
+      if (params.maturity) query.maturity = params.maturity
+      if (params.producerId) query.producerId = params.producerId
+      if (params.regionId) query.regionId = params.regionId
+      if (params.color) query.color = params.color
+      if (params.vintage) query.vintage = params.vintage
+      if (params.cellarId) query.cellarId = params.cellarId
 
       const data = await apiFetch<InventoryResponse>('/api/inventory', {
         query: query as Record<string, string | number | boolean | undefined>,
@@ -185,25 +184,24 @@ export const InventoryScreen = () => {
 
       // Client-side price filter
       let filtered = data.lots
-      if (priceMin > 0 || priceMax < 200) {
+      if (params.priceMin > 0 || params.priceMax < 200) {
         filtered = filtered.filter(lot => {
           const price = lot.purchasePricePerBottle ? parseFloat(lot.purchasePricePerBottle) : 0
-          return price >= priceMin && (priceMax >= 200 || price <= priceMax)
+          return price >= params.priceMin && (params.priceMax >= 200 || price <= params.priceMax)
         })
       }
 
       // Client-side sorting
-      if (sortOption === 'price') {
+      if (params.sort === 'price') {
         filtered.sort((a, b) => {
           const pa = a.purchasePricePerBottle ? parseFloat(a.purchasePricePerBottle) : 0
           const pb = b.purchasePricePerBottle ? parseFloat(b.purchasePricePerBottle) : 0
           return pb - pa
         })
-      } else if (sortOption === 'maturity') {
+      } else if (params.sort === 'maturity') {
         const order: Record<string, number> = { past: 0, declining: 1, peak: 2, ready: 3, approaching: 4, too_early: 5, unknown: 6 }
         filtered.sort((a, b) => (order[a.maturity?.status ?? 'unknown'] ?? 6) - (order[b.maturity?.status ?? 'unknown'] ?? 6))
       }
-      // 'date' and 'value' use default server sort (createdAt desc)
 
       setLots(filtered)
       setTotal(filtered.length)
@@ -213,7 +211,55 @@ export const InventoryScreen = () => {
       const msg = e instanceof ApiError ? e.message : 'Failed to load inventory'
       setError(msg)
     }
-  }, [debouncedSearch, maturity, selectedProducer, selectedRegion, selectedColor, selectedVintage, selectedCellar, priceMin, priceMax, sortOption])
+  }, [])
+
+  // Convenience wrapper using current state (for loadData/onRefresh)
+  const fetchInventory = useCallback(async (currentOffset: number) => {
+    await fetchInventoryWithParams({
+      offset: currentOffset,
+      search: debouncedSearch,
+      maturity: maturity || undefined,
+      producerId: selectedProducer,
+      regionId: selectedRegion,
+      color: selectedColor,
+      vintage: selectedVintage,
+      cellarId: selectedCellar,
+      priceMin,
+      priceMax,
+      sort: sortOption,
+    })
+  }, [fetchInventoryWithParams, debouncedSearch, maturity, selectedProducer, selectedRegion, selectedColor, selectedVintage, selectedCellar, priceMin, priceMax, sortOption])
+
+  // Apply filters: set state AND directly fetch with the new params
+  const applyFilters = (f: FilterState) => {
+    setSortOption(f.sort)
+    setSelectedColor(f.color)
+    setMaturity(f.maturity || '')
+    setSelectedProducer(f.producerId)
+    setSelectedRegion(f.regionId)
+    setSelectedCellar(f.cellarId)
+    setSelectedVintage(f.vintage)
+    setPriceMin(f.priceMin)
+    setPriceMax(f.priceMax)
+    setOffset(0)
+    setShowFilterModal(false)
+
+    // Directly fetch with the new filter params — don't wait for state propagation
+    setIsLoading(true)
+    fetchInventoryWithParams({
+      offset: 0,
+      search: debouncedSearch,
+      maturity: f.maturity,
+      producerId: f.producerId,
+      regionId: f.regionId,
+      color: f.color,
+      vintage: f.vintage,
+      cellarId: f.cellarId,
+      priceMin: f.priceMin,
+      priceMax: f.priceMax,
+      sort: f.sort,
+    }).finally(() => setIsLoading(false))
+  }
 
   const fetchFilters = useCallback(async () => {
     try {
