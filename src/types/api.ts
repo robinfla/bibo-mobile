@@ -151,6 +151,7 @@ export interface InventoryEvent {
   notes: string | null
   rating: number | null
   tastingNotes: string | null
+  pairing: string | null
   createdAt: string
   wineName: string
   wineColor: string

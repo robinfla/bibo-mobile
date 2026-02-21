@@ -94,6 +94,7 @@ export const AnalyticsScreen = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isLoadingEvents, setIsLoadingEvents] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [expandedEvent, setExpandedEvent] = useState<number | null>(null)
   const [refreshing, setRefreshing] = useState(false)
 
   const fetchStats = useCallback(async () => {
@@ -317,45 +318,79 @@ export const AnalyticsScreen = () => {
               monthYears.map(monthYear => (
                 <View key={monthYear}>
                   <Text style={styles.monthHeader}>{monthYear}</Text>
-                  {eventsByMonth[monthYear].map(event => (
-                    <View key={event.id} style={styles.eventRow}>
-                      <View style={styles.eventMain}>
-                        <View style={styles.eventHeader}>
-                          <Text style={styles.eventWine} numberOfLines={1}>
-                            {event.wineName} {event.vintage && `(${event.vintage})`}
-                          </Text>
-                          <View style={[
-                            styles.eventBadge,
-                            event.eventType === 'purchase' ? styles.eventBadgePurchase : styles.eventBadgeConsume
-                          ]}>
-                            <Text style={[
-                              styles.eventBadgeText,
-                              event.eventType === 'purchase' ? styles.eventBadgeTextPurchase : styles.eventBadgeTextConsume
-                            ]}>
-                              {event.eventType === 'purchase' ? 'Added' : 'Consumed'}
+                  {eventsByMonth[monthYear].map(event => {
+                    const isExpanded = expandedEvent === event.id
+                    const hasDetails = event.eventType === 'consume' && (event.rating || event.tastingNotes || event.pairing)
+                    return (
+                      <TouchableOpacity
+                        key={event.id}
+                        style={styles.eventRow}
+                        onPress={() => setExpandedEvent(isExpanded ? null : event.id)}
+                        activeOpacity={0.7}
+                      >
+                        <View style={styles.eventMain}>
+                          <View style={styles.eventHeader}>
+                            <Text style={styles.eventWine} numberOfLines={1}>
+                              {event.wineName} {event.vintage && `(${event.vintage})`}
                             </Text>
+                            <View style={[
+                              styles.eventBadge,
+                              event.eventType === 'purchase' ? styles.eventBadgePurchase : styles.eventBadgeConsume
+                            ]}>
+                              <Text style={[
+                                styles.eventBadgeText,
+                                event.eventType === 'purchase' ? styles.eventBadgeTextPurchase : styles.eventBadgeTextConsume
+                              ]}>
+                                {event.eventType === 'purchase' ? 'Added' : 'Consumed'}
+                              </Text>
+                            </View>
                           </View>
-                        </View>
-                        <Text style={styles.eventProducer}>{event.producerName}</Text>
-                        <View style={styles.eventDetails}>
-                          <Text style={styles.eventQuantity}>
-                            {event.eventType === 'purchase' ? '+' : ''}{event.quantityChange}
-                          </Text>
-                          <Text style={styles.eventDate}>{formatDate(event.eventDate)}</Text>
-                        </View>
-                        {event.eventType === 'consume' && (event.rating || event.tastingNotes) && (
-                          <View style={styles.eventTasting}>
-                            {event.rating && (
-                              <Text style={styles.eventRating}>★ {event.rating}/100</Text>
-                            )}
-                            {event.tastingNotes && (
-                              <Text style={styles.eventNotes} numberOfLines={2}>{event.tastingNotes}</Text>
-                            )}
+                          <Text style={styles.eventProducer}>{event.producerName}</Text>
+                          <View style={styles.eventDetails}>
+                            <Text style={styles.eventQuantity}>
+                              {event.eventType === 'purchase' ? '+' : ''}{event.quantityChange}
+                            </Text>
+                            <Text style={styles.eventDate}>{formatDate(event.eventDate)}</Text>
                           </View>
-                        )}
-                      </View>
-                    </View>
-                  ))}
+
+                          {/* Collapsed: show rating hint */}
+                          {!isExpanded && event.eventType === 'consume' && event.rating != null && event.rating > 0 && (
+                            <Text style={styles.eventRating}>⭐ {event.rating}/100 — tap for details</Text>
+                          )}
+                          {!isExpanded && hasDetails && !(event.rating != null && event.rating > 0) && (
+                            <Text style={styles.tapHint}>Tap for tasting notes</Text>
+                          )}
+
+                          {/* Expanded: full details */}
+                          {isExpanded && event.eventType === 'consume' && (
+                            <View style={styles.expandedDetails}>
+                              {event.rating != null && event.rating > 0 && (
+                                <View style={styles.detailRow}>
+                                  <Text style={styles.detailLabel}>Score</Text>
+                                  <Text style={styles.detailValueBold}>⭐ {event.rating}/100</Text>
+                                </View>
+                              )}
+                              {event.tastingNotes ? (
+                                <View style={styles.detailRow}>
+                                  <Text style={styles.detailLabel}>Tasting Notes</Text>
+                                  <Text style={styles.detailValue}>{event.tastingNotes}</Text>
+                                </View>
+                              ) : null}
+                              {event.pairing ? (
+                                <View style={styles.detailRow}>
+                                  <Text style={styles.detailLabel}>Food Pairing</Text>
+                                  <Text style={styles.detailValue}>{event.pairing}</Text>
+                                </View>
+                              ) : null}
+                              {!event.rating && !event.tastingNotes && !event.pairing && (
+                                <Text style={styles.noDetailsText}>No tasting notes recorded</Text>
+                              )}
+                            </View>
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                    )
+                  })}
                 </View>
               ))
             )}
@@ -626,5 +661,42 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.muted[600],
     lineHeight: 18,
+  },
+  tapHint: {
+    fontSize: 12,
+    color: colors.primary[600],
+    marginTop: 6,
+  },
+  expandedDetails: {
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: colors.muted[100],
+  },
+  detailRow: {
+    marginBottom: 10,
+  },
+  detailLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.muted[500],
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 2,
+  },
+  detailValue: {
+    fontSize: 14,
+    color: colors.muted[800],
+    lineHeight: 20,
+  },
+  detailValueBold: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.muted[900],
+  },
+  noDetailsText: {
+    fontSize: 13,
+    color: colors.muted[400],
+    fontStyle: 'italic',
   },
 })
