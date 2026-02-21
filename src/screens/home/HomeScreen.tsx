@@ -10,6 +10,7 @@ import {
   RefreshControl,
   Modal,
 } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../../auth/AuthContext'
 import { apiFetch, ApiError } from '../../api/client'
@@ -72,6 +73,7 @@ const BarChart = ({ title, items }: { title: string; items: BarChartItem[] }) =>
 }
 
 export const HomeScreen = () => {
+  const insets = useSafeAreaInsets()
   const { user } = useAuth()
   const navigation = useNavigation<any>()
   const [stats, setStats] = useState<StatsResponse | null>(null)
@@ -251,7 +253,7 @@ export const HomeScreen = () => {
         keyboardShouldPersistTaps="handled"
       >
         {/* Hero */}
-        <View style={styles.hero}>
+        <View style={[styles.hero, { paddingTop: insets.top + 12 }]}>
           <View style={styles.heroRow}>
             <View>
               <Text style={styles.heroGreeting}>Hello {userName} 👋</Text>
@@ -515,7 +517,6 @@ const styles = StyleSheet.create({
   // Hero
   hero: {
     paddingHorizontal: 20,
-    paddingTop: 20,
     paddingBottom: 28,
     backgroundColor: colors.muted[50],
   },
