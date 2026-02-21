@@ -53,7 +53,7 @@ const MATURITY_TABS = [
   { label: 'To Age', value: 'young' },
 ] as const
 
-const PAGE_SIZE = 500
+const PAGE_SIZE = 50
 
 interface FilterOption {
   id: number
@@ -78,6 +78,8 @@ export const InventoryScreen = () => {
   const [lots, setLots] = useState<InventoryLot[]>([])
   const [total, setTotal] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -160,6 +162,7 @@ export const InventoryScreen = () => {
     priceMin: number
     priceMax: number
     sort: SortOption
+    append?: boolean
   }) => {
     const fetchId = ++fetchIdRef.current
     try {
@@ -203,8 +206,13 @@ export const InventoryScreen = () => {
         filtered.sort((a, b) => (order[a.maturity?.status ?? 'unknown'] ?? 6) - (order[b.maturity?.status ?? 'unknown'] ?? 6))
       }
 
-      setLots(filtered)
-      setTotal(filtered.length)
+      if (params.append) {
+        setLots(prev => [...prev, ...filtered])
+      } else {
+        setLots(filtered)
+      }
+      setTotal(data.total)
+      setHasMore(params.offset + filtered.length < data.total)
       setError(null)
     } catch (e) {
       if (fetchId !== fetchIdRef.current) return
@@ -242,6 +250,7 @@ export const InventoryScreen = () => {
     setPriceMin(f.priceMin)
     setPriceMax(f.priceMax)
     setOffset(0)
+    setHasMore(true)
     setShowFilterModal(false)
 
     // Directly fetch with the new filter params — don't wait for state propagation
@@ -271,19 +280,22 @@ export const InventoryScreen = () => {
 
   const loadData = useCallback(async () => {
     setIsLoading(true)
-    await Promise.all([fetchInventory(offset), fetchFilters()])
+    setHasMore(true)
+    await Promise.all([fetchInventory(0), fetchFilters()])
     setIsLoading(false)
-  }, [fetchInventory, fetchFilters, offset])
+  }, [fetchInventory, fetchFilters])
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true)
-    const promises = [fetchInventory(offset), fetchFilters()]
+    setOffset(0)
+    setHasMore(true)
+    const promises = [fetchInventory(0), fetchFilters()]
     if (activeTab === 'history') {
       promises.push(fetchEvents())
     }
     await Promise.all(promises)
     setRefreshing(false)
-  }, [fetchInventory, fetchFilters, fetchEvents, offset, activeTab])
+  }, [fetchInventory, fetchFilters, fetchEvents, activeTab])
 
   useEffect(() => {
     loadData()
@@ -402,18 +414,26 @@ export const InventoryScreen = () => {
     }
   }, [activeTab, events.length, fetchEvents])
 
-  const totalPages = Math.ceil(total / PAGE_SIZE)
-  const currentPage = Math.floor(offset / PAGE_SIZE) + 1
-
-  const goNext = useCallback(() => {
-    const newOffset = offset + PAGE_SIZE
-    if (newOffset < total) setOffset(newOffset)
-  }, [offset, total])
-
-  const goPrev = useCallback(() => {
-    const newOffset = Math.max(0, offset - PAGE_SIZE)
-    setOffset(newOffset)
-  }, [offset])
+  const loadMore = useCallback(async () => {
+    if (isLoadingMore || !hasMore || isLoading) return
+    setIsLoadingMore(true)
+    const newOffset = lots.length
+    await fetchInventoryWithParams({
+      offset: newOffset,
+      search: debouncedSearch,
+      maturity: maturity || undefined,
+      producerId: selectedProducer,
+      regionId: selectedRegion,
+      color: selectedColor,
+      vintage: selectedVintage ? Number(selectedVintage) : undefined,
+      cellarId: selectedCellar,
+      priceMin,
+      priceMax,
+      sort: sortOption,
+      append: true,
+    })
+    setIsLoadingMore(false)
+  }, [isLoadingMore, hasMore, isLoading, lots.length, fetchInventoryWithParams, debouncedSearch, maturity, selectedProducer, selectedRegion, selectedColor, selectedVintage, selectedCellar, priceMin, priceMax, sortOption])
 
   const renderFilterDropdown = (
     label: string,
@@ -650,29 +670,10 @@ export const InventoryScreen = () => {
     </>
   )
 
-  const ListFooter = totalPages > 1 ? (
-    <View style={styles.pagination}>
-      <TouchableOpacity
-        style={[styles.pageButton, currentPage <= 1 && styles.pageButtonDisabled]}
-        onPress={goPrev}
-        disabled={currentPage <= 1}
-      >
-        <Text style={[styles.pageButtonText, currentPage <= 1 && styles.pageButtonTextDisabled]}>
-          ← Prev
-        </Text>
-      </TouchableOpacity>
-      <Text style={styles.pageInfo}>
-        Page {currentPage} of {totalPages}
-      </Text>
-      <TouchableOpacity
-        style={[styles.pageButton, currentPage >= totalPages && styles.pageButtonDisabled]}
-        onPress={goNext}
-        disabled={currentPage >= totalPages}
-      >
-        <Text style={[styles.pageButtonText, currentPage >= totalPages && styles.pageButtonTextDisabled]}>
-          Next →
-        </Text>
-      </TouchableOpacity>
+  const ListFooter = isLoadingMore ? (
+    <View style={styles.loadingMore}>
+      <ActivityIndicator size="small" color={colors.primary[600]} />
+      <Text style={styles.loadingMoreText}>Loading more...</Text>
     </View>
   ) : null
 
@@ -717,6 +718,8 @@ export const InventoryScreen = () => {
           contentContainerStyle={styles.listContent}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           keyboardShouldPersistTaps="handled"
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.3}
         />
       ) : activeTab === 'wishlist' ? (
         renderWishlistTab()
@@ -1059,38 +1062,16 @@ const styles = StyleSheet.create({
     color: colors.muted[400],
     fontWeight: '500',
   },
-  pagination: {
+  loadingMore: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: colors.muted[200],
+    paddingVertical: 16,
+    gap: 8,
   },
-  pageButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-    backgroundColor: colors.white,
-  },
-  pageButtonDisabled: {
-    opacity: 0.4,
-  },
-  pageButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.muted[700],
-  },
-  pageButtonTextDisabled: {
-    color: colors.muted[400],
-  },
-  pageInfo: {
+  loadingMoreText: {
     fontSize: 13,
     color: colors.muted[500],
-    fontWeight: '500',
   },
   emptyState: {
     alignItems: 'center',
