@@ -44,7 +44,18 @@ export const ProfileScreen = ({ navigation }: any) => {
         <Text style={styles.userName}>{userName}</Text>
         {user?.email && <Text style={styles.userEmail}>{user.email}</Text>}
 
-        {/* Settings section */}
+        {/* Data section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Data</Text>
+
+          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Import')}>
+            <Text style={styles.menuIcon}>📁</Text>
+            <Text style={styles.menuLabel}>Import Collection</Text>
+            <Text style={styles.menuArrow}>›</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Account section */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Account</Text>
 

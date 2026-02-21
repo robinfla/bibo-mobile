@@ -10,6 +10,7 @@ import { InventoryScreen } from '../screens/inventory/InventoryScreen'
 import { InventoryDetailScreen } from '../screens/inventory/InventoryDetailScreen'
 import { AnalyticsScreen } from '../screens/analytics/AnalyticsScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
+import { ImportScreen } from '../screens/ImportScreen'
 import { ScanWineModal } from '../screens/home/ScanWineModal'
 import type { InventoryLot } from '../types/api'
 
@@ -76,6 +77,11 @@ const HomeStackScreen = () => (
     <HomeStack.Screen
       name="Profile"
       component={ProfileScreen}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="Import"
+      component={ImportScreen}
       options={{ headerShown: false }}
     />
   </HomeStack.Navigator>
