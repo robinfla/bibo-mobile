@@ -7,11 +7,12 @@ import {
   ScrollView,
   Modal,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native'
 import Slider from '@react-native-community/slider'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
-import type { InventoryFilters } from '../../types/api'
+import type { InventoryFilters, InventoryResponse } from '../../types/api'
 
 export type SortOption = 'date' | 'maturity' | 'value' | 'price'
 
@@ -32,7 +33,6 @@ interface FiltersScreenProps {
   onClose: () => void
   onApply: (filters: FilterState) => void
   currentFilters: FilterState
-  matchCount: number
 }
 
 const SORT_OPTIONS: { value: SortOption; label: string; icon: string }[] = [
@@ -66,7 +66,6 @@ export const FiltersScreen = ({
   onClose,
   onApply,
   currentFilters,
-  matchCount,
 }: FiltersScreenProps) => {
   const [sort, setSort] = useState<SortOption>(currentFilters.sort)
   const [color, setColor] = useState<string | undefined>(currentFilters.color)
@@ -78,7 +77,12 @@ export const FiltersScreen = ({
   const [priceMin, setPriceMin] = useState(currentFilters.priceMin)
   const [priceMax, setPriceMax] = useState(currentFilters.priceMax)
 
-  const [filters, setFilters] = useState<InventoryFilters | null>(null)
+  const [filterOptions, setFilterOptions] = useState<InventoryFilters | null>(null)
+  const [matchCount, setMatchCount] = useState<number | null>(null)
+  const [counting, setCounting] = useState(false)
+
+  // Expanded dropdowns
+  const [expandedSection, setExpandedSection] = useState<string | null>(null)
 
   useEffect(() => {
     if (visible) {
@@ -91,16 +95,55 @@ export const FiltersScreen = ({
       setVintage(currentFilters.vintage)
       setPriceMin(currentFilters.priceMin)
       setPriceMax(currentFilters.priceMax)
-      fetchFilters()
+      setExpandedSection(null)
+      fetchFilterOptions()
     }
   }, [visible])
 
-  const fetchFilters = useCallback(async () => {
+  // Live count: fetch matching count when filters change
+  useEffect(() => {
+    if (!visible) return
+    const timeout = setTimeout(() => fetchCount(), 300)
+    return () => clearTimeout(timeout)
+  }, [visible, color, maturity, producerId, regionId, cellarId, vintage, priceMin, priceMax])
+
+  const fetchFilterOptions = useCallback(async () => {
     try {
       const data = await apiFetch<InventoryFilters>('/api/inventory/filters')
-      setFilters(data)
+      setFilterOptions(data)
     } catch {}
   }, [])
+
+  const fetchCount = useCallback(async () => {
+    setCounting(true)
+    try {
+      const query: Record<string, string | number | boolean | undefined> = { limit: 500, offset: 0 }
+      if (color) query.color = color
+      if (maturity) query.maturity = maturity
+      if (producerId) query.producerId = producerId
+      if (regionId) query.regionId = regionId
+      if (cellarId) query.cellarId = cellarId
+      if (vintage) query.vintage = vintage
+
+      const data = await apiFetch<InventoryResponse>('/api/inventory', { query })
+      let count = data.total
+
+      // Client-side price filter for count
+      if (priceMin > 0 || priceMax < 200) {
+        const filtered = data.lots.filter(lot => {
+          const price = lot.purchasePricePerBottle ? parseFloat(lot.purchasePricePerBottle) : 0
+          return price >= priceMin && (priceMax >= 200 || price <= priceMax)
+        })
+        count = filtered.length
+      }
+
+      setMatchCount(count)
+    } catch {
+      setMatchCount(null)
+    } finally {
+      setCounting(false)
+    }
+  }, [color, maturity, producerId, regionId, cellarId, vintage, priceMin, priceMax])
 
   const handleApply = () => {
     onApply({ sort, color, maturity, producerId, regionId, cellarId, vintage, priceMin, priceMax })
@@ -120,6 +163,18 @@ export const FiltersScreen = ({
 
   const toggleChip = <T,>(current: T | undefined, value: T): T | undefined =>
     current === value ? undefined : value
+
+  const toggleSection = (section: string) =>
+    setExpandedSection(expandedSection === section ? null : section)
+
+  const getSelectedLabel = (
+    options: { id: number; name: string }[],
+    selectedId: number | undefined,
+    placeholder: string,
+  ) => {
+    if (!selectedId) return placeholder
+    return options.find(o => o.id === selectedId)?.name ?? placeholder
+  }
 
   const renderChips = <T extends string | number>(
     options: { value: T; label: string }[],
@@ -141,12 +196,65 @@ export const FiltersScreen = ({
     </View>
   )
 
+  const renderDropdown = (
+    sectionKey: string,
+    label: string,
+    emoji: string,
+    options: { id: number; name: string }[],
+    selected: number | undefined,
+    onSelect: (v: number | undefined) => void,
+    placeholder: string,
+  ) => {
+    const isOpen = expandedSection === sectionKey
+    const selectedLabel = getSelectedLabel(options, selected, placeholder)
+    const isActive = selected !== undefined
+
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{emoji} {label}</Text>
+        <TouchableOpacity
+          style={[styles.dropdown, isActive && styles.dropdownActive]}
+          onPress={() => toggleSection(sectionKey)}
+        >
+          <Text style={[styles.dropdownText, isActive && styles.dropdownTextActive]}>
+            {selectedLabel}
+          </Text>
+          <Text style={styles.dropdownArrow}>{isOpen ? '▲' : '▼'}</Text>
+        </TouchableOpacity>
+        {isOpen && (
+          <View style={styles.dropdownList}>
+            {isActive && (
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => { onSelect(undefined); setExpandedSection(null) }}
+              >
+                <Text style={styles.dropdownItemClear}>✕ Clear</Text>
+              </TouchableOpacity>
+            )}
+            {options.map(opt => (
+              <TouchableOpacity
+                key={opt.id}
+                style={[styles.dropdownItem, selected === opt.id && styles.dropdownItemActive]}
+                onPress={() => { onSelect(selected === opt.id ? undefined : opt.id); setExpandedSection(null) }}
+              >
+                <Text style={[styles.dropdownItemText, selected === opt.id && styles.dropdownItemTextActive]}>
+                  {opt.name}
+                </Text>
+                {selected === opt.id && <Text style={styles.checkmark}>✓</Text>}
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+      </View>
+    )
+  }
+
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
       <SafeAreaView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Filters and sorts</Text>
+          <Text style={styles.title}>Filters & Sort</Text>
           <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
             <Text style={styles.closeBtnText}>✕</Text>
           </TouchableOpacity>
@@ -156,6 +264,7 @@ export const FiltersScreen = ({
           style={styles.scroll}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
           {/* Sort by */}
           <View style={styles.section}>
@@ -190,87 +299,61 @@ export const FiltersScreen = ({
           {/* Purchase Price Range */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>💸 Purchase price (EUR)</Text>
-            <View style={styles.sliderRow}>
-              <Text style={styles.sliderValue}>{priceMin}</Text>
-              <View style={styles.sliderTrack}>
-                <Slider
-                  minimumValue={PRICE_MIN}
-                  maximumValue={PRICE_MAX}
-                  step={5}
-                  value={priceMin}
-                  onValueChange={v => {
-                    const rounded = Math.round(v / 5) * 5
-                    if (rounded < priceMax) setPriceMin(rounded)
-                  }}
-                  minimumTrackTintColor={colors.primary[500]}
-                  maximumTrackTintColor={colors.muted[200]}
-                  thumbTintColor={colors.primary[600]}
-                />
-                <Slider
-                  minimumValue={PRICE_MIN}
-                  maximumValue={PRICE_MAX}
-                  step={5}
-                  value={priceMax}
-                  onValueChange={v => {
-                    const rounded = Math.round(v / 5) * 5
-                    if (rounded > priceMin) setPriceMax(rounded)
-                  }}
-                  minimumTrackTintColor={colors.muted[200]}
-                  maximumTrackTintColor={colors.muted[200]}
-                  thumbTintColor={colors.primary[600]}
-                />
+            <View style={styles.sliderContainer}>
+              <View style={styles.sliderLabels}>
+                <Text style={styles.sliderValue}>€{priceMin}</Text>
+                <Text style={styles.sliderValue}>€{priceMax}{priceMax >= PRICE_MAX ? '+' : ''}</Text>
               </View>
-              <Text style={styles.sliderValue}>{priceMax}{priceMax >= PRICE_MAX ? '+' : ''}</Text>
+              <Text style={styles.sliderHint}>Min price</Text>
+              <Slider
+                minimumValue={PRICE_MIN}
+                maximumValue={PRICE_MAX}
+                step={5}
+                value={priceMin}
+                onValueChange={v => {
+                  const rounded = Math.round(v / 5) * 5
+                  if (rounded < priceMax) setPriceMin(rounded)
+                }}
+                minimumTrackTintColor={colors.primary[500]}
+                maximumTrackTintColor={colors.muted[200]}
+                thumbTintColor={colors.primary[600]}
+              />
+              <Text style={styles.sliderHint}>Max price</Text>
+              <Slider
+                minimumValue={PRICE_MIN}
+                maximumValue={PRICE_MAX}
+                step={5}
+                value={priceMax}
+                onValueChange={v => {
+                  const rounded = Math.round(v / 5) * 5
+                  if (rounded > priceMin) setPriceMax(rounded)
+                }}
+                minimumTrackTintColor={colors.primary[500]}
+                maximumTrackTintColor={colors.muted[200]}
+                thumbTintColor={colors.primary[600]}
+              />
             </View>
           </View>
 
-          {/* Region */}
-          {filters && filters.regions.length > 0 && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>🌍 Region</Text>
-              {renderChips(
-                filters.regions.map(r => ({ value: r.id, label: r.name })),
-                regionId,
-                setRegionId,
-              )}
-            </View>
-          )}
+          {/* Region — dropdown */}
+          {filterOptions && filterOptions.regions.length > 0 &&
+            renderDropdown('region', 'Region', '🌍', filterOptions.regions, regionId, setRegionId, 'All regions')}
 
-          {/* Cellar */}
-          {filters && filters.cellars.length > 0 && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>🔍 Cellar</Text>
-              {renderChips(
-                filters.cellars.map(c => ({ value: c.id, label: c.name })),
-                cellarId,
-                setCellarId,
-              )}
-            </View>
-          )}
+          {/* Cellar — dropdown */}
+          {filterOptions && filterOptions.cellars.length > 0 &&
+            renderDropdown('cellar', 'Cellar', '🔍', filterOptions.cellars, cellarId, setCellarId, 'All cellars')}
 
-          {/* Producer */}
-          {filters && filters.producers.length > 0 && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>🏠 Producer</Text>
-              {renderChips(
-                filters.producers.slice(0, 20).map(p => ({ value: p.id, label: p.name })),
-                producerId,
-                setProducerId,
-              )}
-            </View>
-          )}
+          {/* Producer — dropdown */}
+          {filterOptions && filterOptions.producers.length > 0 &&
+            renderDropdown('producer', 'Producer', '🏠', filterOptions.producers, producerId, setProducerId, 'All producers')}
 
-          {/* Vintage */}
-          {filters && filters.vintages.length > 0 && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>📆 Vintage</Text>
-              {renderChips(
-                filters.vintages.slice(0, 15).map(v => ({ value: v, label: String(v) })),
-                vintage,
-                setVintage,
-              )}
-            </View>
-          )}
+          {/* Vintage — dropdown */}
+          {filterOptions && filterOptions.vintages.length > 0 &&
+            renderDropdown(
+              'vintage', 'Vintage', '📆',
+              filterOptions.vintages.map(v => ({ id: v, name: String(v) })),
+              vintage, setVintage, 'All vintages',
+            )}
 
           {/* Reset link */}
           <TouchableOpacity style={styles.resetBtn} onPress={handleReset}>
@@ -283,9 +366,15 @@ export const FiltersScreen = ({
         {/* Sticky CTA */}
         <View style={styles.ctaContainer}>
           <TouchableOpacity style={styles.ctaButton} onPress={handleApply}>
-            <Text style={styles.ctaText}>
-              See the {matchCount} bottle{matchCount !== 1 ? 's' : ''}
-            </Text>
+            {counting ? (
+              <ActivityIndicator color={colors.white} size="small" />
+            ) : (
+              <Text style={styles.ctaText}>
+                {matchCount !== null
+                  ? `See the ${matchCount} bottle${matchCount !== 1 ? 's' : ''}`
+                  : 'Apply filters'}
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -340,14 +429,43 @@ const styles = StyleSheet.create({
   chipTextActive: { color: colors.primary[700], fontWeight: '600' },
 
   // Slider
-  sliderRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
+  sliderContainer: { marginTop: 4 },
+  sliderLabels: {
+    flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4,
   },
-  sliderTrack: { flex: 1 },
   sliderValue: {
-    fontSize: 14, fontWeight: '700', color: colors.primary[600],
-    minWidth: 32, textAlign: 'center',
+    fontSize: 15, fontWeight: '700', color: colors.primary[600],
   },
+  sliderHint: {
+    fontSize: 12, color: colors.muted[500], marginBottom: 2, marginTop: 8,
+  },
+
+  // Dropdown
+  dropdown: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    backgroundColor: colors.muted[50], borderWidth: 1, borderColor: colors.muted[300],
+    borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12,
+  },
+  dropdownActive: {
+    borderColor: colors.primary[500], backgroundColor: colors.primary[50],
+  },
+  dropdownText: { fontSize: 15, color: colors.muted[500] },
+  dropdownTextActive: { color: colors.primary[700], fontWeight: '600' },
+  dropdownArrow: { fontSize: 12, color: colors.muted[400] },
+  dropdownList: {
+    marginTop: 6, backgroundColor: colors.white,
+    borderWidth: 1, borderColor: colors.muted[200], borderRadius: 10,
+    maxHeight: 250, overflow: 'hidden',
+  },
+  dropdownItem: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingHorizontal: 14, paddingVertical: 11,
+    borderBottomWidth: 1, borderBottomColor: colors.muted[50],
+  },
+  dropdownItemActive: { backgroundColor: colors.primary[50] },
+  dropdownItemText: { fontSize: 14, color: colors.muted[700] },
+  dropdownItemTextActive: { color: colors.primary[700], fontWeight: '600' },
+  dropdownItemClear: { fontSize: 14, color: colors.muted[500], fontWeight: '600' },
 
   // Reset
   resetBtn: { alignSelf: 'center', paddingVertical: 12 },

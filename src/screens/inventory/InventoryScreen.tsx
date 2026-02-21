@@ -583,7 +583,11 @@ export const InventoryScreen = () => {
           style={[styles.filterIconBtn, hasAnyFilter && styles.filterIconBtnActive]}
           onPress={() => setShowFilterModal(true)}
         >
-          <Text style={styles.filterIconText}>⚙️</Text>
+          <View style={styles.filterLines}>
+            <View style={[styles.filterLine, { width: 20 }]} />
+            <View style={[styles.filterLine, { width: 14 }]} />
+            <View style={[styles.filterLine, { width: 8 }]} />
+          </View>
           {hasAnyFilter && <View style={styles.filterDot} />}
         </TouchableOpacity>
       </View>
@@ -674,7 +678,6 @@ export const InventoryScreen = () => {
         onClose={() => setShowFilterModal(false)}
         onApply={applyFilters}
         currentFilters={currentFilterState}
-        matchCount={total}
       />
 
       {/* Add/Edit Tasting Notes Modal */}
@@ -822,8 +825,14 @@ const styles = StyleSheet.create({
     borderColor: colors.primary[500],
     backgroundColor: colors.primary[50],
   },
-  filterIconText: {
-    fontSize: 20,
+  filterLines: {
+    alignItems: 'center',
+    gap: 3,
+  },
+  filterLine: {
+    height: 2,
+    backgroundColor: colors.muted[600],
+    borderRadius: 1,
   },
   filterDot: {
     position: 'absolute',
