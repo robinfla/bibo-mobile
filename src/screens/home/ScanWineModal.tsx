@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import {
   View,
   Text,
+  TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
@@ -42,7 +43,7 @@ const getWineColor = (color: string): string =>
   WINE_COLORS[color.toLowerCase()] ?? colors.muted[400]
 
 export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProps) => {
-  const [step, setStep] = useState<'launching' | 'choose' | 'preview' | 'scanning' | 'results' | 'manual-search' | 'manual-searching'>('launching')
+  const [step, setStep] = useState<'launching' | 'choose' | 'preview' | 'scanning' | 'results' | 'manual-search' | 'manual-searching' | 'tasting'>('launching')
   const [cameraLaunched, setCameraLaunched] = useState(false)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [selectedImageBase64, setSelectedImageBase64] = useState<string | null>(null)
@@ -52,8 +53,15 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
   const [prefillData, setPrefillData] = useState<ParsedWine | null>(null)
 
   // Consume flow state
+  const [consumeMatch, setConsumeMatch] = useState<WineMatch | null>(null)
+  const [consumeLot, setConsumeLot] = useState<InventoryLot | null>(null)
+  const [consumeQty, setConsumeQty] = useState(1)
+  const [consumeScore, setConsumeScore] = useState('')
+  const [consumeComment, setConsumeComment] = useState('')
+  const [consumePairing, setConsumePairing] = useState('')
   const [isConsuming, setIsConsuming] = useState(false)
   const [consumeError, setConsumeError] = useState<string | null>(null)
+  const [isFindingLot, setIsFindingLot] = useState(false)
 
   // Manual search state
   const [manualSearchText, setManualSearchText] = useState('')
@@ -67,8 +75,15 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
     setError(null)
     setShowAddModal(false)
     setPrefillData(null)
+    setConsumeMatch(null)
+    setConsumeLot(null)
+    setConsumeQty(1)
+    setConsumeScore('')
+    setConsumeComment('')
+    setConsumePairing('')
     setIsConsuming(false)
     setConsumeError(null)
+    setIsFindingLot(false)
     setManualSearchText('')
     setManualSearchResults(null)
   }, [])
@@ -187,12 +202,12 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
     }
   }
 
-  const consumeWine = async (match: WineMatch, quantity: number = 1) => {
-    setIsConsuming(true)
+  const startConsume = async (match: WineMatch) => {
+    setIsFindingLot(true)
     setConsumeError(null)
+    setConsumeMatch(match)
 
     try {
-      // Search by wine name only (combined search is too strict for ilike)
       const inventory = await apiFetch<{ lots: InventoryLot[] }>('/api/inventory', {
         query: { search: match.wine.name, inStock: 'true', limit: 50 },
       })
@@ -201,22 +216,44 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
       
       if (availableLots.length === 0) {
         setConsumeError('No bottles available for this wine')
-        setIsConsuming(false)
+        setIsFindingLot(false)
         return
       }
 
-      // Use the first available lot
-      const lot = availableLots[0]
-      const consumeQty = Math.min(quantity, lot.quantity)
+      setConsumeLot(availableLots[0])
+      setConsumeQty(1)
+      setConsumeScore('')
+      setConsumeComment('')
+      setConsumePairing('')
+      setStep('tasting' as any)
+    } catch (e) {
+      const msg = e instanceof ApiError ? e.message : 'Failed to find bottle'
+      setConsumeError(msg)
+    } finally {
+      setIsFindingLot(false)
+    }
+  }
 
-      const payload: ConsumePayload = { quantity: consumeQty }
+  const confirmConsume = async () => {
+    if (!consumeLot) return
+    setIsConsuming(true)
+    setConsumeError(null)
 
-      await apiFetch(`/api/inventory/${lot.id}/consume`, {
+    const payload: ConsumePayload = { quantity: consumeQty }
+    const scoreNum = parseInt(consumeScore, 10)
+    if (consumeComment.trim() || consumePairing.trim() || (!isNaN(scoreNum) && scoreNum >= 0)) {
+      payload.tastingNote = {
+        score: !isNaN(scoreNum) ? scoreNum : 0,
+        comment: consumeComment.trim(),
+        pairing: consumePairing.trim(),
+      }
+    }
+
+    try {
+      await apiFetch(`/api/inventory/${consumeLot.id}/consume`, {
         method: 'POST',
         body: payload as unknown as Record<string, unknown>,
       })
-
-      Alert.alert('Success', `Opened ${consumeQty} bottle(s) of ${match.wine.name}`)
       onSuccess()
       handleClose()
     } catch (e) {
@@ -364,10 +401,10 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
                 <View style={styles.matchActions}>
                   <TouchableOpacity 
                     style={styles.consumeButton}
-                    onPress={() => consumeWine(match)}
-                    disabled={isConsuming}
+                    onPress={() => startConsume(match)}
+                    disabled={isFindingLot}
                   >
-                    {isConsuming ? (
+                    {isFindingLot && consumeMatch?.wine.id === match.wine.id ? (
                       <ActivityIndicator color={colors.white} size="small" />
                     ) : (
                       <Text style={styles.consumeButtonText}>Open this bottle</Text>
@@ -375,7 +412,7 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
                   </TouchableOpacity>
                 </View>
 
-                {consumeError && (
+                {consumeError && consumeMatch?.wine.id === match.wine.id && (
                   <Text style={styles.errorText}>{consumeError}</Text>
                 )}
               </View>
@@ -398,6 +435,99 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
         <TouchableOpacity style={styles.manualSearchLink} onPress={() => setStep('manual-search')}>
           <Text style={styles.manualSearchLinkText}>Not your wine? Try manual search instead</Text>
         </TouchableOpacity>
+      </ScrollView>
+    )
+  }
+
+  const renderTastingStep = () => {
+    if (!consumeLot || !consumeMatch) return null
+
+    return (
+      <ScrollView keyboardShouldPersistTaps="handled">
+        <Text style={styles.modalTitle}>Tasting Notes</Text>
+
+        <View style={styles.tastingWineInfo}>
+          <View style={[styles.colorDot, { backgroundColor: getWineColor(consumeMatch.wine.color) }]} />
+          <View style={styles.tastingWineText}>
+            <Text style={styles.tastingWineName}>{consumeMatch.wine.name}</Text>
+            <Text style={styles.tastingWineMeta}>
+              {consumeMatch.producer.name} · {consumeLot.vintage ?? 'NV'}
+            </Text>
+          </View>
+        </View>
+
+        <Text style={styles.tastingLabel}>Quantity ({consumeLot.quantity} available)</Text>
+        <View style={styles.qtyRow}>
+          <TouchableOpacity
+            style={styles.qtyButton}
+            onPress={() => setConsumeQty((q) => Math.max(1, q - 1))}
+          >
+            <Text style={styles.qtyButtonText}>−</Text>
+          </TouchableOpacity>
+          <Text style={styles.qtyValue}>{consumeQty}</Text>
+          <TouchableOpacity
+            style={styles.qtyButton}
+            onPress={() => setConsumeQty((q) => Math.min(consumeLot.quantity, q + 1))}
+          >
+            <Text style={styles.qtyButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.tastingLabel}>Score (0-100, optional)</Text>
+        <TextInput
+          style={styles.tastingInput}
+          value={consumeScore}
+          onChangeText={setConsumeScore}
+          placeholder="e.g. 88"
+          placeholderTextColor={colors.muted[400]}
+          keyboardType="number-pad"
+          maxLength={3}
+        />
+
+        <Text style={styles.tastingLabel}>Tasting Notes (optional)</Text>
+        <TextInput
+          style={[styles.tastingInput, styles.tastingTextArea]}
+          value={consumeComment}
+          onChangeText={setConsumeComment}
+          placeholder="Describe the wine..."
+          placeholderTextColor={colors.muted[400]}
+          multiline
+          numberOfLines={3}
+        />
+
+        <Text style={styles.tastingLabel}>Food Pairing (optional)</Text>
+        <TextInput
+          style={styles.tastingInput}
+          value={consumePairing}
+          onChangeText={setConsumePairing}
+          placeholder="What did you pair it with?"
+          placeholderTextColor={colors.muted[400]}
+        />
+
+        {consumeError && (
+          <Text style={styles.errorText}>{consumeError}</Text>
+        )}
+
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={() => setStep('results')}
+            disabled={isConsuming}
+          >
+            <Text style={styles.secondaryButtonText}>Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.primaryButton, isConsuming && styles.buttonDisabled]}
+            onPress={confirmConsume}
+            disabled={isConsuming}
+          >
+            {isConsuming ? (
+              <ActivityIndicator color={colors.white} size="small" />
+            ) : (
+              <Text style={styles.primaryButtonText}>Confirm</Text>
+            )}
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     )
   }
@@ -453,6 +583,7 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
               {step === 'preview' && renderPreviewStep()}
               {step === 'scanning' && renderScanningStep()}
               {step === 'results' && renderResultsStep()}
+              {step === 'tasting' && renderTastingStep()}
               {step === 'manual-search' && renderManualSearchStep()}
               {step === 'manual-searching' && renderScanningStep()}
             </TouchableOpacity>
@@ -744,6 +875,79 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 8,
   },
+  // Tasting notes
+  tastingWineInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.muted[50],
+    padding: 12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.muted[200],
+    marginBottom: 20,
+  },
+  tastingWineText: {
+    flex: 1,
+  },
+  tastingWineName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.muted[900],
+  },
+  tastingWineMeta: {
+    fontSize: 14,
+    color: colors.muted[500],
+    marginTop: 2,
+  },
+  tastingLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.muted[700],
+    marginBottom: 6,
+    marginTop: 12,
+  },
+  tastingInput: {
+    backgroundColor: colors.muted[50],
+    borderWidth: 1,
+    borderColor: colors.muted[300],
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    fontSize: 15,
+    color: colors.muted[900],
+  },
+  tastingTextArea: {
+    minHeight: 80,
+    textAlignVertical: 'top',
+  },
+  qtyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  qtyButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.muted[300],
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.muted[50],
+  },
+  qtyButtonText: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: colors.muted[700],
+  },
+  qtyValue: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.muted[900],
+    minWidth: 30,
+    textAlign: 'center',
+  },
+
   manualSearchLink: {
     paddingVertical: 12,
     alignItems: 'center',
