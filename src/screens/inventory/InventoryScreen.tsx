@@ -15,6 +15,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors } from '../../theme/colors'
+import { WishlistTab } from './WishlistTab'
 import type {
   InventoryLot,
   InventoryResponse,
@@ -372,13 +373,7 @@ export const InventoryScreen = () => {
   )
 
   const renderWishlistTab = () => (
-    <ScrollView
-      style={styles.tabContent}
-      contentContainerStyle={styles.centeredContent}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-    >
-      <Text style={styles.comingSoonText}>Coming soon</Text>
-    </ScrollView>
+    <WishlistTab />
   )
 
   const renderHistoryTab = () => {

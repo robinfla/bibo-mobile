@@ -186,3 +186,36 @@ export interface InventoryEventsResponse {
   events: InventoryEvent[]
   total: number
 }
+
+export interface WishlistItem {
+  id: number
+  itemType: 'wine' | 'producer'
+  name: string
+  wineId: number | null
+  producerId: number | null
+  regionId: number | null
+  vintage: number | null
+  notes: string | null
+  winesOfInterest: string | null
+  priceTarget: string | null
+  priceCurrency: string | null
+  url: string | null
+  createdAt: string
+  updatedAt: string
+  wineName: string | null
+  wineColor: string | null
+  producerName: string | null
+  regionName: string | null
+}
+
+export interface CreateWishlistItem {
+  itemType: 'wine' | 'producer'
+  name: string
+  vintage?: number | null
+  notes?: string | null
+  priceTarget?: string | null
+  priceCurrency?: string
+  url?: string | null
+  regionId?: number | null
+  winesOfInterest?: string | null
+}
