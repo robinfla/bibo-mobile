@@ -249,18 +249,17 @@ export const HomeScreen = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         keyboardShouldPersistTaps="handled"
       >
+        {/* Top Bar */}
+        <View style={styles.topBar}>
+          <View style={styles.topBarSpacer} />
+          <Text style={styles.topBarGreeting}>Hello {userName} 👋</Text>
+          <TouchableOpacity onPress={logout} style={styles.logoutButton}>
+            <Text style={styles.logoutIcon}>⏻</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Hero */}
         <View style={styles.hero}>
-          <View style={styles.heroHeader}>
-            <View>
-              <Text style={styles.heroGreeting}>Hello {userName} 👋</Text>
-              <Text style={styles.heroSubtitle}>Welcome back to your cellar</Text>
-            </View>
-            <TouchableOpacity onPress={logout} style={styles.logoutButton}>
-              <Text style={styles.logoutText}>Sign Out</Text>
-            </TouchableOpacity>
-          </View>
-
           {/* Bottle count */}
           <View style={styles.bottleCountCard}>
             <Text style={styles.bottleCountLabel}>Number of bottles</Text>
@@ -506,39 +505,46 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  // Top Bar
+  topBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 8,
+    backgroundColor: colors.muted[50],
+  },
+  topBarSpacer: {
+    width: 36,
+  },
+  topBarGreeting: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.muted[900],
+    textAlign: 'center',
+    flex: 1,
+  },
+  logoutButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.muted[300],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoutIcon: {
+    fontSize: 18,
+    color: colors.muted[600],
+  },
+
   // Hero
   hero: {
     paddingHorizontal: 20,
-    paddingTop: 24,
+    paddingTop: 8,
     paddingBottom: 28,
     backgroundColor: colors.muted[50],
-  },
-  heroHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  heroGreeting: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: colors.muted[900],
-  },
-  heroSubtitle: {
-    fontSize: 14,
-    color: colors.muted[500],
-    marginTop: 4,
-  },
-  logoutButton: {
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  logoutText: {
-    color: colors.muted[600],
-    fontSize: 13,
-    fontWeight: '600',
   },
   bottleCountCard: {
     backgroundColor: colors.white,
