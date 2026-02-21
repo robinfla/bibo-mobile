@@ -141,3 +141,47 @@ export interface ChatMessage {
 export interface PairingResponse {
   reply: string
 }
+
+export interface InventoryEvent {
+  id: number
+  lotId: number
+  eventType: 'purchase' | 'consume'
+  quantityChange: number
+  eventDate: string
+  notes: string | null
+  rating: number | null
+  tastingNotes: string | null
+  createdAt: string
+  wineName: string
+  wineColor: string
+  producerName: string
+  vintage: number | null
+  cellarName: string
+}
+
+export interface EventsResponse {
+  events: InventoryEvent[]
+  total: number
+}
+
+export interface InventoryEvent {
+  id: number
+  lotId: number
+  eventType: 'purchase' | 'consume'
+  quantityChange: number
+  eventDate: string
+  notes: string | null
+  rating: number | null
+  tastingNotes: string | null
+  createdAt: string
+  wineName: string
+  wineColor: string
+  producerName: string
+  vintage: number | null
+  cellarName: string
+}
+
+export interface InventoryEventsResponse {
+  events: InventoryEvent[]
+  total: number
+}
