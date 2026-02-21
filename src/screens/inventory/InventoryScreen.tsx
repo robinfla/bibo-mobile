@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WishlistTab } from './WishlistTab'
+import { FiltersScreen, type FilterState, type SortOption } from './FiltersScreen'
 import type {
   InventoryLot,
   InventoryResponse,
@@ -104,6 +105,47 @@ export const InventoryScreen = () => {
   const [selectedVintage, setSelectedVintage] = useState<number | undefined>(undefined)
   const [selectedCellar, setSelectedCellar] = useState<number | undefined>(undefined)
 
+  // Full-screen filter modal
+  const [showFilterModal, setShowFilterModal] = useState(false)
+  const [sortOption, setSortOption] = useState<SortOption>('date')
+  const [priceMin, setPriceMin] = useState(0)
+  const [priceMax, setPriceMax] = useState(200)
+
+  const currentFilterState: FilterState = {
+    sort: sortOption,
+    color: selectedColor,
+    maturity: maturity || undefined,
+    producerId: selectedProducer,
+    regionId: selectedRegion,
+    cellarId: selectedCellar,
+    vintage: selectedVintage,
+    priceMin,
+    priceMax,
+  }
+
+  const hasAnyFilter = selectedProducer !== undefined ||
+    selectedRegion !== undefined ||
+    selectedColor !== undefined ||
+    selectedVintage !== undefined ||
+    selectedCellar !== undefined ||
+    (maturity !== '') ||
+    priceMin > 0 ||
+    priceMax < 200
+
+  const applyFilters = (f: FilterState) => {
+    setSortOption(f.sort)
+    setSelectedColor(f.color)
+    setMaturity(f.maturity || '')
+    setSelectedProducer(f.producerId)
+    setSelectedRegion(f.regionId)
+    setSelectedCellar(f.cellarId)
+    setSelectedVintage(f.vintage)
+    setPriceMin(f.priceMin)
+    setPriceMax(f.priceMax)
+    setOffset(0)
+    setShowFilterModal(false)
+  }
+
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [debouncedSearch, setDebouncedSearch] = useState('')
 
@@ -135,14 +177,36 @@ export const InventoryScreen = () => {
       const data = await apiFetch<InventoryResponse>('/api/inventory', {
         query: query as Record<string, string | number | boolean | undefined>,
       })
-      setLots(data.lots)
-      setTotal(data.total)
+      // Client-side price filter
+      let filtered = data.lots
+      if (priceMin > 0 || priceMax < 200) {
+        filtered = filtered.filter(lot => {
+          const price = lot.purchasePricePerBottle ? parseFloat(lot.purchasePricePerBottle) : 0
+          return price >= priceMin && (priceMax >= 200 || price <= priceMax)
+        })
+      }
+
+      // Client-side sorting
+      if (sortOption === 'price') {
+        filtered.sort((a, b) => {
+          const pa = a.purchasePricePerBottle ? parseFloat(a.purchasePricePerBottle) : 0
+          const pb = b.purchasePricePerBottle ? parseFloat(b.purchasePricePerBottle) : 0
+          return pb - pa
+        })
+      } else if (sortOption === 'maturity') {
+        const order: Record<string, number> = { past: 0, declining: 1, peak: 2, ready: 3, approaching: 4, too_early: 5, unknown: 6 }
+        filtered.sort((a, b) => (order[a.maturity?.status ?? 'unknown'] ?? 6) - (order[b.maturity?.status ?? 'unknown'] ?? 6))
+      }
+      // 'date' and 'value' use default server sort (createdAt desc)
+
+      setLots(filtered)
+      setTotal(filtered.length)
       setError(null)
     } catch (e) {
       const msg = e instanceof ApiError ? e.message : 'Failed to load inventory'
       setError(msg)
     }
-  }, [debouncedSearch, maturity, selectedProducer, selectedRegion, selectedColor, selectedVintage, selectedCellar])
+  }, [debouncedSearch, maturity, selectedProducer, selectedRegion, selectedColor, selectedVintage, selectedCellar, priceMin, priceMax, sortOption])
 
   const fetchFilters = useCallback(async () => {
     try {
@@ -515,97 +579,14 @@ export const InventoryScreen = () => {
           placeholder="Search wines..."
           placeholderTextColor={colors.muted[400]}
         />
+        <TouchableOpacity
+          style={[styles.filterIconBtn, hasAnyFilter && styles.filterIconBtnActive]}
+          onPress={() => setShowFilterModal(true)}
+        >
+          <Text style={styles.filterIconText}>⚙️</Text>
+          {hasAnyFilter && <View style={styles.filterDot} />}
+        </TouchableOpacity>
       </View>
-
-      <View style={styles.maturityTabs}>
-        {MATURITY_TABS.map(({ label, value }) => (
-          <TouchableOpacity
-            key={value}
-            style={[styles.maturityTab, maturity === value && styles.maturityTabActive]}
-            onPress={() => handleMaturityChange(value)}
-          >
-            <Text style={[styles.maturityTabText, maturity === value && styles.maturityTabTextActive]}>
-              {label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <TouchableOpacity
-        style={styles.filterToggle}
-        onPress={() => setShowFilters((v) => !v)}
-      >
-        <Text style={styles.filterToggleText}>
-          {showFilters ? 'Hide Filters' : 'Show Filters'}
-          {hasActiveFilters ? ' (active)' : ''}
-        </Text>
-      </TouchableOpacity>
-
-      {showFilters && filters && (
-        <View style={styles.filtersContainer}>
-          {hasActiveFilters && (
-            <TouchableOpacity style={styles.clearAllButton} onPress={clearFilters}>
-              <Text style={styles.clearAllText}>Clear All Filters</Text>
-            </TouchableOpacity>
-          )}
-
-          {renderFilterDropdown('Producer', filters.producers, selectedProducer, setSelectedProducer)}
-          {renderFilterDropdown('Region', filters.regions, selectedRegion, setSelectedRegion)}
-
-          <View style={styles.filterGroup}>
-            <Text style={styles.filterLabel}>Color</Text>
-            <View style={styles.filterChips}>
-              {selectedColor !== undefined && (
-                <TouchableOpacity
-                  style={styles.clearChip}
-                  onPress={() => { setSelectedColor(undefined); setOffset(0) }}
-                >
-                  <Text style={styles.clearChipText}>✕ Clear</Text>
-                </TouchableOpacity>
-              )}
-              {WINE_COLOR_OPTIONS.map((c) => (
-                <TouchableOpacity
-                  key={c}
-                  style={[styles.filterChip, selectedColor === c && styles.filterChipActive]}
-                  onPress={() => { setSelectedColor(selectedColor === c ? undefined : c); setOffset(0) }}
-                >
-                  <View style={[styles.miniDot, { backgroundColor: getWineColor(c) }]} />
-                  <Text style={[styles.filterChipText, selectedColor === c && styles.filterChipTextActive]}>
-                    {c.charAt(0).toUpperCase() + c.slice(1)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          <View style={styles.filterGroup}>
-            <Text style={styles.filterLabel}>Vintage</Text>
-            <View style={styles.filterChips}>
-              {selectedVintage !== undefined && (
-                <TouchableOpacity
-                  style={styles.clearChip}
-                  onPress={() => { setSelectedVintage(undefined); setOffset(0) }}
-                >
-                  <Text style={styles.clearChipText}>✕ Clear</Text>
-                </TouchableOpacity>
-              )}
-              {filters.vintages.slice(0, 10).map((v) => (
-                <TouchableOpacity
-                  key={v}
-                  style={[styles.filterChip, selectedVintage === v && styles.filterChipActive]}
-                  onPress={() => { setSelectedVintage(selectedVintage === v ? undefined : v); setOffset(0) }}
-                >
-                  <Text style={[styles.filterChipText, selectedVintage === v && styles.filterChipTextActive]}>
-                    {v}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-
-          {renderFilterDropdown('Cellar', filters.cellars, selectedCellar, setSelectedCellar)}
-        </View>
-      )}
 
       <View style={styles.resultCount}>
         <Text style={styles.resultCountText}>{total} lot{total !== 1 ? 's' : ''} found</Text>
@@ -686,6 +667,15 @@ export const InventoryScreen = () => {
       ) : (
         renderHistoryTab()
       )}
+
+      {/* Filter Modal */}
+      <FiltersScreen
+        visible={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        onApply={applyFilters}
+        currentFilters={currentFilterState}
+        matchCount={total}
+      />
 
       {/* Add/Edit Tasting Notes Modal */}
       <Modal visible={!!editingEvent} transparent animationType="slide">
@@ -802,9 +792,13 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
     marginBottom: 12,
   },
   searchInput: {
+    flex: 1,
     backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.muted[300],
@@ -813,6 +807,32 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 16,
     color: colors.muted[900],
+  },
+  filterIconBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.muted[300],
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  filterIconBtnActive: {
+    borderColor: colors.primary[500],
+    backgroundColor: colors.primary[50],
+  },
+  filterIconText: {
+    fontSize: 20,
+  },
+  filterDot: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.primary[600],
   },
   maturityTabs: {
     flexDirection: 'row',
