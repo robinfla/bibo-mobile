@@ -50,8 +50,6 @@ const CollapsibleChart = ({ title, emoji, items }: { title: string; emoji: strin
   const maxValue = items.reduce((max, { value }) => Math.max(max, value), 0)
   const total = items.reduce((sum, i) => sum + i.value, 0)
 
-  if (items.length === 0) return null
-
   const toggle = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
     setExpanded(!expanded)
@@ -68,7 +66,9 @@ const CollapsibleChart = ({ title, emoji, items }: { title: string; emoji: strin
 
       {expanded && (
         <View style={styles.chartBody}>
-          {items.map(({ label, value, color }, index) => {
+          {items.length === 0 ? (
+            <Text style={{ color: '#999', fontSize: 13, textAlign: 'center', paddingVertical: 8 }}>No data</Text>
+          ) : items.map(({ label, value, color }, index) => {
             const pct = maxValue > 0 ? (value / maxValue) * 100 : 0
             const share = total > 0 ? Math.round((value / total) * 100) : 0
             return (
@@ -162,9 +162,9 @@ export const AnalyticsScreen = () => {
     }))
 
   const buildGrapeChart = (data: StatsResponse['byGrape']): BarChartItem[] =>
-    data.slice(0, 10).map(({ grapeName, bottles }, i) => ({
+    (data ?? []).slice(0, 10).map(({ grapeName, bottles }, i) => ({
       label: grapeName,
-      value: parseInt(bottles, 10),
+      value: typeof bottles === 'string' ? parseInt(bottles, 10) : Number(bottles),
       color: GRAPE_COLORS[i % GRAPE_COLORS.length],
     }))
 
