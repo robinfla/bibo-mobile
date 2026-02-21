@@ -583,10 +583,9 @@ export const InventoryScreen = () => {
           style={[styles.filterIconBtn, hasAnyFilter && styles.filterIconBtnActive]}
           onPress={() => setShowFilterModal(true)}
         >
-          <View style={styles.filterLines}>
-            <View style={[styles.filterLine, { width: 20 }]} />
-            <View style={[styles.filterLine, { width: 14 }]} />
-            <View style={[styles.filterLine, { width: 8 }]} />
+          <View style={styles.funnelIcon}>
+            <View style={styles.funnelTop} />
+            <View style={styles.funnelStem} />
           </View>
           {hasAnyFilter && <View style={styles.filterDot} />}
         </TouchableOpacity>
@@ -825,14 +824,24 @@ const styles = StyleSheet.create({
     borderColor: colors.primary[500],
     backgroundColor: colors.primary[50],
   },
-  filterLines: {
+  funnelIcon: {
     alignItems: 'center',
-    gap: 3,
   },
-  filterLine: {
-    height: 2,
-    backgroundColor: colors.muted[600],
-    borderRadius: 1,
+  funnelTop: {
+    width: 22,
+    height: 0,
+    borderLeftWidth: 11,
+    borderRightWidth: 11,
+    borderTopWidth: 14,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: colors.muted[700],
+  },
+  funnelStem: {
+    width: 3,
+    height: 8,
+    backgroundColor: colors.muted[700],
+    marginTop: -1,
   },
   filterDot: {
     position: 'absolute',
