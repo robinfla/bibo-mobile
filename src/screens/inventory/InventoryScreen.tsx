@@ -147,6 +147,7 @@ export const InventoryScreen = () => {
   }
 
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const fetchIdRef = useRef(0)
   const [debouncedSearch, setDebouncedSearch] = useState('')
 
   useEffect(() => {
@@ -161,6 +162,7 @@ export const InventoryScreen = () => {
   }, [search])
 
   const fetchInventory = useCallback(async (currentOffset: number) => {
+    const fetchId = ++fetchIdRef.current
     try {
       const query: InventoryQueryParams = {
         limit: PAGE_SIZE,
@@ -177,6 +179,10 @@ export const InventoryScreen = () => {
       const data = await apiFetch<InventoryResponse>('/api/inventory', {
         query: query as Record<string, string | number | boolean | undefined>,
       })
+
+      // Ignore stale responses
+      if (fetchId !== fetchIdRef.current) return
+
       // Client-side price filter
       let filtered = data.lots
       if (priceMin > 0 || priceMax < 200) {
@@ -203,6 +209,7 @@ export const InventoryScreen = () => {
       setTotal(filtered.length)
       setError(null)
     } catch (e) {
+      if (fetchId !== fetchIdRef.current) return
       const msg = e instanceof ApiError ? e.message : 'Failed to load inventory'
       setError(msg)
     }
