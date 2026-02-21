@@ -53,7 +53,7 @@ const MATURITY_TABS = [
   { label: 'To Age', value: 'young' },
 ] as const
 
-const PAGE_SIZE = 50
+const PAGE_SIZE = 500
 
 interface FilterOption {
   id: number
