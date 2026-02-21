@@ -2,17 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react'
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   ScrollView,
   ActivityIndicator,
   RefreshControl,
   TouchableOpacity,
-  Modal,
 } from 'react-native'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors, chartColors } from '../../theme/colors'
-import type { StatsResponse, InventoryEvent, InventoryEventsResponse } from '../../types/api'
+import type { StatsResponse } from '../../types/api'
 
 const WINE_COLORS: Record<string, string> = {
   red: colors.wine.red,
@@ -69,41 +67,13 @@ const formatPrice = (value: number): string => {
   }).format(value)
 }
 
-const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric'
-  })
-}
-
-const getMonthYear = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    month: 'long',
-    year: 'numeric'
-  })
-}
-
-interface EventsByMonth {
-  [monthYear: string]: InventoryEvent[]
-}
-
-type Tab = 'composition' | 'finance' | 'consumption'
+type Tab = 'composition' | 'finance'
 
 export const AnalyticsScreen = () => {
   const [activeTab, setActiveTab] = useState<Tab>('composition')
   const [stats, setStats] = useState<StatsResponse | null>(null)
-  const [events, setEvents] = useState<InventoryEvent[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isLoadingEvents, setIsLoadingEvents] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [expandedEvent, setExpandedEvent] = useState<number | null>(null)
-
-  // Add tasting notes form
-  const [editingEvent, setEditingEvent] = useState<InventoryEvent | null>(null)
-  const [editScore, setEditScore] = useState('')
-  const [editComment, setEditComment] = useState('')
-  const [editPairing, setEditPairing] = useState('')
-  const [isSavingNote, setIsSavingNote] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
 
   const fetchStats = useCallback(async () => {
@@ -117,20 +87,6 @@ export const AnalyticsScreen = () => {
     }
   }, [])
 
-  const fetchEvents = useCallback(async () => {
-    if (isLoadingEvents) return
-    
-    setIsLoadingEvents(true)
-    try {
-      const data = await apiFetch<InventoryEventsResponse>('/api/inventory/events?limit=100')
-      setEvents(data.events)
-    } catch (e) {
-      console.error('Failed to load events:', e)
-    } finally {
-      setIsLoadingEvents(false)
-    }
-  }, [isLoadingEvents])
-
   const loadData = useCallback(async () => {
     setIsLoading(true)
     await fetchStats()
@@ -140,47 +96,12 @@ export const AnalyticsScreen = () => {
   const onRefresh = useCallback(async () => {
     setRefreshing(true)
     await fetchStats()
-    if (activeTab === 'consumption') {
-      await fetchEvents()
-    }
     setRefreshing(false)
-  }, [fetchStats, fetchEvents, activeTab])
+  }, [fetchStats])
 
   useEffect(() => { 
     loadData() 
   }, [loadData])
-
-  const openAddNote = (ev: InventoryEvent) => {
-    setEditingEvent(ev)
-    setEditScore(ev.rating ? String(ev.rating) : '')
-    setEditComment(ev.tastingNotes || '')
-    setEditPairing(ev.pairing || '')
-  }
-
-  const saveNote = async () => {
-    if (!editingEvent) return
-    setIsSavingNote(true)
-    try {
-      const scoreNum = parseInt(editScore, 10)
-      await apiFetch(`/api/inventory/${editingEvent.lotId}/tasting-notes`, {
-        method: 'POST',
-        body: {
-          score: !isNaN(scoreNum) ? scoreNum : null,
-          comment: editComment.trim() || null,
-          pairing: editPairing.trim() || null,
-        },
-      })
-      setEditingEvent(null)
-      await fetchEvents()
-    } catch { /* */ }
-    finally { setIsSavingNote(false) }
-  }
-
-  useEffect(() => {
-    if (activeTab === 'consumption' && events.length === 0) {
-      fetchEvents()
-    }
-  }, [activeTab, events.length, fetchEvents])
 
   const buildColorChart = (data: StatsResponse['byColor']): BarChartItem[] =>
     data.map(({ color, bottles }) => ({
@@ -210,36 +131,7 @@ export const AnalyticsScreen = () => {
       color: chartColors.vintage[i % chartColors.vintage.length],
     }))
 
-  const getEventsByMonth = (): EventsByMonth => {
-    const grouped: EventsByMonth = {}
-    events.forEach(event => {
-      const monthYear = getMonthYear(event.eventDate)
-      if (!grouped[monthYear]) {
-        grouped[monthYear] = []
-      }
-      grouped[monthYear].push(event)
-    })
-    
-    // Sort events within each month by date (newest first)
-    Object.keys(grouped).forEach(monthYear => {
-      grouped[monthYear].sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime())
-    })
-    
-    return grouped
-  }
-
-  const getThisMonthEvents = (eventType: 'purchase' | 'consume'): number => {
-    const now = new Date()
-    const currentMonth = now.getMonth()
-    const currentYear = now.getFullYear()
-    
-    return events.filter(event => {
-      const eventDate = new Date(event.eventDate)
-      return event.eventType === eventType && 
-             eventDate.getMonth() === currentMonth && 
-             eventDate.getFullYear() === currentYear
-    }).length
-  }
+  // Consumption-related functions moved to InventoryScreen
 
   const renderTabPills = () => (
     <View style={styles.tabContainer}>
@@ -247,7 +139,6 @@ export const AnalyticsScreen = () => {
         {[
           { key: 'composition' as Tab, label: 'Composition' },
           { key: 'finance' as Tab, label: 'Finance' },
-          { key: 'consumption' as Tab, label: 'Consumption' },
         ].map(({ key, label }) => (
           <TouchableOpacity
             key={key}
@@ -317,130 +208,7 @@ export const AnalyticsScreen = () => {
     )
   }
 
-  const renderConsumptionTab = () => {
-    const eventsByMonth = getEventsByMonth()
-    const monthYears = Object.keys(eventsByMonth).sort((a, b) => new Date(b + ' 1').getTime() - new Date(a + ' 1').getTime())
-
-    return (
-      <>
-        {/* This month stats */}
-        <View style={styles.statsRow}>
-          <View style={styles.statCard}>
-            <Text style={styles.statLabel}>Added This Month</Text>
-            <Text style={[styles.statValue, { color: colors.secondary[600] }]}>
-              {getThisMonthEvents('purchase')}
-            </Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statLabel}>Consumed This Month</Text>
-            <Text style={[styles.statValue, { color: colors.danger }]}>
-              {getThisMonthEvents('consume')}
-            </Text>
-          </View>
-        </View>
-
-        {/* History */}
-        {isLoadingEvents ? (
-          <View style={styles.centered}>
-            <ActivityIndicator size="large" color={colors.primary[600]} />
-          </View>
-        ) : (
-          <View style={styles.chartCard}>
-            <Text style={styles.sectionTitle}>History</Text>
-            {monthYears.length === 0 ? (
-              <Text style={styles.emptyText}>No events yet</Text>
-            ) : (
-              monthYears.map(monthYear => (
-                <View key={monthYear}>
-                  <Text style={styles.monthHeader}>{monthYear}</Text>
-                  {eventsByMonth[monthYear].map(event => {
-                    const isExpanded = expandedEvent === event.id
-                    const hasDetails = event.eventType === 'consume' && (event.rating || event.tastingNotes || event.pairing)
-                    return (
-                      <TouchableOpacity
-                        key={event.id}
-                        style={styles.eventRow}
-                        onPress={() => setExpandedEvent(isExpanded ? null : event.id)}
-                        activeOpacity={0.7}
-                      >
-                        <View style={styles.eventMain}>
-                          <View style={styles.eventHeader}>
-                            <Text style={styles.eventWine} numberOfLines={1}>
-                              {event.wineName} {event.vintage && `(${event.vintage})`}
-                            </Text>
-                            <View style={[
-                              styles.eventBadge,
-                              event.eventType === 'purchase' ? styles.eventBadgePurchase : styles.eventBadgeConsume
-                            ]}>
-                              <Text style={[
-                                styles.eventBadgeText,
-                                event.eventType === 'purchase' ? styles.eventBadgeTextPurchase : styles.eventBadgeTextConsume
-                              ]}>
-                                {event.eventType === 'purchase' ? 'Added' : 'Consumed'}
-                              </Text>
-                            </View>
-                          </View>
-                          <Text style={styles.eventProducer}>{event.producerName}</Text>
-                          <View style={styles.eventDetails}>
-                            <Text style={styles.eventQuantity}>
-                              {event.eventType === 'purchase' ? '+' : ''}{event.quantityChange}
-                            </Text>
-                            <Text style={styles.eventDate}>{formatDate(event.eventDate)}</Text>
-                          </View>
-
-                          {/* Collapsed: show rating hint */}
-                          {!isExpanded && event.eventType === 'consume' && event.rating != null && event.rating > 0 && (
-                            <Text style={styles.eventRating}>⭐ {event.rating}/100 — tap for details</Text>
-                          )}
-                          {!isExpanded && hasDetails && !(event.rating != null && event.rating > 0) && (
-                            <Text style={styles.tapHint}>Tap for tasting notes</Text>
-                          )}
-
-                          {/* Expanded: full details */}
-                          {isExpanded && event.eventType === 'consume' && (
-                            <View style={styles.expandedDetails}>
-                              {event.rating != null && event.rating > 0 && (
-                                <View style={styles.detailRow}>
-                                  <Text style={styles.detailLabel}>Score</Text>
-                                  <Text style={styles.detailValueBold}>⭐ {event.rating}/100</Text>
-                                </View>
-                              )}
-                              {event.tastingNotes ? (
-                                <View style={styles.detailRow}>
-                                  <Text style={styles.detailLabel}>Tasting Notes</Text>
-                                  <Text style={styles.detailValue}>{event.tastingNotes}</Text>
-                                </View>
-                              ) : null}
-                              {event.pairing ? (
-                                <View style={styles.detailRow}>
-                                  <Text style={styles.detailLabel}>Food Pairing</Text>
-                                  <Text style={styles.detailValue}>{event.pairing}</Text>
-                                </View>
-                              ) : null}
-                              {!event.rating && !event.tastingNotes && !event.pairing && (
-                                <TouchableOpacity style={styles.addNoteButton} onPress={() => openAddNote(event)}>
-                                  <Text style={styles.addNoteButtonText}>+ Add tasting notes</Text>
-                                </TouchableOpacity>
-                              )}
-                              {(event.rating || event.tastingNotes || event.pairing) && (
-                                <TouchableOpacity style={styles.editNoteLink} onPress={() => openAddNote(event)}>
-                                  <Text style={styles.editNoteLinkText}>Edit notes</Text>
-                                </TouchableOpacity>
-                              )}
-                            </View>
-                          )}
-                        </View>
-                      </TouchableOpacity>
-                    )
-                  })}
-                </View>
-              ))
-            )}
-          </View>
-        )}
-      </>
-    )
-  }
+  // Consumption tab moved to InventoryScreen
 
   if (isLoading) {
     return (
@@ -468,87 +236,7 @@ export const AnalyticsScreen = () => {
       >
         {activeTab === 'composition' && renderCompositionTab()}
         {activeTab === 'finance' && renderFinanceTab()}
-        {activeTab === 'consumption' && renderConsumptionTab()}
       </ScrollView>
-
-      {/* Add/Edit Tasting Notes Modal */}
-      <Modal visible={!!editingEvent} transparent animationType="slide">
-        <TouchableOpacity
-          style={styles.noteModalOverlay}
-          activeOpacity={1}
-          onPress={() => setEditingEvent(null)}
-        >
-          <TouchableOpacity activeOpacity={1} style={styles.noteModalContent}>
-            <View style={styles.noteModalHeader}>
-              <Text style={styles.noteModalTitle}>
-                {editingEvent?.rating || editingEvent?.tastingNotes ? 'Edit' : 'Add'} Tasting Notes
-              </Text>
-              <TouchableOpacity onPress={() => setEditingEvent(null)}>
-                <Text style={styles.noteModalClose}>✕</Text>
-              </TouchableOpacity>
-            </View>
-
-            {editingEvent && (
-              <View style={styles.noteModalWine}>
-                <Text style={styles.noteModalWineName}>{editingEvent.wineName}</Text>
-                <Text style={styles.noteModalWineMeta}>
-                  {editingEvent.producerName} · {editingEvent.vintage ?? 'NV'}
-                </Text>
-              </View>
-            )}
-
-            <ScrollView keyboardShouldPersistTaps="handled">
-              <Text style={styles.noteLabel}>Score (0-100)</Text>
-              <TextInput
-                style={styles.noteInput}
-                value={editScore}
-                onChangeText={setEditScore}
-                placeholder="e.g. 88"
-                placeholderTextColor={colors.muted[400]}
-                keyboardType="number-pad"
-                maxLength={3}
-              />
-
-              <Text style={styles.noteLabel}>Tasting Notes</Text>
-              <TextInput
-                style={[styles.noteInput, styles.noteTextArea]}
-                value={editComment}
-                onChangeText={setEditComment}
-                placeholder="Describe the wine..."
-                placeholderTextColor={colors.muted[400]}
-                multiline
-                numberOfLines={3}
-              />
-
-              <Text style={styles.noteLabel}>Food Pairing</Text>
-              <TextInput
-                style={styles.noteInput}
-                value={editPairing}
-                onChangeText={setEditPairing}
-                placeholder="What did you pair it with?"
-                placeholderTextColor={colors.muted[400]}
-              />
-            </ScrollView>
-
-            <View style={styles.noteButtons}>
-              <TouchableOpacity style={styles.noteCancelBtn} onPress={() => setEditingEvent(null)}>
-                <Text style={styles.noteCancelText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.noteSaveBtn, isSavingNote && { opacity: 0.5 }]}
-                onPress={saveNote}
-                disabled={isSavingNote}
-              >
-                {isSavingNote ? (
-                  <ActivityIndicator color={colors.white} size="small" />
-                ) : (
-                  <Text style={styles.noteSaveText}>Save</Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </Modal>
     </View>
   )
 }
@@ -688,255 +376,5 @@ const styles = StyleSheet.create({
     borderRadius: 4 
   },
 
-  // Events
-  emptyText: {
-    fontSize: 14,
-    color: colors.muted[500],
-    textAlign: 'center',
-    fontStyle: 'italic',
-    paddingVertical: 20,
-  },
-  monthHeader: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.muted[700],
-    paddingVertical: 8,
-    marginTop: 8,
-  },
-  eventRow: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.muted[100],
-    paddingVertical: 12,
-  },
-  eventMain: {
-    flex: 1,
-  },
-  eventHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 4,
-  },
-  eventWine: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.muted[900],
-    flex: 1,
-    marginRight: 8,
-  },
-  eventProducer: {
-    fontSize: 13,
-    color: colors.muted[600],
-    marginBottom: 4,
-  },
-  eventDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  eventQuantity: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.muted[700],
-  },
-  eventDate: {
-    fontSize: 13,
-    color: colors.muted[500],
-  },
-  eventBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 12,
-  },
-  eventBadgePurchase: {
-    backgroundColor: '#dcfce7',
-  },
-  eventBadgeConsume: {
-    backgroundColor: '#fee2e2',
-  },
-  eventBadgeText: {
-    fontSize: 11,
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  eventBadgeTextPurchase: {
-    color: '#15803d',
-  },
-  eventBadgeTextConsume: {
-    color: '#dc2626',
-  },
-  eventTasting: {
-    marginTop: 8,
-    paddingTop: 8,
-    borderTopWidth: 1,
-    borderTopColor: colors.muted[100],
-  },
-  eventRating: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.accent[600],
-    marginBottom: 4,
-  },
-  eventNotes: {
-    fontSize: 13,
-    color: colors.muted[600],
-    lineHeight: 18,
-  },
-  tapHint: {
-    fontSize: 12,
-    color: colors.primary[600],
-    marginTop: 6,
-  },
-  expandedDetails: {
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: colors.muted[100],
-  },
-  detailRow: {
-    marginBottom: 10,
-  },
-  detailLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.muted[500],
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginBottom: 2,
-  },
-  detailValue: {
-    fontSize: 14,
-    color: colors.muted[800],
-    lineHeight: 20,
-  },
-  detailValueBold: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.muted[900],
-  },
-  noDetailsText: {
-    fontSize: 13,
-    color: colors.muted[400],
-    fontStyle: 'italic',
-  },
-  addNoteButton: {
-    backgroundColor: colors.primary[600],
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    alignSelf: 'flex-start',
-  },
-  addNoteButtonText: {
-    color: colors.white,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  editNoteLink: {
-    marginTop: 8,
-  },
-  editNoteLinkText: {
-    color: colors.primary[600],
-    fontSize: 13,
-    fontWeight: '600',
-  },
-
-  // Tasting notes modal
-  noteModalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  noteModalContent: {
-    backgroundColor: colors.white,
-    borderRadius: 20,
-    padding: 24,
-    maxHeight: '80%',
-  },
-  noteModalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  noteModalTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: colors.muted[900],
-  },
-  noteModalClose: {
-    fontSize: 20,
-    color: colors.muted[400],
-    padding: 4,
-  },
-  noteModalWine: {
-    backgroundColor: colors.muted[50],
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.muted[200],
-    padding: 12,
-    marginBottom: 16,
-  },
-  noteModalWineName: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.muted[900],
-  },
-  noteModalWineMeta: {
-    fontSize: 14,
-    color: colors.muted[500],
-    marginTop: 2,
-  },
-  noteLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.muted[700],
-    marginBottom: 6,
-    marginTop: 12,
-  },
-  noteInput: {
-    backgroundColor: colors.muted[50],
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    fontSize: 15,
-    color: colors.muted[900],
-  },
-  noteTextArea: {
-    minHeight: 80,
-    textAlignVertical: 'top',
-  },
-  noteButtons: {
-    flexDirection: 'row',
-    gap: 12,
-    marginTop: 20,
-  },
-  noteCancelBtn: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  noteCancelText: {
-    color: colors.muted[700],
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  noteSaveBtn: {
-    flex: 1,
-    backgroundColor: colors.primary[600],
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  noteSaveText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: '600',
-  },
+  // Consumption-related styles moved to InventoryScreen
 })
