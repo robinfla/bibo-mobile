@@ -53,7 +53,7 @@ export interface WineCard {
   bottleImageUrl: string | null
   vintage: number | null
   totalQuantity: number
-  avgPurchasePrice: number
+  avgPurchasePrice: number | null
   purchaseCurrency: string | null
   currentValue: number | null
   valueChangePercent: number | null

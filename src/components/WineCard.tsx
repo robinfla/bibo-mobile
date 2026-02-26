@@ -73,28 +73,32 @@ export const WineCard: React.FC<WineCardProps> = ({ card, onPress }) => {
       </View>
 
       {/* Value Row */}
-      <View style={styles.valueRow}>
-        <Text style={styles.purchasePrice}>
-          Purchase: {card.purchaseCurrency || '€'}
-          {card.avgPurchasePrice.toFixed(2)}
-        </Text>
-        {card.valueChangePercent != null && (
-          <View style={styles.valueChange}>
-            <Text
-              style={[
-                styles.valueChangeText,
-                { color: card.valueChangePercent >= 0 ? '#16a34a' : '#dc2626' },
-              ]}
-            >
-              {card.valueChangePercent >= 0 ? '+' : ''}
-              {card.valueChangePercent}%
+      {(card.avgPurchasePrice != null || card.valueChangePercent != null) && (
+        <View style={styles.valueRow}>
+          {card.avgPurchasePrice != null && (
+            <Text style={styles.purchasePrice}>
+              Purchase: {card.purchaseCurrency || '€'}
+              {card.avgPurchasePrice.toFixed(2)}
             </Text>
-            <Text style={styles.valueChangeIcon}>
-              {card.valueChangePercent >= 0 ? '📈' : '📉'}
-            </Text>
-          </View>
-        )}
-      </View>
+          )}
+          {card.valueChangePercent != null && (
+            <View style={styles.valueChange}>
+              <Text
+                style={[
+                  styles.valueChangeText,
+                  { color: card.valueChangePercent >= 0 ? '#16a34a' : '#dc2626' },
+                ]}
+              >
+                {card.valueChangePercent >= 0 ? '+' : ''}
+                {card.valueChangePercent}%
+              </Text>
+              <Text style={styles.valueChangeIcon}>
+                {card.valueChangePercent >= 0 ? '📈' : '📉'}
+              </Text>
+            </View>
+          )}
+        </View>
+      )}
     </TouchableOpacity>
   )
 }
