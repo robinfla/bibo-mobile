@@ -8,7 +8,6 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  Modal,
   ActionSheetIOS,
   Platform,
 } from 'react-native'
@@ -19,6 +18,7 @@ import { colors } from '../../theme/colors'
 import { WineCardNew } from '../../components/WineCardNew'
 import { WishlistTab } from './WishlistTab'
 import { HistoryTab } from './HistoryTab'
+import { FiltersScreen, type FilterState } from './FiltersScreen'
 import type { WineCard, WineCardsResponse } from '../../types/api'
 
 type InventoryTab = 'cellar' | 'wishlist' | 'history'
@@ -39,11 +39,22 @@ export const InventoryScreen = () => {
   // Search & filter
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
-  const [activeFilters, setActiveFilters] = useState<any>({}) // Track active filter state
+  const [filters, setFilters] = useState<FilterState>({
+    sort: 'date',
+    priceMin: 0,
+    priceMax: 200,
+  })
   
   // Check if any filters are active
-  const hasActiveFilters = Object.keys(activeFilters).some(key => 
-    activeFilters[key] !== undefined && activeFilters[key] !== null && activeFilters[key] !== ''
+  const hasActiveFilters = !!(
+    filters.color ||
+    filters.maturity ||
+    filters.producerId ||
+    filters.regionId ||
+    filters.cellarId ||
+    filters.vintage ||
+    filters.priceMin > 0 ||
+    filters.priceMax < 200
   )
 
   // Debounce search
@@ -54,12 +65,12 @@ export const InventoryScreen = () => {
     return () => clearTimeout(timer)
   }, [searchQuery])
 
-  // Fetch cards when search changes or tab changes
+  // Fetch cards when search/filters change or tab changes
   useEffect(() => {
     if (activeTab === 'cellar') {
       fetchCards()
     }
-  }, [debouncedSearch, activeTab])
+  }, [debouncedSearch, filters, activeTab])
 
   const fetchCards = useCallback(async () => {
     try {
@@ -70,6 +81,12 @@ export const InventoryScreen = () => {
       if (debouncedSearch) {
         params.append('search', debouncedSearch)
       }
+      if (filters.color) {
+        params.append('color', filters.color)
+      }
+      if (filters.cellarId) {
+        params.append('cellarId', String(filters.cellarId))
+      }
 
       const response = await apiFetch<WineCardsResponse>(`/api/inventory/cards?${params}`)
       setCards(response.cards)
@@ -78,7 +95,7 @@ export const InventoryScreen = () => {
     } finally {
       setIsLoading(false)
     }
-  }, [debouncedSearch])
+  }, [debouncedSearch, filters])
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true)
@@ -88,6 +105,11 @@ export const InventoryScreen = () => {
 
   const handleCardPress = (wineId: number) => {
     navigation.navigate('WineDetail', { wineId })
+  }
+
+  const handleApplyFilters = (newFilters: FilterState) => {
+    setFilters(newFilters)
+    setShowFilterModal(false)
   }
 
   const handleFabPress = () => {
@@ -232,22 +254,13 @@ export const InventoryScreen = () => {
         <Icon name="plus" size={28} color="#fff" />
       </TouchableOpacity>
 
-      {/* Filter Modal (placeholder) */}
-      <Modal
+      {/* Filter Modal */}
+      <FiltersScreen
         visible={showFilterModal}
-        animationType="slide"
-        presentationStyle="pageSheet"
-      >
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Filters</Text>
-          <TouchableOpacity
-            style={styles.modalCloseButton}
-            onPress={() => setShowFilterModal(false)}
-          >
-            <Text style={styles.modalCloseText}>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+        onClose={() => setShowFilterModal(false)}
+        onApply={handleApplyFilters}
+        currentFilters={filters}
+      />
     </View>
   )
 }
@@ -386,22 +399,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 8,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 16,
-  },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    marginBottom: 16,
-  },
-  modalCloseButton: {
-    alignSelf: 'flex-end',
-  },
-  modalCloseText: {
-    fontSize: 16,
-    color: colors.primary[600],
   },
 })
