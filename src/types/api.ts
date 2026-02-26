@@ -43,6 +43,16 @@ export interface InventoryResponse {
   total: number
 }
 
+export interface VintageData {
+  vintage: number | null
+  bottleCount: number
+  maturityStatus: 'peak' | 'approaching' | 'to_age' | 'past_prime' | 'declining' | 'unknown'
+  maturityLabel: string
+  maturityColor: string
+  drinkFrom?: number
+  drinkUntil?: number
+}
+
 export interface WineCard {
   wineId: number
   wineName: string
@@ -51,18 +61,8 @@ export interface WineCard {
   appellationName: string | null
   wineColor: string
   bottleImageUrl: string | null
-  vintage: number | null
-  totalQuantity: number
-  avgPurchasePrice: number | null
-  purchaseCurrency: string | null
-  currentValue: number | null
-  valueChangePercent: number | null
-  maturity: {
-    status: 'peak' | 'approaching' | 'to_age' | 'past_prime' | 'declining' | 'unknown'
-    message: string
-    drinkFrom?: number
-    drinkUntil?: number
-  }
+  vintages: VintageData[]
+  totalBottles: number
 }
 
 export interface WineCardsResponse {
