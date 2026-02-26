@@ -12,7 +12,6 @@ import {
   ActionSheetIOS,
   Platform,
 } from 'react-native'
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { apiFetch } from '../../api/client'
@@ -25,17 +24,8 @@ import type { WineCard, WineCardsResponse } from '../../types/api'
 type InventoryTab = 'cellar' | 'wishlist' | 'history'
 type ViewMode = 'grid' | 'list'
 
-interface InventoryStackParamList {
-  InventoryList: undefined
-  WineDetail: { wineId: number }
-  AddWine: undefined
-  ScanBottle: undefined
-}
-
-type NavProp = NativeStackNavigationProp<InventoryStackParamList, 'InventoryList'>
-
 export const InventoryScreen = () => {
-  const navigation = useNavigation<NavProp>()
+  const navigation = useNavigation<any>()
 
   // UI state
   const [activeTab, setActiveTab] = useState<InventoryTab>('cellar')
@@ -136,24 +126,24 @@ export const InventoryScreen = () => {
             onPress={() => setViewMode('grid')}
             style={[styles.viewButton, viewMode === 'grid' && styles.viewButtonActive]}
           >
-            <Icon name="view-grid" size={20} color={viewMode === 'grid' ? '#FFF' : colors.neutral[400]} />
+            <Icon name="view-grid" size={20} color={viewMode === 'grid' ? '#FFF' : colors.muted[400]} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setViewMode('list')}
             style={[styles.viewButton, viewMode === 'list' && styles.viewButtonActive]}
           >
-            <Icon name="view-list" size={20} color={viewMode === 'list' ? '#FFF' : colors.neutral[400]} />
+            <Icon name="view-list" size={20} color={viewMode === 'list' ? '#FFF' : colors.muted[400]} />
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Icon name="magnify" size={20} color={colors.neutral[400]} style={styles.searchIcon} />
+        <Icon name="magnify" size={20} color={colors.muted[400]} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search wines..."
-          placeholderTextColor={colors.neutral[400]}
+          placeholderTextColor={colors.muted[400]}
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
@@ -161,7 +151,7 @@ export const InventoryScreen = () => {
           style={styles.filterButton}
           onPress={() => setShowFilterModal(true)}
         >
-          <Icon name="filter-variant" size={20} color={colors.neutral[600]} />
+          <Icon name="filter-variant" size={20} color={colors.muted[600]} />
           {hasActiveFilters && <View style={styles.filterBadge} />}
         </TouchableOpacity>
       </View>
@@ -208,7 +198,7 @@ export const InventoryScreen = () => {
     if (error) {
       return (
         <View style={styles.centerContent}>
-          <Icon name="alert-circle" size={48} color={colors.red[500]} />
+          <Icon name="alert-circle" size={48} color={colors.danger} />
           <Text style={styles.errorText}>{error}</Text>
           <TouchableOpacity style={styles.retryButton} onPress={fetchCards}>
             <Text style={styles.retryButtonText}>Retry</Text>
@@ -220,7 +210,7 @@ export const InventoryScreen = () => {
     if (cards.length === 0) {
       return (
         <View style={styles.centerContent}>
-          <Icon name="bottle-wine" size={64} color={colors.neutral[300]} />
+          <Icon name="bottle-wine" size={64} color={colors.muted[300]} />
           <Text style={styles.emptyText}>No wines in your cellar yet</Text>
           <Text style={styles.emptySubtext}>Tap the + button to add your first bottle</Text>
         </View>
@@ -285,12 +275,12 @@ export const InventoryScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.neutral[50],
+    backgroundColor: colors.muted[50],
   },
   header: {
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: colors.neutral[200],
+    borderBottomColor: colors.muted[200],
     paddingTop: 8,
   },
   headerTop: {
@@ -316,7 +306,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.neutral[100],
+    backgroundColor: colors.muted[100],
   },
   viewButtonActive: {
     backgroundColor: '#722F37', // Maroon fill for active view
@@ -328,7 +318,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 12,
     height: 44,
-    backgroundColor: colors.neutral[100],
+    backgroundColor: colors.muted[100],
     borderRadius: 12,
   },
   searchIcon: {
@@ -337,7 +327,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: colors.neutral[900],
+    color: colors.muted[900],
   },
   filterButton: {
     width: 32,
@@ -353,7 +343,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: colors.red[500],
+    backgroundColor: colors.danger,
   },
   tabs: {
     flexDirection: 'row',
@@ -371,7 +361,7 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 16,
     fontWeight: '500',
-    color: colors.neutral[500],
+    color: colors.muted[500],
   },
   tabTextActive: {
     color: '#2C1810', // Dark brown for active tab
@@ -391,7 +381,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: colors.neutral[600],
+    color: colors.muted[600],
     textAlign: 'center',
     marginTop: 12,
   },
@@ -410,12 +400,12 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.neutral[700],
+    color: colors.muted[700],
     marginTop: 16,
   },
   emptySubtext: {
     fontSize: 14,
-    color: colors.neutral[500],
+    color: colors.muted[500],
     marginTop: 8,
     textAlign: 'center',
   },

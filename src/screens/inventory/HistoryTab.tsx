@@ -15,10 +15,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.neutral[50],
+    backgroundColor: colors.muted[50],
   },
   text: {
     fontSize: 16,
-    color: colors.neutral[600],
+    color: colors.muted[600],
   },
 })

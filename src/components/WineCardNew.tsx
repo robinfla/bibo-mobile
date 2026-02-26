@@ -101,7 +101,7 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress, viewMod
 
   const renderBottleCount = () => (
     <View style={styles.bottleCount}>
-      <Icon name="bottle-wine" size={16} color={colors.neutral[500]} />
+      <Icon name="bottle-wine" size={16} color={colors.muted[500]} />
       <Text style={styles.bottleCountText}>
         {selectedVintage?.bottleCount || card.totalBottles}
       </Text>
@@ -117,7 +117,7 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress, viewMod
             <Image source={{ uri: card.bottleImageUrl }} style={styles.gridImage} />
           ) : (
             <View style={[styles.gridImage, styles.placeholderImage]}>
-              <Icon name="bottle-wine-outline" size={32} color={colors.neutral[300]} />
+              <Icon name="bottle-wine-outline" size={32} color={colors.muted[300]} />
             </View>
           )}
         </View>
@@ -167,7 +167,7 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress, viewMod
           <Image source={{ uri: card.bottleImageUrl }} style={styles.listImage} />
         ) : (
           <View style={[styles.listImage, styles.placeholderImage]}>
-            <Icon name="bottle-wine-outline" size={28} color={colors.neutral[300]} />
+            <Icon name="bottle-wine-outline" size={28} color={colors.muted[300]} />
           </View>
         )}
       </View>
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   gridImageContainer: {
     width: '100%',
     height: 140,
-    backgroundColor: colors.neutral[100],
+    backgroundColor: colors.muted[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   },
   gridProducer: {
     fontSize: 14,
-    color: colors.neutral[600],
+    color: colors.muted[600],
     marginBottom: 4,
   },
   gridMeta: {
@@ -256,11 +256,11 @@ const styles = StyleSheet.create({
   gridMetaText: {
     flex: 1,
     fontSize: 13,
-    color: colors.neutral[500],
+    color: colors.muted[500],
   },
   vintageCount: {
     fontSize: 12,
-    color: colors.neutral[400],
+    color: colors.muted[400],
     fontWeight: '500',
   },
 
@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
   listImageContainer: {
     width: 60,
     height: 80,
-    backgroundColor: colors.neutral[100],
+    backgroundColor: colors.muted[100],
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
@@ -312,12 +312,12 @@ const styles = StyleSheet.create({
   },
   listProducer: {
     fontSize: 14,
-    color: colors.neutral[600],
+    color: colors.muted[600],
     marginBottom: 2,
   },
   listRegion: {
     fontSize: 13,
-    color: colors.neutral[500],
+    color: colors.muted[500],
     marginBottom: 8,
   },
 
@@ -349,9 +349,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    backgroundColor: colors.neutral[100],
+    backgroundColor: colors.muted[100],
     borderWidth: 1,
-    borderColor: colors.neutral[200],
+    borderColor: colors.muted[200],
   },
   vintageChipActive: {
     backgroundColor: colors.primary[50],
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
   vintageChipText: {
     fontSize: 13,
     fontWeight: '500',
-    color: colors.neutral[600],
+    color: colors.muted[600],
   },
   vintageChipTextActive: {
     color: colors.primary[600],
