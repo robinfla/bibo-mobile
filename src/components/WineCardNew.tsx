@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Platform,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { colors } from '../theme/colors'
@@ -237,8 +238,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '600',
-    color: colors.neutral[900],
+    color: '#2C1810',
     marginRight: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   gridProducer: {
     fontSize: 14,
@@ -304,8 +306,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '600',
-    color: colors.neutral[900],
+    color: '#2C1810',
     marginRight: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   listProducer: {
     fontSize: 14,
@@ -371,7 +374,7 @@ const styles = StyleSheet.create({
   bottleCountText: {
     fontSize: 14,
     fontWeight: '600',
-    color: colors.neutral[700],
+    color: '#722F37', // Maroon accent for emphasis
   },
   placeholderImage: {
     alignItems: 'center',

@@ -51,7 +51,12 @@ export const InventoryScreen = () => {
   // Search & filter
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
-  const [hasActiveFilters, setHasActiveFilters] = useState(false)
+  const [activeFilters, setActiveFilters] = useState<any>({}) // Track active filter state
+  
+  // Check if any filters are active
+  const hasActiveFilters = Object.keys(activeFilters).some(key => 
+    activeFilters[key] !== undefined && activeFilters[key] !== null && activeFilters[key] !== ''
+  )
 
   // Debounce search
   useEffect(() => {
@@ -131,13 +136,13 @@ export const InventoryScreen = () => {
             onPress={() => setViewMode('grid')}
             style={[styles.viewButton, viewMode === 'grid' && styles.viewButtonActive]}
           >
-            <Icon name="view-grid" size={20} color={viewMode === 'grid' ? colors.primary[600] : colors.neutral[400]} />
+            <Icon name="view-grid" size={20} color={viewMode === 'grid' ? '#FFF' : colors.neutral[400]} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setViewMode('list')}
             style={[styles.viewButton, viewMode === 'list' && styles.viewButtonActive]}
           >
-            <Icon name="view-list" size={20} color={viewMode === 'list' ? colors.primary[600] : colors.neutral[400]} />
+            <Icon name="view-list" size={20} color={viewMode === 'list' ? '#FFF' : colors.neutral[400]} />
           </TouchableOpacity>
         </View>
       </View>
@@ -298,7 +303,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '700',
-    color: colors.neutral[900],
+    color: '#2C1810', // Dark brown
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif', // Serif for premium feel
   },
   viewToggle: {
     flexDirection: 'row',
@@ -313,7 +319,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral[100],
   },
   viewButtonActive: {
-    backgroundColor: colors.primary[50],
+    backgroundColor: '#722F37', // Maroon fill for active view
   },
   searchContainer: {
     flexDirection: 'row',
@@ -360,7 +366,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   tabActive: {
-    borderBottomColor: colors.primary[600],
+    borderBottomColor: '#2C1810', // Dark brown underline
   },
   tabText: {
     fontSize: 16,
@@ -368,7 +374,7 @@ const styles = StyleSheet.create({
     color: colors.neutral[500],
   },
   tabTextActive: {
-    color: colors.primary[600],
+    color: '#2C1810', // Dark brown for active tab
     fontWeight: '600',
   },
   listContent: {
@@ -420,7 +426,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: colors.primary[600],
+    backgroundColor: '#722F37', // Maroon/burgundy accent
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
