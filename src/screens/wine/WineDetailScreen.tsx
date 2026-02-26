@@ -12,6 +12,9 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors } from '../../theme/colors'
+import { AgingTimeline } from '../../components/AgingTimeline'
+import { TastingNotesCard } from '../../components/TastingNotesCard'
+import { MealSuggestionsGrid } from '../../components/MealSuggestionsGrid'
 import type { WineDetail, InventoryLot } from '../../types/api'
 
 const MATURITY_BADGES = {
@@ -149,31 +152,7 @@ export const WineDetailScreen = () => {
     }
   }
 
-  const renderTasteCharacteristics = () => {
-    if (!wine) return null
-    
-    const characteristics = [
-      { label: 'Light', value: wine.bodyWeight ?? 50, inverseLabel: 'Heavy' },
-      { label: 'Flexible', value: wine.tanninLevel ?? 50, inverseLabel: 'Tannic' },
-      { label: 'Dry', value: wine.sweetnessLevel ?? 50, inverseLabel: 'Sweet' },
-      { label: 'Soft', value: wine.acidityLevel ?? 50, inverseLabel: 'Acid' },
-    ]
-    
-    return (
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Taste Characteristics 🍷</Text>
-        {characteristics.map((char, index) => (
-          <View key={index} style={styles.characteristicRow}>
-            <Text style={styles.characteristicLabel}>{char.label}</Text>
-            <View style={styles.characteristicBar}>
-              <View style={[styles.characteristicFill, { width: `${char.value}%` }]} />
-            </View>
-            <Text style={styles.characteristicLabel}>{char.inverseLabel}</Text>
-          </View>
-        ))}
-      </View>
-    )
-  }
+
 
   const renderGrapes = () => {
     if (!wine?.grapes || wine.grapes.length === 0) return null
@@ -194,29 +173,21 @@ export const WineDetailScreen = () => {
     )
   }
 
-  const renderAdaptedMeals = () => {
-    const meals = [
-      { name: 'Beef', match: 95 },
-      { name: 'Lamb', match: 90 },
-      { name: 'Duck', match: 85 },
-      { name: 'Aged Cheese', match: 80 },
+  const renderMealSuggestions = () => {
+    const meals = wine?.foodPairings?.map((pairing, index) => ({
+      name: pairing,
+      score: 95 - (index * 5), // Placeholder scoring
+    })) || [
+      { name: 'Grilled Ribeye', score: 95 },
+      { name: 'Aged Cheese', score: 90 },
+      { name: 'Lamb Ragù', score: 88 },
+      { name: 'Duck Confit', score: 85 },
     ]
     
     return (
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Adapted Meals</Text>
-        <View style={styles.mealsGrid}>
-          {meals.map((meal, index) => (
-            <View key={index} style={styles.mealCard}>
-              <View style={styles.mealImagePlaceholder}>
-                <View style={styles.mealMatchBadge}>
-                  <Text style={styles.mealMatchText}>{meal.match}%</Text>
-                </View>
-              </View>
-              <Text style={styles.mealName}>{meal.name}</Text>
-            </View>
-          ))}
-        </View>
+        <Text style={styles.sectionTitle}>Meal Suggestions</Text>
+        <MealSuggestionsGrid meals={meals} />
       </View>
     )
   }
@@ -417,49 +388,40 @@ export const WineDetailScreen = () => {
             Drinking Window ({curveData.drinkFrom}-{curveData.drinkUntil} vintage)
           </Text>
           
-          {/* Curve visualization */}
-          <View style={styles.curveContainer}>
-            <View style={styles.curveLabels}>
-              <View style={styles.curveLabel}>
-                <Text style={styles.curveLabelYear}>{curveData.drinkFrom}</Text>
-                <Text style={styles.curveLabelText}>Youth</Text>
-              </View>
-              <View style={styles.curveLabel}>
-                <Text style={styles.curveLabelYear}>{curveData.peakStart}-{curveData.peakEnd - curveData.peakStart}</Text>
-                <Text style={styles.curveLabelText}>Maturity</Text>
-              </View>
-              <View style={styles.curveLabel}>
-                <Text style={styles.curveLabelYear}>{curveData.peakEnd}</Text>
-                <Text style={styles.curveLabelText}>Peak</Text>
-              </View>
-              <View style={styles.curveLabel}>
-                <Text style={styles.curveLabelYear}>{curveData.drinkUntil}</Text>
-                <Text style={styles.curveLabelText}>Decline</Text>
-              </View>
-            </View>
-            
-            {/* Emoji curve markers */}
-            <View style={styles.curveEmojis}>
-              <Text style={styles.curveEmoji}>🍇</Text>
-              <Text style={styles.curveEmoji}>😊</Text>
-              <Text style={styles.curveEmoji}>😍</Text>
-              <Text style={styles.curveEmoji}>📉</Text>
-            </View>
-          </View>
+          <AgingTimeline
+            drinkFrom={curveData.drinkFrom}
+            drinkUntil={curveData.drinkUntil}
+            currentYear={curveData.currentYear}
+          />
         </View>
       )}
 
-      {/* Taste characteristics */}
-      {renderTasteCharacteristics()}
+      {/* Tasting Notes */}
+      {wine?.notes && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Tasting Notes</Text>
+          <TastingNotesCard score={92} notes={wine.notes} />
+        </View>
+      )}
 
       {/* Grapes */}
       {renderGrapes()}
 
-      {/* Adapted meals */}
-      {renderAdaptedMeals()}
+      {/* Meal Suggestions */}
+      {renderMealSuggestions()}
 
       {/* Serving guide */}
       {renderServingGuide()}
+
+      {/* Comments */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Comments</Text>
+        <View style={styles.commentsCard}>
+          <Text style={styles.commentsText}>
+            Purchased at auction. Excellent provenance. Store in lower cellar, temperature stable at 13°C. Open 2030 for best experience. Decant 2 hours before serving.
+          </Text>
+        </View>
+      </View>
 
       {/* Action buttons */}
       <View style={styles.actionButtons}>
@@ -685,35 +647,17 @@ const styles = StyleSheet.create({
     color: colors.muted[500],
     marginTop: 2,
   },
-  curveEmojis: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 12,
+  commentsCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.muted[200],
+    padding: 16,
   },
-  curveEmoji: {
-    fontSize: 32,
-  },
-  characteristicRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    gap: 12,
-  },
-  characteristicLabel: {
-    fontSize: 13,
-    color: colors.muted[600],
-    width: 60,
-  },
-  characteristicBar: {
-    flex: 1,
-    height: 8,
-    backgroundColor: colors.muted[200],
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  characteristicFill: {
-    height: '100%',
-    backgroundColor: '#b8946d',
+  commentsText: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#1f2937',
   },
   grapesGrid: {
     flexDirection: 'row',
@@ -731,43 +675,7 @@ const styles = StyleSheet.create({
     color: colors.muted[700],
     fontWeight: '500',
   },
-  mealsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  mealCard: {
-    width: '48%',
-  },
-  mealImagePlaceholder: {
-    height: 100,
-    backgroundColor: '#d4a574',
-    borderRadius: 12,
-    position: 'relative',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  mealMatchBadge: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: '#16a34a',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  mealMatchText: {
-    color: colors.white,
-    fontSize: 11,
-    fontWeight: '700',
-  },
-  mealName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1a1a1a',
-    marginTop: 8,
-    textAlign: 'center',
-  },
+
   guideRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
