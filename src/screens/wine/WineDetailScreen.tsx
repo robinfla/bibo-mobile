@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Image,
+  Alert,
+  Share,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRoute, useNavigation } from '@react-navigation/native'
@@ -15,6 +17,8 @@ import { colors } from '../../theme/colors'
 import { AgingTimeline } from '../../components/AgingTimeline'
 import { TastingNotesCard } from '../../components/TastingNotesCard'
 import { MealSuggestionsGrid } from '../../components/MealSuggestionsGrid'
+import { WineActionFAB } from '../../components/WineActionFAB'
+import { WineMenuDropdown } from '../../components/WineMenuDropdown'
 import type { WineDetail, InventoryLot } from '../../types/api'
 
 const MATURITY_BADGES = {
@@ -152,6 +156,63 @@ export const WineDetailScreen = () => {
     }
   }
 
+  // Action handlers
+  const handleConsume = () => {
+    Alert.alert(
+      'Consume Wine',
+      'Log a consumption event?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Consume',
+          onPress: () => {
+            // TODO: Navigate to consume flow
+            Alert.alert('Coming Soon', 'Consume flow will be implemented.')
+          },
+        },
+      ]
+    )
+  }
+
+  const handleAddTastingNote = () => {
+    // TODO: Navigate to tasting note editor
+    Alert.alert('Coming Soon', 'Tasting note editor will be implemented.')
+  }
+
+  const handleEditDetails = () => {
+    // TODO: Navigate to wine editor
+    Alert.alert('Coming Soon', 'Wine editor will be implemented.')
+  }
+
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `Check out this wine: ${wine?.name} by ${wine?.producerName}`,
+      })
+    } catch (error) {
+      console.error('Error sharing:', error)
+    }
+  }
+
+  const handleRemove = () => {
+    Alert.alert(
+      'Remove from Cellar',
+      'Are you sure you want to remove this wine from your cellar? This action cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: () => {
+            // TODO: Call API to remove wine
+            Alert.alert('Removed', 'Wine removed from cellar.')
+            navigation.goBack()
+          },
+        },
+      ]
+    )
+  }
+
 
 
   const renderGrapes = () => {
@@ -219,7 +280,27 @@ export const WineDetailScreen = () => {
   const badge = curveData ? MATURITY_BADGES[curveData.status] : null
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+    <View style={styles.container}>
+      {/* Navigation Header */}
+      <View style={styles.navHeader}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.backIcon}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.navTitle} numberOfLines={1}>
+          {wine.name} {selectedVintage}
+        </Text>
+        <WineMenuDropdown
+          onEditDetails={handleEditDetails}
+          onShare={handleShare}
+          onRemove={handleRemove}
+        />
+      </View>
+
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
       {/* Header with bottle image */}
       <LinearGradient colors={['#8B4049', '#722F37']} style={styles.header}>
         {wine.bottleImageUrl ? (
@@ -393,16 +474,14 @@ export const WineDetailScreen = () => {
         </View>
       </View>
 
-      {/* Action buttons */}
-      <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.actionButton}>
-          <Text style={styles.actionButtonText}>Actions</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.removeButton}>
-          <Text style={styles.removeButtonText}>Remove</Text>
-        </TouchableOpacity>
-      </View>
     </ScrollView>
+
+      {/* FAB */}
+      <WineActionFAB
+        onConsume={handleConsume}
+        onAddTastingNote={handleAddTastingNote}
+      />
+    </View>
   )
 }
 
@@ -410,6 +489,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.muted[50],
+  },
+  navHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: colors.muted[200],
+    gap: 12,
+  },
+  backButton: {
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backIcon: {
+    fontSize: 24,
+    color: '#1f2937',
+  },
+  navTitle: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1f2937',
+  },
+  scrollContainer: {
+    flex: 1,
   },
   scrollContent: {
     paddingBottom: 32,
@@ -644,37 +752,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.muted[700],
     fontWeight: '500',
-  },
-
-
-  actionButtons: {
-    flexDirection: 'row',
-    gap: 12,
-    paddingHorizontal: 16,
-    marginTop: 16,
-  },
-  actionButton: {
-    flex: 1,
-    backgroundColor: '#722F37',
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  actionButtonText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  removeButton: {
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-  },
-  removeButtonText: {
-    color: colors.muted[700],
-    fontSize: 16,
-    fontWeight: '600',
   },
 })
