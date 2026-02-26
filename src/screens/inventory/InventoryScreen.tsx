@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WineCardNew } from '../../components/WineCardNew'

@@ -8,7 +8,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { colors } from '../theme/colors'
 import type { WineCard } from '../types/api'
 
