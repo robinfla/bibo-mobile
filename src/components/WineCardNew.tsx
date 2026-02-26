@@ -89,6 +89,27 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
     )
   }
 
+  // Get color-specific placeholder styling
+  const getPlaceholderStyle = () => {
+    switch (card.wineColor) {
+      case 'red':
+        return { backgroundColor: '#4a1a1a', iconColor: '#8b3a3a' }
+      case 'white':
+        return { backgroundColor: '#fef9e7', iconColor: '#d4af37' }
+      case 'rose':
+        return { backgroundColor: '#ffe0e6', iconColor: '#ff69b4' }
+      case 'sparkling':
+        return { backgroundColor: '#fffacd', iconColor: '#ffd700' }
+      case 'dessert':
+      case 'fortified':
+        return { backgroundColor: '#3d2314', iconColor: '#8b4513' }
+      default:
+        return { backgroundColor: colors.muted[100], iconColor: colors.muted[300] }
+    }
+  }
+
+  const placeholderStyle = getPlaceholderStyle()
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       {/* Wine Image */}
@@ -96,8 +117,8 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
         {card.bottleImageUrl ? (
           <Image source={{ uri: card.bottleImageUrl }} style={styles.image} />
         ) : (
-          <View style={[styles.image, styles.placeholderImage]}>
-            <Icon name="bottle-wine-outline" size={28} color={colors.muted[300]} />
+          <View style={[styles.image, styles.placeholderImage, { backgroundColor: placeholderStyle.backgroundColor }]}>
+            <Icon name="bottle-wine" size={32} color={placeholderStyle.iconColor} />
           </View>
         )}
       </View>
