@@ -359,25 +359,23 @@ export const WineDetailScreen = () => {
       )}
 
       {/* Tasting Notes */}
-      {(() => {
-        // Get most recent tasting note from history
-        const tastingHistory = wine?.history
-          ?.filter(h => h.tastingNotes || h.rating)
-          .sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime())
-        const latestTasting = tastingHistory?.[0]
-        
-        if (!latestTasting) return null
-        
-        return (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Tasting Notes</Text>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Tasting Notes</Text>
+        {(() => {
+          // Get most recent tasting note from history
+          const tastingHistory = wine?.history
+            ?.filter(h => h.tastingNotes || h.rating)
+            .sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime())
+          const latestTasting = tastingHistory?.[0]
+          
+          return (
             <TastingNotesCard 
-              score={latestTasting.rating || undefined} 
-              notes={latestTasting.tastingNotes || undefined} 
+              score={latestTasting?.rating || undefined} 
+              notes={latestTasting?.tastingNotes || wine?.notes || "No tasting notes yet. Add one after your first tasting."} 
             />
-          </View>
-        )
-      })()}
+          )
+        })()}
+      </View>
 
       {/* Grapes */}
       {renderGrapes()}
