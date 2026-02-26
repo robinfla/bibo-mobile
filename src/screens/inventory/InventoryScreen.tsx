@@ -17,6 +17,7 @@ import { apiFetch, ApiError } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WishlistTab } from './WishlistTab'
 import { FiltersScreen, type FilterState, type SortOption } from './FiltersScreen'
+import { WineCard } from '../../components/WineCard'
 import type {
   InventoryLot,
   InventoryResponse,
@@ -24,6 +25,8 @@ import type {
   InventoryQueryParams,
   InventoryEvent,
   EventsResponse,
+  WineCard as WineCardType,
+  WineCardsResponse,
 } from '../../types/api'
 
 type InventoryStackParamList = {
@@ -33,19 +36,6 @@ type InventoryStackParamList = {
 }
 
 type NavProp = NativeStackNavigationProp<InventoryStackParamList, 'InventoryList'>
-
-const WINE_COLORS: Record<string, string> = {
-  red: '#ef4444',
-  white: '#fcd34d',
-  rose: '#f472b6',
-  rosé: '#f472b6',
-  sparkling: '#facc15',
-  dessert: '#fb923c',
-  fortified: '#a855f7',
-}
-
-const getWineColor = (color: string): string =>
-  WINE_COLORS[color.toLowerCase()] ?? colors.muted[400]
 
 const MATURITY_TABS = [
   { label: 'All', value: '' },
@@ -79,7 +69,7 @@ export const InventoryScreen = () => {
   const [activeTab, setActiveTab] = useState<InventoryTab>('mywines')
 
   // My Wines state
-  const [lots, setLots] = useState<InventoryLot[]>([])
+  const [cards, setCards] = useState<WineCardType[]>([])
   const [total, setTotal] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
@@ -170,66 +160,67 @@ export const InventoryScreen = () => {
   }) => {
     const fetchId = ++fetchIdRef.current
     try {
-      const query: InventoryQueryParams = {
-        limit: filterLotIds ? 9999 : PAGE_SIZE,
-        offset: filterLotIds ? 0 : params.offset,
-      }
+      const query: Record<string, string | number | boolean | undefined> = {}
       if (params.search?.trim()) query.search = params.search.trim()
-      if (params.maturity) query.maturity = params.maturity
-      if (params.producerId) query.producerId = params.producerId
-      if (params.regionId) query.regionId = params.regionId
-      if (params.color) query.color = params.color
-      if (params.vintage) query.vintage = params.vintage
-      if (params.cellarId) query.cellarId = params.cellarId
 
-      const data = await apiFetch<InventoryResponse>('/api/inventory', {
-        query: query as Record<string, string | number | boolean | undefined>,
+      const data = await apiFetch<WineCardsResponse>('/api/inventory/cards', {
+        query,
       })
 
       // Ignore stale responses
       if (fetchId !== fetchIdRef.current) return
 
-      // Client-side price filter
-      let filtered = data.lots
+      // Client-side filters
+      let filtered = data.cards
+      
+      // Maturity filter
+      if (params.maturity) {
+        const maturityMap: Record<string, string[]> = {
+          peak: ['peak'],
+          approaching: ['approaching'],
+          to_age: ['to_age'],
+          past_prime: ['past_prime'],
+          declining: ['declining'],
+        }
+        const allowedStatuses = maturityMap[params.maturity] || []
+        if (allowedStatuses.length > 0) {
+          filtered = filtered.filter(card => allowedStatuses.includes(card.maturity.status))
+        }
+      }
+
+      // Producer filter
+      if (params.producerId) {
+        // Note: cards endpoint doesn't expose producerId yet, will need backend update
+        // For now, skip this filter
+      }
+
+      // Color filter
+      if (params.color) {
+        filtered = filtered.filter(card => card.wineColor === params.color)
+      }
+
+      // Price filter
       if (params.priceMin > 0 || params.priceMax < 200) {
-        filtered = filtered.filter(lot => {
-          const price = lot.purchasePricePerBottle ? parseFloat(lot.purchasePricePerBottle) : 0
+        filtered = filtered.filter(card => {
+          const price = card.avgPurchasePrice
           return price >= params.priceMin && (params.priceMax >= 200 || price <= params.priceMax)
         })
       }
 
-      // Filter by lot IDs (from "See wine list" in cellar view)
-      if (filterLotIds && filterLotIds.length > 0) {
-        const idSet = new Set(filterLotIds)
-        filtered = filtered.filter(lot => idSet.has(lot.id))
-      }
-
-      // Client-side sorting
-      if (params.sort === 'price') {
-        filtered.sort((a, b) => {
-          const pa = a.purchasePricePerBottle ? parseFloat(a.purchasePricePerBottle) : 0
-          const pb = b.purchasePricePerBottle ? parseFloat(b.purchasePricePerBottle) : 0
-          return pb - pa
-        })
-      } else if (params.sort === 'maturity') {
-        const order: Record<string, number> = { declining: 0, past_prime: 1, peak: 2, approaching: 3, to_age: 4, unknown: 5 }
-        filtered.sort((a, b) => (order[a.maturity?.status ?? 'unknown'] ?? 6) - (order[b.maturity?.status ?? 'unknown'] ?? 6))
-      }
-
       if (params.append) {
-        setLots(prev => [...prev, ...filtered])
+        setCards(prev => [...prev, ...filtered])
       } else {
-        setLots(filtered)
+        setCards(filtered)
       }
-      setTotal(filterLotIds ? filtered.length : data.total)
-      setHasMore(filterLotIds ? false : params.offset + filtered.length < data.total)
+      setTotal(filtered.length)
+      setHasMore(false) // Cards endpoint returns all, no pagination
       setError(null)
     } catch (e) {
       if (fetchId !== fetchIdRef.current) return
       const msg = e instanceof ApiError ? e.message : 'Failed to load inventory'
       setError(msg)
     }
-  }, [filterLotIds])
+  }, [])
 
   // Convenience wrapper using current state (for loadData/onRefresh)
   const fetchInventory = useCallback(async (currentOffset: number) => {
@@ -288,6 +279,21 @@ export const InventoryScreen = () => {
     }
   }, [])
 
+  // History functions
+  const fetchEvents = useCallback(async () => {
+    if (isLoadingEvents) return
+    
+    setIsLoadingEvents(true)
+    try {
+      const data = await apiFetch<EventsResponse>('/api/inventory/events?limit=200')
+      setEvents(data.events)
+    } catch (e) {
+      console.error('Failed to load events:', e)
+    } finally {
+      setIsLoadingEvents(false)
+    }
+  }, [isLoadingEvents])
+
   const loadData = useCallback(async () => {
     setIsLoading(true)
     setHasMore(true)
@@ -340,21 +346,6 @@ export const InventoryScreen = () => {
     selectedColor !== undefined ||
     selectedVintage !== undefined ||
     selectedCellar !== undefined
-
-  // History functions
-  const fetchEvents = useCallback(async () => {
-    if (isLoadingEvents) return
-    
-    setIsLoadingEvents(true)
-    try {
-      const data = await apiFetch<EventsResponse>('/api/inventory/events?limit=200')
-      setEvents(data.events)
-    } catch (e) {
-      console.error('Failed to load events:', e)
-    } finally {
-      setIsLoadingEvents(false)
-    }
-  }, [isLoadingEvents])
 
   const formatDate = (dateString: string): string => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -437,7 +428,7 @@ export const InventoryScreen = () => {
   const loadMore = useCallback(async () => {
     if (isLoadingMore || !hasMore || isLoading) return
     setIsLoadingMore(true)
-    const newOffset = lots.length
+    const newOffset = cards.length
     await fetchInventoryWithParams({
       offset: newOffset,
       search: debouncedSearch,
@@ -453,7 +444,7 @@ export const InventoryScreen = () => {
       append: true,
     })
     setIsLoadingMore(false)
-  }, [isLoadingMore, hasMore, isLoading, lots.length, fetchInventoryWithParams, debouncedSearch, maturity, selectedProducer, selectedRegion, selectedColor, selectedVintage, selectedCellar, priceMin, priceMax, sortOption])
+  }, [isLoadingMore, hasMore, isLoading, cards.length, fetchInventoryWithParams, debouncedSearch, maturity, selectedProducer, selectedRegion, selectedColor, selectedVintage, selectedCellar, priceMin, priceMax, sortOption])
 
   const renderFilterDropdown = (
     label: string,
@@ -487,55 +478,20 @@ export const InventoryScreen = () => {
     </View>
   )
 
-  const MATURITY_BADGES: Record<string, { label: string; bg: string; fg: string }> = {
-    to_age: { label: 'To Age', bg: '#dbeafe', fg: '#1e40af' },
-      past_prime: { label: 'Past Prime', bg: '#fef3c7', fg: '#92400e' },
-    approaching: { label: 'Approaching', bg: '#e0e7ff', fg: '#3730a3' },
-    ready: { label: 'Ready', bg: '#dcfce7', fg: '#166534' },
-    peak: { label: 'Peak', bg: '#fef9c3', fg: '#854d0e' },
-    declining: { label: 'Declining', bg: '#fed7aa', fg: '#9a3412' },
-    past: { label: 'Past', bg: '#fecaca', fg: '#991b1b' },
-    unknown: { label: '', bg: 'transparent', fg: 'transparent' },
-  }
-
-  const renderLot = useCallback(({ item }: { item: InventoryLot }) => {
-    const badge = item.maturity ? MATURITY_BADGES[item.maturity.status] : null
+  const renderCard = useCallback(({ item }: { item: WineCardType }) => {
     return (
-      <TouchableOpacity
-        style={styles.lotCard}
-        onPress={() => navigation.navigate('InventoryDetail', { lot: item })}
-        activeOpacity={0.7}
-      >
-        <View style={[styles.colorDot, { backgroundColor: getWineColor(item.wineColor) }]} />
-        <View style={styles.lotInfo}>
-          <View style={styles.lotNameRow}>
-            <Text style={styles.lotName} numberOfLines={1}>{item.wineName}</Text>
-            <TouchableOpacity
-              onPress={(e) => {
-                e.stopPropagation()
-                navigation.navigate('WineDetail', { wineId: item.wineId })
-              }}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Text style={styles.infoIcon}>ⓘ</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.lotMeta}>
-            {item.producerName} · {item.vintage ?? 'NV'}
-            {badge && badge.label ? (
-              <Text style={{ color: badge.fg, fontSize: 11 }}> · {badge.label}</Text>
-            ) : null}
-          </Text>
-        </View>
-        <View style={styles.lotRight}>
-          <Text style={styles.lotQty}>{item.quantity}</Text>
-          <Text style={styles.lotQtyLabel}>btl</Text>
-        </View>
-      </TouchableOpacity>
+      <WineCard
+        card={item}
+        onPress={() => {
+          // Navigate to wine detail (we'll need to adjust this - cards don't have lotId)
+          // For now, navigate to wine detail directly
+          navigation.navigate('WineDetail', { wineId: item.wineId })
+        }}
+      />
     )
   }, [navigation])
 
-  const keyExtractor = useCallback((item: InventoryLot, index: number) => `${item.id}-${index}`, [])
+  const keyExtractor = useCallback((item: WineCardType, index: number) => `${item.wineId}-${item.vintage}-${index}`, [])
 
   const renderTabPills = () => (
     <View style={styles.tabRow}>
@@ -740,7 +696,7 @@ export const InventoryScreen = () => {
     </View>
   ) : null
 
-  if (isLoading && lots.length === 0) {
+  if (isLoading && cards.length === 0) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color={colors.primary[600]} />
@@ -748,7 +704,7 @@ export const InventoryScreen = () => {
     )
   }
 
-  if (error && lots.length === 0) {
+  if (error && cards.length === 0) {
     return (
       <View style={styles.centered}>
         <Text style={styles.errorText}>{error}</Text>
@@ -765,8 +721,8 @@ export const InventoryScreen = () => {
       
       {activeTab === 'mywines' ? (
         <FlatList
-          data={lots}
-          renderItem={renderLot}
+          data={cards}
+          renderItem={renderCard}
           keyExtractor={keyExtractor}
           ListHeaderComponent={ListHeader}
           ListFooterComponent={ListFooter}
@@ -1087,59 +1043,6 @@ const styles = StyleSheet.create({
   resultCountText: {
     fontSize: 13,
     color: colors.muted[500],
-    fontWeight: '500',
-  },
-  lotCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.muted[200],
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 8,
-  },
-  colorDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 12,
-  },
-  lotInfo: {
-    flex: 1,
-  },
-  lotNameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  lotName: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.muted[900],
-    flex: 1,
-  },
-  infoIcon: {
-    fontSize: 16,
-    color: colors.primary[600],
-  },
-  lotMeta: {
-    fontSize: 13,
-    color: colors.muted[500],
-    marginTop: 2,
-  },
-  lotRight: {
-    alignItems: 'center',
-    marginLeft: 12,
-  },
-  lotQty: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: colors.muted[900],
-  },
-  lotQtyLabel: {
-    fontSize: 11,
-    color: colors.muted[400],
     fontWeight: '500',
   },
   loadingMore: {

@@ -43,6 +43,33 @@ export interface InventoryResponse {
   total: number
 }
 
+export interface WineCard {
+  wineId: number
+  wineName: string
+  producerName: string
+  regionName: string | null
+  appellationName: string | null
+  wineColor: string
+  bottleImageUrl: string | null
+  vintage: number | null
+  totalQuantity: number
+  avgPurchasePrice: number
+  purchaseCurrency: string | null
+  currentValue: number | null
+  valueChangePercent: number | null
+  maturity: {
+    status: 'peak' | 'approaching' | 'to_age' | 'past_prime' | 'declining' | 'unknown'
+    message: string
+    drinkFrom?: number
+    drinkUntil?: number
+  }
+}
+
+export interface WineCardsResponse {
+  cards: WineCard[]
+  total: number
+}
+
 export interface InventoryFilters {
   producers: { id: number; name: string }[]
   regions: { id: number; name: string }[]
