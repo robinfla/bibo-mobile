@@ -203,6 +203,7 @@ export const InventoryScreen = () => {
       if (params.priceMin > 0 || params.priceMax < 200) {
         filtered = filtered.filter(card => {
           const price = card.avgPurchasePrice
+          if (price == null) return false
           return price >= params.priceMin && (params.priceMax >= 200 || price <= params.priceMax)
         })
       }

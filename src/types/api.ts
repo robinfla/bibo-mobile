@@ -70,6 +70,94 @@ export interface WineCardsResponse {
   total: number
 }
 
+export interface WineDetail {
+  id: number
+  name: string
+  color: string
+  notes: string | null
+  bottleImageUrl: string | null
+  defaultDrinkFromYears: number | null
+  defaultDrinkUntilYears: number | null
+  tasteProfile: string[] | null
+  
+  // Taste characteristics
+  bodyWeight: number | null
+  tanninLevel: number | null
+  sweetnessLevel: number | null
+  acidityLevel: number | null
+  
+  // Serving guide
+  servingTempCelsius: number | null
+  decantMinutes: number | null
+  glassType: string | null
+  foodPairings: string[] | null
+  
+  // Relations
+  producer: {
+    id: number
+    name: string
+    website: string | null
+  } | null
+  producerName?: string // Computed from producer.name
+  region: {
+    id: number
+    name: string
+    countryCode: string
+  } | null
+  regionName?: string | null
+  appellation: {
+    id: number
+    name: string
+    level: string | null
+  } | null
+  appellationName?: string | null
+  
+  // Grapes
+  grapes: Array<{ id: number; name: string; color: string; percentage: number | null }>
+  
+  // Vintages
+  vintages?: Array<{
+    id: number
+    vintage: number | null
+    quantity: number
+    binLocation: string | null
+    purchaseDate: string | null
+    purchasePricePerBottle: string | null
+    purchaseCurrency: string | null
+    format: {
+      id: number
+      name: string
+      volumeMl: number
+    } | null
+    cellar: {
+      id: number
+      name: string
+    } | null
+    valuation: {
+      vintage: number | null
+      priceEstimate: string | null
+      priceLow: string | null
+      priceHigh: string | null
+      source: string | null
+      fetchedAt: string | null
+    } | null
+  }>
+  
+  // History
+  history?: Array<{
+    id: number
+    eventType: string
+    quantityChange: number
+    eventDate: string
+    rating: number | null
+    tastingNotes: string | null
+    notes: string | null
+    lotId: number
+    vintage: number | null
+    cellarName: string | null
+  }>
+}
+
 export interface InventoryFilters {
   producers: { id: number; name: string }[]
   regions: { id: number; name: string }[]
