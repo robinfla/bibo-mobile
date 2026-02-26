@@ -15,7 +15,6 @@ import type { WineCard } from '../types/api'
 interface WineCardNewProps {
   card: WineCard
   onPress: () => void
-  viewMode: 'grid' | 'list'
 }
 
 const MATURITY_CONFIG = {
@@ -51,20 +50,11 @@ const MATURITY_CONFIG = {
   },
 }
 
-export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress, viewMode }) => {
+export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
   const [selectedVintageIndex, setSelectedVintageIndex] = useState(0)
 
   const selectedVintage = card.vintages[selectedVintageIndex]
   const maturityConfig = MATURITY_CONFIG[selectedVintage?.maturityStatus || 'unknown']
-
-  const renderMaturityBadge = () => (
-    <View style={[styles.maturityBadge, { backgroundColor: maturityConfig.bg }]}>
-      <View style={[styles.maturityDot, { backgroundColor: maturityConfig.color }]} />
-      <Text style={[styles.maturityLabel, { color: maturityConfig.color }]}>
-        {maturityConfig.label}
-      </Text>
-    </View>
-  )
 
   const renderVintageChips = () => {
     if (card.vintages.length <= 1) return null
@@ -99,93 +89,38 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress, viewMod
     )
   }
 
-  const renderBottleCount = () => (
-    <View style={styles.bottleCount}>
-      <Icon name="bottle-wine" size={16} color={colors.muted[500]} />
-      <Text style={styles.bottleCountText}>
-        {selectedVintage?.bottleCount || card.totalBottles}
-      </Text>
-    </View>
-  )
-
-  if (viewMode === 'grid') {
-    return (
-      <TouchableOpacity style={styles.gridCard} onPress={onPress} activeOpacity={0.7}>
-        {/* Wine Image */}
-        <View style={styles.gridImageContainer}>
-          {card.bottleImageUrl ? (
-            <Image source={{ uri: card.bottleImageUrl }} style={styles.gridImage} />
-          ) : (
-            <View style={[styles.gridImage, styles.placeholderImage]}>
-              <Icon name="bottle-wine-outline" size={32} color={colors.muted[300]} />
-            </View>
-          )}
-        </View>
-
-        <View style={styles.gridContent}>
-          {/* Wine Name + Maturity Badge */}
-          <View style={styles.gridHeader}>
-            <Text style={styles.gridWineName} numberOfLines={2}>
-              {card.wineName}
-            </Text>
-            {renderMaturityBadge()}
-          </View>
-
-          {/* Producer */}
-          <Text style={styles.gridProducer} numberOfLines={1}>
-            {card.producerName}
-          </Text>
-
-          {/* Region + Vintage Count */}
-          <View style={styles.gridMeta}>
-            <Text style={styles.gridMetaText} numberOfLines={1}>
-              {card.regionName || 'Unknown Region'}
-            </Text>
-            {card.vintages.length > 1 && (
-              <Text style={styles.vintageCount}>
-                {card.vintages.length} vintages
-              </Text>
-            )}
-          </View>
-
-          {/* Vintage Chips */}
-          {renderVintageChips()}
-
-          {/* Bottle Count */}
-          {renderBottleCount()}
-        </View>
-      </TouchableOpacity>
-    )
-  }
-
-  // List view
   return (
-    <TouchableOpacity style={styles.listCard} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       {/* Wine Image */}
-      <View style={styles.listImageContainer}>
+      <View style={styles.imageContainer}>
         {card.bottleImageUrl ? (
-          <Image source={{ uri: card.bottleImageUrl }} style={styles.listImage} />
+          <Image source={{ uri: card.bottleImageUrl }} style={styles.image} />
         ) : (
-          <View style={[styles.listImage, styles.placeholderImage]}>
+          <View style={[styles.image, styles.placeholderImage]}>
             <Icon name="bottle-wine-outline" size={28} color={colors.muted[300]} />
           </View>
         )}
       </View>
 
-      <View style={styles.listContent}>
+      <View style={styles.content}>
         {/* Wine Name + Maturity Badge */}
-        <View style={styles.listHeader}>
-          <Text style={styles.listWineName} numberOfLines={1}>
+        <View style={styles.header}>
+          <Text style={styles.wineName} numberOfLines={1}>
             {card.wineName}
           </Text>
-          {renderMaturityBadge()}
+          <View style={[styles.maturityBadge, { backgroundColor: maturityConfig.bg }]}>
+            <View style={[styles.maturityDot, { backgroundColor: maturityConfig.color }]} />
+            <Text style={[styles.maturityLabel, { color: maturityConfig.color }]}>
+              {maturityConfig.label}
+            </Text>
+          </View>
         </View>
 
         {/* Producer + Region */}
-        <Text style={styles.listProducer} numberOfLines={1}>
+        <Text style={styles.producer} numberOfLines={1}>
           {card.producerName}
         </Text>
-        <Text style={styles.listRegion} numberOfLines={1}>
+        <Text style={styles.region} numberOfLines={1}>
           {card.regionName || 'Unknown Region'} • {card.vintages.length > 1 ? `${card.vintages.length} vintages` : selectedVintage?.vintage || 'NV'}
         </Text>
 
@@ -193,79 +128,19 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress, viewMod
         {renderVintageChips()}
 
         {/* Bottle Count */}
-        {renderBottleCount()}
+        <View style={styles.bottleCount}>
+          <Icon name="bottle-wine" size={16} color={colors.muted[500]} />
+          <Text style={styles.bottleCountText}>
+            {selectedVintage?.bottleCount || card.totalBottles}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
-  // Grid Card Styles
-  gridCard: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  gridImageContainer: {
-    width: '100%',
-    height: 140,
-    backgroundColor: colors.muted[100],
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  gridImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  gridContent: {
-    padding: 12,
-  },
-  gridHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 4,
-  },
-  gridWineName: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2C1810',
-    marginRight: 8,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
-  },
-  gridProducer: {
-    fontSize: 14,
-    color: colors.muted[600],
-    marginBottom: 4,
-  },
-  gridMeta: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  gridMetaText: {
-    flex: 1,
-    fontSize: 13,
-    color: colors.muted[500],
-  },
-  vintageCount: {
-    fontSize: 12,
-    color: colors.muted[400],
-    fontWeight: '500',
-  },
-
-  // List Card Styles
-  listCard: {
+  card: {
     flexDirection: 'row',
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -278,7 +153,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
-  listImageContainer: {
+  imageContainer: {
     width: 60,
     height: 80,
     backgroundColor: colors.muted[100],
@@ -287,22 +162,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 12,
   },
-  listImage: {
+  image: {
     width: '100%',
     height: '100%',
     borderRadius: 8,
     resizeMode: 'cover',
   },
-  listContent: {
+  content: {
     flex: 1,
   },
-  listHeader: {
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: 4,
   },
-  listWineName: {
+  wineName: {
     flex: 1,
     fontSize: 16,
     fontWeight: '600',
@@ -310,18 +185,16 @@ const styles = StyleSheet.create({
     marginRight: 8,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
-  listProducer: {
+  producer: {
     fontSize: 14,
     color: colors.muted[600],
     marginBottom: 2,
   },
-  listRegion: {
+  region: {
     fontSize: 13,
     color: colors.muted[500],
     marginBottom: 8,
   },
-
-  // Shared Styles
   maturityBadge: {
     flexDirection: 'row',
     alignItems: 'center',

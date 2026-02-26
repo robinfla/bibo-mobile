@@ -22,14 +22,12 @@ import { HistoryTab } from './HistoryTab'
 import type { WineCard, WineCardsResponse } from '../../types/api'
 
 type InventoryTab = 'cellar' | 'wishlist' | 'history'
-type ViewMode = 'grid' | 'list'
 
 export const InventoryScreen = () => {
   const navigation = useNavigation<any>()
 
   // UI state
   const [activeTab, setActiveTab] = useState<InventoryTab>('cellar')
-  const [viewMode, setViewMode] = useState<ViewMode>('grid')
   const [showFilterModal, setShowFilterModal] = useState(false)
 
   // Data state
@@ -118,23 +116,9 @@ export const InventoryScreen = () => {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      {/* Title & View Toggle */}
+      {/* Title */}
       <View style={styles.headerTop}>
         <Text style={styles.title}>Inventory</Text>
-        <View style={styles.viewToggle}>
-          <TouchableOpacity
-            onPress={() => setViewMode('grid')}
-            style={[styles.viewButton, viewMode === 'grid' && styles.viewButtonActive]}
-          >
-            <Icon name="view-grid" size={20} color={viewMode === 'grid' ? '#FFF' : colors.muted[400]} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setViewMode('list')}
-            style={[styles.viewButton, viewMode === 'list' && styles.viewButtonActive]}
-          >
-            <Icon name="view-list" size={20} color={viewMode === 'list' ? '#FFF' : colors.muted[400]} />
-          </TouchableOpacity>
-        </View>
       </View>
 
       {/* Search Bar */}
@@ -225,12 +209,8 @@ export const InventoryScreen = () => {
           <WineCardNew
             card={item}
             onPress={() => handleCardPress(item.wineId)}
-            viewMode={viewMode}
           />
         )}
-        numColumns={viewMode === 'grid' ? 2 : 1}
-        key={viewMode} // Force re-render on view mode change
-        columnWrapperStyle={viewMode === 'grid' ? styles.gridRow : undefined}
         contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -296,21 +276,6 @@ const styles = StyleSheet.create({
     color: '#2C1810', // Dark brown
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif', // Serif for premium feel
   },
-  viewToggle: {
-    flexDirection: 'row',
-    gap: 4,
-  },
-  viewButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.muted[100],
-  },
-  viewButtonActive: {
-    backgroundColor: '#722F37', // Maroon fill for active view
-  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -369,9 +334,6 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: 16,
-  },
-  gridRow: {
-    justifyContent: 'space-between',
   },
   centerContent: {
     flex: 1,
