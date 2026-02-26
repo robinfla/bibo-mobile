@@ -39,7 +39,7 @@ export const WineDetailScreen = ({ route, navigation }: Props) => {
   const fetchWine = async () => {
     try {
       setError(null)
-      const data = await apiFetch<WineDetailResponse>(`/wines/${wineId}`)
+      const data = await apiFetch<WineDetailResponse>(`/api/wines/${wineId}`)
       setWine(data)
     } catch (err: any) {
       setError(err.message || 'Failed to load wine')
