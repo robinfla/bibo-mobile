@@ -54,8 +54,8 @@ const WINE_COLORS = [
 
 const MATURITY_OPTIONS = [
   { value: 'young', label: 'Youth' },
-  { value: 'ready', label: 'Ready' },
-  { value: 'past', label: 'Past Prime' },
+  { value: 'peak', label: 'Peak' },
+  { value: 'past_prime', label: 'Past Prime' },
 ]
 
 const PRICE_MIN = 0

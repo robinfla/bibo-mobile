@@ -12,7 +12,7 @@ import {
   Modal,
 } from 'react-native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WishlistTab } from './WishlistTab'
@@ -29,6 +29,7 @@ import type {
 type InventoryStackParamList = {
   InventoryList: undefined
   InventoryDetail: { lot: InventoryLot }
+  WineDetail: { wineId: number }
 }
 
 type NavProp = NativeStackNavigationProp<InventoryStackParamList, 'InventoryList'>
@@ -48,8 +49,8 @@ const getWineColor = (color: string): string =>
 
 const MATURITY_TABS = [
   { label: 'All', value: '' },
-  { label: 'Ready', value: 'ready' },
-  { label: 'Past Prime', value: 'past' },
+  { label: 'Peak', value: 'peak' },
+  { label: 'Past Prime', value: 'past_prime' },
   { label: 'To Age', value: 'young' },
 ] as const
 
@@ -70,6 +71,9 @@ interface EventsByMonth {
 
 export const InventoryScreen = () => {
   const navigation = useNavigation<NavProp>()
+  const route = useRoute<any>()
+  const filterLotIds = route.params?.filterLotIds as number[] | undefined
+  const filterLabel = route.params?.filterLabel as string | undefined
 
   // Tab state
   const [activeTab, setActiveTab] = useState<InventoryTab>('mywines')
@@ -167,8 +171,8 @@ export const InventoryScreen = () => {
     const fetchId = ++fetchIdRef.current
     try {
       const query: InventoryQueryParams = {
-        limit: PAGE_SIZE,
-        offset: params.offset,
+        limit: filterLotIds ? 9999 : PAGE_SIZE,
+        offset: filterLotIds ? 0 : params.offset,
       }
       if (params.search?.trim()) query.search = params.search.trim()
       if (params.maturity) query.maturity = params.maturity
@@ -194,6 +198,12 @@ export const InventoryScreen = () => {
         })
       }
 
+      // Filter by lot IDs (from "See wine list" in cellar view)
+      if (filterLotIds && filterLotIds.length > 0) {
+        const idSet = new Set(filterLotIds)
+        filtered = filtered.filter(lot => idSet.has(lot.id))
+      }
+
       // Client-side sorting
       if (params.sort === 'price') {
         filtered.sort((a, b) => {
@@ -202,7 +212,7 @@ export const InventoryScreen = () => {
           return pb - pa
         })
       } else if (params.sort === 'maturity') {
-        const order: Record<string, number> = { past: 0, declining: 1, peak: 2, ready: 3, approaching: 4, too_early: 5, unknown: 6 }
+        const order: Record<string, number> = { declining: 0, past_prime: 1, peak: 2, approaching: 3, to_age: 4, unknown: 5 }
         filtered.sort((a, b) => (order[a.maturity?.status ?? 'unknown'] ?? 6) - (order[b.maturity?.status ?? 'unknown'] ?? 6))
       }
 
@@ -211,15 +221,15 @@ export const InventoryScreen = () => {
       } else {
         setLots(filtered)
       }
-      setTotal(data.total)
-      setHasMore(params.offset + filtered.length < data.total)
+      setTotal(filterLotIds ? filtered.length : data.total)
+      setHasMore(filterLotIds ? false : params.offset + filtered.length < data.total)
       setError(null)
     } catch (e) {
       if (fetchId !== fetchIdRef.current) return
       const msg = e instanceof ApiError ? e.message : 'Failed to load inventory'
       setError(msg)
     }
-  }, [])
+  }, [filterLotIds])
 
   // Convenience wrapper using current state (for loadData/onRefresh)
   const fetchInventory = useCallback(async (currentOffset: number) => {
@@ -300,6 +310,16 @@ export const InventoryScreen = () => {
   useEffect(() => {
     loadData()
   }, [loadData])
+
+  // Re-fetch when navigating with filterLotIds (e.g., from "See wine list")
+  useEffect(() => {
+    if (filterLotIds) {
+      setOffset(0)
+      setHasMore(true)
+      setIsLoading(true)
+      fetchInventory(0).finally(() => setIsLoading(false))
+    }
+  }, [filterLotIds])
 
   const handleMaturityChange = useCallback((value: string) => {
     setMaturity(value)
@@ -468,7 +488,8 @@ export const InventoryScreen = () => {
   )
 
   const MATURITY_BADGES: Record<string, { label: string; bg: string; fg: string }> = {
-    too_early: { label: 'Too Young', bg: '#dbeafe', fg: '#1e40af' },
+    to_age: { label: 'To Age', bg: '#dbeafe', fg: '#1e40af' },
+      past_prime: { label: 'Past Prime', bg: '#fef3c7', fg: '#92400e' },
     approaching: { label: 'Approaching', bg: '#e0e7ff', fg: '#3730a3' },
     ready: { label: 'Ready', bg: '#dcfce7', fg: '#166534' },
     peak: { label: 'Peak', bg: '#fef9c3', fg: '#854d0e' },
@@ -487,7 +508,18 @@ export const InventoryScreen = () => {
       >
         <View style={[styles.colorDot, { backgroundColor: getWineColor(item.wineColor) }]} />
         <View style={styles.lotInfo}>
-          <Text style={styles.lotName} numberOfLines={1}>{item.wineName}</Text>
+          <View style={styles.lotNameRow}>
+            <Text style={styles.lotName} numberOfLines={1}>{item.wineName}</Text>
+            <TouchableOpacity
+              onPress={(e) => {
+                e.stopPropagation()
+                navigation.navigate('WineDetail', { wineId: item.wineId })
+              }}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Text style={styles.infoIcon}>ⓘ</Text>
+            </TouchableOpacity>
+          </View>
           <Text style={styles.lotMeta}>
             {item.producerName} · {item.vintage ?? 'NV'}
             {badge && badge.label ? (
@@ -503,7 +535,7 @@ export const InventoryScreen = () => {
     )
   }, [navigation])
 
-  const keyExtractor = useCallback((item: InventoryLot) => String(item.id), [])
+  const keyExtractor = useCallback((item: InventoryLot, index: number) => `${item.id}-${index}`, [])
 
   const renderTabPills = () => (
     <View style={styles.tabRow}>
@@ -660,6 +692,14 @@ export const InventoryScreen = () => {
 
   const ListHeader = (
     <>
+      {filterLabel && (
+        <View style={styles.filterBanner}>
+          <Text style={styles.filterBannerText}>📍 {filterLabel}</Text>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Text style={styles.filterBannerClear}>✕ Clear</Text>
+          </TouchableOpacity>
+        </View>
+      )}
       <View style={styles.searchRow}>
         <TextInput
           style={styles.searchInput}
@@ -838,6 +878,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.muted[50],
   },
+  filterBanner: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#fdf2f3',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginBottom: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#f5c6cb',
+  },
+  filterBannerText: { fontSize: 14, fontWeight: '600', color: '#722F37' },
+  filterBannerClear: { fontSize: 13, fontWeight: '600', color: '#722F37' },
   centered: {
     flex: 1,
     justifyContent: 'center',
@@ -1054,10 +1108,20 @@ const styles = StyleSheet.create({
   lotInfo: {
     flex: 1,
   },
+  lotNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
   lotName: {
     fontSize: 15,
     fontWeight: '600',
     color: colors.muted[900],
+    flex: 1,
+  },
+  infoIcon: {
+    fontSize: 16,
+    color: colors.primary[600],
   },
   lotMeta: {
     fontSize: 13,

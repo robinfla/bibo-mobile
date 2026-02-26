@@ -17,6 +17,7 @@ import { apiFetch, ApiError } from '../../api/client'
 import { colors, chartColors } from '../../theme/colors'
 import AddWineModal from './AddWineModal'
 import PairingChatModal from './PairingChatModal'
+import { PieChart } from '../../components/PieChart'
 // ScanWineModal moved to bottom tab bar
 import type {
   StatsResponse,
@@ -81,6 +82,9 @@ export const HomeScreen = () => {
   const [error, setError] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
 
+  // Maturity breakdown
+  const [maturityData, setMaturityData] = useState<Record<string, number>>({})
+
   // Consume search
   const [showConsumeModal, setShowConsumeModal] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -113,17 +117,33 @@ export const HomeScreen = () => {
     }
   }, [])
 
+  const fetchMaturity = useCallback(async () => {
+    try {
+      const data = await apiFetch<InventoryResponse>('/api/inventory', {
+        query: { inStock: 'true', limit: '2000' },
+      })
+      const counts: Record<string, number> = {}
+      data.lots.forEach((lot) => {
+        const status = lot.maturity?.status ?? 'unknown'
+        counts[status] = (counts[status] ?? 0) + lot.quantity
+      })
+      setMaturityData(counts)
+    } catch {
+      // non-critical
+    }
+  }, [])
+
   const loadData = useCallback(async () => {
     setIsLoading(true)
-    await fetchStats()
+    await Promise.all([fetchStats(), fetchMaturity()])
     setIsLoading(false)
-  }, [fetchStats])
+  }, [fetchStats, fetchMaturity])
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true)
-    await fetchStats()
+    await Promise.all([fetchStats(), fetchMaturity()])
     setRefreshing(false)
-  }, [fetchStats])
+  }, [fetchStats, fetchMaturity])
 
   useEffect(() => {
     loadData()
@@ -255,9 +275,9 @@ export const HomeScreen = () => {
         {/* Hero */}
         <View style={[styles.hero, { paddingTop: insets.top + 12 }]}>
           <View style={styles.heroRow}>
-            <View>
-              <Text style={styles.heroGreeting}>Hello {userName} 👋</Text>
-              <Text style={styles.heroSubtitle}>Welcome back to your cellar</Text>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.heroGreeting}>Hello {userName}</Text>
+              <Text style={styles.heroSubtitle}>What are we drinking today?</Text>
             </View>
             <TouchableOpacity
               style={styles.avatar}
@@ -268,49 +288,69 @@ export const HomeScreen = () => {
               </Text>
             </TouchableOpacity>
           </View>
+        </View>
 
-          {/* Bottle count */}
-          <View style={styles.bottleCountCard}>
-            <Text style={styles.bottleCountLabel}>Number of bottles</Text>
-            <Text style={styles.bottleCountValue}>{stats?.totals.bottles ?? 0}</Text>
+        {/* Action Cards — Cooper-style grid */}
+        <View style={styles.actionGrid}>
+          {/* Left tall card — AI Sommelier */}
+          <TouchableOpacity
+            style={styles.actionCardTall}
+            onPress={() => setShowPairingModal(true)}
+            activeOpacity={0.85}
+          >
+            <View style={styles.actionCardTallIcon}>
+              <Text style={{ fontSize: 28 }}>🍷</Text>
+            </View>
+            <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+              <Text style={styles.actionCardTallTitle}>Chat with AI Sommelier</Text>
+              <Text style={styles.actionCardTallSub}>Let's find your next bottle</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Right column — two stacked cards */}
+          <View style={styles.actionCardRight}>
+            <TouchableOpacity
+              style={styles.actionCardSmall}
+              onPress={() => setShowAddWineModal(true)}
+              activeOpacity={0.85}
+            >
+              <View style={styles.actionCardSmallIcon}>
+                <Text style={{ fontSize: 22 }}>➕</Text>
+              </View>
+              <Text style={styles.actionCardSmallTitle}>Add a wine</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.actionCardSmall, styles.actionCardSmallDark]}
+              onPress={() => setShowConsumeModal(true)}
+              activeOpacity={0.85}
+            >
+              <View style={styles.actionCardSmallIconDark}>
+                <Text style={{ fontSize: 22 }}>🍾</Text>
+              </View>
+              <Text style={styles.actionCardSmallTitleDark}>Open a bottle</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
-        {/* Quick Actions */}
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
-        <View style={styles.quickActions}>
-          <TouchableOpacity
-            style={styles.quickActionButton}
-            onPress={() => setShowConsumeModal(true)}
-          >
-            <View style={[styles.quickActionIcon, { backgroundColor: colors.primary[100] }]}>
-              <Text style={[styles.quickActionEmoji]}>🍷</Text>
-            </View>
-            <Text style={styles.quickActionLabel}>Open a{'\n'}bottle</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.quickActionButton}
-            onPress={() => setShowAddWineModal(true)}
-          >
-            <View style={[styles.quickActionIcon, { backgroundColor: colors.secondary?.[100] ?? '#dcfce7' }]}>
-              <Text style={styles.quickActionEmoji}>➕</Text>
-            </View>
-            <Text style={styles.quickActionLabel}>Add a{'\n'}bottle</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.quickActionButton}
-            onPress={() => setShowPairingModal(true)}
-          >
-            <View style={[styles.quickActionIcon, { backgroundColor: '#fef3c7' }]}>
-              <Text style={styles.quickActionEmoji}>💡</Text>
-            </View>
-            <Text style={styles.quickActionLabel}>Get{'\n'}inspiration</Text>
-          </TouchableOpacity>
+        {/* Bottle count pill */}
+        <View style={styles.bottleCountPill}>
+          <Text style={styles.bottleCountLabel}>{stats?.totals.bottles ?? 0} bottles in your cellar</Text>
         </View>
 
-        {/* Charts moved to Analytics tab */}
+        {/* Maturity Pie Chart */}
+        {Object.keys(maturityData).length > 0 && (
+          <PieChart
+            title="Cellar Maturity"
+            data={[
+              { label: 'To Age', value: maturityData['to_age'] ?? 0, color: '#3b82f6' },
+              { label: 'Approaching', value: maturityData['approaching'] ?? 0, color: '#f59e0b' },
+              { label: 'Peak', value: maturityData['peak'] ?? 0, color: '#22c55e' },
+              { label: 'Past Prime', value: maturityData['past_prime'] ?? 0, color: '#f97316' },
+              { label: 'Declining', value: maturityData['declining'] ?? 0, color: '#ef4444' },
+            ]}
+          />
+        )}
       </ScrollView>
 
       {/* Consume Search Modal */}
@@ -517,29 +557,28 @@ const styles = StyleSheet.create({
   // Hero
   hero: {
     paddingHorizontal: 20,
-    paddingBottom: 28,
+    paddingBottom: 8,
     backgroundColor: colors.muted[50],
   },
   heroRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
   },
   heroGreeting: {
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 28,
+    fontWeight: '800',
     color: colors.muted[900],
   },
   heroSubtitle: {
-    fontSize: 14,
+    fontSize: 15,
     color: colors.muted[500],
-    marginTop: 2,
+    marginTop: 4,
   },
   avatar: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: colors.primary[600],
     justifyContent: 'center',
     alignItems: 'center',
@@ -549,29 +588,102 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.white,
   },
-  bottleCountCard: {
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.muted[200],
-    borderRadius: 16,
-    padding: 16,
+
+  // Action Grid (Cooper-style)
+  actionGrid: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    gap: 12,
     marginTop: 20,
-    alignSelf: 'flex-start',
-    minWidth: 160,
   },
-  bottleCountLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.muted[500],
+  actionCardTall: {
+    flex: 1,
+    backgroundColor: '#ede9fe',
+    borderRadius: 20,
+    padding: 18,
+    minHeight: 180,
   },
-  bottleCountValue: {
-    fontSize: 36,
-    fontWeight: '800',
+  actionCardTallIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  actionCardTallTitle: {
+    fontSize: 16,
+    fontWeight: '700',
     color: colors.muted[900],
+    lineHeight: 20,
+  },
+  actionCardTallSub: {
+    fontSize: 12,
+    color: colors.muted[600],
     marginTop: 4,
   },
+  actionCardRight: {
+    flex: 1,
+    gap: 12,
+  },
+  actionCardSmall: {
+    flex: 1,
+    backgroundColor: '#fef3c7',
+    borderRadius: 20,
+    padding: 16,
+    justifyContent: 'center',
+  },
+  actionCardSmallDark: {
+    backgroundColor: colors.muted[900],
+  },
+  actionCardSmallIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  actionCardSmallIconDark: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  actionCardSmallTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.muted[900],
+  },
+  actionCardSmallTitleDark: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.white,
+  },
 
-  // Quick Actions
+  // Bottle count pill
+  bottleCountPill: {
+    marginHorizontal: 16,
+    marginTop: 16,
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.muted[200],
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+  },
+  bottleCountLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.muted[600],
+  },
+
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
@@ -579,38 +691,6 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 12,
     paddingHorizontal: 16,
-  },
-  quickActions: {
-    flexDirection: 'row',
-    paddingHorizontal: 16,
-    gap: 12,
-  },
-  quickActionButton: {
-    flex: 1,
-    backgroundColor: colors.white,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.muted[200],
-    paddingVertical: 16,
-    alignItems: 'center',
-    gap: 8,
-  },
-  quickActionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  quickActionEmoji: {
-    fontSize: 22,
-  },
-  quickActionLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.muted[700],
-    textAlign: 'center',
-    lineHeight: 16,
   },
 
   // Charts

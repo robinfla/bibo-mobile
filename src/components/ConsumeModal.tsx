@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import {
   View,
   Text,
@@ -6,11 +6,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  Modal,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
+  Keyboard,
 } from 'react-native'
+import BottomSheet, { BottomSheetScrollView, BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { apiFetch, ApiError } from '../api/client'
 import { colors } from '../theme/colors'
 import type { InventoryLot, ConsumePayload } from '../types/api'
@@ -41,6 +39,8 @@ export const ConsumeModal = ({ visible, lot, onClose, onConsumed }: ConsumeModal
   const [pairing, setPairing] = useState('')
   const [isConsuming, setIsConsuming] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const bottomSheetRef = useRef<BottomSheet>(null)
+  const snapPoints = useMemo(() => ['85%'], [])
 
   const resetState = useCallback(() => {
     setQty(1)
@@ -51,10 +51,35 @@ export const ConsumeModal = ({ visible, lot, onClose, onConsumed }: ConsumeModal
     setIsConsuming(false)
   }, [])
 
+  useEffect(() => {
+    if (visible) {
+      bottomSheetRef.current?.expand()
+    } else {
+      bottomSheetRef.current?.close()
+    }
+  }, [visible])
+
   const handleClose = useCallback(() => {
+    Keyboard.dismiss()
     resetState()
     onClose()
   }, [resetState, onClose])
+
+  const handleSheetChange = useCallback(
+    (index: number) => {
+      if (index === -1) {
+        handleClose()
+      }
+    },
+    [handleClose],
+  )
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} opacity={0.5} />
+    ),
+    [],
+  )
 
   const handleConsume = useCallback(async () => {
     if (!lot) return
@@ -87,131 +112,139 @@ export const ConsumeModal = ({ visible, lot, onClose, onConsumed }: ConsumeModal
   }, [lot, qty, score, comment, pairing, resetState, onConsumed])
 
   if (!lot) return null
+  if (!visible) return null
 
   return (
-    <Modal visible={visible} transparent animationType="slide">
-      <KeyboardAvoidingView
-        style={styles.overlay}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    <BottomSheet
+      ref={bottomSheetRef}
+      index={0}
+      snapPoints={snapPoints}
+      enablePanDownToClose
+      onChange={handleSheetChange}
+      backdropComponent={renderBackdrop}
+      handleIndicatorStyle={styles.indicator}
+      backgroundStyle={styles.sheetBackground}
+      keyboardBehavior="interactive"
+      keyboardBlurBehavior="restore"
+      android_keyboardInputMode="adjustResize"
+    >
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Open a Bottle</Text>
+        <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+          <Text style={styles.closeText}>✕</Text>
+        </TouchableOpacity>
+      </View>
+
+      <BottomSheetScrollView
+        style={styles.body}
+        contentContainerStyle={styles.bodyContent}
+        keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.headerTitle}>Consume Bottle</Text>
-            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <Text style={styles.closeText}>✕</Text>
-            </TouchableOpacity>
+        <View style={styles.wineInfo}>
+          <View style={[styles.colorDot, { backgroundColor: getWineColor(lot.wineColor) }]} />
+          <View style={styles.wineText}>
+            <Text style={styles.wineName}>{lot.wineName}</Text>
+            <Text style={styles.wineMeta}>
+              {lot.producerName} · {lot.vintage ?? 'NV'}
+            </Text>
           </View>
-
-          <ScrollView style={styles.body} keyboardShouldPersistTaps="handled">
-            <View style={styles.wineInfo}>
-              <View style={[styles.colorDot, { backgroundColor: getWineColor(lot.wineColor) }]} />
-              <View style={styles.wineText}>
-                <Text style={styles.wineName}>{lot.wineName}</Text>
-                <Text style={styles.wineMeta}>
-                  {lot.producerName} · {lot.vintage ?? 'NV'}
-                </Text>
-              </View>
-            </View>
-
-            {error && (
-              <View style={styles.errorBox}>
-                <Text style={styles.errorText}>{error}</Text>
-              </View>
-            )}
-
-            <Text style={styles.fieldLabel}>Quantity ({lot.quantity} available)</Text>
-            <View style={styles.qtyRow}>
-              <TouchableOpacity
-                style={styles.qtyButton}
-                onPress={() => setQty((q) => Math.max(1, q - 1))}
-              >
-                <Text style={styles.qtyButtonText}>−</Text>
-              </TouchableOpacity>
-              <Text style={styles.qtyValue}>{qty}</Text>
-              <TouchableOpacity
-                style={styles.qtyButton}
-                onPress={() => setQty((q) => Math.min(lot.quantity, q + 1))}
-              >
-                <Text style={styles.qtyButtonText}>+</Text>
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.fieldLabel}>Score (0-100, optional)</Text>
-            <TextInput
-              style={styles.input}
-              value={score}
-              onChangeText={setScore}
-              placeholder="e.g. 88"
-              placeholderTextColor={colors.muted[400]}
-              keyboardType="number-pad"
-              maxLength={3}
-            />
-
-            <Text style={styles.fieldLabel}>Tasting Notes (optional)</Text>
-            <TextInput
-              style={[styles.input, styles.textArea]}
-              value={comment}
-              onChangeText={setComment}
-              placeholder="Describe the wine..."
-              placeholderTextColor={colors.muted[400]}
-              multiline
-              numberOfLines={3}
-            />
-
-            <Text style={styles.fieldLabel}>Food Pairing (optional)</Text>
-            <TextInput
-              style={styles.input}
-              value={pairing}
-              onChangeText={setPairing}
-              placeholder="What did you pair it with?"
-              placeholderTextColor={colors.muted[400]}
-            />
-
-            <View style={styles.buttons}>
-              <TouchableOpacity
-                style={styles.cancelButton}
-                onPress={handleClose}
-                disabled={isConsuming}
-              >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.confirmButton, isConsuming && styles.buttonDisabled]}
-                onPress={handleConsume}
-                disabled={isConsuming}
-              >
-                {isConsuming ? (
-                  <ActivityIndicator color={colors.white} size="small" />
-                ) : (
-                  <Text style={styles.confirmButtonText}>Confirm</Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
         </View>
-      </KeyboardAvoidingView>
-    </Modal>
+
+        {error && (
+          <View style={styles.errorBox}>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        )}
+
+        <Text style={styles.fieldLabel}>Quantity ({lot.quantity} available)</Text>
+        <View style={styles.qtyRow}>
+          <TouchableOpacity
+            style={styles.qtyButton}
+            onPress={() => setQty((q) => Math.max(1, q - 1))}
+          >
+            <Text style={styles.qtyButtonText}>−</Text>
+          </TouchableOpacity>
+          <Text style={styles.qtyValue}>{qty}</Text>
+          <TouchableOpacity
+            style={styles.qtyButton}
+            onPress={() => setQty((q) => Math.min(lot.quantity, q + 1))}
+          >
+            <Text style={styles.qtyButtonText}>+</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.fieldLabel}>Score (0-100, optional)</Text>
+        <TextInput
+          style={styles.input}
+          value={score}
+          onChangeText={setScore}
+          placeholder="e.g. 88"
+          placeholderTextColor={colors.muted[400]}
+          keyboardType="number-pad"
+          maxLength={3}
+        />
+
+        <Text style={styles.fieldLabel}>Tasting Notes (optional)</Text>
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          value={comment}
+          onChangeText={setComment}
+          placeholder="Describe the wine..."
+          placeholderTextColor={colors.muted[400]}
+          multiline
+          numberOfLines={3}
+        />
+
+        <Text style={styles.fieldLabel}>Food Pairing (optional)</Text>
+        <TextInput
+          style={styles.input}
+          value={pairing}
+          onChangeText={setPairing}
+          placeholder="What did you pair it with?"
+          placeholderTextColor={colors.muted[400]}
+        />
+
+        <View style={styles.buttons}>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={handleClose}
+            disabled={isConsuming}
+          >
+            <Text style={styles.cancelButtonText}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.confirmButton, isConsuming && styles.buttonDisabled]}
+            onPress={handleConsume}
+            disabled={isConsuming}
+          >
+            {isConsuming ? (
+              <ActivityIndicator color={colors.white} size="small" />
+            ) : (
+              <Text style={styles.confirmButtonText}>Confirm</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      </BottomSheetScrollView>
+    </BottomSheet>
   )
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
-  content: {
+  sheetBackground: {
     backgroundColor: colors.white,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    maxHeight: '85%',
+  },
+  indicator: {
+    backgroundColor: colors.muted[300],
+    width: 40,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: colors.muted[200],
   },
@@ -234,7 +267,11 @@ const styles = StyleSheet.create({
     color: colors.muted[600],
   },
   body: {
+    flex: 1,
+  },
+  bodyContent: {
     padding: 20,
+    paddingBottom: 40,
   },
   wineInfo: {
     flexDirection: 'row',
@@ -328,7 +365,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     marginTop: 20,
-    paddingBottom: 20,
   },
   cancelButton: {
     flex: 1,

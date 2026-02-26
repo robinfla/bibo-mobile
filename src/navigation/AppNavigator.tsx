@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, ActivityIndicator, StyleSheet, Platform } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useAuth } from '../auth/AuthContext'
@@ -8,42 +8,95 @@ import { LoginScreen } from '../screens/LoginScreen'
 import { HomeScreen } from '../screens/home/HomeScreen'
 import { InventoryScreen } from '../screens/inventory/InventoryScreen'
 import { InventoryDetailScreen } from '../screens/inventory/InventoryDetailScreen'
+import { WineDetailScreen } from '../screens/wine/WineDetailScreen'
 import { AnalyticsScreen } from '../screens/analytics/AnalyticsScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
 import { ImportScreen } from '../screens/ImportScreen'
 import { ScanWineModal } from '../screens/home/ScanWineModal'
+import { CellarsScreen } from '../screens/cellars/CellarsScreen'
+import { SpacesListScreen } from '../screens/cellars/SpacesListScreen'
+import { CreateSpaceScreen } from '../screens/cellars/CreateSpaceScreen'
+import { SpaceDetailScreen } from '../screens/cellars/SpaceDetailScreen'
+import { CreateRackScreen } from '../screens/cellars/CreateRackScreen'
+import { RackViewScreen } from '../screens/cellars/RackViewScreen'
+import { RoomSetupScreen } from '../screens/cellars/RoomSetupScreen'
+import { FridgeSetupScreen } from '../screens/cellars/FridgeSetupScreen'
 import type { InventoryLot } from '../types/api'
 
 type InventoryStackParamList = {
   InventoryList: undefined
   InventoryDetail: { lot: InventoryLot }
+  WineDetail: { wineId: number }
 }
 
 const HomeStack = createNativeStackNavigator()
 const InventoryStack = createNativeStackNavigator<InventoryStackParamList>()
 const Tab = createBottomTabNavigator()
 
-const HomeIcon = ({ color }: { color: string }) => (
-  <Text style={{ fontSize: 20, color }}>⌂</Text>
+const HomeIcon = ({ color, size }: { color: string; size: number }) => (
+  <Text style={{ fontSize: size + 4, color, lineHeight: size + 8 }}>⌂</Text>
 )
 
-const ListIcon = ({ color }: { color: string }) => (
-  <Text style={{ fontSize: 20, color }}>☰</Text>
+const ListIcon = ({ color, size }: { color: string; size: number }) => (
+  <Text style={{ fontSize: size + 2, color, lineHeight: size + 6 }}>☰</Text>
 )
 
-const ChartIcon = ({ color }: { color: string }) => (
-  <Text style={{ fontSize: 20, color }}>📊</Text>
+const ChartIcon = ({ color, size }: { color: string; size: number }) => (
+  <Text style={{ fontSize: size + 2, color, lineHeight: size + 6 }}>📊</Text>
 )
 
-const ScanIcon = ({ color }: { color: string }) => (
-  <Text style={{ fontSize: 20, color }}>📷</Text>
+// Scan button — elevated bordeaux circle, centered in tab bar
+const ScanButton = () => (
+  <View
+    style={{
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      backgroundColor: '#722F37',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 24,
+      shadowColor: '#722F37',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.3,
+      shadowRadius: 8,
+      elevation: 8,
+    }}
+  >
+    {/* Scan/viewfinder icon */}
+    <View style={{ width: 24, height: 24, position: 'relative' }}>
+      <View style={{ position: 'absolute', top: 0, left: 0, width: 7, height: 7, borderTopWidth: 2.5, borderLeftWidth: 2.5, borderColor: '#fff', borderTopLeftRadius: 2 }} />
+      <View style={{ position: 'absolute', top: 0, right: 0, width: 7, height: 7, borderTopWidth: 2.5, borderRightWidth: 2.5, borderColor: '#fff', borderTopRightRadius: 2 }} />
+      <View style={{ position: 'absolute', bottom: 0, left: 0, width: 7, height: 7, borderBottomWidth: 2.5, borderLeftWidth: 2.5, borderColor: '#fff', borderBottomLeftRadius: 2 }} />
+      <View style={{ position: 'absolute', bottom: 0, right: 0, width: 7, height: 7, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#fff', borderBottomRightRadius: 2 }} />
+    </View>
+  </View>
+)
+
+// Cellars icon
+const CellarIcon = ({ color, size }: { color: string; size: number }) => (
+  <Text style={{ fontSize: size + 2, color, lineHeight: size + 6 }}>🏠</Text>
 )
 
 // Dummy screen — scan tab never actually renders, it opens a modal
 const DummyScreen = () => <View />;
 
 
+const CellarsStack = createNativeStackNavigator()
 const AnalyticsStack = createNativeStackNavigator()
+
+const CellarsStackScreen = () => (
+  <CellarsStack.Navigator screenOptions={{ headerShown: false }}>
+    <CellarsStack.Screen name="CellarsList" component={CellarsScreen} />
+    <CellarsStack.Screen name="SpacesList" component={SpacesListScreen} />
+    <CellarsStack.Screen name="CreateSpace" component={CreateSpaceScreen} />
+    <CellarsStack.Screen name="RoomSetup" component={RoomSetupScreen} />
+    <CellarsStack.Screen name="FridgeSetup" component={FridgeSetupScreen} />
+    <CellarsStack.Screen name="SpaceDetail" component={SpaceDetailScreen} />
+    <CellarsStack.Screen name="CreateRack" component={CreateRackScreen} />
+    <CellarsStack.Screen name="RackView" component={RackViewScreen} />
+  </CellarsStack.Navigator>
+)
 
 const AnalyticsStackScreen = () => (
   <AnalyticsStack.Navigator
@@ -105,6 +158,11 @@ const InventoryStackScreen = () => (
       component={InventoryDetailScreen}
       options={{ title: 'Wine Details' }}
     />
+    <InventoryStack.Screen
+      name="WineDetail"
+      component={WineDetailScreen}
+      options={{ title: 'Wine Info' }}
+    />
   </InventoryStack.Navigator>
 )
 
@@ -119,15 +177,25 @@ const AuthenticatedTabs = () => {
           tabBarStyle: {
             backgroundColor: colors.white,
             borderTopColor: colors.muted[200],
-            borderTopWidth: 1,
-            height: 60,
-            paddingBottom: 6,
+            borderTopWidth: 0,
+            height: Platform.OS === 'ios' ? 88 : 72,
+            paddingBottom: Platform.OS === 'ios' ? 24 : 12,
+            paddingTop: 8,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: -2 },
+            shadowOpacity: 0.06,
+            shadowRadius: 8,
+            elevation: 10,
           },
-          tabBarActiveTintColor: colors.primary[600],
+          tabBarActiveTintColor: '#722F37',
           tabBarInactiveTintColor: colors.muted[400],
           tabBarLabelStyle: {
             fontSize: 11,
             fontWeight: '600',
+            marginTop: 2,
+          },
+          tabBarIconStyle: {
+            marginBottom: -2,
           },
         }}
       >
@@ -136,7 +204,7 @@ const AuthenticatedTabs = () => {
           component={HomeStackScreen}
           options={{
             tabBarLabel: 'Home',
-            tabBarIcon: HomeIcon,
+            tabBarIcon: ({ color }) => <HomeIcon color={color} size={24} />,
           }}
         />
         <Tab.Screen
@@ -144,7 +212,7 @@ const AuthenticatedTabs = () => {
           component={InventoryStackScreen}
           options={{
             tabBarLabel: 'Inventory',
-            tabBarIcon: ListIcon,
+            tabBarIcon: ({ color }) => <ListIcon color={color} size={24} />,
           }}
         />
         <Tab.Screen
@@ -157,8 +225,8 @@ const AuthenticatedTabs = () => {
             },
           }}
           options={{
-            tabBarLabel: 'Scan',
-            tabBarIcon: ScanIcon,
+            tabBarLabel: '',
+            tabBarIcon: () => <ScanButton />,
           }}
         />
         <Tab.Screen
@@ -166,7 +234,15 @@ const AuthenticatedTabs = () => {
           component={AnalyticsStackScreen}
           options={{
             tabBarLabel: 'Analytics',
-            tabBarIcon: ChartIcon,
+            tabBarIcon: ({ color }) => <ChartIcon color={color} size={24} />,
+          }}
+        />
+        <Tab.Screen
+          name="CellarsTab"
+          component={CellarsStackScreen}
+          options={{
+            tabBarLabel: 'Cellars',
+            tabBarIcon: ({ color }) => <CellarIcon color={color} size={24} />,
           }}
         />
       </Tab.Navigator>

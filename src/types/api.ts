@@ -32,7 +32,7 @@ export interface InventoryLot {
 }
 
 export interface MaturityInfo {
-  status: 'peak' | 'ready' | 'approaching' | 'declining' | 'too_early' | 'past' | 'unknown'
+  status: 'peak' | 'approaching' | 'to_age' | 'past_prime' | 'declining' | 'unknown'
   message: string
   drinkFrom: number | null
   drinkUntil: number | null
@@ -218,4 +218,78 @@ export interface CreateWishlistItem {
   url?: string | null
   regionId?: number | null
   winesOfInterest?: string | null
+}
+
+// Wine Detail
+export interface WineDetailResponse {
+  id: number
+  name: string
+  color: string
+  notes: string | null
+  defaultDrinkFromYears: number | null
+  defaultDrinkUntilYears: number | null
+  tasteProfile: string[] | null
+  servingTempCelsius: number | null
+  decantMinutes: number | null
+  glassType: string | null
+  foodPairings: string[] | null
+  producer: {
+    id: number
+    name: string
+    website: string | null
+  } | null
+  region: {
+    id: number
+    name: string
+    countryCode: string
+  } | null
+  appellation: {
+    id: number
+    name: string
+    level: string | null
+  } | null
+  grapes: Array<{
+    id: number
+    name: string
+    color: string | null
+    percentage: number | null
+  }>
+  vintages: Array<{
+    id: number
+    vintage: number | null
+    quantity: number
+    binLocation: string | null
+    purchaseDate: string | null
+    purchasePricePerBottle: string | null
+    purchaseCurrency: string | null
+    format: {
+      id: number
+      name: string
+      volumeMl: number
+    } | null
+    cellar: {
+      id: number
+      name: string
+    } | null
+    valuation: {
+      vintage: number | null
+      priceEstimate: string | null
+      priceLow: string | null
+      priceHigh: string | null
+      source: string | null
+      fetchedAt: string | null
+    } | null
+  }>
+  history: Array<{
+    id: number
+    eventType: string
+    quantityChange: number
+    eventDate: string
+    rating: number | null
+    tastingNotes: string | null
+    notes: string | null
+    lotId: number
+    vintage: number | null
+    cellarName: string | null
+  }>
 }

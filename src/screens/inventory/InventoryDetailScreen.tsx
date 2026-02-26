@@ -39,7 +39,8 @@ const MATURITY_COLORS: Record<string, { bg: string; text: string }> = {
   ready: { bg: '#dcfce7', text: '#15803d' },
   approaching: { bg: '#fef3c7', text: '#b45309' },
   declining: { bg: '#fef3c7', text: '#b45309' },
-  too_early: { bg: '#dbeafe', text: '#1d4ed8' },
+  to_age: { bg: '#dbeafe', text: '#1d4ed8' },
+  past_prime: { bg: '#fef3c7', text: '#92400e' },
   past: { bg: '#fef2f2', text: '#dc2626' },
   unknown: { bg: '#f3f4f6', text: '#6b7280' },
 }
@@ -52,7 +53,8 @@ const MATURITY_LABELS: Record<string, string> = {
   ready: 'Ready to Drink',
   approaching: 'Approaching',
   declining: 'Declining',
-  too_early: 'Too Early',
+  to_age: 'To Age',
+  past_prime: 'Past Prime',
   past: 'Past Prime',
   unknown: 'Unknown',
 }
