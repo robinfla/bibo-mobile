@@ -30,6 +30,7 @@ export const WineDetailScreen = () => {
 
   const [wine, setWine] = useState<WineDetail | null>(null)
   const [selectedVintage, setSelectedVintage] = useState<number | null>(null)
+  const [selectedFormat, setSelectedFormat] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -52,10 +53,14 @@ export const WineDetailScreen = () => {
       }
       setWine(wineWithFlattened)
       
-      // Use vintages from wine detail response
+      // Use vintages from wine detail response — select first vintage + format
       if (data.vintages && data.vintages.length > 0) {
         const firstVintage = data.vintages[0].vintage
-        if (firstVintage) setSelectedVintage(firstVintage)
+        const firstFormat = data.vintages[0].format?.name || 'Standard'
+        if (firstVintage) {
+          setSelectedVintage(firstVintage)
+          setSelectedFormat(firstFormat)
+        }
       }
       
       setError(null)
@@ -69,22 +74,51 @@ export const WineDetailScreen = () => {
   const getVintageSummary = () => {
     if (!wine?.vintages) return []
     
+    // Group by vintage + format
     const vintageGroups = wine.vintages.reduce((acc, v) => {
       const vintage = v.vintage ?? 0
-      if (!acc[vintage]) {
-        acc[vintage] = { vintage, quantity: 0, items: [] }
+      const formatName = v.format?.name || 'Standard'
+      const key = `${vintage}-${formatName}`
+      
+      if (!acc[key]) {
+        acc[key] = {
+          vintage,
+          formatName,
+          formatVolume: v.format?.volumeMl || 750,
+          quantity: 0,
+          items: [],
+        }
       }
-      acc[vintage].quantity += v.quantity
-      acc[vintage].items.push(v)
+      acc[key].quantity += v.quantity
+      acc[key].items.push(v)
       return acc
-    }, {} as Record<number, { vintage: number; quantity: number; items: typeof wine.vintages }>)
+    }, {} as Record<string, {
+      vintage: number
+      formatName: string
+      formatVolume: number
+      quantity: number
+      items: typeof wine.vintages
+    }>)
     
-    return Object.values(vintageGroups).sort((a, b) => b.vintage - a.vintage)
+    return Object.values(vintageGroups).sort((a, b) => {
+      if (a.vintage !== b.vintage) return b.vintage - a.vintage
+      return b.formatVolume - a.formatVolume // Larger bottles first
+    })
   }
 
   const getSelectedVintageData = () => {
-    if (!wine?.vintages || !selectedVintage) return null
-    return wine.vintages.find(v => v.vintage === selectedVintage)
+    if (!wine?.vintages || !selectedVintage || !selectedFormat) return null
+    return wine.vintages.find(
+      v => v.vintage === selectedVintage && (v.format?.name || 'Standard') === selectedFormat
+    )
+  }
+
+  const getSelectedVintageGroup = () => {
+    if (!selectedVintage || !selectedFormat) return null
+    const vintages = getVintageSummary()
+    return vintages.find(
+      v => v.vintage === selectedVintage && v.formatName === selectedFormat
+    )
   }
 
   const getAgingCurveData = () => {
@@ -113,52 +147,6 @@ export const WineDetailScreen = () => {
       currentYear,
       status: maturity.status,
     }
-  }
-
-  const renderAgingCurve = () => {
-    const curveData = getAgingCurveData()
-    if (!curveData) return null
-    
-    const { drinkFrom, drinkUntil, peakStart, peakEnd, currentYear } = curveData
-    
-    return (
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Aging Phase</Text>
-        <Text style={styles.sectionSubtitle}>
-          Drinking Window ({drinkFrom}-{drinkUntil} vintage)
-        </Text>
-        
-        {/* Curve visualization */}
-        <View style={styles.curveContainer}>
-          <View style={styles.curveLabels}>
-            <View style={styles.curveLabel}>
-              <Text style={styles.curveLabelYear}>{drinkFrom}</Text>
-              <Text style={styles.curveLabelText}>Youth</Text>
-            </View>
-            <View style={styles.curveLabel}>
-              <Text style={styles.curveLabelYear}>{peakStart}-{peakEnd}</Text>
-              <Text style={styles.curveLabelText}>Maturity</Text>
-            </View>
-            <View style={styles.curveLabel}>
-              <Text style={styles.curveLabelYear}>{peakEnd}</Text>
-              <Text style={styles.curveLabelText}>Peak</Text>
-            </View>
-            <View style={styles.curveLabel}>
-              <Text style={styles.curveLabelYear}>{drinkUntil}</Text>
-              <Text style={styles.curveLabelText}>Decline</Text>
-            </View>
-          </View>
-          
-          {/* Emoji curve markers */}
-          <View style={styles.curveEmojis}>
-            <Text style={styles.curveEmoji}>🍇</Text>
-            <Text style={styles.curveEmoji}>😊</Text>
-            <Text style={styles.curveEmoji}>😍</Text>
-            <Text style={styles.curveEmoji}>📉</Text>
-          </View>
-        </View>
-      </View>
-    )
   }
 
   const renderTasteCharacteristics = () => {
@@ -323,68 +311,93 @@ export const WineDetailScreen = () => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Your Vintages</Text>
           <View style={styles.vintageTabsRow}>
-            {vintages.map((v) => (
-              <TouchableOpacity
-                key={v.vintage}
-                style={[
-                  styles.vintageTab,
-                  selectedVintage === v.vintage && styles.vintageTabActive,
-                ]}
-                onPress={() => setSelectedVintage(v.vintage)}
-              >
-                <Text
-                  style={[
-                    styles.vintageTabText,
-                    selectedVintage === v.vintage && styles.vintageTabTextActive,
-                  ]}
+            {vintages.map((v, index) => {
+              const isActive = selectedVintage === v.vintage && selectedFormat === v.formatName
+              return (
+                <TouchableOpacity
+                  key={`${v.vintage}-${v.formatName}-${index}`}
+                  style={styles.vintageTabContainer}
+                  onPress={() => {
+                    setSelectedVintage(v.vintage)
+                    setSelectedFormat(v.formatName)
+                  }}
                 >
-                  {v.vintage} (x{v.quantity})
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <View
+                    style={[
+                      styles.vintageTab,
+                      isActive && styles.vintageTabActive,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.vintageTabText,
+                        isActive && styles.vintageTabTextActive,
+                      ]}
+                    >
+                      {v.vintage} (x{v.quantity})
+                    </Text>
+                  </View>
+                  <Text style={styles.vintageFormatText}>
+                    {v.formatName} {v.formatVolume}ml
+                  </Text>
+                </TouchableOpacity>
+              )
+            })}
           </View>
         </View>
       )}
 
-      {/* Maturity badge & value */}
-      {selectedVintageData && (
+      {/* Maturity status & drinking window */}
+      {selectedVintageData && curveData && badge && badge.label && (
         <View style={styles.section}>
-          {badge && badge.label && (
-            <View style={[styles.maturityBadgeLarge, { backgroundColor: badge.bg }]}>
-              <Text style={[styles.maturityBadgeLargeText, { color: badge.fg }]}>
+          <View style={styles.maturityRow}>
+            <View style={[styles.maturityBadge, { backgroundColor: badge.bg }]}>
+              <Text style={[styles.maturityBadgeText, { color: badge.fg }]}>
                 {badge.emoji} {badge.label}
               </Text>
             </View>
-          )}
-          
-          {selectedVintageData.purchasePricePerBottle && (
-            <View style={styles.valueRow}>
-              <View>
-                <Text style={styles.valueLabel}>Average buy price</Text>
+            
+            <View style={styles.drinkingWindow}>
+              <Text style={styles.drinkingWindowLabel}>Maturity date</Text>
+              <Text style={styles.drinkingWindowDate}>
+                {curveData.drinkFrom} - {curveData.drinkUntil}
+              </Text>
+            </View>
+          </View>
+        </View>
+      )}
+
+      {/* Average buy price & current value */}
+      {selectedVintageData?.purchasePricePerBottle && (
+        <View style={styles.section}>
+          <View style={styles.valueRow}>
+            <View>
+              <Text style={styles.valueLabel}>Average buy price</Text>
+              <Text style={styles.valueAmount}>
+                {selectedVintageData.purchaseCurrency || '€'}
+                {selectedVintageData.purchasePricePerBottle} / bottle
+              </Text>
+            </View>
+            
+            <Text style={styles.valueChangeCenter}>
+              {selectedVintageData.valuation?.priceEstimate && (() => {
+                const purchase = parseFloat(selectedVintageData.purchasePricePerBottle!)
+                const current = parseFloat(selectedVintageData.valuation.priceEstimate!)
+                const change = Math.round(((current - purchase) / purchase) * 100)
+                return `${change >= 0 ? '+' : ''}${change}% ${change >= 0 ? '📈' : '📉'}`
+              })()}
+            </Text>
+            
+            {selectedVintageData.valuation?.priceEstimate && (
+              <View style={styles.valueRight}>
+                <Text style={styles.valueLabel}>Current value</Text>
                 <Text style={styles.valueAmount}>
                   {selectedVintageData.purchaseCurrency || '€'}
-                  {selectedVintageData.purchasePricePerBottle} / bottle
+                  {selectedVintageData.valuation.priceEstimate}
                 </Text>
               </View>
-              {selectedVintageData.valuation?.priceEstimate && (
-                <View style={styles.valueRight}>
-                  <Text style={styles.valueLabel}>Current value</Text>
-                  <Text style={styles.valueAmount}>
-                    {selectedVintageData.purchaseCurrency || '€'}
-                    {selectedVintageData.valuation.priceEstimate}
-                  </Text>
-                  <Text style={styles.valueChange}>
-                    {(() => {
-                      const purchase = parseFloat(selectedVintageData.purchasePricePerBottle)
-                      const current = parseFloat(selectedVintageData.valuation.priceEstimate!)
-                      const change = Math.round(((current - purchase) / purchase) * 100)
-                      return `${change >= 0 ? '+' : ''}${change}% ${change >= 0 ? '📈' : '📉'}`
-                    })()}
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
+            )}
+          </View>
         </View>
       )}
 
@@ -396,8 +409,45 @@ export const WineDetailScreen = () => {
         </View>
       )}
 
-      {/* Aging curve */}
-      {renderAgingCurve()}
+      {/* Aging Phase */}
+      {curveData && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Aging Phase</Text>
+          <Text style={styles.sectionSubtitle}>
+            Drinking Window ({curveData.drinkFrom}-{curveData.drinkUntil} vintage)
+          </Text>
+          
+          {/* Curve visualization */}
+          <View style={styles.curveContainer}>
+            <View style={styles.curveLabels}>
+              <View style={styles.curveLabel}>
+                <Text style={styles.curveLabelYear}>{curveData.drinkFrom}</Text>
+                <Text style={styles.curveLabelText}>Youth</Text>
+              </View>
+              <View style={styles.curveLabel}>
+                <Text style={styles.curveLabelYear}>{curveData.peakStart}-{curveData.peakEnd - curveData.peakStart}</Text>
+                <Text style={styles.curveLabelText}>Maturity</Text>
+              </View>
+              <View style={styles.curveLabel}>
+                <Text style={styles.curveLabelYear}>{curveData.peakEnd}</Text>
+                <Text style={styles.curveLabelText}>Peak</Text>
+              </View>
+              <View style={styles.curveLabel}>
+                <Text style={styles.curveLabelYear}>{curveData.drinkUntil}</Text>
+                <Text style={styles.curveLabelText}>Decline</Text>
+              </View>
+            </View>
+            
+            {/* Emoji curve markers */}
+            <View style={styles.curveEmojis}>
+              <Text style={styles.curveEmoji}>🍇</Text>
+              <Text style={styles.curveEmoji}>😊</Text>
+              <Text style={styles.curveEmoji}>😍</Text>
+              <Text style={styles.curveEmoji}>📉</Text>
+            </View>
+          </View>
+        </View>
+      )}
 
       {/* Taste characteristics */}
       {renderTasteCharacteristics()}
@@ -521,15 +571,19 @@ const styles = StyleSheet.create({
   vintageTabsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 16,
+  },
+  vintageTabContainer: {
+    alignItems: 'center',
   },
   vintageTab: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: colors.muted[100],
-    borderWidth: 1,
+    backgroundColor: colors.white,
+    borderWidth: 1.5,
     borderColor: colors.muted[300],
+    marginBottom: 6,
   },
   vintageTabActive: {
     backgroundColor: '#722F37',
@@ -543,20 +597,47 @@ const styles = StyleSheet.create({
   vintageTabTextActive: {
     color: colors.white,
   },
-  maturityBadgeLarge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 14,
+  vintageFormatText: {
+    fontSize: 11,
+    color: colors.muted[500],
+    textAlign: 'center',
+  },
+  maturityRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  maturityBadge: {
+    paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 12,
-    marginBottom: 16,
   },
-  maturityBadgeLargeText: {
-    fontSize: 16,
+  maturityBadgeText: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  drinkingWindow: {
+    alignItems: 'flex-end',
+  },
+  drinkingWindowLabel: {
+    fontSize: 12,
+    color: colors.muted[500],
+    marginBottom: 2,
+  },
+  drinkingWindowDate: {
+    fontSize: 15,
     fontWeight: '700',
+    color: '#1a1a1a',
   },
   valueRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  valueChangeCenter: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#16a34a',
   },
   valueLabel: {
     fontSize: 12,
