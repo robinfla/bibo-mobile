@@ -192,45 +192,7 @@ export const WineDetailScreen = () => {
     )
   }
 
-  const renderServingGuide = () => {
-    if (!wine) return null
-    
-    return (
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Serving Guide</Text>
-        
-        {wine.servingTempCelsius && (
-          <View style={styles.guideRow}>
-            <Text style={styles.guideIcon}>🌡️</Text>
-            <View>
-              <Text style={styles.guideTitle}>{wine.servingTempCelsius}°C</Text>
-              <Text style={styles.guideSubtitle}>Slightly below room temperature</Text>
-            </View>
-          </View>
-        )}
-        
-        {wine.decantMinutes && (
-          <View style={styles.guideRow}>
-            <Text style={styles.guideIcon}>⏱️</Text>
-            <View>
-              <Text style={styles.guideTitle}>{wine.decantMinutes} minutes</Text>
-              <Text style={styles.guideSubtitle}>Allow time to breathe before serving</Text>
-            </View>
-          </View>
-        )}
-        
-        {wine.glassType && (
-          <View style={styles.guideRow}>
-            <Text style={styles.guideIcon}>🍷</Text>
-            <View>
-              <Text style={styles.guideTitle}>{wine.glassType}</Text>
-              <Text style={styles.guideSubtitle}>Use a large bowl to aerate the wine</Text>
-            </View>
-          </View>
-        )}
-      </View>
-    )
-  }
+
 
   if (isLoading) {
     return (
@@ -397,21 +359,31 @@ export const WineDetailScreen = () => {
       )}
 
       {/* Tasting Notes */}
-      {wine?.notes && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Tasting Notes</Text>
-          <TastingNotesCard score={92} notes={wine.notes} />
-        </View>
-      )}
+      {(() => {
+        // Get most recent tasting note from history
+        const tastingHistory = wine?.history
+          ?.filter(h => h.tastingNotes || h.rating)
+          .sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime())
+        const latestTasting = tastingHistory?.[0]
+        
+        if (!latestTasting) return null
+        
+        return (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Tasting Notes</Text>
+            <TastingNotesCard 
+              score={latestTasting.rating || undefined} 
+              notes={latestTasting.tastingNotes || undefined} 
+            />
+          </View>
+        )
+      })()}
 
       {/* Grapes */}
       {renderGrapes()}
 
       {/* Meal Suggestions */}
       {renderMealSuggestions()}
-
-      {/* Serving guide */}
-      {renderServingGuide()}
 
       {/* Comments */}
       <View style={styles.section}>
@@ -676,25 +648,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
-  guideRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 16,
-    gap: 12,
-  },
-  guideIcon: {
-    fontSize: 24,
-  },
-  guideTitle: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#1a1a1a',
-  },
-  guideSubtitle: {
-    fontSize: 13,
-    color: colors.muted[500],
-    marginTop: 2,
-  },
+
   actionButtons: {
     flexDirection: 'row',
     gap: 12,
