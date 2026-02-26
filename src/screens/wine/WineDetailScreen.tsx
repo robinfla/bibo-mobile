@@ -88,13 +88,15 @@ export const WineDetailScreen = () => {
   }
 
   const getAgingCurveData = () => {
-    if (!selectedVintage || !wine) return null
+    const vintageData = getSelectedVintageData()
+    if (!vintageData?.maturity) return null
     
-    const drinkFromYears = wine.defaultDrinkFromYears ?? 5
-    const drinkUntilYears = wine.defaultDrinkUntilYears ?? 15
+    const { maturity } = vintageData
+    const drinkFrom = maturity.drinkFrom
+    const drinkUntil = maturity.drinkUntil
     
-    const drinkFrom = selectedVintage + drinkFromYears
-    const drinkUntil = selectedVintage + drinkUntilYears
+    if (!drinkFrom || !drinkUntil) return null
+    
     const currentYear = new Date().getFullYear()
     
     // Calculate phase boundaries (1/3, 2/3)
@@ -103,27 +105,13 @@ export const WineDetailScreen = () => {
     const peakStart = drinkFrom + thirdLength
     const peakEnd = drinkFrom + thirdLength * 2
     
-    // Determine status based on current year
-    let status: keyof typeof MATURITY_BADGES = 'unknown'
-    if (currentYear < drinkFrom) {
-      status = 'to_age'
-    } else if (currentYear < peakStart) {
-      status = 'approaching'
-    } else if (currentYear <= peakEnd) {
-      status = 'peak'
-    } else if (currentYear <= drinkUntil) {
-      status = 'past_prime'
-    } else {
-      status = 'declining'
-    }
-    
     return {
       drinkFrom,
       drinkUntil,
       peakStart,
       peakEnd,
       currentYear,
-      status,
+      status: maturity.status,
     }
   }
 

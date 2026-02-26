@@ -141,6 +141,12 @@ export interface WineDetail {
       source: string | null
       fetchedAt: string | null
     } | null
+    maturity: {
+      status: 'to_age' | 'approaching' | 'peak' | 'past_prime' | 'declining' | 'unknown'
+      message: string
+      drinkFrom?: number
+      drinkUntil?: number
+    }
   }>
   
   // History
