@@ -180,6 +180,16 @@ export const WineDetailScreenV3 = () => {
     .sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime())
   const latestTasting = tastingHistory?.[0]
 
+  // Strip producer name from wine name if it's at the start
+  const getCleanWineName = () => {
+    const fullName = wine.name
+    const producer = wine.producerName
+    if (producer && fullName.toLowerCase().startsWith(producer.toLowerCase() + ' ')) {
+      return fullName.substring(producer.length + 1).trim()
+    }
+    return fullName
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -208,7 +218,7 @@ export const WineDetailScreenV3 = () => {
           {/* Hero Content */}
           <View style={styles.heroContent}>
             <Text style={styles.wineGlass}>🍷</Text>
-            <Text style={styles.heroTitle}>{wine.name}</Text>
+            <Text style={styles.heroTitle}>{getCleanWineName()}</Text>
             <Text style={styles.heroSubtitle}>{wine.producerName}</Text>
           </View>
         </LinearGradient>
@@ -216,7 +226,7 @@ export const WineDetailScreenV3 = () => {
         {/* Sticky Sub-Header */}
         <View style={styles.subHeader}>
           <Text style={styles.subHeaderTitle}>
-            {wine.name} {selectedVintage}
+            {getCleanWineName()} {selectedVintage}
           </Text>
           <WineMenuDropdown
             onEditDetails={handleEditDetails}
