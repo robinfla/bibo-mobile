@@ -1,938 +1,501 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
   ActivityIndicator,
   RefreshControl,
-  Modal,
+  SafeAreaView,
 } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../../auth/AuthContext'
-import { apiFetch, ApiError } from '../../api/client'
-import { colors, chartColors } from '../../theme/colors'
+import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import AddWineModal from './AddWineModal'
 import PairingChatModal from './PairingChatModal'
-import { PieChart } from '../../components/PieChart'
-// ScanWineModal moved to bottom tab bar
-import type {
-  StatsResponse,
-  InventoryLot,
-  InventoryResponse,
-  ConsumePayload,
-} from '../../types/api'
 
-const WINE_COLORS: Record<string, string> = {
-  red: colors.wine.red,
-  white: colors.wine.white,
-  rose: colors.wine.rose,
-  rosé: colors.wine.rose,
-  sparkling: colors.wine.sparkling,
-  dessert: colors.wine.dessert,
-  fortified: colors.wine.fortified,
-}
-
-const getWineColor = (color: string): string =>
-  WINE_COLORS[color.toLowerCase()] ?? colors.muted[400]
-
-interface BarChartItem {
-  label: string
-  value: number
-  color: string
-}
-
-const BarChart = ({ title, items }: { title: string; items: BarChartItem[] }) => {
-  const maxValue = items.reduce((max, { value }) => Math.max(max, value), 0)
-
-  if (items.length === 0) return null
-
-  return (
-    <View style={styles.chartCard}>
-      <Text style={styles.chartTitle}>{title}</Text>
-      {items.map(({ label, value, color }, index) => {
-        const pct = maxValue > 0 ? (value / maxValue) * 100 : 0
-        const total = items.reduce((sum, i) => sum + i.value, 0)
-        const share = total > 0 ? Math.round((value / total) * 100) : 0
-        return (
-          <View key={`${label}-${index}`} style={styles.barRow}>
-            <View style={styles.barLabelRow}>
-              <Text style={styles.barLabel} numberOfLines={1}>{label}</Text>
-              <Text style={styles.barValue}>{value} ({share}%)</Text>
-            </View>
-            <View style={styles.barTrack}>
-              <View style={[styles.barFill, { width: `${pct}%`, backgroundColor: color }]} />
-            </View>
-          </View>
-        )
-      })}
-    </View>
-  )
+interface WineSuggestion {
+  id: string
+  name: string
+  vintage: number
+  region: string
+  imageUrl?: string
+  maturityStatus: 'peak' | 'approaching' | 'ready' | 'young' | 'past_prime'
 }
 
 export const HomeScreen = () => {
-  const insets = useSafeAreaInsets()
   const { user } = useAuth()
   const navigation = useNavigation<any>()
-  const [stats, setStats] = useState<StatsResponse | null>(null)
+  const [bottleCount, setBottleCount] = useState(0)
+  const [readyWines, setReadyWines] = useState<WineSuggestion[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
-
-  // Maturity breakdown
-  const [maturityData, setMaturityData] = useState<Record<string, number>>({})
-
-  // Consume search
-  const [showConsumeModal, setShowConsumeModal] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<InventoryLot[]>([])
-  const [isSearching, setIsSearching] = useState(false)
-  const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  // New modals
   const [showAddWineModal, setShowAddWineModal] = useState(false)
   const [showPairingModal, setShowPairingModal] = useState(false)
-  // scan modal moved to tab bar
 
-  // Consume form
-  const [consumeLot, setConsumeLot] = useState<InventoryLot | null>(null)
-  const [consumeQty, setConsumeQty] = useState(1)
-  const [consumeScore, setConsumeScore] = useState('')
-  const [consumeComment, setConsumeComment] = useState('')
-  const [consumePairing, setConsumePairing] = useState('')
-  const [isConsuming, setIsConsuming] = useState(false)
-  const [consumeError, setConsumeError] = useState<string | null>(null)
+  const userName = user?.name ?? user?.email?.split('@')[0] ?? 'Robin'
 
-  const fetchStats = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const data = await apiFetch<StatsResponse>('/api/reports/stats')
-      setStats(data)
-      setError(null)
-    } catch (e) {
-      const msg = e instanceof ApiError ? e.message : 'Failed to load stats'
-      setError(msg)
+      setIsLoading(true)
+      
+      // TODO: Replace with actual API calls
+      // const stats = await apiFetch('/api/stats/cellar')
+      // const wines = await apiFetch('/api/wines/ready')
+      
+      // Mock data for now
+      setBottleCount(882)
+      setReadyWines([
+        {
+          id: '1',
+          name: 'Château Margaux',
+          vintage: 2015,
+          region: 'Bordeaux',
+          maturityStatus: 'peak',
+        },
+        {
+          id: '2',
+          name: 'Barolo Riserva',
+          vintage: 2013,
+          region: 'Piedmont',
+          maturityStatus: 'approaching',
+        },
+        {
+          id: '3',
+          name: 'Brunello di Montalcino',
+          vintage: 2012,
+          region: 'Tuscany',
+          maturityStatus: 'peak',
+        },
+      ])
+    } catch (error) {
+      console.error('Failed to load home data:', error)
+    } finally {
+      setIsLoading(false)
     }
   }, [])
 
-  const fetchMaturity = useCallback(async () => {
-    try {
-      const data = await apiFetch<InventoryResponse>('/api/inventory', {
-        query: { inStock: 'true', limit: '2000' },
-      })
-      const counts: Record<string, number> = {}
-      data.lots.forEach((lot) => {
-        const status = lot.maturity?.status ?? 'unknown'
-        counts[status] = (counts[status] ?? 0) + lot.quantity
-      })
-      setMaturityData(counts)
-    } catch {
-      // non-critical
-    }
-  }, [])
-
-  const loadData = useCallback(async () => {
-    setIsLoading(true)
-    await Promise.all([fetchStats(), fetchMaturity()])
-    setIsLoading(false)
-  }, [fetchStats, fetchMaturity])
-
-  const onRefresh = useCallback(async () => {
+  const handleRefresh = useCallback(async () => {
     setRefreshing(true)
-    await Promise.all([fetchStats(), fetchMaturity()])
+    await fetchData()
     setRefreshing(false)
-  }, [fetchStats, fetchMaturity])
+  }, [fetchData])
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    fetchData()
+  }, [fetchData])
 
-  const handleSearch = useCallback((text: string) => {
-    setSearchQuery(text)
-    if (searchTimeout.current) clearTimeout(searchTimeout.current)
-
-    if (text.trim().length < 2) {
-      setSearchResults([])
-      return
+  const getBadgeConfig = (status: string) => {
+    const configs: Record<string, {
+      label: string
+      gradient: readonly [string, string]
+      color: string
+    }> = {
+      peak: {
+        label: 'At Peak',
+        gradient: ['#e8f5e9', '#c8e6c9'] as const,
+        color: '#2e7d32',
+      },
+      approaching: {
+        label: 'Ready Now',
+        gradient: ['#fff3e0', '#ffe0b2'] as const,
+        color: '#ef6c00',
+      },
+      ready: {
+        label: 'Ready Now',
+        gradient: ['#fff3e0', '#ffe0b2'] as const,
+        color: '#ef6c00',
+      },
     }
-
-    searchTimeout.current = setTimeout(async () => {
-      setIsSearching(true)
-      try {
-        const data = await apiFetch<InventoryResponse>('/api/inventory', {
-          query: { search: text.trim(), inStock: 'true', limit: 10 },
-        })
-        setSearchResults(data.lots)
-      } catch {
-        setSearchResults([])
-      } finally {
-        setIsSearching(false)
-      }
-    }, 300)
-  }, [])
-
-  const openConsumeForm = useCallback((lot: InventoryLot) => {
-    setConsumeLot(lot)
-    setConsumeQty(1)
-    setConsumeScore('')
-    setConsumeComment('')
-    setConsumePairing('')
-    setConsumeError(null)
-    setShowConsumeModal(false)
-    setSearchQuery('')
-    setSearchResults([])
-  }, [])
-
-  const handleConsume = useCallback(async () => {
-    if (!consumeLot) return
-    setIsConsuming(true)
-    setConsumeError(null)
-
-    const payload: ConsumePayload = { quantity: consumeQty }
-    const scoreNum = parseInt(consumeScore, 10)
-    if (consumeComment.trim() || consumePairing.trim() || (!isNaN(scoreNum) && scoreNum >= 0)) {
-      payload.tastingNote = {
-        score: !isNaN(scoreNum) ? scoreNum : 0,
-        comment: consumeComment.trim(),
-        pairing: consumePairing.trim(),
-      }
-    }
-
-    try {
-      await apiFetch(`/api/inventory/${consumeLot.id}/consume`, {
-        method: 'POST',
-        body: payload as unknown as Record<string, unknown>,
-      })
-      setConsumeLot(null)
-      await fetchStats()
-    } catch (e) {
-      const msg = e instanceof ApiError ? e.message : 'Failed to consume bottle'
-      setConsumeError(msg)
-    } finally {
-      setIsConsuming(false)
-    }
-  }, [consumeLot, consumeQty, consumeScore, consumeComment, consumePairing, fetchStats])
-
-  const buildColorChart = (data: StatsResponse['byColor']): BarChartItem[] =>
-    data.map(({ color, bottles }) => ({
-      label: color.charAt(0).toUpperCase() + color.slice(1),
-      value: parseInt(bottles, 10),
-      color: getWineColor(color),
-    }))
-
-  const buildCellarChart = (data: StatsResponse['byCellar']): BarChartItem[] =>
-    data.map(({ cellarName, bottles }, i) => ({
-      label: cellarName,
-      value: parseInt(bottles, 10),
-      color: chartColors.cellar[i % chartColors.cellar.length],
-    }))
-
-  const buildRegionChart = (data: StatsResponse['byRegion']): BarChartItem[] =>
-    data.slice(0, 5).map(({ regionName, bottles }, i) => ({
-      label: regionName,
-      value: parseInt(bottles, 10),
-      color: chartColors.region[i % chartColors.region.length],
-    }))
-
-  const buildVintageChart = (data: StatsResponse['byVintage']): BarChartItem[] =>
-    data.slice(0, 5).map(({ vintage, bottles }, i) => ({
-      label: String(vintage),
-      value: parseInt(bottles, 10),
-      color: chartColors.vintage[i % chartColors.vintage.length],
-    }))
-
-  const userName = user?.name ?? user?.email?.split('@')[0] ?? 'User'
+    return configs[status] || configs.ready
+  }
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={colors.primary[600]} />
-      </View>
-    )
-  }
-
-  if (error && !stats) {
-    return (
-      <View style={styles.centered}>
-        <Text style={styles.errorText}>{error}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadData}>
-          <Text style={styles.retryText}>Retry</Text>
-        </TouchableOpacity>
+        <ActivityIndicator size="large" color="#722F37" />
       </View>
     )
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        keyboardShouldPersistTaps="handled"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
       >
-        {/* Hero */}
-        <View style={[styles.hero, { paddingTop: insets.top + 12 }]}>
-          <View style={styles.heroRow}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.heroGreeting}>Hello {userName}</Text>
-              <Text style={styles.heroSubtitle}>What are we drinking today?</Text>
-            </View>
-            <TouchableOpacity
-              style={styles.avatar}
-              onPress={() => navigation.navigate('Profile')}
-            >
-              <Text style={styles.avatarText}>
-                {userName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
-              </Text>
-            </TouchableOpacity>
-          </View>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.greeting}>Hello {userName} 👋</Text>
+          <Text style={styles.subtitle}>What's calling you tonight?</Text>
         </View>
 
-        {/* Action Cards — Cooper-style grid */}
-        <View style={styles.actionGrid}>
-          {/* Left tall card — AI Sommelier */}
-          <TouchableOpacity
-            style={styles.actionCardTall}
-            onPress={() => setShowPairingModal(true)}
-            activeOpacity={0.85}
+        {/* Cellar Stats Card */}
+        <TouchableOpacity
+          style={styles.statsCardContainer}
+          onPress={() => navigation.navigate('Analytics')}
+          activeOpacity={0.9}
+        >
+          <LinearGradient
+            colors={['#722F37', '#8b3a45']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.statsCard}
           >
-            <View style={styles.actionCardTallIcon}>
-              <Text style={{ fontSize: 28 }}>🍷</Text>
+            {/* Watermark */}
+            <Text style={styles.watermark}>🍷</Text>
+            
+            {/* Content */}
+            <Text style={styles.statsLabel}>YOUR COLLECTION</Text>
+            <Text style={styles.statsNumber}>{bottleCount}</Text>
+            <Text style={styles.statsSubtitle}>bottles in your cellar</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        {/* Quick Actions */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Quick Actions</Text>
+
+          {/* Add a Wine */}
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => setShowAddWineModal(true)}
+            activeOpacity={0.7}
+          >
+            <View style={styles.actionIcon}>
+              <Text style={styles.actionIconEmoji}>🍷</Text>
             </View>
-            <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-              <Text style={styles.actionCardTallTitle}>Chat with AI Sommelier</Text>
-              <Text style={styles.actionCardTallSub}>Let's find your next bottle</Text>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Add a Wine</Text>
+              <Text style={styles.actionSubtitle}>Scan label or enter details</Text>
             </View>
+            <Icon name="chevron-right" size={24} color="#999" />
           </TouchableOpacity>
 
-          {/* Right column — two stacked cards */}
-          <View style={styles.actionCardRight}>
-            <TouchableOpacity
-              style={styles.actionCardSmall}
-              onPress={() => setShowAddWineModal(true)}
-              activeOpacity={0.85}
-            >
-              <View style={styles.actionCardSmallIcon}>
-                <Text style={{ fontSize: 22 }}>➕</Text>
-              </View>
-              <Text style={styles.actionCardSmallTitle}>Add a wine</Text>
-            </TouchableOpacity>
+          {/* Open a Bottle */}
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('Inventory')}
+            activeOpacity={0.7}
+          >
+            <View style={styles.actionIcon}>
+              <Text style={styles.actionIconEmoji}>🍾</Text>
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Open a Bottle</Text>
+              <Text style={styles.actionSubtitle}>Mark one as consumed</Text>
+            </View>
+            <Icon name="chevron-right" size={24} color="#999" />
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.actionCardSmall, styles.actionCardSmallDark]}
-              onPress={() => setShowConsumeModal(true)}
-              activeOpacity={0.85}
-            >
-              <View style={styles.actionCardSmallIconDark}>
-                <Text style={{ fontSize: 22 }}>🍾</Text>
-              </View>
-              <Text style={styles.actionCardSmallTitleDark}>Open a bottle</Text>
-            </TouchableOpacity>
-          </View>
+          {/* Ask the Sommelier */}
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => setShowPairingModal(true)}
+            activeOpacity={0.7}
+          >
+            <View style={styles.actionIcon}>
+              <Text style={styles.actionIconEmoji}>🎩</Text>
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Ask the Sommelier</Text>
+              <Text style={styles.actionSubtitle}>Get personalized recommendations</Text>
+            </View>
+            <Icon name="chevron-right" size={24} color="#999" />
+          </TouchableOpacity>
         </View>
 
-        {/* Bottle count pill */}
-        <View style={styles.bottleCountPill}>
-          <Text style={styles.bottleCountLabel}>{stats?.totals.bottles ?? 0} bottles in your cellar</Text>
-        </View>
-
-        {/* Maturity Pie Chart */}
-        {Object.keys(maturityData).length > 0 && (
-          <PieChart
-            title="Cellar Maturity"
-            data={[
-              { label: 'To Age', value: maturityData['to_age'] ?? 0, color: '#3b82f6' },
-              { label: 'Approaching', value: maturityData['approaching'] ?? 0, color: '#f59e0b' },
-              { label: 'Peak', value: maturityData['peak'] ?? 0, color: '#22c55e' },
-              { label: 'Past Prime', value: maturityData['past_prime'] ?? 0, color: '#f97316' },
-              { label: 'Declining', value: maturityData['declining'] ?? 0, color: '#ef4444' },
-            ]}
-          />
-        )}
-      </ScrollView>
-
-      {/* Consume Search Modal */}
-      <Modal visible={showConsumeModal} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.searchModalContent}>
-            <View style={styles.searchModalHeader}>
-              <Text style={styles.modalTitle}>Open a Bottle</Text>
-              <TouchableOpacity onPress={() => { setShowConsumeModal(false); setSearchQuery(''); setSearchResults([]) }}>
-                <Text style={styles.closeButton}>✕</Text>
+        {/* Wine Suggestions */}
+        {readyWines.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Ready Tonight</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Inventory', { filter: 'ready' })}
+              >
+                <Text style={styles.seeAllLink}>See all ›</Text>
               </TouchableOpacity>
             </View>
 
-            <TextInput
-              style={styles.searchInput}
-              value={searchQuery}
-              onChangeText={handleSearch}
-              placeholder="Search your wines..."
-              placeholderTextColor={colors.muted[400]}
-              autoFocus
-            />
-
-            {isSearching && (
-              <ActivityIndicator size="small" color={colors.primary[600]} style={{ marginTop: 16 }} />
-            )}
-
-            {searchQuery.trim().length >= 2 && !isSearching && searchResults.length === 0 && (
-              <Text style={styles.noResults}>No wines found</Text>
-            )}
-
-            <ScrollView style={styles.searchResultsList} keyboardShouldPersistTaps="handled">
-              {searchResults.map((lot) => (
+            {readyWines.map((wine) => {
+              const badgeConfig = getBadgeConfig(wine.maturityStatus)
+              
+              return (
                 <TouchableOpacity
-                  key={lot.id}
-                  style={styles.searchResultItem}
-                  onPress={() => openConsumeForm(lot)}
+                  key={wine.id}
+                  style={styles.wineCard}
+                  onPress={() => navigation.navigate('WineDetail', { wineId: wine.id })}
+                  activeOpacity={0.7}
                 >
-                  <View style={[styles.colorDot, { backgroundColor: getWineColor(lot.wineColor) }]} />
-                  <View style={styles.searchResultText}>
-                    <Text style={styles.searchResultName} numberOfLines={1}>{lot.wineName}</Text>
-                    <Text style={styles.searchResultMeta}>
-                      {lot.producerName} · {lot.vintage ?? 'NV'} · {lot.quantity} btl
+                  {/* Wine Image */}
+                  <LinearGradient
+                    colors={['#722F37', '#944654']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.wineImage}
+                  >
+                    <Text style={styles.wineImageEmoji}>🍷</Text>
+                  </LinearGradient>
+
+                  {/* Wine Info */}
+                  <View style={styles.wineInfo}>
+                    <Text style={styles.wineName} numberOfLines={1}>
+                      {wine.name}
                     </Text>
+                    <Text style={styles.wineMeta}>
+                      {wine.vintage} • {wine.region}
+                    </Text>
+                    <LinearGradient
+                      colors={badgeConfig.gradient}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.maturityBadge}
+                    >
+                      <View style={[styles.badgeDot, { backgroundColor: badgeConfig.color }]} />
+                      <Text style={[styles.badgeText, { color: badgeConfig.color }]}>
+                        {badgeConfig.label}
+                      </Text>
+                    </LinearGradient>
                   </View>
                 </TouchableOpacity>
-              ))}
-            </ScrollView>
+              )
+            })}
           </View>
-        </View>
-      </Modal>
+        )}
+      </ScrollView>
 
-      {/* Consume Form Modal */}
-      <Modal visible={!!consumeLot} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Open a Bottle</Text>
-
-            {consumeLot && (
-              <>
-                <View style={styles.modalWineInfo}>
-                  <View style={[styles.colorDot, { backgroundColor: getWineColor(consumeLot.wineColor) }]} />
-                  <View style={styles.modalWineText}>
-                    <Text style={styles.modalWineName}>{consumeLot.wineName}</Text>
-                    <Text style={styles.modalWineMeta}>
-                      {consumeLot.producerName} · {consumeLot.vintage ?? 'NV'}
-                    </Text>
-                  </View>
-                </View>
-
-                <Text style={styles.fieldLabel}>Quantity ({consumeLot.quantity} available)</Text>
-                <View style={styles.qtyRow}>
-                  <TouchableOpacity
-                    style={styles.qtyButton}
-                    onPress={() => setConsumeQty((q) => Math.max(1, q - 1))}
-                  >
-                    <Text style={styles.qtyButtonText}>−</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.qtyValue}>{consumeQty}</Text>
-                  <TouchableOpacity
-                    style={styles.qtyButton}
-                    onPress={() => setConsumeQty((q) => Math.min(consumeLot.quantity, q + 1))}
-                  >
-                    <Text style={styles.qtyButtonText}>+</Text>
-                  </TouchableOpacity>
-                </View>
-
-                <Text style={styles.fieldLabel}>Score (0-100, optional)</Text>
-                <TextInput
-                  style={styles.modalInput}
-                  value={consumeScore}
-                  onChangeText={setConsumeScore}
-                  placeholder="e.g. 88"
-                  placeholderTextColor={colors.muted[400]}
-                  keyboardType="number-pad"
-                  maxLength={3}
-                />
-
-                <Text style={styles.fieldLabel}>Tasting Notes (optional)</Text>
-                <TextInput
-                  style={[styles.modalInput, styles.textArea]}
-                  value={consumeComment}
-                  onChangeText={setConsumeComment}
-                  placeholder="Describe the wine..."
-                  placeholderTextColor={colors.muted[400]}
-                  multiline
-                  numberOfLines={3}
-                />
-
-                <Text style={styles.fieldLabel}>Food Pairing (optional)</Text>
-                <TextInput
-                  style={styles.modalInput}
-                  value={consumePairing}
-                  onChangeText={setConsumePairing}
-                  placeholder="What did you pair it with?"
-                  placeholderTextColor={colors.muted[400]}
-                />
-
-                {consumeError && (
-                  <Text style={styles.consumeErrorText}>{consumeError}</Text>
-                )}
-
-                <View style={styles.modalButtons}>
-                  <TouchableOpacity
-                    style={styles.cancelBtn}
-                    onPress={() => setConsumeLot(null)}
-                    disabled={isConsuming}
-                  >
-                    <Text style={styles.cancelBtnText}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.confirmBtn, isConsuming && styles.buttonDisabled]}
-                    onPress={handleConsume}
-                    disabled={isConsuming}
-                  >
-                    {isConsuming ? (
-                      <ActivityIndicator color={colors.white} size="small" />
-                    ) : (
-                      <Text style={styles.confirmBtnText}>Confirm</Text>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
-
-      {/* Add Wine Modal */}
+      {/* Modals */}
       <AddWineModal
         visible={showAddWineModal}
         onClose={() => setShowAddWineModal(false)}
         onSuccess={() => {
           setShowAddWineModal(false)
-          fetchStats() // Refresh stats
+          fetchData()
         }}
       />
 
-      {/* Pairing Chat Modal */}
       <PairingChatModal
         visible={showPairingModal}
         onClose={() => setShowPairingModal(false)}
       />
-
-      {/* Scan moved to bottom tab bar */}
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.muted[50],
+    backgroundColor: '#fef9f5',
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 32,
+    paddingBottom: 40,
   },
   centered: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.muted[50],
-    padding: 24,
+    justifyContent: 'center',
+    backgroundColor: '#fef9f5',
   },
-  errorText: {
-    color: colors.danger,
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  retryButton: {
-    backgroundColor: colors.primary[600],
-    borderRadius: 8,
+  
+  // Header
+  header: {
     paddingHorizontal: 24,
-    paddingVertical: 10,
+    paddingTop: 24,
+    paddingBottom: 20,
   },
-  retryText: {
-    color: colors.white,
-    fontWeight: '600',
+  greeting: {
+    fontSize: 36,
+    fontWeight: '800',
+    color: '#1a1a1a',
+    letterSpacing: -1,
+  },
+  subtitle: {
+    fontSize: 17,
+    color: '#888',
+    fontWeight: '400',
+    marginTop: 4,
   },
 
-  // Hero
-  hero: {
-    paddingHorizontal: 20,
-    paddingBottom: 8,
-    backgroundColor: colors.muted[50],
+  // Cellar Stats Card
+  statsCardContainer: {
+    paddingHorizontal: 24,
+    marginBottom: 32,
   },
-  heroRow: {
+  statsCard: {
+    borderRadius: 24,
+    padding: 24,
+    position: 'relative',
+    overflow: 'hidden',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.25,
+    shadowRadius: 24,
+    elevation: 8,
+  },
+  watermark: {
+    position: 'absolute',
+    top: -20,
+    right: -20,
+    fontSize: 120,
+    opacity: 0.08,
+  },
+  statsLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'rgba(255, 255, 255, 0.7)',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  statsNumber: {
+    fontSize: 48,
+    fontWeight: '800',
+    color: '#fff',
+    letterSpacing: -2,
+    marginTop: 4,
+  },
+  statsSubtitle: {
+    fontSize: 15,
+    color: 'rgba(255, 255, 255, 0.8)',
+    marginTop: 4,
+  },
+
+  // Sections
+  section: {
+    paddingHorizontal: 24,
+    marginBottom: 32,
+  },
+  sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 16,
   },
-  heroGreeting: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: colors.muted[900],
-  },
-  heroSubtitle: {
-    fontSize: 15,
-    color: colors.muted[500],
-    marginTop: 4,
-  },
-  avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: colors.primary[600],
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  avatarText: {
-    fontSize: 16,
+  sectionTitle: {
+    fontSize: 22,
     fontWeight: '700',
-    color: colors.white,
+    color: '#1a1a1a',
+    letterSpacing: -0.5,
+  },
+  seeAllLink: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#722F37',
   },
 
-  // Action Grid (Cooper-style)
-  actionGrid: {
+  // Action Buttons
+  actionButton: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    gap: 12,
-    marginTop: 20,
-  },
-  actionCardTall: {
-    flex: 1,
-    backgroundColor: '#ede9fe',
+    alignItems: 'center',
+    backgroundColor: '#fff',
     borderRadius: 20,
     padding: 18,
-    minHeight: 180,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(228, 213, 203, 0.15)',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 3,
   },
-  actionCardTallIcon: {
-    width: 48,
-    height: 48,
+  actionIcon: {
+    width: 52,
+    height: 52,
+    borderRadius: 16,
+    backgroundColor: '#f8f4f0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  actionIconEmoji: {
+    fontSize: 28,
+  },
+  actionContent: {
+    flex: 1,
+  },
+  actionTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#1a1a1a',
+  },
+  actionSubtitle: {
+    fontSize: 14,
+    color: '#999',
+    marginTop: 2,
+  },
+
+  // Wine Cards
+  wineCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(228, 213, 203, 0.15)',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 3,
+  },
+  wineImage: {
+    width: 52,
+    height: 68,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  wineImageEmoji: {
+    fontSize: 26,
+  },
+  wineInfo: {
+    flex: 1,
+    gap: 6,
+  },
+  wineName: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#1a1a1a',
+    letterSpacing: -0.3,
+  },
+  wineMeta: {
+    fontSize: 14,
+    color: '#999',
+  },
+  maturityBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
     borderRadius: 14,
-    backgroundColor: 'rgba(255,255,255,0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
   },
-  actionCardTallTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.muted[900],
-    lineHeight: 20,
+  badgeDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
   },
-  actionCardTallSub: {
+  badgeText: {
     fontSize: 12,
-    color: colors.muted[600],
-    marginTop: 4,
-  },
-  actionCardRight: {
-    flex: 1,
-    gap: 12,
-  },
-  actionCardSmall: {
-    flex: 1,
-    backgroundColor: '#fef3c7',
-    borderRadius: 20,
-    padding: 16,
-    justifyContent: 'center',
-  },
-  actionCardSmallDark: {
-    backgroundColor: colors.muted[900],
-  },
-  actionCardSmallIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  actionCardSmallIconDark: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  actionCardSmallTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: colors.muted[900],
-  },
-  actionCardSmallTitleDark: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: colors.white,
-  },
-
-  // Bottle count pill
-  bottleCountPill: {
-    marginHorizontal: 16,
-    marginTop: 16,
-    backgroundColor: colors.white,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.muted[200],
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-  },
-  bottleCountLabel: {
-    fontSize: 14,
     fontWeight: '600',
-    color: colors.muted[600],
-  },
-
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: colors.muted[900],
-    marginTop: 24,
-    marginBottom: 12,
-    paddingHorizontal: 16,
-  },
-
-  // Charts
-  chartCard: {
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.muted[200],
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    marginHorizontal: 16,
-  },
-  chartTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.muted[900],
-    marginBottom: 12,
-  },
-  barRow: {
-    marginBottom: 10,
-  },
-  barLabelRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 4,
-  },
-  barLabel: {
-    fontSize: 13,
-    color: colors.muted[700],
-    fontWeight: '500',
-    flex: 1,
-  },
-  barValue: {
-    fontSize: 13,
-    color: colors.muted[500],
-    fontWeight: '600',
-    marginLeft: 8,
-  },
-  barTrack: {
-    height: 8,
-    backgroundColor: colors.muted[100],
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  barFill: {
-    height: 8,
-    borderRadius: 4,
-  },
-
-  // Search Modal
-  searchModalContent: {
-    backgroundColor: colors.white,
-    borderRadius: 20,
-    padding: 20,
-    maxHeight: '80%',
-  },
-  searchModalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  closeButton: {
-    fontSize: 20,
-    color: colors.muted[400],
-    padding: 4,
-  },
-  searchInput: {
-    backgroundColor: colors.muted[50],
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
-    color: colors.muted[900],
-  },
-  searchResultsList: {
-    marginTop: 8,
-    maxHeight: 300,
-  },
-  searchResultItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.muted[100],
-  },
-  searchResultText: {
-    flex: 1,
-  },
-  searchResultName: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: colors.muted[900],
-  },
-  searchResultMeta: {
-    fontSize: 13,
-    color: colors.muted[500],
-    marginTop: 2,
-  },
-  noResults: {
-    padding: 16,
-    textAlign: 'center',
-    color: colors.muted[500],
-    fontSize: 14,
-  },
-
-  // Consume Form Modal
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  modalContent: {
-    backgroundColor: colors.white,
-    borderRadius: 20,
-    padding: 24,
-    maxHeight: '85%',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: colors.muted[900],
-    marginBottom: 16,
-  },
-  modalWineInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    backgroundColor: colors.muted[50],
-    padding: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.muted[200],
-  },
-  colorDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  modalWineText: {
-    flex: 1,
-  },
-  modalWineName: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.muted[900],
-  },
-  modalWineMeta: {
-    fontSize: 14,
-    color: colors.muted[500],
-    marginTop: 2,
-  },
-  fieldLabel: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.muted[700],
-    marginBottom: 6,
-    marginTop: 12,
-  },
-  qtyRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
-  qtyButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.muted[50],
-  },
-  qtyButtonText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: colors.muted[700],
-  },
-  qtyValue: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: colors.muted[900],
-    minWidth: 30,
-    textAlign: 'center',
-  },
-  modalInput: {
-    backgroundColor: colors.muted[50],
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    fontSize: 15,
-    color: colors.muted[900],
-  },
-  textArea: {
-    minHeight: 80,
-    textAlignVertical: 'top',
-  },
-  consumeErrorText: {
-    color: colors.danger,
-    fontSize: 14,
-    marginTop: 12,
-    textAlign: 'center',
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    gap: 12,
-    marginTop: 20,
-  },
-  cancelBtn: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: colors.muted[300],
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  cancelBtnText: {
-    color: colors.muted[700],
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  confirmBtn: {
-    flex: 1,
-    backgroundColor: colors.primary[600],
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  confirmBtnText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  buttonDisabled: {
-    opacity: 0.5,
   },
 })
