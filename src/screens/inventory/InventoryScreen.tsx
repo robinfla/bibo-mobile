@@ -11,6 +11,7 @@ import {
   ActionSheetIOS,
   Platform,
 } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { apiFetch } from '../../api/client'
@@ -250,8 +251,13 @@ export const InventoryScreen = () => {
       {activeTab === 'history' && <HistoryTab />}
 
       {/* FAB */}
-      <TouchableOpacity style={styles.fab} onPress={handleFabPress}>
-        <Icon name="plus" size={28} color="#fff" />
+      <TouchableOpacity style={styles.fabContainer} onPress={handleFabPress} activeOpacity={0.8}>
+        <LinearGradient
+          colors={['#8b4d5a', '#722F37']}
+          style={styles.fab}
+        >
+          <Text style={styles.fabIcon}>+</Text>
+        </LinearGradient>
       </TouchableOpacity>
 
       {/* Filter Modal */}
@@ -268,12 +274,12 @@ export const InventoryScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.muted[50],
+    backgroundColor: '#fef9f5', // Warm gradient background (can be enhanced with LinearGradient)
   },
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderBottomWidth: 1,
-    borderBottomColor: colors.muted[200],
+    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
     paddingTop: 8,
   },
   headerTop: {
@@ -285,19 +291,24 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: '700',
-    color: '#2C1810', // Dark brown
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif', // Serif for premium feel
+    fontWeight: '800',
+    color: '#1a1a1a',
+    letterSpacing: -0.5,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 16,
     marginBottom: 12,
-    paddingHorizontal: 12,
-    height: 44,
-    backgroundColor: colors.muted[100],
-    borderRadius: 12,
+    paddingHorizontal: 16,
+    height: 48,
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
   },
   searchIcon: {
     marginRight: 8,
@@ -305,19 +316,26 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: colors.muted[900],
+    color: '#1a1a1a',
   },
   filterButton: {
-    width: 32,
-    height: 32,
+    width: 44,
+    height: 44,
+    backgroundColor: '#fff',
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
     position: 'relative',
   },
   filterBadge: {
     position: 'absolute',
-    top: 6,
-    right: 6,
+    top: 8,
+    right: 8,
     width: 8,
     height: 8,
     borderRadius: 4,
@@ -326,27 +344,31 @@ const styles = StyleSheet.create({
   tabs: {
     flexDirection: 'row',
     paddingHorizontal: 16,
+    borderBottomWidth: 2,
+    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
   },
   tab: {
     paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderBottomWidth: 2,
+    paddingHorizontal: 0,
+    marginRight: 24,
+    borderBottomWidth: 3,
     borderBottomColor: 'transparent',
   },
   tabActive: {
-    borderBottomColor: '#2C1810', // Dark brown underline
+    borderBottomColor: '#722F37',
   },
   tabText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.muted[500],
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#999',
   },
   tabTextActive: {
-    color: '#2C1810', // Dark brown for active tab
-    fontWeight: '600',
+    color: '#722F37',
+    fontWeight: '700',
   },
   listContent: {
     padding: 16,
+    paddingBottom: 100,
   },
   centerContent: {
     flex: 1,
@@ -364,8 +386,13 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: colors.primary[600],
-    borderRadius: 8,
+    backgroundColor: '#722F37',
+    borderRadius: 14,
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 3,
   },
   retryButtonText: {
     color: '#fff',
@@ -373,31 +400,41 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   emptyText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.muted[700],
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1a1a1a',
     marginTop: 16,
   },
   emptySubtext: {
-    fontSize: 14,
-    color: colors.muted[500],
+    fontSize: 15,
+    color: '#666',
     marginTop: 8,
     textAlign: 'center',
+    lineHeight: 22.5,
+  },
+  fabContainer: {
+    position: 'absolute',
+    right: 20,
+    bottom: 80,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    overflow: 'hidden',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+    elevation: 8,
   },
   fab: {
-    position: 'absolute',
-    right: 16,
-    bottom: 24,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#722F37', // Maroon/burgundy accent
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 8,
+  },
+  fabIcon: {
+    fontSize: 26,
+    fontWeight: '300',
+    color: '#fff',
   },
 })

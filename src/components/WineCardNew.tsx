@@ -8,6 +8,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { colors } from '../theme/colors'
 import type { WineCard } from '../types/api'
@@ -19,32 +20,32 @@ interface WineCardNewProps {
 
 const MATURITY_CONFIG = {
   peak: {
-    bg: '#e8f5e9',
+    gradient: ['#e8f5e9', '#c8e6c9'] as const,
     color: '#2e7d32',
     label: 'Peak',
   },
   approaching: {
-    bg: '#e8f5e9',
+    gradient: ['#e8f5e9', '#c8e6c9'] as const,
     color: '#2e7d32',
     label: 'Ready',
   },
   past_prime: {
-    bg: '#fff3e0',
+    gradient: ['#fff3e0', '#ffe0b2'] as const,
     color: '#ef6c00',
     label: 'Drink Now',
   },
   declining: {
-    bg: '#fff3e0',
+    gradient: ['#fff3e0', '#ffe0b2'] as const,
     color: '#ef6c00',
     label: 'Drink Now',
   },
   to_age: {
-    bg: '#e3f2fd',
+    gradient: ['#e3f2fd', '#bbdefb'] as const,
     color: '#1565c0',
     label: 'Young',
   },
   unknown: {
-    bg: '#f5f5f5',
+    gradient: ['#f5f5f5', '#e0e0e0'] as const,
     color: '#757575',
     label: 'Unknown',
   },
@@ -66,25 +67,37 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
         style={styles.vintageChipsContainer}
         contentContainerStyle={styles.vintageChipsContent}
       >
-        {card.vintages.map((vintage, index) => (
-          <TouchableOpacity
-            key={`${vintage.vintage}-${index}`}
-            style={[
-              styles.vintageChip,
-              index === selectedVintageIndex && styles.vintageChipActive,
-            ]}
-            onPress={() => setSelectedVintageIndex(index)}
-          >
-            <Text
-              style={[
-                styles.vintageChipText,
-                index === selectedVintageIndex && styles.vintageChipTextActive,
-              ]}
+        {card.vintages.map((vintage, index) => {
+          const isSelected = index === selectedVintageIndex
+          
+          return isSelected ? (
+            <TouchableOpacity
+              key={`${vintage.vintage}-${index}`}
+              onPress={() => setSelectedVintageIndex(index)}
+              activeOpacity={0.8}
             >
-              {vintage.vintage || 'NV'}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <LinearGradient
+                colors={['#6B2D3E', '#5A2535']}
+                style={styles.vintageChipActive}
+              >
+                <Text style={styles.vintageChipTextActive}>
+                  {vintage.vintage || 'NV'}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              key={`${vintage.vintage}-${index}`}
+              style={styles.vintageChip}
+              onPress={() => setSelectedVintageIndex(index)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.vintageChipText}>
+                {vintage.vintage || 'NV'}
+              </Text>
+            </TouchableOpacity>
+          )
+        })}
       </ScrollView>
     )
   }
@@ -93,7 +106,7 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
   const getPlaceholderStyle = () => {
     switch (card.wineColor) {
       case 'red':
-        return { backgroundColor: '#4a1a1a', iconColor: '#8b3a3a' }
+        return { backgroundColor: '#6B2D3E', iconColor: '#8b3a3a' }
       case 'white':
         return { backgroundColor: '#fef9e7', iconColor: '#d4af37' }
       case 'rose':
@@ -118,7 +131,7 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
           <Image source={{ uri: card.bottleImageUrl }} style={styles.image} />
         ) : (
           <View style={[styles.image, styles.placeholderImage, { backgroundColor: placeholderStyle.backgroundColor }]}>
-            <Icon name="bottle-wine" size={32} color={placeholderStyle.iconColor} />
+            <Icon name="bottle-wine" size={36} color={placeholderStyle.iconColor} />
           </View>
         )}
       </View>
@@ -126,23 +139,30 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
       <View style={styles.content}>
         {/* Wine Name + Maturity Badge */}
         <View style={styles.header}>
-          <Text style={styles.wineName} numberOfLines={1}>
+          <Text style={styles.wineName} numberOfLines={2}>
             {card.wineName}
           </Text>
-          <View style={[styles.maturityBadge, { backgroundColor: maturityConfig.bg }]}>
+          <LinearGradient
+            colors={maturityConfig.gradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.maturityBadge}
+          >
             <View style={[styles.maturityDot, { backgroundColor: maturityConfig.color }]} />
             <Text style={[styles.maturityLabel, { color: maturityConfig.color }]}>
               {maturityConfig.label}
             </Text>
-          </View>
+          </LinearGradient>
         </View>
 
-        {/* Producer + Region */}
+        {/* Producer */}
         <Text style={styles.producer} numberOfLines={1}>
           {card.producerName}
         </Text>
+
+        {/* Region + Vintage Count */}
         <Text style={styles.region} numberOfLines={1}>
-          {card.regionName || 'Unknown Region'} • {card.vintages.length > 1 ? `${card.vintages.length} vintages` : selectedVintage?.vintage || 'NV'}
+          {card.regionName || 'Unknown Region'} • {card.vintages.length} {card.vintages.length === 1 ? 'vintage' : 'vintages'}
         </Text>
 
         {/* Vintage Chips */}
@@ -150,9 +170,9 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
 
         {/* Bottle Count */}
         <View style={styles.bottleCount}>
-          <Icon name="bottle-wine" size={16} color={colors.muted[500]} />
+          <Text style={styles.bottleEmoji}>🍷</Text>
           <Text style={styles.bottleCountText}>
-            {selectedVintage?.bottleCount || card.totalBottles}
+            {selectedVintage?.bottleCount || card.totalBottles} {(selectedVintage?.bottleCount || card.totalBottles) === 1 ? 'bottle' : 'bottles'}
           </Text>
         </View>
       </View>
@@ -164,65 +184,71 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginBottom: 12,
-    padding: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    borderRadius: 18,
+    marginBottom: 14,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(228, 213, 203, 0.2)',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+    elevation: 4,
   },
   imageContainer: {
-    width: 60,
-    height: 80,
-    backgroundColor: colors.muted[100],
-    borderRadius: 8,
+    width: 72,
+    height: 90,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: 14,
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 3,
   },
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 8,
+    borderRadius: 12,
     resizeMode: 'cover',
   },
   content: {
     flex: 1,
+    gap: 8,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 4,
+    gap: 8,
   },
   wineName: {
     flex: 1,
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2C1810',
-    marginRight: 8,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1a1a1a',
+    letterSpacing: -0.3,
+    lineHeight: 23.4,
   },
   producer: {
-    fontSize: 14,
-    color: colors.muted[600],
-    marginBottom: 2,
+    fontSize: 15,
+    fontWeight: '500',
+    color: '#4A3A35',
   },
   region: {
     fontSize: 13,
-    color: colors.muted[500],
-    marginBottom: 8,
+    color: '#8A7E78',
   },
   maturityBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 12,
+    gap: 5,
+    flexShrink: 0,
   },
   maturityDot: {
     width: 6,
@@ -230,45 +256,57 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   maturityLabel: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: '700',
   },
   vintageChipsContainer: {
-    marginBottom: 8,
+    marginTop: 4,
   },
   vintageChipsContent: {
-    gap: 6,
+    gap: 8,
   },
   vintageChip: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: colors.muted[100],
+    borderRadius: 14,
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: colors.muted[200],
+    borderColor: '#D9D0C8',
   },
   vintageChipActive: {
-    backgroundColor: colors.primary[50],
-    borderColor: colors.primary[600],
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 14,
+    transform: [{ scale: 1.05 }],
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 6,
   },
   vintageChipText: {
-    fontSize: 13,
-    fontWeight: '500',
-    color: colors.muted[600],
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#5A4A42',
   },
   vintageChipTextActive: {
-    color: colors.primary[600],
-    fontWeight: '600',
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
   },
   bottleCount: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 6,
+    marginTop: 2,
+  },
+  bottleEmoji: {
+    fontSize: 16,
   },
   bottleCountText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#722F37', // Maroon accent for emphasis
+    fontWeight: '700',
+    color: '#3A2A25',
   },
   placeholderImage: {
     alignItems: 'center',
