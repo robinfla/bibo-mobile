@@ -55,7 +55,16 @@ export const AddWishlistStep1 = () => {
   }
 
   const handleManualEntry = () => {
-    Alert.alert('Coming Soon', 'Manual wine entry will be implemented.')
+    // Navigate to Step 2 with manual entry mode
+    navigation.navigate('AddWishlistStep2', {
+      wine: {
+        id: 0, // 0 indicates manual entry
+        name: '',
+        vintage: undefined,
+        region: '',
+        color: '',
+      },
+    })
   }
 
   const handleCancel = () => {

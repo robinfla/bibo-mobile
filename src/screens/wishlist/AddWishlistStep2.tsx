@@ -38,6 +38,14 @@ export const AddWishlistStep2 = () => {
   const [whereToBuy, setWhereToBuy] = useState('')
   const [notes, setNotes] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // Manual entry fields (when wine.id === 0)
+  const [manualName, setManualName] = useState('')
+  const [manualVintage, setManualVintage] = useState('')
+  const [manualRegion, setManualRegion] = useState('')
+  const [manualColor, setManualColor] = useState('')
+  
+  const isManualEntry = wine?.id === 0
 
   const handleBack = () => {
     if (budget || whereToBuy || notes) {
@@ -55,14 +63,30 @@ export const AddWishlistStep2 = () => {
   }
 
   const handleSubmit = async () => {
-    if (!wine) {
+    if (isManualEntry && !manualName.trim()) {
+      Alert.alert('Required', 'Please enter a wine name')
+      return
+    }
+    
+    if (!isManualEntry && !wine) {
       Alert.alert('Error', 'No wine selected')
       return
     }
 
     setIsSubmitting(true)
     
-    // TODO: POST /api/wishlist
+    // TODO: POST /api/wishlist with manual or AI-selected wine data
+    const wineData = isManualEntry
+      ? {
+          name: manualName.trim(),
+          vintage: manualVintage ? parseInt(manualVintage) : null,
+          region: manualRegion.trim() || null,
+          color: manualColor.trim() || null,
+        }
+      : wine
+    
+    console.log('Submitting wishlist item:', { wineData, priority, budget, whereToBuy, notes })
+    
     setTimeout(() => {
       setIsSubmitting(false)
       Alert.alert('Success', 'Wine added to wishlist!', [
@@ -91,24 +115,68 @@ export const AddWishlistStep2 = () => {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Hero */}
         <View style={styles.hero}>
-          <Text style={styles.heroTitle}>One step away! ✨</Text>
+          <Text style={styles.heroTitle}>
+            {isManualEntry ? 'What wine are you dreaming of? 🍷' : 'One step away! ✨'}
+          </Text>
           <Text style={styles.heroSubtitle}>
-            Tell us why this wine matters to you.
+            {isManualEntry ? 'Tell us about the wine you want.' : 'Tell us why this wine matters to you.'}
           </Text>
         </View>
 
-        {/* Wine Preview Card */}
-        <View style={styles.wineCard}>
-          <View style={styles.wineImagePlaceholder}>
-            <Text style={styles.wineImageText}>🍷</Text>
+        {/* Wine Preview Card - Manual Entry */}
+        {isManualEntry ? (
+          <View style={styles.section}>
+            <Text style={styles.label}>Wine Name *</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="e.g. Château Margaux"
+              placeholderTextColor="#aaa"
+              value={manualName}
+              onChangeText={setManualName}
+            />
+            
+            <Text style={styles.label}>Vintage (optional)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="e.g. 2015"
+              placeholderTextColor="#aaa"
+              value={manualVintage}
+              onChangeText={setManualVintage}
+              keyboardType="number-pad"
+            />
+            
+            <Text style={styles.label}>Region (optional)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="e.g. Bordeaux"
+              placeholderTextColor="#aaa"
+              value={manualRegion}
+              onChangeText={setManualRegion}
+            />
+            
+            <Text style={styles.label}>Color (optional)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="e.g. Red, White, Rosé"
+              placeholderTextColor="#aaa"
+              value={manualColor}
+              onChangeText={setManualColor}
+            />
           </View>
-          <View style={styles.wineInfo}>
-            <Text style={styles.wineName}>{wine?.name || 'Unknown Wine'}</Text>
-            <Text style={styles.wineMeta}>
-              {wine?.vintage} • {wine?.region} • {wine?.color}
-            </Text>
+        ) : (
+          /* Wine Preview Card - AI Selected */
+          <View style={styles.wineCard}>
+            <View style={styles.wineImagePlaceholder}>
+              <Text style={styles.wineImageText}>🍷</Text>
+            </View>
+            <View style={styles.wineInfo}>
+              <Text style={styles.wineName}>{wine?.name || 'Unknown Wine'}</Text>
+              <Text style={styles.wineMeta}>
+                {wine?.vintage} • {wine?.region} • {wine?.color}
+              </Text>
+            </View>
           </View>
-        </View>
+        )}
 
         {/* Info Banner */}
         <View style={styles.infoBanner}>
@@ -187,9 +255,9 @@ export const AddWishlistStep2 = () => {
 
         {/* Submit Button */}
         <TouchableOpacity
-          style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]}
+          style={[styles.submitButton, (isSubmitting || (isManualEntry && !manualName.trim())) && styles.submitButtonDisabled]}
           onPress={handleSubmit}
-          disabled={isSubmitting}
+          disabled={isSubmitting || (isManualEntry && !manualName.trim())}
           activeOpacity={0.8}
         >
           <LinearGradient
