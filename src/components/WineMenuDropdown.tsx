@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Modal,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { colors } from '../theme/colors'
@@ -22,18 +23,28 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
   onRemove,
 }) => {
   const [menuVisible, setMenuVisible] = useState(false)
+  const [buttonLayout, setButtonLayout] = useState({ x: 0, y: 0, width: 0, height: 0 })
+  const buttonRef = useRef<View>(null)
 
   const handleMenuPress = (action: () => void) => {
     setMenuVisible(false)
     setTimeout(() => action(), 100)
   }
 
+  const handleButtonPress = () => {
+    buttonRef.current?.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number) => {
+      setButtonLayout({ x: pageX, y: pageY, width, height })
+      setMenuVisible(true)
+    })
+  }
+
   return (
     <>
       {/* Menu Button */}
       <TouchableOpacity
+        ref={buttonRef as any}
         style={styles.menuButton}
-        onPress={() => setMenuVisible(true)}
+        onPress={handleButtonPress}
         activeOpacity={0.7}
       >
         <Icon name="dots-horizontal" size={24} color="#1f2937" />
@@ -49,7 +60,16 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
         <TouchableWithoutFeedback onPress={() => setMenuVisible(false)}>
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback>
-              <View style={styles.menuCard}>
+              <View
+                style={[
+                  styles.menuCard,
+                  {
+                    position: 'absolute',
+                    top: buttonLayout.y + buttonLayout.height + 8,
+                    right: Dimensions.get('window').width - buttonLayout.x - buttonLayout.width,
+                  },
+                ]}
+              >
                 <TouchableOpacity
                   style={styles.menuItem}
                   onPress={() => handleMenuPress(onEditDetails)}
@@ -103,10 +123,6 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    justifyContent: 'flex-start',
-    paddingTop: 60,
-    paddingRight: 16,
-    alignItems: 'flex-end',
   },
   menuCard: {
     backgroundColor: '#fff',
