@@ -180,7 +180,7 @@ export const HomeScreen = () => {
           {/* Open a Bottle */}
           <TouchableOpacity
             style={styles.actionButton}
-            onPress={() => navigation.navigate('Inventory')}
+            onPress={() => navigation.navigate('InventoryTab' as never)}
             activeOpacity={0.7}
           >
             <View style={styles.actionIcon}>
@@ -216,7 +216,7 @@ export const HomeScreen = () => {
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Ready Tonight</Text>
               <TouchableOpacity
-                onPress={() => navigation.navigate('Inventory', { filter: 'ready' })}
+                onPress={() => navigation.navigate('InventoryTab' as never)}
               >
                 <Text style={styles.seeAllLink}>See all ›</Text>
               </TouchableOpacity>
@@ -229,7 +229,10 @@ export const HomeScreen = () => {
                 <TouchableOpacity
                   key={wine.id}
                   style={styles.wineCard}
-                  onPress={() => navigation.navigate('WineDetail', { wineId: wine.id })}
+                  onPress={() => navigation.navigate('InventoryTab' as never, {
+                    screen: 'WineDetail',
+                    params: { wineId: wine.id }
+                  } as never)}
                   activeOpacity={0.7}
                 >
                   {/* Wine Image */}

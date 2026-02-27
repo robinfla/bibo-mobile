@@ -77,10 +77,15 @@ export const AnalyticsDetailScreen = () => {
   const maxCount = Math.max(...items.map(i => i.count))
 
   const handleItemPress = (item: AnalyticsItem) => {
-    navigation.navigate('Inventory', {
-      filter: { [type === 'grapes' ? 'grape' : 'region']: item.id },
-      title: item.name,
-    })
+    const filterKey = type === 'grapes' ? 'grape' : 'region'
+    // Navigate to the Inventory tab, then to the InventoryList screen with filter
+    navigation.navigate('InventoryTab' as never, {
+      screen: 'InventoryList',
+      params: {
+        filter: { [filterKey]: item.id },
+        title: item.name,
+      }
+    } as never)
   }
 
   const handleBack = () => {

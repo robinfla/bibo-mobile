@@ -82,15 +82,25 @@ export const AnalyticsScreen = () => {
   }, [fetchData])
 
   const handleColorPress = (color: 'red' | 'white' | 'rose') => {
-    navigation.navigate('Inventory', { filter: { color } })
+    // Navigate to the Inventory tab, then to the InventoryList screen with filter
+    navigation.navigate('InventoryTab' as never, {
+      screen: 'InventoryList',
+      params: { filter: { color } }
+    } as never)
   }
 
   const handleGrapePress = (grapeId: string) => {
-    navigation.navigate('Inventory', { filter: { grape: grapeId } })
+    navigation.navigate('InventoryTab' as never, {
+      screen: 'InventoryList',
+      params: { filter: { grape: grapeId } }
+    } as never)
   }
 
   const handleRegionPress = (regionId: string) => {
-    navigation.navigate('Inventory', { filter: { region: regionId } })
+    navigation.navigate('InventoryTab' as never, {
+      screen: 'InventoryList',
+      params: { filter: { region: regionId } }
+    } as never)
   }
 
   // Calculate pie chart segments
