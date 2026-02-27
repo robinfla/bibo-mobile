@@ -102,7 +102,6 @@ export const AddWishlistStep1 = () => {
             onChangeText={setSearchQuery}
             onSubmitEditing={handleSearch}
             returnKeyType="search"
-            autoFocus
           />
         </View>
 
