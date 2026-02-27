@@ -14,6 +14,7 @@ import { useRoute, useNavigation } from '@react-navigation/native'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WineActionFAB } from '../../components/WineActionFAB'
+import { WineMenuDropdown } from '../../components/WineMenuDropdown'
 import type { WineDetail } from '../../types/api'
 
 const MATURITY_COLORS = {
@@ -216,9 +217,11 @@ export const WineDetailScreenV3 = () => {
           <Text style={styles.subHeaderTitle}>
             {wine.name} {selectedVintage}
           </Text>
-          <TouchableOpacity style={styles.menuButton}>
-            <Text style={styles.menuButtonText}>⋯</Text>
-          </TouchableOpacity>
+          <WineMenuDropdown
+            onEditDetails={handleEditDetails}
+            onShare={handleShare}
+            onRemove={handleRemove}
+          />
         </View>
 
         {/* Content Area */}
@@ -267,6 +270,75 @@ export const WineDetailScreenV3 = () => {
                   <Text style={styles.maturityDatesLabel}>MATURITY WINDOW</Text>
                   <Text style={styles.maturityDatesValue}>{maturityWindow}</Text>
                 </View>
+              </View>
+            </View>
+          )}
+
+          {/* Aging Phase Card */}
+          {selectedVintageData?.maturity?.drinkFrom && selectedVintageData?.maturity?.drinkUntil && (
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>Aging Phase</Text>
+              
+              {/* Timeline Track */}
+              <View style={styles.timeline}>
+                <View style={styles.timelineTrack}>
+                  <View style={[styles.timelineSegment, styles.timelineYouth]} />
+                  <View style={[styles.timelineSegment, styles.timelineMaturity]} />
+                  <View style={[styles.timelineSegment, styles.timelinePeak]} />
+                  <View style={[styles.timelineSegment, styles.timelineDecline]} />
+                </View>
+                
+                {/* Position Marker */}
+                {(() => {
+                  const drinkFrom = selectedVintageData.maturity.drinkFrom
+                  const drinkUntil = selectedVintageData.maturity.drinkUntil
+                  const currentYear = new Date().getFullYear()
+                  const windowLength = drinkUntil - drinkFrom
+                  const position = currentYear < drinkFrom
+                    ? 0
+                    : currentYear > drinkUntil
+                    ? 100
+                    : ((currentYear - drinkFrom) / windowLength) * 100
+
+                  return (
+                    <View style={[styles.timelineMarker, { left: `${position}%` }]}>
+                      <View style={styles.timelineMarkerDot} />
+                    </View>
+                  )
+                })()}
+              </View>
+
+              {/* Timeline Labels */}
+              <View style={styles.timelineLabels}>
+                {(() => {
+                  const drinkFrom = selectedVintageData.maturity.drinkFrom
+                  const drinkUntil = selectedVintageData.maturity.drinkUntil
+                  const windowLength = drinkUntil - drinkFrom
+                  const thirdLength = Math.max(1, Math.round(windowLength / 3))
+                  const peakStart = drinkFrom + thirdLength
+                  const peakEnd = drinkFrom + thirdLength * 2
+
+                  return (
+                    <>
+                      <View style={styles.timelineLabel}>
+                        <Text style={styles.timelineLabelYear}>{drinkFrom}</Text>
+                        <Text style={styles.timelineLabelPhase}>Youth</Text>
+                      </View>
+                      <View style={styles.timelineLabel}>
+                        <Text style={styles.timelineLabelYear}>{peakStart}</Text>
+                        <Text style={styles.timelineLabelPhase}>Maturity</Text>
+                      </View>
+                      <View style={styles.timelineLabel}>
+                        <Text style={styles.timelineLabelYear}>{peakEnd}</Text>
+                        <Text style={styles.timelineLabelPhase}>Peak</Text>
+                      </View>
+                      <View style={styles.timelineLabel}>
+                        <Text style={styles.timelineLabelYear}>{drinkUntil}</Text>
+                        <Text style={styles.timelineLabelPhase}>Decline</Text>
+                      </View>
+                    </>
+                  )
+                })()}
               </View>
             </View>
           )}
@@ -422,18 +494,6 @@ const styles = StyleSheet.create({
     color: '#1a1a1a',
     letterSpacing: -0.4,
   },
-  menuButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: '#f5f5f5',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  menuButtonText: {
-    fontSize: 20,
-    color: '#1a1a1a',
-  },
   content: {
     padding: 20,
     paddingBottom: 100,
@@ -575,5 +635,66 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     color: '#333',
+  },
+  timeline: {
+    position: 'relative',
+    marginBottom: 24,
+  },
+  timelineTrack: {
+    flexDirection: 'row',
+    height: 10,
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  timelineSegment: {
+    flex: 1,
+  },
+  timelineYouth: {
+    backgroundColor: '#bbdefb',
+  },
+  timelineMaturity: {
+    backgroundColor: '#ffe0b2',
+  },
+  timelinePeak: {
+    backgroundColor: '#c8e6c9',
+  },
+  timelineDecline: {
+    backgroundColor: '#f8bbd0',
+  },
+  timelineMarker: {
+    position: 'absolute',
+    top: 1,
+    marginLeft: -9,
+  },
+  timelineMarkerDot: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#ef6c00',
+    borderWidth: 3,
+    borderColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  timelineLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 12,
+  },
+  timelineLabel: {
+    alignItems: 'center',
+  },
+  timelineLabelYear: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#1a1a1a',
+    marginBottom: 2,
+  },
+  timelineLabelPhase: {
+    fontSize: 11,
+    color: '#999',
   },
 })
