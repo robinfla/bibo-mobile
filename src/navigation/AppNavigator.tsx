@@ -13,6 +13,8 @@ import { AnalyticsScreen } from '../screens/analytics/AnalyticsScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
 import { ImportScreen } from '../screens/ImportScreen'
 import { ScanWineModal } from '../screens/home/ScanWineModal'
+import { AddWishlistStep1 } from '../screens/wishlist/AddWishlistStep1'
+import { AddWishlistStep2 } from '../screens/wishlist/AddWishlistStep2'
 import { CellarsScreen } from '../screens/cellars/CellarsScreen'
 import { SpacesListScreen } from '../screens/cellars/SpacesListScreen'
 import { CreateSpaceScreen } from '../screens/cellars/CreateSpaceScreen'
@@ -27,6 +29,8 @@ type InventoryStackParamList = {
   InventoryList: undefined
   InventoryDetail: { lot: InventoryLot }
   WineDetail: { wineId: number }
+  AddWishlistStep1: undefined
+  AddWishlistStep2: { wine: { id: number; name: string; vintage?: number; region?: string; color?: string } }
 }
 
 const HomeStack = createNativeStackNavigator()
@@ -161,7 +165,17 @@ const InventoryStackScreen = () => (
     <InventoryStack.Screen
       name="WineDetail"
       component={WineDetailScreen}
-      options={{ title: 'Wine Info' }}
+      options={{ title: 'Wine Info', headerShown: false }}
+    />
+    <InventoryStack.Screen
+      name="AddWishlistStep1"
+      component={AddWishlistStep1}
+      options={{ headerShown: false }}
+    />
+    <InventoryStack.Screen
+      name="AddWishlistStep2"
+      component={AddWishlistStep2}
+      options={{ headerShown: false }}
     />
   </InventoryStack.Navigator>
 )
