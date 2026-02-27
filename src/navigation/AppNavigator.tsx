@@ -156,7 +156,7 @@ const InventoryStackScreen = () => (
     <InventoryStack.Screen
       name="InventoryList"
       component={InventoryScreen}
-      options={{ title: 'Inventory' }}
+      options={{ headerShown: false }}
     />
     <InventoryStack.Screen
       name="InventoryDetail"

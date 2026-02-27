@@ -10,6 +10,7 @@ import {
   RefreshControl,
   ActionSheetIOS,
   Platform,
+  SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
@@ -243,7 +244,7 @@ export const InventoryScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {renderHeader()}
 
       {activeTab === 'cellar' && renderCellarTab()}
@@ -267,7 +268,7 @@ export const InventoryScreen = () => {
         onApply={handleApplyFilters}
         currentFilters={filters}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 
