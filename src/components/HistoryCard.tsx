@@ -17,7 +17,8 @@ interface HistoryCardProps {
   consumedDate: Date
   score?: number
   tastingNotes?: string
-  onPress: () => void
+  onEditScore: () => void
+  onEditNotes: () => void
 }
 
 export const HistoryCard: React.FC<HistoryCardProps> = ({
@@ -28,7 +29,8 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
   consumedDate,
   score,
   tastingNotes,
-  onPress,
+  onEditScore,
+  onEditNotes,
 }) => {
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {
@@ -38,16 +40,155 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
     })
   }
 
-  const hasScore = score !== undefined && score !== null
+  const hasScore = score !== null && score !== undefined
   const hasNotes = tastingNotes && tastingNotes.trim().length > 0
-  const hasTastingSection = hasScore || hasNotes
+
+  // Render CTAs for Rate and/or Add notes
+  const renderCTA = (type: 'rate' | 'notes') => {
+    const config = {
+      rate: {
+        emoji: '⭐',
+        text: 'Rate',
+        onPress: onEditScore,
+      },
+      notes: {
+        emoji: '📝',
+        text: 'Add notes',
+        onPress: onEditNotes,
+      },
+    }
+
+    const { emoji, text, onPress } = config[type]
+
+    return (
+      <TouchableOpacity
+        style={styles.cta}
+        onPress={onPress}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.ctaEmoji}>{emoji}</Text>
+        <Text style={styles.ctaText}>{text}</Text>
+      </TouchableOpacity>
+    )
+  }
+
+  // Render the tasting section based on state
+  const renderTastingSection = () => {
+    // State 1: Score + Notes (both present)
+    if (hasScore && hasNotes) {
+      return (
+        <View style={styles.tastingSection}>
+          <TouchableOpacity onPress={onEditScore} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#722F37', '#944654']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.scoreBadge}
+            >
+              <Text style={styles.scoreNumber}>{score}</Text>
+              <Text style={styles.scoreDenominator}>/100</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.notesBoxTouchable}
+            onPress={onEditNotes}
+            activeOpacity={0.7}
+          >
+            <LinearGradient
+              colors={['#f9f9f9', '#f5f5f5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.notesBox}
+            >
+              <Text style={styles.notesText} numberOfLines={3}>
+                {tastingNotes}
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+
+    // State 2: No score, no notes (both CTAs)
+    if (!hasScore && !hasNotes) {
+      return (
+        <View style={styles.tastingSection}>
+          {renderCTA('rate')}
+          {renderCTA('notes')}
+        </View>
+      )
+    }
+
+    // State 3: Notes only (no score)
+    if (hasNotes && !hasScore) {
+      return (
+        <View style={styles.tastingSection}>
+          <TouchableOpacity
+            style={styles.notesBoxTouchableFullWidth}
+            onPress={onEditNotes}
+            activeOpacity={0.7}
+          >
+            <LinearGradient
+              colors={['#f9f9f9', '#f5f5f5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.notesBoxFullWidth}
+            >
+              <Text style={styles.notesText} numberOfLines={3}>
+                {tastingNotes}
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+
+    // State 4: Score only (no notes) - Rate CTA + notes box placeholder?
+    // Actually based on spec: if hasScore && !hasNotes, we should show score badge + Add notes CTA
+    // But the mockup description suggests State 4 is score badge + notes box (with notes present)
+    // Re-reading spec: State 4 is "Score Present, Notes Empty" with "Rate CTA + Notes Box"
+    // This seems contradictory. Let me check the spec again...
+    // 
+    // From spec:
+    // "State 4: Score Present, Notes Empty
+    // Display: [⭐ Rate] [Notes Text Box]
+    // When: User has NOT rated but HAS added notes"
+    //
+    // Wait, that's wrong. State 4 says "Score Present" but then "User has NOT rated"
+    // That's a contradiction. Let me interpret based on the logic matrix:
+    //
+    // State 1: hasScore && hasNotes
+    // State 2: !hasScore && !hasNotes  
+    // State 3: hasNotes && !hasScore
+    // State 4: hasScore && !hasNotes
+    //
+    // So State 4 should be: score badge + "Add notes" CTA
+    if (hasScore && !hasNotes) {
+      return (
+        <View style={styles.tastingSection}>
+          <TouchableOpacity onPress={onEditScore} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#722F37', '#944654']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.scoreBadge}
+            >
+              <Text style={styles.scoreNumber}>{score}</Text>
+              <Text style={styles.scoreDenominator}>/100</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {renderCTA('notes')}
+        </View>
+      )
+    }
+
+    return null
+  }
 
   return (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={onPress}
-      activeOpacity={0.7}
-    >
+    <View style={styles.card}>
       {/* Wine Identity Section */}
       <View style={styles.wineHeader}>
         {/* Wine Image */}
@@ -55,9 +196,16 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
           {imageUrl ? (
             <Image source={{ uri: imageUrl }} style={styles.image} />
           ) : (
-            <View style={[styles.image, styles.placeholderImage]}>
-              <Icon name="bottle-wine" size={28} color="#8b3a3a" />
-            </View>
+            <LinearGradient
+              colors={['#722F37', '#944654']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[styles.image, styles.placeholderImage]}
+            >
+              <View style={{ opacity: 0.6 }}>
+                <Icon name="bottle-wine" size={32} color="#fff" />
+              </View>
+            </LinearGradient>
           )}
         </View>
 
@@ -80,35 +228,8 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
       </View>
 
       {/* Tasting Section (conditional) */}
-      {hasTastingSection && (
-        <View style={styles.tastingSection}>
-          {hasScore && (
-            <LinearGradient
-              colors={['#722F37', '#944654']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.scoreBadge}
-            >
-              <Text style={styles.scoreNumber}>{score}</Text>
-              <Text style={styles.scoreDenominator}>/100</Text>
-            </LinearGradient>
-          )}
-
-          {hasNotes && (
-            <LinearGradient
-              colors={['#f9f9f9', '#f5f5f5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.notesBox, !hasScore && styles.notesBoxFullWidth]}
-            >
-              <Text style={styles.notesText} numberOfLines={3}>
-                {tastingNotes}
-              </Text>
-            </LinearGradient>
-          )}
-        </View>
-      )}
-    </TouchableOpacity>
+      {renderTastingSection()}
+    </View>
   )
 }
 
@@ -142,7 +263,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   placeholderImage: {
-    backgroundColor: '#4A1A2E',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -158,7 +278,7 @@ const styles = StyleSheet.create({
   },
   vintageRegion: {
     fontSize: 13,
-    color: '#888',
+    color: '#999',
   },
   consumedDateRow: {
     flexDirection: 'row',
@@ -169,13 +289,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   consumedDate: {
-    fontSize: 12,
+    fontSize: 13,
     color: '#722F37',
-    fontWeight: '500',
+    fontWeight: '600',
   },
   tastingSection: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 14,
     alignItems: 'flex-start',
     marginTop: 12,
     paddingTop: 12,
@@ -185,7 +305,7 @@ const styles = StyleSheet.create({
   scoreBadge: {
     width: 48,
     height: 48,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#722F37',
@@ -205,17 +325,40 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     marginTop: -2,
   },
-  notesBox: {
+  notesBoxTouchable: {
     flex: 1,
+  },
+  notesBox: {
     padding: 10,
     borderRadius: 10,
   },
-  notesBoxFullWidth: {
+  notesBoxTouchableFullWidth: {
     flex: 1,
+  },
+  notesBoxFullWidth: {
+    padding: 10,
+    borderRadius: 10,
   },
   notesText: {
     fontSize: 14,
     lineHeight: 21,
     color: '#555',
+  },
+  cta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 10,
+  },
+  ctaEmoji: {
+    fontSize: 18,
+  },
+  ctaText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#999',
+    textDecorationLine: 'underline',
+    textDecorationColor: '#ddd',
+    textDecorationStyle: 'solid',
   },
 })

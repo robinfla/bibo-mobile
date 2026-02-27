@@ -38,7 +38,7 @@ export const HistoryTab: React.FC = () => {
       // TODO: Replace with actual API call
       // const data = await apiFetch<HistoryWine[]>('/api/history')
 
-      // Mock data matching the mockup
+      // Mock data showing all 4 states
       const mockData: HistoryWine[] = [
         {
           id: '1',
@@ -56,7 +56,7 @@ export const HistoryTab: React.FC = () => {
           vintage: 2013,
           region: 'Piedmont',
           consumedDate: new Date('2026-02-10'),
-          // No score, no notes
+          // State 2: No score, no notes
         },
         {
           id: '3',
@@ -64,7 +64,7 @@ export const HistoryTab: React.FC = () => {
           vintage: 2012,
           region: 'Tuscany',
           consumedDate: new Date('2026-02-05'),
-          // Notes only, no score
+          // State 3: Notes only, no score
           tastingNotes:
             'Shared with friends at dinner. Great complexity but a bit too tannic for my taste. Needed more time.',
         },
@@ -75,7 +75,7 @@ export const HistoryTab: React.FC = () => {
           region: 'Tuscany',
           consumedDate: new Date('2026-01-28'),
           score: 91,
-          // Score only, no notes
+          // State 4: Score only, no notes
         },
       ]
 
@@ -93,14 +93,27 @@ export const HistoryTab: React.FC = () => {
     setRefreshing(false)
   }, [fetchHistory])
 
-  const handleCardPress = (wine: HistoryWine) => {
-    // TODO: Navigate to EditTasting screen
-    console.log('Edit tasting for wine:', wine.id)
-    // navigation.navigate('EditTasting', {
+  const handleEditScore = (wine: HistoryWine) => {
+    // TODO: Open score picker modal
+    console.log('Edit score for wine:', wine.id, wine.name)
+    // navigation.navigate('ScorePicker', {
     //   wineId: wine.id,
-    //   consumedDate: wine.consumedDate,
     //   currentScore: wine.score,
+    //   onSave: (newScore) => {
+    //     // Update wine score
+    //   }
+    // })
+  }
+
+  const handleEditNotes = (wine: HistoryWine) => {
+    // TODO: Open notes input modal
+    console.log('Edit notes for wine:', wine.id, wine.name)
+    // navigation.navigate('NotesInput', {
+    //   wineId: wine.id,
     //   currentNotes: wine.tastingNotes,
+    //   onSave: (newNotes) => {
+    //     // Update wine notes
+    //   }
     // })
   }
 
@@ -136,7 +149,8 @@ export const HistoryTab: React.FC = () => {
             consumedDate={item.consumedDate}
             score={item.score}
             tastingNotes={item.tastingNotes}
-            onPress={() => handleCardPress(item)}
+            onEditScore={() => handleEditScore(item)}
+            onEditNotes={() => handleEditNotes(item)}
           />
         )}
         contentContainerStyle={[
