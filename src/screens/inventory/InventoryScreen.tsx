@@ -259,8 +259,8 @@ export const InventoryScreen = () => {
       {activeTab === 'wishlist' && <WishlistTabNew />}
       {activeTab === 'history' && <HistoryTab />}
 
-      {/* FAB - Only show on cellar and history tabs (wishlist has its own) */}
-      {activeTab !== 'wishlist' && (
+      {/* FAB - Only show on cellar tab */}
+      {activeTab === 'cellar' && (
         <TouchableOpacity style={styles.fabContainer} onPress={handleFabPress} activeOpacity={0.8}>
           <LinearGradient
             colors={['#8b4d5a', '#722F37']}
