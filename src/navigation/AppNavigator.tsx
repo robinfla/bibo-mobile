@@ -16,6 +16,8 @@ import { ImportScreen } from '../screens/ImportScreen'
 import { ScanWineModal } from '../screens/home/ScanWineModal'
 import { AddWishlistStep1 } from '../screens/wishlist/AddWishlistStep1'
 import { AddWishlistStep2 } from '../screens/wishlist/AddWishlistStep2'
+import { AddWineStep1 } from '../screens/wine/AddWineStep1'
+import { AddWineStep2 } from '../screens/wine/AddWineStep2'
 import { CellarsScreen } from '../screens/cellars/CellarsScreen'
 import { SpacesListScreen } from '../screens/cellars/SpacesListScreen'
 import { CreateSpaceScreen } from '../screens/cellars/CreateSpaceScreen'
@@ -140,6 +142,16 @@ const HomeStackScreen = () => (
     <HomeStack.Screen
       name="Import"
       component={ImportScreen}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="AddWineStep1"
+      component={AddWineStep1}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="AddWineStep2"
+      component={AddWineStep2}
       options={{ headerShown: false }}
     />
   </HomeStack.Navigator>
