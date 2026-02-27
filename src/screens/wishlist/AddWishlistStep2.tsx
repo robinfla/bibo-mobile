@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   Animated,
+  SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRoute, useNavigation } from '@react-navigation/native'
@@ -102,7 +103,7 @@ export const AddWishlistStep2 = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack}>
@@ -273,7 +274,7 @@ export const AddWishlistStep2 = () => {
 
       {/* Background Decorations */}
       <View style={styles.decorationTop} />
-    </View>
+    </SafeAreaView>
   )
 }
 
