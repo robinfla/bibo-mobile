@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import { View, Text, ActivityIndicator, StyleSheet, Platform } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
 import { useAuth } from '../auth/AuthContext'
 import { colors } from '../theme/colors'
 import { LoginScreen } from '../screens/LoginScreen'
 import { HomeScreen } from '../screens/home/HomeScreen'
 import { InventoryScreen } from '../screens/inventory/InventoryScreen'
 import { InventoryDetailScreen } from '../screens/inventory/InventoryDetailScreen'
-import { WineDetailScreen } from '../screens/wine/WineDetailScreen'
+import { WineDetailScreenV3 } from '../screens/wine/WineDetailScreenV3'
 import { AnalyticsScreen } from '../screens/analytics/AnalyticsScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
 import { ImportScreen } from '../screens/ImportScreen'
@@ -164,7 +165,7 @@ const InventoryStackScreen = () => (
     />
     <InventoryStack.Screen
       name="WineDetail"
-      component={WineDetailScreen}
+      component={WineDetailScreenV3}
       options={{ title: 'Wine Info', headerShown: false }}
     />
     <InventoryStack.Screen
@@ -224,10 +225,30 @@ const AuthenticatedTabs = () => {
         <Tab.Screen
           name="InventoryTab"
           component={InventoryStackScreen}
-          options={{
+          options={({ route }) => ({
             tabBarLabel: 'Inventory',
             tabBarIcon: ({ color }) => <ListIcon color={color} size={24} />,
-          }}
+            tabBarStyle: (() => {
+              const routeName = getFocusedRouteNameFromRoute(route)
+              // Hide tab bar on WineDetail screen
+              if (routeName === 'WineDetail') {
+                return { display: 'none' }
+              }
+              return {
+                backgroundColor: colors.white,
+                borderTopColor: colors.muted[200],
+                borderTopWidth: 0,
+                height: Platform.OS === 'ios' ? 88 : 72,
+                paddingBottom: Platform.OS === 'ios' ? 24 : 12,
+                paddingTop: 8,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: -2 },
+                shadowOpacity: 0.06,
+                shadowRadius: 8,
+                elevation: 10,
+              }
+            })(),
+          })}
         />
         <Tab.Screen
           name="ScanTab"
