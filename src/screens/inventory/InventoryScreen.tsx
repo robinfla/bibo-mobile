@@ -140,9 +140,17 @@ export const InventoryScreen = () => {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      {/* Title */}
+      {/* Title with Back Button */}
       <View style={styles.headerTop}>
-        <Text style={styles.title}>Inventory</Text>
+        <TouchableOpacity 
+          style={styles.backButton} 
+          onPress={() => navigation.goBack()}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Icon name="chevron-left" size={28} color="#722F37" />
+        </TouchableOpacity>
+        <Text style={styles.title}>My Wines</Text>
+        <View style={styles.backButton} />
       </View>
 
       {/* Search Bar */}
@@ -289,12 +297,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingBottom: 12,
+    position: 'relative',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#1a1a1a',
-    letterSpacing: -0.5,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#722F37',
+    letterSpacing: -0.3,
   },
   searchContainer: {
     flexDirection: 'row',
