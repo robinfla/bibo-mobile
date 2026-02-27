@@ -3,11 +3,13 @@ import {
   View,
   Text,
   FlatList,
+  TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { LinearGradient } from 'expo-linear-gradient'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WishlistCard } from '../../components/WishlistCard'
@@ -106,6 +108,10 @@ export const WishlistTabNew = () => {
     console.log('Pressed wishlist item:', item.id)
   }
 
+  const handleAddPress = () => {
+    navigation.navigate('AddWishlistStep1')
+  }
+
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <Text style={styles.emptyIcon}>🍷</Text>
@@ -150,6 +156,20 @@ export const WishlistTabNew = () => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       />
+
+      {/* FAB */}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={handleAddPress}
+        activeOpacity={0.8}
+      >
+        <LinearGradient
+          colors={['#8b4d5a', '#722F37']}
+          style={styles.fabGradient}
+        >
+          <Text style={styles.fabIcon}>+</Text>
+        </LinearGradient>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -196,5 +216,31 @@ const styles = StyleSheet.create({
     color: '#666',
     lineHeight: 22.5,
     textAlign: 'center',
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 24,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    overflow: 'hidden',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+    elevation: 8,
+    zIndex: 50,
+  },
+  fabGradient: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fabIcon: {
+    fontSize: 26,
+    fontWeight: '300',
+    color: '#fff',
   },
 })
