@@ -16,7 +16,7 @@ import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WineCardNew } from '../../components/WineCardNew'
-import { WishlistTab } from './WishlistTab'
+import { WishlistTabNew } from './WishlistTabNew'
 import { HistoryTab } from './HistoryTab'
 import { FiltersScreen, type FilterState } from './FiltersScreen'
 import type { WineCard, WineCardsResponse } from '../../types/api'
@@ -246,7 +246,7 @@ export const InventoryScreen = () => {
       {renderHeader()}
 
       {activeTab === 'cellar' && renderCellarTab()}
-      {activeTab === 'wishlist' && <WishlistTab />}
+      {activeTab === 'wishlist' && <WishlistTabNew />}
       {activeTab === 'history' && <HistoryTab />}
 
       {/* FAB */}
