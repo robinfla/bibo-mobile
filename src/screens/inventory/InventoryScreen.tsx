@@ -8,11 +8,8 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  ActionSheetIOS,
-  Platform,
   SafeAreaView,
 } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { apiFetch } from '../../api/client'
@@ -112,30 +109,6 @@ export const InventoryScreen = () => {
   const handleApplyFilters = (newFilters: FilterState) => {
     setFilters(newFilters)
     setShowFilterModal(false)
-  }
-
-  const handleFabPress = () => {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: ['Cancel', 'Add Manually', 'Scan Bottle', 'Quick Log'],
-          cancelButtonIndex: 0,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 1) {
-            navigation.navigate('AddWine')
-          } else if (buttonIndex === 2) {
-            navigation.navigate('ScanBottle')
-          } else if (buttonIndex === 3) {
-            // TODO: Implement quick log
-          }
-        },
-      )
-    } else {
-      // Android: show custom modal
-      // For now, just navigate to add wine
-      navigation.navigate('AddWine')
-    }
   }
 
   const renderHeader = () => (
@@ -258,18 +231,6 @@ export const InventoryScreen = () => {
       {activeTab === 'cellar' && renderCellarTab()}
       {activeTab === 'wishlist' && <WishlistTabNew />}
       {activeTab === 'history' && <HistoryTab />}
-
-      {/* FAB - Only show on cellar and history tabs (wishlist has its own) */}
-      {activeTab !== 'wishlist' && (
-        <TouchableOpacity style={styles.fabContainer} onPress={handleFabPress} activeOpacity={0.8}>
-          <LinearGradient
-            colors={['#8b4d5a', '#722F37']}
-            style={styles.fab}
-          >
-            <Text style={styles.fabIcon}>+</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      )}
 
       {/* Filter Modal */}
       <FiltersScreen
@@ -433,30 +394,5 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: 'center',
     lineHeight: 22.5,
-  },
-  fabContainer: {
-    position: 'absolute',
-    right: 20,
-    bottom: 24,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    overflow: 'hidden',
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 24,
-    elevation: 8,
-  },
-  fab: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fabIcon: {
-    fontSize: 26,
-    fontWeight: '300',
-    color: '#fff',
   },
 })
