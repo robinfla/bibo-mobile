@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
+    zIndex: 1,
   },
   hero: {
     marginBottom: 32,
@@ -297,6 +298,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.04,
     shadowRadius: 12,
     elevation: 1,
+    zIndex: 1,
   },
   manualButtonText: {
     fontSize: 16,
@@ -311,6 +313,8 @@ const styles = StyleSheet.create({
     height: 300,
     borderRadius: 150,
     backgroundColor: 'rgba(114, 47, 55, 0.05)',
+    zIndex: -1,
+    pointerEvents: 'none',
   },
   decorationBottom: {
     position: 'absolute',
@@ -320,5 +324,7 @@ const styles = StyleSheet.create({
     height: 400,
     borderRadius: 200,
     backgroundColor: 'rgba(245, 183, 49, 0.05)',
+    zIndex: -1,
+    pointerEvents: 'none',
   },
 })
