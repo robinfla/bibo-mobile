@@ -15,6 +15,7 @@ import { apiFetch, ApiError } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WineActionFAB } from '../../components/WineActionFAB'
 import { WineMenuDropdown } from '../../components/WineMenuDropdown'
+import { MealSuggestionsGrid } from '../../components/MealSuggestionsGrid'
 import type { WineDetail } from '../../types/api'
 
 const MATURITY_COLORS = {
@@ -344,11 +345,11 @@ export const WineDetailScreenV3 = () => {
           )}
 
           {/* Tasting Notes Card */}
-          {(latestTasting?.rating || latestTasting?.tastingNotes) && (
+          {(latestTasting?.rating || latestTasting?.tastingNotes || wine.notes) && (
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Tasting Notes</Text>
               <View style={styles.tastingNotesContent}>
-                {latestTasting.rating && (
+                {latestTasting?.rating && (
                   <View style={styles.ratingSection}>
                     <LinearGradient
                       colors={['#8B3A4A', '#722F37']}
@@ -361,14 +362,35 @@ export const WineDetailScreenV3 = () => {
                   </View>
                 )}
                 
-                {latestTasting.tastingNotes && (
-                  <View style={styles.tastingNoteBox}>
-                    <Text style={styles.tastingNoteText}>{latestTasting.tastingNotes}</Text>
-                  </View>
-                )}
+                <View style={styles.tastingNoteBox}>
+                  <Text style={styles.tastingNoteText}>
+                    {latestTasting?.tastingNotes || wine.notes || 'No tasting notes yet. Add one after your first tasting.'}
+                  </Text>
+                </View>
               </View>
             </View>
           )}
+
+          {/* Meal Suggestions Card */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Meal Suggestions</Text>
+            <MealSuggestionsGrid
+              meals={wine.foodPairings?.map((pairing, index) => ({
+                name: pairing,
+                score: 95 - (index * 5),
+              })) || undefined}
+            />
+          </View>
+
+          {/* Comments Card */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Comments</Text>
+            <View style={styles.commentsBox}>
+              <Text style={styles.commentsText}>
+                {wine.notes || 'No comments yet. Tap to add notes about this wine.'}
+              </Text>
+            </View>
+          </View>
         </View>
       </ScrollView>
 
@@ -696,5 +718,15 @@ const styles = StyleSheet.create({
   timelineLabelPhase: {
     fontSize: 11,
     color: '#999',
+  },
+  commentsBox: {
+    backgroundColor: '#f9f9f9',
+    borderRadius: 14,
+    padding: 14,
+  },
+  commentsText: {
+    fontSize: 14,
+    lineHeight: 22,
+    color: '#333',
   },
 })
