@@ -11,6 +11,7 @@ import { InventoryScreen } from '../screens/inventory/InventoryScreen'
 import { InventoryDetailScreen } from '../screens/inventory/InventoryDetailScreen'
 import { WineDetailScreenV3 } from '../screens/wine/WineDetailScreenV3'
 import { AnalyticsScreen } from '../screens/analytics/AnalyticsScreen'
+import { AnalyticsDetailScreen } from '../screens/analytics/AnalyticsDetailScreen'
 import { ProfileScreen } from '../screens/ProfileScreen'
 import { ImportScreen } from '../screens/ImportScreen'
 import { ScanWineModal } from '../screens/home/ScanWineModal'
@@ -116,7 +117,12 @@ const AnalyticsStackScreen = () => (
     <AnalyticsStack.Screen
       name="AnalyticsMain"
       component={AnalyticsScreen}
-      options={{ title: 'Analytics' }}
+      options={{ headerShown: false }}
+    />
+    <AnalyticsStack.Screen
+      name="AnalyticsDetail"
+      component={AnalyticsDetailScreen}
+      options={{ headerShown: false }}
     />
   </AnalyticsStack.Navigator>
 )

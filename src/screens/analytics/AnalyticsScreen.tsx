@@ -308,7 +308,9 @@ export const AnalyticsScreen = () => {
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>By Grape</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('AnalyticsDetail', { type: 'grapes', title: 'By Grape' })}
+                >
                   <Text style={styles.seeAllLink}>See all ›</Text>
                 </TouchableOpacity>
               </View>
@@ -354,7 +356,9 @@ export const AnalyticsScreen = () => {
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>By Region</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('AnalyticsDetail', { type: 'regions', title: 'By Region' })}
+                >
                   <Text style={styles.seeAllLink}>See all ›</Text>
                 </TouchableOpacity>
               </View>
