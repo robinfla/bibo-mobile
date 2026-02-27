@@ -72,10 +72,6 @@ export const ScorePickerModal: React.FC<ScorePickerModalProps> = ({
     }
   }
 
-  const handleQuickSelect = (quickScore: number) => {
-    setScore(quickScore)
-  }
-
   const handleSave = () => {
     onSave(score)
     onClose()
@@ -196,32 +192,6 @@ export const ScorePickerModal: React.FC<ScorePickerModalProps> = ({
               >
                 <Text style={styles.handleStar}>⭐</Text>
               </LinearGradient>
-            </View>
-          </View>
-
-          {/* Quick Select Buttons */}
-          <View style={styles.quickSelectContainer}>
-            <Text style={styles.quickSelectLabel}>Quick Select</Text>
-            <View style={styles.quickSelectButtons}>
-              {[85, 90, 92, 95, 98, 100].map((quickScore) => (
-                <TouchableOpacity
-                  key={quickScore}
-                  style={[
-                    styles.quickSelectButton,
-                    score === quickScore && styles.quickSelectButtonActive,
-                  ]}
-                  onPress={() => handleQuickSelect(quickScore)}
-                >
-                  <Text
-                    style={[
-                      styles.quickSelectButtonText,
-                      score === quickScore && styles.quickSelectButtonTextActive,
-                    ]}
-                  >
-                    {quickScore}
-                  </Text>
-                </TouchableOpacity>
-              ))}
             </View>
           </View>
 
@@ -346,42 +316,6 @@ const styles = StyleSheet.create({
   },
   handleStar: {
     fontSize: 24,
-  },
-  quickSelectContainer: {
-    marginBottom: 24,
-  },
-  quickSelectLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#666',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  quickSelectButtons: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 10,
-  },
-  quickSelectButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 16,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  quickSelectButtonActive: {
-    backgroundColor: '#722F37',
-    borderColor: '#722F37',
-  },
-  quickSelectButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#666',
-  },
-  quickSelectButtonTextActive: {
-    color: '#fff',
   },
   saveButton: {
     borderRadius: 14,
