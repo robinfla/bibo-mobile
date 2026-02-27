@@ -448,7 +448,6 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 40,
     paddingHorizontal: 20,
-    alignItems: 'center',
   },
   heroNav: {
     flexDirection: 'row',
@@ -488,6 +487,7 @@ const styles = StyleSheet.create({
   },
   heroContent: {
     alignItems: 'center',
+    alignSelf: 'center',
     marginTop: 20,
     width: '70%',
   },
