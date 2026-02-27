@@ -12,6 +12,7 @@ import {
   Alert,
   Linking,
 } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
 import type { WishlistItem, CreateWishlistItem, Region } from '../../types/api'
@@ -20,6 +21,7 @@ type ItemTypeFilter = '' | 'wine' | 'producer'
 type Currency = 'EUR' | 'USD' | 'GBP' | 'ZAR' | 'CHF'
 
 export const WishlistTab = () => {
+  const navigation = useNavigation<any>()
   const [items, setItems] = useState<WishlistItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -74,18 +76,7 @@ export const WishlistTab = () => {
   }, [])
 
   const openModal = () => {
-    const defaultType = typeFilter === 'wine' || typeFilter === 'producer' ? typeFilter : 'wine'
-    setItemType(defaultType)
-    setName('')
-    setVintage('')
-    setNotes('')
-    setPriceTarget('')
-    setPriceCurrency('EUR')
-    setUrl('')
-    setWinesOfInterest('')
-    setSelectedRegionId(null)
-    fetchRegions()
-    setShowModal(true)
+    navigation.navigate('AddWishlistStep1')
   }
 
   const addItem = async () => {
