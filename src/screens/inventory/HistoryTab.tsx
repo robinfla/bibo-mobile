@@ -10,6 +10,7 @@ import {
 import { useNavigation } from '@react-navigation/native'
 import { colors } from '../../theme/colors'
 import { HistoryCard } from '../../components/HistoryCard'
+import { ScorePickerModal } from '../../components/ScorePickerModal'
 
 interface HistoryWine {
   id: string
@@ -27,6 +28,8 @@ export const HistoryTab: React.FC = () => {
   const [wines, setWines] = useState<HistoryWine[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  const [scoreModalVisible, setScoreModalVisible] = useState(false)
+  const [selectedWine, setSelectedWine] = useState<HistoryWine | null>(null)
 
   useEffect(() => {
     fetchHistory()
@@ -94,15 +97,28 @@ export const HistoryTab: React.FC = () => {
   }, [fetchHistory])
 
   const handleEditScore = (wine: HistoryWine) => {
-    // TODO: Open score picker modal
-    console.log('Edit score for wine:', wine.id, wine.name)
-    // navigation.navigate('ScorePicker', {
-    //   wineId: wine.id,
-    //   currentScore: wine.score,
-    //   onSave: (newScore) => {
-    //     // Update wine score
-    //   }
+    setSelectedWine(wine)
+    setScoreModalVisible(true)
+  }
+
+  const handleSaveScore = (newScore: number) => {
+    if (!selectedWine) return
+
+    // TODO: Save to API
+    // await apiFetch(`/api/history/${selectedWine.id}/score`, {
+    //   method: 'PUT',
+    //   body: JSON.stringify({ score: newScore }),
     // })
+
+    // Update local state
+    setWines((prevWines) =>
+      prevWines.map((w) =>
+        w.id === selectedWine.id ? { ...w, score: newScore } : w
+      )
+    )
+
+    setScoreModalVisible(false)
+    setSelectedWine(null)
   }
 
   const handleEditNotes = (wine: HistoryWine) => {
@@ -162,6 +178,20 @@ export const HistoryTab: React.FC = () => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       />
+
+      {/* Score Picker Modal */}
+      {selectedWine && (
+        <ScorePickerModal
+          visible={scoreModalVisible}
+          wineName={selectedWine.name}
+          currentScore={selectedWine.score}
+          onSave={handleSaveScore}
+          onClose={() => {
+            setScoreModalVisible(false)
+            setSelectedWine(null)
+          }}
+        />
+      )}
     </View>
   )
 }
