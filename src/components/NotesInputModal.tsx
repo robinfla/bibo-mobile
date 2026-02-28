@@ -52,15 +52,6 @@ export const NotesInputModal: React.FC<NotesInputModalProps> = ({
     onClose()
   }
 
-  const handlePromptTap = (prompt: string) => {
-    const currentText = notes.trim()
-    const newText = currentText
-      ? `${currentText}\n\n${prompt} `
-      : `${prompt} `
-    setNotes(newText)
-    setCharCount(newText.length)
-  }
-
   return (
     <Modal
       visible={visible}
@@ -113,14 +104,12 @@ export const NotesInputModal: React.FC<NotesInputModalProps> = ({
               <Text style={styles.promptsLabel}>Need inspiration?</Text>
               <View style={styles.promptsGrid}>
                 {TASTING_PROMPTS.map((prompt) => (
-                  <TouchableOpacity
+                  <View
                     key={prompt}
                     style={styles.promptChip}
-                    onPress={() => handlePromptTap(prompt)}
-                    activeOpacity={0.7}
                   >
                     <Text style={styles.promptChipText}>{prompt}</Text>
-                  </TouchableOpacity>
+                  </View>
                 ))}
               </View>
             </View>
