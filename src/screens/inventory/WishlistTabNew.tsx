@@ -18,18 +18,24 @@ import { EditWishlistModal } from '../../components/EditWishlistModal'
 type Priority = 'must_have' | 'nice_to_have' | 'someday'
 
 interface WishlistItem {
-  id: string
-  wine: {
-    name: string
-    vintage?: number | null
-    region?: string | null
-    producer?: string | null
-  }
-  priority: Priority
-  targetBudget?: number | null
-  whereToBuy?: string | null
+  id: number
+  itemType: string
+  name: string
+  wineId?: number | null
+  producerId?: number | null
+  regionId?: number | null
+  vintage?: number | null
   notes?: string | null
-  addedAt: string
+  winesOfInterest?: string | null
+  priceTarget?: string | null
+  priceCurrency?: string | null
+  url?: string | null
+  createdAt: string
+  updatedAt: string
+  wineName?: string | null
+  wineColor?: string | null
+  producerName?: string | null
+  regionName?: string | null
 }
 
 export const WishlistTabNew = () => {
@@ -47,54 +53,11 @@ export const WishlistTabNew = () => {
   const fetchWishlist = useCallback(async () => {
     try {
       setIsLoading(true)
-      // TODO: Replace with actual API call
-      // const data = await apiFetch<WishlistItem[]>('/api/wishlist')
-      
-      // Mock data for now
-      const mockData: WishlistItem[] = [
-        {
-          id: '1',
-          wine: {
-            name: 'Château Margaux',
-            vintage: 2015,
-            region: 'Bordeaux',
-            producer: 'Château Margaux',
-          },
-          priority: 'must_have',
-          targetBudget: 200,
-          notes: 'Special occasion wine — want for anniversary',
-          addedAt: new Date().toISOString(),
-        },
-        {
-          id: '2',
-          wine: {
-            name: 'Barolo Riserva',
-            vintage: 2013,
-            region: 'Piedmont',
-            producer: 'Giuseppe Mascarello',
-          },
-          priority: 'nice_to_have',
-          targetBudget: 120,
-          notes: 'Great reviews, want to try',
-          addedAt: new Date().toISOString(),
-        },
-        {
-          id: '3',
-          wine: {
-            name: 'Sassicaia',
-            vintage: 2016,
-            region: 'Tuscany',
-            producer: 'Tenuta San Guido',
-          },
-          priority: 'someday',
-          notes: 'Been wanting to try this for years',
-          addedAt: new Date().toISOString(),
-        },
-      ]
-      
-      setItems(mockData)
+      const data = await apiFetch<WishlistItem[]>('/api/wishlist')
+      setItems(data || [])
     } catch (error) {
       console.error('Failed to load wishlist:', error)
+      setItems([])
     } finally {
       setIsLoading(false)
     }
@@ -179,16 +142,16 @@ export const WishlistTabNew = () => {
     <View style={styles.container}>
       <FlatList
         data={items}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <WishlistCard
-            id={item.id}
-            wineName={item.wine.name}
-            vintage={item.wine.vintage}
-            region={item.wine.region}
-            priority={item.priority}
-            targetBudget={item.targetBudget}
-            notes={item.notes}
+            id={String(item.id)}
+            wineName={item.wineName || item.name}
+            vintage={item.vintage ?? null}
+            region={item.regionName ?? null}
+            priority="nice_to_have"
+            targetBudget={item.priceTarget ? parseFloat(item.priceTarget) : null}
+            notes={item.notes ?? null}
             onPress={() => handleCardPress(item)}
           />
         )}
@@ -220,11 +183,11 @@ export const WishlistTabNew = () => {
       {selectedItem && (
         <EditWishlistModal
           visible={editModalVisible}
-          wineName={selectedItem.wine.name}
-          vintage={selectedItem.wine.vintage ?? undefined}
-          region={selectedItem.wine.region ?? undefined}
-          currentPriority={selectedItem.priority}
-          currentBudget={selectedItem.targetBudget ?? undefined}
+          wineName={selectedItem.wineName || selectedItem.name}
+          vintage={selectedItem.vintage ?? undefined}
+          region={selectedItem.regionName ?? undefined}
+          currentPriority="nice_to_have"
+          currentBudget={selectedItem.priceTarget ? parseFloat(selectedItem.priceTarget) : undefined}
           currentNotes={selectedItem.notes ?? undefined}
           onSave={handleSaveEdit}
           onDelete={handleDelete}
