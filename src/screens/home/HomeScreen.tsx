@@ -133,8 +133,27 @@ export const HomeScreen = () => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.greeting}>Hello {userName} 👋</Text>
-          <Text style={styles.subtitle}>What's calling you tonight?</Text>
+          <View>
+            <Text style={styles.greeting}>Hello {userName} 👋</Text>
+            <Text style={styles.subtitle}>What's calling you tonight?</Text>
+          </View>
+          
+          <TouchableOpacity
+            style={styles.profileButton}
+            onPress={() => navigation.navigate('Profile' as never)}
+            activeOpacity={0.8}
+          >
+            <LinearGradient
+              colors={['#722F37', '#944654']}
+              style={styles.profileGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            >
+              <Text style={styles.profileInitials}>
+                {userName.substring(0, 2).toUpperCase()}
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
 
         {/* Cellar Stats Card */}
@@ -315,9 +334,34 @@ const styles = StyleSheet.create({
   
   // Header
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 24,
     paddingTop: 24,
     paddingBottom: 20,
+  },
+  profileButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  profileGradient: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInitials: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#fff',
   },
   greeting: {
     fontSize: 36,
