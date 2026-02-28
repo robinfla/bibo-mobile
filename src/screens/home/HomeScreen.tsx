@@ -43,35 +43,14 @@ export const HomeScreen = () => {
     try {
       setIsLoading(true)
       
-      // TODO: Replace with actual API calls
-      // const stats = await apiFetch('/api/stats/cellar')
-      // const wines = await apiFetch('/api/wines/ready')
-      
-      // Mock data for now
-      setBottleCount(882)
-      setReadyWines([
-        {
-          id: '1',
-          name: 'Château Margaux',
-          vintage: 2015,
-          region: 'Bordeaux',
-          maturityStatus: 'peak',
-        },
-        {
-          id: '2',
-          name: 'Barolo Riserva',
-          vintage: 2013,
-          region: 'Piedmont',
-          maturityStatus: 'approaching',
-        },
-        {
-          id: '3',
-          name: 'Brunello di Montalcino',
-          vintage: 2012,
-          region: 'Tuscany',
-          maturityStatus: 'peak',
-        },
+      // Fetch stats and ready wines
+      const [statsData, winesData] = await Promise.all([
+        apiFetch<any>('/api/reports/stats'),
+        apiFetch<{ wines: WineSuggestion[] }>('/api/wines/ready?limit=5'),
       ])
+      
+      setBottleCount(statsData.totals.bottles)
+      setReadyWines(winesData.wines)
     } catch (error) {
       console.error('Failed to load home data:', error)
     } finally {
