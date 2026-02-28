@@ -90,25 +90,11 @@ export const AnalyticsScreen = () => {
       }))
       setGrapes(topGrapes)
       
-      // Set top 3 regions
-      const regionFlags: Record<string, string> = {
-        'France': '🇫🇷',
-        'Italy': '🇮🇹',
-        'Spain': '🇪🇸',
-        'United States': '🇺🇸',
-        'Australia': '🇦🇺',
-        'Germany': '🇩🇪',
-        'Portugal': '🇵🇹',
-        'Argentina': '🇦🇷',
-        'Chile': '🇨🇱',
-        'South Africa': '🇿🇦',
-        'New Zealand': '🇳🇿',
-      }
-      
+      // Set top 3 regions (flag now comes from API)
       const topRegions = statsData.byRegion.slice(0, 3).map((item: any) => ({
         id: String(item.regionId),
         name: item.regionName,
-        flag: regionFlags[item.regionName] || '🌍',
+        flag: item.flag || '🌍',
         count: item.bottles,
         percentage: Math.round((item.bottles / statsData.totals.bottles) * 100),
       }))
