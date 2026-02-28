@@ -9,19 +9,26 @@ import {
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { colors } from '../../theme/colors'
+import { apiFetch } from '../../api/client'
 import { HistoryCard } from '../../components/HistoryCard'
 import { ScorePickerModal } from '../../components/ScorePickerModal'
 import { NotesInputModal } from '../../components/NotesInputModal'
 
 interface HistoryWine {
-  id: string
-  name: string
-  vintage?: number
-  region?: string
-  imageUrl?: string
-  consumedDate: Date
-  score?: number
-  tastingNotes?: string
+  id: number
+  lotId: number
+  eventType: string
+  quantityChange: number
+  eventDate: string
+  notes?: string | null
+  rating?: number | null
+  tastingNotes?: string | null
+  wineName: string
+  wineColor: string
+  producerName: string
+  vintage?: number | null
+  cellarName: string
+  pairing?: string | null
 }
 
 export const HistoryTab: React.FC = () => {
@@ -40,53 +47,11 @@ export const HistoryTab: React.FC = () => {
   const fetchHistory = useCallback(async () => {
     try {
       setIsLoading(true)
-      // TODO: Replace with actual API call
-      // const data = await apiFetch<HistoryWine[]>('/api/history')
-
-      // Mock data showing all 4 states
-      const mockData: HistoryWine[] = [
-        {
-          id: '1',
-          name: 'Château Margaux',
-          vintage: 2015,
-          region: 'Bordeaux',
-          consumedDate: new Date('2026-02-15'),
-          score: 94,
-          tastingNotes:
-            'Exceptional wine. Rich blackcurrant with elegant tannins. Perfect for the anniversary dinner. Would buy again.',
-        },
-        {
-          id: '2',
-          name: 'Barolo Riserva',
-          vintage: 2013,
-          region: 'Piedmont',
-          consumedDate: new Date('2026-02-10'),
-          // State 2: No score, no notes
-        },
-        {
-          id: '3',
-          name: 'Brunello di Montalcino',
-          vintage: 2012,
-          region: 'Tuscany',
-          consumedDate: new Date('2026-02-05'),
-          // State 3: Notes only, no score
-          tastingNotes:
-            'Shared with friends at dinner. Great complexity but a bit too tannic for my taste. Needed more time.',
-        },
-        {
-          id: '4',
-          name: 'Sassicaia',
-          vintage: 2016,
-          region: 'Tuscany',
-          consumedDate: new Date('2026-01-28'),
-          score: 91,
-          // State 4: Score only, no notes
-        },
-      ]
-
-      setWines(mockData)
+      const response = await apiFetch<{ events: HistoryWine[] }>('/api/inventory/events?eventType=consume')
+      setWines(response.events || [])
     } catch (error) {
       console.error('Failed to load history:', error)
+      setWines([])
     } finally {
       setIsLoading(false)
     }
@@ -170,16 +135,16 @@ export const HistoryTab: React.FC = () => {
     <View style={styles.container}>
       <FlatList
         data={wines}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <HistoryCard
-            wineName={item.name}
-            vintage={item.vintage}
-            region={item.region}
-            imageUrl={item.imageUrl}
-            consumedDate={item.consumedDate}
-            score={item.score}
-            tastingNotes={item.tastingNotes}
+            wineName={`${item.producerName} ${item.wineName}`}
+            vintage={item.vintage ?? undefined}
+            region={item.cellarName}
+            imageUrl={undefined}
+            consumedDate={new Date(item.eventDate)}
+            score={item.rating ?? undefined}
+            tastingNotes={item.tastingNotes ?? undefined}
             onEditScore={() => handleEditScore(item)}
             onEditNotes={() => handleEditNotes(item)}
           />
@@ -198,8 +163,8 @@ export const HistoryTab: React.FC = () => {
       {selectedWine && (
         <ScorePickerModal
           visible={scoreModalVisible}
-          wineName={selectedWine.name}
-          currentScore={selectedWine.score}
+          wineName={`${selectedWine.producerName} ${selectedWine.wineName}`}
+          currentScore={selectedWine.rating ?? undefined}
           onSave={handleSaveScore}
           onClose={() => {
             setScoreModalVisible(false)
@@ -212,8 +177,8 @@ export const HistoryTab: React.FC = () => {
       {selectedWine && (
         <NotesInputModal
           visible={notesModalVisible}
-          wineName={selectedWine.name}
-          currentNotes={selectedWine.tastingNotes}
+          wineName={`${selectedWine.producerName} ${selectedWine.wineName}`}
+          currentNotes={selectedWine.tastingNotes ?? undefined}
           onSave={handleSaveNotes}
           onClose={() => {
             setNotesModalVisible(false)
