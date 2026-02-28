@@ -136,11 +136,7 @@ export const HomeScreen = () => {
         </View>
 
         {/* Cellar Stats Card */}
-        <TouchableOpacity
-          style={styles.statsCardContainer}
-          onPress={() => navigation.navigate('Analytics')}
-          activeOpacity={0.9}
-        >
+        <View style={styles.statsCardContainer}>
           <LinearGradient
             colors={['#722F37', '#8b3a45']}
             start={{ x: 0, y: 0 }}
@@ -155,7 +151,7 @@ export const HomeScreen = () => {
             <Text style={styles.statsNumber}>{bottleCount}</Text>
             <Text style={styles.statsSubtitle}>bottles in your cellar</Text>
           </LinearGradient>
-        </TouchableOpacity>
+        </View>
 
         {/* Quick Actions */}
         <View style={styles.section}>
