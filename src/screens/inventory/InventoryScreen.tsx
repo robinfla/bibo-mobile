@@ -74,6 +74,16 @@ export const InventoryScreen = ({ route }: any) => {
     }
   }, [route?.params?.tab])
 
+  // Update filters when route params change
+  useEffect(() => {
+    if (route?.params?.filter) {
+      setFilters((prev) => ({
+        ...prev,
+        ...route.params.filter,
+      }))
+    }
+  }, [route?.params?.filter])
+
   // Fetch cards when search/filters change or tab changes
   useEffect(() => {
     if (activeTab === 'cellar') {
@@ -95,6 +105,9 @@ export const InventoryScreen = ({ route }: any) => {
       }
       if (filters.cellarId) {
         params.append('cellarId', String(filters.cellarId))
+      }
+      if (filters.maturity) {
+        params.append('maturity', filters.maturity)
       }
 
       const response = await apiFetch<WineCardsResponse>(`/api/inventory/cards?${params}`)

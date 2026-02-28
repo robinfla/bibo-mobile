@@ -218,7 +218,7 @@ export const HomeScreen = () => {
               <TouchableOpacity
                 onPress={() => navigation.navigate('InventoryTab' as never, {
                   screen: 'InventoryList',
-                  params: { tab: 'cellar' }
+                  params: { tab: 'cellar', filter: { maturity: 'ready' } }
                 } as never)}
               >
                 <Text style={styles.seeAllLink}>See all ›</Text>
