@@ -142,6 +142,7 @@ export const HistoryTab: React.FC = () => {
             vintage={item.vintage ?? undefined}
             region={item.cellarName}
             imageUrl={undefined}
+            wineColor={item.wineColor}
             consumedDate={new Date(item.eventDate)}
             score={item.rating ?? undefined}
             tastingNotes={item.tastingNotes ?? undefined}

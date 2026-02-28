@@ -14,6 +14,7 @@ interface HistoryCardProps {
   vintage?: number
   region?: string
   imageUrl?: string
+  wineColor?: string
   consumedDate: Date
   score?: number
   tastingNotes?: string
@@ -26,12 +27,70 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
   vintage,
   region,
   imageUrl,
+  wineColor,
   consumedDate,
   score,
   tastingNotes,
   onEditScore,
   onEditNotes,
 }) => {
+  // Get color-specific styling for wine type
+  const getWineColorStyle = () => {
+    switch (wineColor) {
+      case 'red':
+        return { 
+          backgroundColor: '#6B2D3E', 
+          iconColor: '#8b3a3a',
+          cardBg: '#fff',
+          borderColor: 'rgba(107, 45, 62, 0.15)',
+          shadowColor: '#6B2D3E',
+        }
+      case 'white':
+        return { 
+          backgroundColor: '#fef9e7', 
+          iconColor: '#d4af37',
+          cardBg: '#fffef9',
+          borderColor: 'rgba(212, 175, 55, 0.15)',
+          shadowColor: '#d4af37',
+        }
+      case 'rose':
+        return { 
+          backgroundColor: '#ffe0e6', 
+          iconColor: '#ff69b4',
+          cardBg: '#fff9fa',
+          borderColor: 'rgba(255, 105, 180, 0.15)',
+          shadowColor: '#ff69b4',
+        }
+      case 'sparkling':
+        return { 
+          backgroundColor: '#fffacd', 
+          iconColor: '#ffd700',
+          cardBg: '#fffef8',
+          borderColor: 'rgba(255, 215, 0, 0.15)',
+          shadowColor: '#ffd700',
+        }
+      case 'dessert':
+      case 'fortified':
+        return { 
+          backgroundColor: '#3d2314', 
+          iconColor: '#8b4513',
+          cardBg: '#faf7f5',
+          borderColor: 'rgba(139, 69, 19, 0.15)',
+          shadowColor: '#8b4513',
+        }
+      default:
+        return { 
+          backgroundColor: '#e0e0e0', 
+          iconColor: '#999',
+          cardBg: '#fff',
+          borderColor: 'rgba(228, 213, 203, 0.2)',
+          shadowColor: '#722F37',
+        }
+    }
+  }
+
+  const colorStyle = getWineColorStyle()
+
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {
       month: 'short',
@@ -188,7 +247,14 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
   }
 
   return (
-    <View style={styles.card}>
+    <View style={[
+      styles.card,
+      { 
+        backgroundColor: colorStyle.cardBg,
+        borderColor: colorStyle.borderColor,
+        shadowColor: colorStyle.shadowColor,
+      }
+    ]}>
       {/* Wine Identity Section */}
       <View style={styles.wineHeader}>
         {/* Wine Image */}
@@ -196,16 +262,13 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
           {imageUrl ? (
             <Image source={{ uri: imageUrl }} style={styles.image} />
           ) : (
-            <LinearGradient
-              colors={['#722F37', '#944654']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={[styles.image, styles.placeholderImage]}
-            >
-              <View style={{ opacity: 0.6 }}>
-                <Icon name="bottle-wine" size={32} color="#fff" />
-              </View>
-            </LinearGradient>
+            <View style={[
+              styles.image, 
+              styles.placeholderImage,
+              { backgroundColor: colorStyle.backgroundColor }
+            ]}>
+              <Icon name="bottle-wine" size={32} color={colorStyle.iconColor} />
+            </View>
           )}
         </View>
 

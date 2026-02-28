@@ -102,36 +102,83 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
     )
   }
 
-  // Get color-specific placeholder styling
-  const getPlaceholderStyle = () => {
+  // Get color-specific styling for wine type
+  const getWineColorStyle = () => {
     switch (card.wineColor) {
       case 'red':
-        return { backgroundColor: '#6B2D3E', iconColor: '#8b3a3a' }
+        return { 
+          backgroundColor: '#6B2D3E', 
+          iconColor: '#8b3a3a',
+          cardBg: '#fff',
+          borderColor: 'rgba(107, 45, 62, 0.15)',
+          shadowColor: '#6B2D3E',
+        }
       case 'white':
-        return { backgroundColor: '#fef9e7', iconColor: '#d4af37' }
+        return { 
+          backgroundColor: '#fef9e7', 
+          iconColor: '#d4af37',
+          cardBg: '#fffef9',
+          borderColor: 'rgba(212, 175, 55, 0.15)',
+          shadowColor: '#d4af37',
+        }
       case 'rose':
-        return { backgroundColor: '#ffe0e6', iconColor: '#ff69b4' }
+        return { 
+          backgroundColor: '#ffe0e6', 
+          iconColor: '#ff69b4',
+          cardBg: '#fff9fa',
+          borderColor: 'rgba(255, 105, 180, 0.15)',
+          shadowColor: '#ff69b4',
+        }
       case 'sparkling':
-        return { backgroundColor: '#fffacd', iconColor: '#ffd700' }
+        return { 
+          backgroundColor: '#fffacd', 
+          iconColor: '#ffd700',
+          cardBg: '#fffef8',
+          borderColor: 'rgba(255, 215, 0, 0.15)',
+          shadowColor: '#ffd700',
+        }
       case 'dessert':
       case 'fortified':
-        return { backgroundColor: '#3d2314', iconColor: '#8b4513' }
+        return { 
+          backgroundColor: '#3d2314', 
+          iconColor: '#8b4513',
+          cardBg: '#faf7f5',
+          borderColor: 'rgba(139, 69, 19, 0.15)',
+          shadowColor: '#8b4513',
+        }
       default:
-        return { backgroundColor: colors.muted[100], iconColor: colors.muted[300] }
+        return { 
+          backgroundColor: colors.muted[100], 
+          iconColor: colors.muted[300],
+          cardBg: '#fff',
+          borderColor: 'rgba(228, 213, 203, 0.2)',
+          shadowColor: '#722F37',
+        }
     }
   }
 
-  const placeholderStyle = getPlaceholderStyle()
+  const colorStyle = getWineColorStyle()
 
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity 
+      style={[
+        styles.card, 
+        { 
+          backgroundColor: colorStyle.cardBg,
+          borderColor: colorStyle.borderColor,
+          shadowColor: colorStyle.shadowColor,
+        }
+      ]} 
+      onPress={onPress} 
+      activeOpacity={0.7}
+    >
       {/* Wine Image */}
       <View style={styles.imageContainer}>
         {card.bottleImageUrl ? (
           <Image source={{ uri: card.bottleImageUrl }} style={styles.image} />
         ) : (
-          <View style={[styles.image, styles.placeholderImage, { backgroundColor: placeholderStyle.backgroundColor }]}>
-            <Icon name="bottle-wine" size={36} color={placeholderStyle.iconColor} />
+          <View style={[styles.image, styles.placeholderImage, { backgroundColor: colorStyle.backgroundColor }]}>
+            <Icon name="bottle-wine" size={36} color={colorStyle.iconColor} />
           </View>
         )}
       </View>
