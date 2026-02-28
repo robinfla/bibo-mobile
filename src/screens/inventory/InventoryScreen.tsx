@@ -67,22 +67,24 @@ export const InventoryScreen = ({ route }: any) => {
     return () => clearTimeout(timer)
   }, [searchQuery])
 
-  // Update active tab when route params change
+  // Update active tab and filters when route params change
   useEffect(() => {
     if (route?.params?.tab) {
       setActiveTab(route.params.tab)
     }
-  }, [route?.params?.tab])
-
-  // Update filters when route params change
-  useEffect(() => {
+    
     if (route?.params?.filter) {
-      setFilters((prev) => ({
-        ...prev,
-        ...route.params.filter,
-      }))
+      console.log('📍 Applying route filter:', route.params.filter)
+      setFilters((prev) => {
+        const newFilters = {
+          ...prev,
+          ...route.params.filter,
+        }
+        console.log('📍 New filters state:', newFilters)
+        return newFilters
+      })
     }
-  }, [route?.params?.filter])
+  }, [route?.params])
 
   // Fetch cards when search/filters change or tab changes
   useEffect(() => {
@@ -110,7 +112,9 @@ export const InventoryScreen = ({ route }: any) => {
         params.append('maturity', filters.maturity)
       }
 
+      console.log('📡 Fetching cards with params:', params.toString())
       const response = await apiFetch<WineCardsResponse>(`/api/inventory/cards?${params}`)
+      console.log('📦 Received cards:', response.cards.length, 'total:', response.total)
       setCards(response.cards)
     } catch (err: any) {
       setError(err.message || 'Failed to load inventory')
@@ -191,6 +195,22 @@ export const InventoryScreen = ({ route }: any) => {
           {hasActiveFilters && <View style={styles.filterBadge} />}
         </TouchableOpacity>
       </View>
+
+      {/* Active Filter Indicator */}
+      {filters.maturity && (
+        <View style={styles.filterChipContainer}>
+          <View style={styles.filterChip}>
+            <Icon name="filter-check" size={16} color="#722F37" />
+            <Text style={styles.filterChipText}>Ready to drink</Text>
+            <TouchableOpacity
+              onPress={() => setFilters((prev) => ({ ...prev, maturity: undefined }))}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Icon name="close-circle" size={18} color="#722F37" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
 
       {/* Tabs */}
       <View style={styles.tabs}>
@@ -478,5 +498,26 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: '300',
     color: '#fff',
+  },
+  filterChipContainer: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  filterChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#722F37',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    alignSelf: 'flex-start',
+    gap: 6,
+  },
+  filterChipText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#722F37',
   },
 })
