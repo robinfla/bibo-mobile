@@ -19,8 +19,12 @@ const MATURITY_BADGES = {
 }
 
 export const WineCard: React.FC<WineCardProps> = ({ card, onPress }) => {
-  const badge = MATURITY_BADGES[card.maturity.status]
+  // Use first vintage or default values
+  const firstVintage = card.vintages?.[0]
+  const maturityStatus = firstVintage?.maturityStatus || 'unknown'
+  const badge = MATURITY_BADGES[maturityStatus]
   const hasBottleImage = !!card.bottleImageUrl
+  const vintage = firstVintage?.vintage
 
   return (
     <TouchableOpacity
@@ -36,7 +40,7 @@ export const WineCard: React.FC<WineCardProps> = ({ card, onPress }) => {
         {/* Vintage Badge */}
         <View style={styles.vintageBadge}>
           <Text style={styles.vintageBadgeText}>
-            {card.vintage ?? 'NV'} {card.totalQuantity > 1 ? `(x${card.totalQuantity})` : ''}
+            {vintage ?? 'NV'} {card.totalBottles > 1 ? `(x${card.totalBottles})` : ''}
           </Text>
         </View>
 
@@ -72,33 +76,7 @@ export const WineCard: React.FC<WineCardProps> = ({ card, onPress }) => {
         </Text>
       </View>
 
-      {/* Value Row */}
-      {(card.avgPurchasePrice != null || card.valueChangePercent != null) && (
-        <View style={styles.valueRow}>
-          {card.avgPurchasePrice != null && (
-            <Text style={styles.purchasePrice}>
-              Purchase: {card.purchaseCurrency || '€'}
-              {card.avgPurchasePrice.toFixed(2)}
-            </Text>
-          )}
-          {card.valueChangePercent != null && (
-            <View style={styles.valueChange}>
-              <Text
-                style={[
-                  styles.valueChangeText,
-                  { color: card.valueChangePercent >= 0 ? '#16a34a' : '#dc2626' },
-                ]}
-              >
-                {card.valueChangePercent >= 0 ? '+' : ''}
-                {card.valueChangePercent}%
-              </Text>
-              <Text style={styles.valueChangeIcon}>
-                {card.valueChangePercent >= 0 ? '📈' : '📉'}
-              </Text>
-            </View>
-          )}
-        </View>
-      )}
+
     </TouchableOpacity>
   )
 }
