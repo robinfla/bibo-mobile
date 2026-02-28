@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import { colors } from '../../theme/colors'
 import { HistoryCard } from '../../components/HistoryCard'
 import { ScorePickerModal } from '../../components/ScorePickerModal'
+import { NotesInputModal } from '../../components/NotesInputModal'
 
 interface HistoryWine {
   id: string
@@ -29,6 +30,7 @@ export const HistoryTab: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [scoreModalVisible, setScoreModalVisible] = useState(false)
+  const [notesModalVisible, setNotesModalVisible] = useState(false)
   const [selectedWine, setSelectedWine] = useState<HistoryWine | null>(null)
 
   useEffect(() => {
@@ -122,15 +124,28 @@ export const HistoryTab: React.FC = () => {
   }
 
   const handleEditNotes = (wine: HistoryWine) => {
-    // TODO: Open notes input modal
-    console.log('Edit notes for wine:', wine.id, wine.name)
-    // navigation.navigate('NotesInput', {
-    //   wineId: wine.id,
-    //   currentNotes: wine.tastingNotes,
-    //   onSave: (newNotes) => {
-    //     // Update wine notes
-    //   }
+    setSelectedWine(wine)
+    setNotesModalVisible(true)
+  }
+
+  const handleSaveNotes = (newNotes: string) => {
+    if (!selectedWine) return
+
+    // TODO: Save to API
+    // await apiFetch(`/api/history/${selectedWine.id}/notes`, {
+    //   method: 'PUT',
+    //   body: JSON.stringify({ notes: newNotes }),
     // })
+
+    // Update local state
+    setWines((prevWines) =>
+      prevWines.map((w) =>
+        w.id === selectedWine.id ? { ...w, tastingNotes: newNotes } : w
+      )
+    )
+
+    setNotesModalVisible(false)
+    setSelectedWine(null)
   }
 
   const renderEmptyState = () => (
@@ -188,6 +203,20 @@ export const HistoryTab: React.FC = () => {
           onSave={handleSaveScore}
           onClose={() => {
             setScoreModalVisible(false)
+            setSelectedWine(null)
+          }}
+        />
+      )}
+
+      {/* Notes Input Modal */}
+      {selectedWine && (
+        <NotesInputModal
+          visible={notesModalVisible}
+          wineName={selectedWine.name}
+          currentNotes={selectedWine.tastingNotes}
+          onSave={handleSaveNotes}
+          onClose={() => {
+            setNotesModalVisible(false)
             setSelectedWine(null)
           }}
         />
