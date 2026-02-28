@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WishlistCard } from '../../components/WishlistCard'
+import { EditWishlistModal } from '../../components/EditWishlistModal'
 
 type Priority = 'must_have' | 'nice_to_have' | 'someday'
 
@@ -36,6 +37,8 @@ export const WishlistTabNew = () => {
   const [items, setItems] = useState<WishlistItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  const [editModalVisible, setEditModalVisible] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<WishlistItem | null>(null)
 
   useEffect(() => {
     fetchWishlist()
@@ -104,8 +107,50 @@ export const WishlistTabNew = () => {
   }, [fetchWishlist])
 
   const handleCardPress = (item: WishlistItem) => {
-    // TODO: Navigate to wishlist detail screen
-    console.log('Pressed wishlist item:', item.id)
+    setSelectedItem(item)
+    setEditModalVisible(true)
+  }
+
+  const handleSaveEdit = (data: { priority: Priority; budget?: number; notes?: string }) => {
+    if (!selectedItem) return
+
+    // TODO: Save to API
+    // await apiFetch(`/api/wishlist/${selectedItem.id}`, {
+    //   method: 'PUT',
+    //   body: JSON.stringify(data),
+    // })
+
+    // Update local state
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item.id === selectedItem.id
+          ? {
+              ...item,
+              priority: data.priority,
+              targetBudget: data.budget,
+              notes: data.notes,
+            }
+          : item
+      )
+    )
+
+    setEditModalVisible(false)
+    setSelectedItem(null)
+  }
+
+  const handleDelete = () => {
+    if (!selectedItem) return
+
+    // TODO: Delete from API
+    // await apiFetch(`/api/wishlist/${selectedItem.id}`, {
+    //   method: 'DELETE',
+    // })
+
+    // Update local state
+    setItems((prevItems) => prevItems.filter((item) => item.id !== selectedItem.id))
+
+    setEditModalVisible(false)
+    setSelectedItem(null)
   }
 
   const handleAddPress = () => {
@@ -170,6 +215,25 @@ export const WishlistTabNew = () => {
           <Text style={styles.fabIcon}>+</Text>
         </LinearGradient>
       </TouchableOpacity>
+
+      {/* Edit Modal */}
+      {selectedItem && (
+        <EditWishlistModal
+          visible={editModalVisible}
+          wineName={selectedItem.wine.name}
+          vintage={selectedItem.wine.vintage ?? undefined}
+          region={selectedItem.wine.region ?? undefined}
+          currentPriority={selectedItem.priority}
+          currentBudget={selectedItem.targetBudget ?? undefined}
+          currentNotes={selectedItem.notes ?? undefined}
+          onSave={handleSaveEdit}
+          onDelete={handleDelete}
+          onClose={() => {
+            setEditModalVisible(false)
+            setSelectedItem(null)
+          }}
+        />
+      )}
     </View>
   )
 }
