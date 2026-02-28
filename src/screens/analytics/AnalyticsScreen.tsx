@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import Svg, { Circle, G } from 'react-native-svg'
+import { apiFetch } from '../../api/client'
 
 interface ColorData {
   red: number
@@ -57,13 +58,62 @@ export const AnalyticsScreen = () => {
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true)
-      // TODO: Replace with actual API calls
-      // const statsData = await apiFetch('/api/analytics/stats')
-      // const colorsData = await apiFetch('/api/analytics/colors')
-      // const grapesData = await apiFetch('/api/analytics/grapes?limit=3')
-      // const regionsData = await apiFetch('/api/analytics/regions?limit=3')
       
-      // Mock data is already set
+      const statsData = await apiFetch<any>('/api/reports/stats')
+      
+      // Set stats
+      setStats({
+        bottles: statsData.totals.bottles,
+        lots: statsData.totals.lots,
+        ready: statsData.readyToDrink,
+      })
+      
+      // Set colors
+      const colorMap: Record<string, number> = {}
+      statsData.byColor.forEach((item: any) => {
+        if (item.color === 'red') colorMap.red = item.bottles
+        if (item.color === 'white') colorMap.white = item.bottles
+        if (item.color === 'rose') colorMap.rose = item.bottles
+      })
+      setColors({
+        red: colorMap.red || 0,
+        white: colorMap.white || 0,
+        rose: colorMap.rose || 0,
+      })
+      
+      // Set top 3 grapes
+      const topGrapes = statsData.byGrape.slice(0, 3).map((item: any) => ({
+        id: String(item.grapeId),
+        name: item.grapeName,
+        count: item.bottles,
+        percentage: Math.round((item.bottles / statsData.totals.bottles) * 100),
+      }))
+      setGrapes(topGrapes)
+      
+      // Set top 3 regions
+      const regionFlags: Record<string, string> = {
+        'France': '🇫🇷',
+        'Italy': '🇮🇹',
+        'Spain': '🇪🇸',
+        'United States': '🇺🇸',
+        'Australia': '🇦🇺',
+        'Germany': '🇩🇪',
+        'Portugal': '🇵🇹',
+        'Argentina': '🇦🇷',
+        'Chile': '🇨🇱',
+        'South Africa': '🇿🇦',
+        'New Zealand': '🇳🇿',
+      }
+      
+      const topRegions = statsData.byRegion.slice(0, 3).map((item: any) => ({
+        id: String(item.regionId),
+        name: item.regionName,
+        flag: regionFlags[item.regionName] || '🌍',
+        count: item.bottles,
+        percentage: Math.round((item.bottles / statsData.totals.bottles) * 100),
+      }))
+      setRegions(topRegions)
+      
     } catch (error) {
       console.error('Failed to load analytics:', error)
     } finally {

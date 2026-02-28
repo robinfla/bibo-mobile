@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { apiFetch } from '../../api/client'
 
 interface AnalyticsItem {
   id: string
@@ -38,29 +39,8 @@ export const AnalyticsDetailScreen = () => {
   const fetchData = useCallback(async () => {
     setIsLoading(true)
     try {
-      // TODO: Replace with actual API call
-      // const data = await apiFetch(`/api/analytics/${type}`)
-      
-      // Mock data
-      if (type === 'grapes') {
-        setItems([
-          { id: 'cabernet-sauvignon', name: 'Cabernet Sauvignon', count: 156, percentage: 18 },
-          { id: 'chardonnay', name: 'Chardonnay', count: 142, percentage: 16 },
-          { id: 'pinot-noir', name: 'Pinot Noir', count: 98, percentage: 11 },
-          { id: 'merlot', name: 'Merlot', count: 87, percentage: 10 },
-          { id: 'syrah', name: 'Syrah', count: 76, percentage: 9 },
-          { id: 'sauvignon-blanc', name: 'Sauvignon Blanc', count: 65, percentage: 7 },
-          { id: 'riesling', name: 'Riesling', count: 54, percentage: 6 },
-        ])
-      } else if (type === 'regions') {
-        setItems([
-          { id: 'france', name: 'France', icon: '🇫🇷', count: 345, percentage: 39 },
-          { id: 'italy', name: 'Italy', icon: '🇮🇹', count: 289, percentage: 33 },
-          { id: 'spain', name: 'Spain', icon: '🇪🇸', count: 127, percentage: 14 },
-          { id: 'usa', name: 'United States', icon: '🇺🇸', count: 89, percentage: 10 },
-          { id: 'australia', name: 'Australia', icon: '🇦🇺', count: 32, percentage: 4 },
-        ])
-      }
+      const data = await apiFetch<{ items: AnalyticsItem[]; total: number }>(`/api/analytics/${type}`)
+      setItems(data.items)
     } catch (error) {
       console.error('Failed to load data:', error)
     } finally {
