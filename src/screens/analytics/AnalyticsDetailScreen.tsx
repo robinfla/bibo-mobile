@@ -82,6 +82,7 @@ export const AnalyticsDetailScreen = () => {
     navigation.navigate('InventoryTab' as never, {
       screen: 'InventoryList',
       params: {
+        tab: 'cellar',
         filter: { [filterKey]: item.id },
         title: item.name,
       }

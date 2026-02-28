@@ -180,7 +180,10 @@ export const HomeScreen = () => {
           {/* Open a Bottle */}
           <TouchableOpacity
             style={styles.actionButton}
-            onPress={() => navigation.navigate('InventoryTab' as never)}
+            onPress={() => navigation.navigate('InventoryTab' as never, {
+              screen: 'InventoryList',
+              params: { tab: 'cellar' }
+            } as never)}
             activeOpacity={0.7}
           >
             <View style={styles.actionIcon}>
@@ -216,7 +219,10 @@ export const HomeScreen = () => {
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Ready Tonight</Text>
               <TouchableOpacity
-                onPress={() => navigation.navigate('InventoryTab' as never)}
+                onPress={() => navigation.navigate('InventoryTab' as never, {
+                  screen: 'InventoryList',
+                  params: { tab: 'cellar' }
+                } as never)}
               >
                 <Text style={styles.seeAllLink}>See all ›</Text>
               </TouchableOpacity>

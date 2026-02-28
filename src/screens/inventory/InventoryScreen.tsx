@@ -25,11 +25,11 @@ import type { WineCard, WineCardsResponse } from '../../types/api'
 
 type InventoryTab = 'cellar' | 'wishlist' | 'history'
 
-export const InventoryScreen = () => {
+export const InventoryScreen = ({ route }: any) => {
   const navigation = useNavigation<any>()
 
   // UI state
-  const [activeTab, setActiveTab] = useState<InventoryTab>('cellar')
+  const [activeTab, setActiveTab] = useState<InventoryTab>(route?.params?.tab || 'cellar')
   const [showFilterModal, setShowFilterModal] = useState(false)
 
   // Data state
@@ -66,6 +66,13 @@ export const InventoryScreen = () => {
     }, 300)
     return () => clearTimeout(timer)
   }, [searchQuery])
+
+  // Update active tab when route params change
+  useEffect(() => {
+    if (route?.params?.tab) {
+      setActiveTab(route.params.tab)
+    }
+  }, [route?.params?.tab])
 
   // Fetch cards when search/filters change or tab changes
   useEffect(() => {

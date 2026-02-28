@@ -85,21 +85,21 @@ export const AnalyticsScreen = () => {
     // Navigate to the Inventory tab, then to the InventoryList screen with filter
     navigation.navigate('InventoryTab' as never, {
       screen: 'InventoryList',
-      params: { filter: { color } }
+      params: { tab: 'cellar', filter: { color } }
     } as never)
   }
 
   const handleGrapePress = (grapeId: string) => {
     navigation.navigate('InventoryTab' as never, {
       screen: 'InventoryList',
-      params: { filter: { grape: grapeId } }
+      params: { tab: 'cellar', filter: { grape: grapeId } }
     } as never)
   }
 
   const handleRegionPress = (regionId: string) => {
     navigation.navigate('InventoryTab' as never, {
       screen: 'InventoryList',
-      params: { filter: { region: regionId } }
+      params: { tab: 'cellar', filter: { region: regionId } }
     } as never)
   }
 
