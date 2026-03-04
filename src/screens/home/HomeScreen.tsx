@@ -15,7 +15,6 @@ import { useAuth } from '../../auth/AuthContext'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
-import PairingChatModal from './PairingChatModal'
 import { ConsumeWineModal } from '../../components/ConsumeWineModal'
 
 interface WineSuggestion {
@@ -34,7 +33,6 @@ export const HomeScreen = () => {
   const [readyWines, setReadyWines] = useState<WineSuggestion[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
-  const [showPairingModal, setShowPairingModal] = useState(false)
   const [showConsumeModal, setShowConsumeModal] = useState(false)
 
   const userName = user?.name ?? user?.email?.split('@')[0] ?? 'Robin'
@@ -192,7 +190,7 @@ export const HomeScreen = () => {
           {/* Ask the Sommelier */}
           <TouchableOpacity
             style={styles.actionButton}
-            onPress={() => setShowPairingModal(true)}
+            onPress={() => navigation.navigate('Sommelier' as never)}
             activeOpacity={0.7}
           >
             <View style={styles.actionIcon}>
@@ -272,11 +270,6 @@ export const HomeScreen = () => {
       </ScrollView>
 
       {/* Modals */}
-      <PairingChatModal
-        visible={showPairingModal}
-        onClose={() => setShowPairingModal(false)}
-      />
-
       <ConsumeWineModal
         visible={showConsumeModal}
         onClose={() => setShowConsumeModal(false)}

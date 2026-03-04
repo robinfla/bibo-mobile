@@ -27,6 +27,7 @@ import { CreateRackScreen } from '../screens/cellars/CreateRackScreen'
 import { RackViewScreen } from '../screens/cellars/RackViewScreen'
 import { RoomSetupScreen } from '../screens/cellars/RoomSetupScreen'
 import { FridgeSetupScreen } from '../screens/cellars/FridgeSetupScreen'
+import { SommelierScreen } from '../screens/sommelier/SommelierScreen'
 import type { InventoryLot } from '../types/api'
 
 type InventoryStackParamList = {
@@ -158,6 +159,11 @@ const HomeStackScreen = () => (
     <HomeStack.Screen
       name="AddWineStep2"
       component={AddWineStep2}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="Sommelier"
+      component={SommelierScreen}
       options={{ headerShown: false }}
     />
   </HomeStack.Navigator>
