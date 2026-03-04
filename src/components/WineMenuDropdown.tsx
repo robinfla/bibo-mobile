@@ -13,12 +13,14 @@ import { colors } from '../theme/colors'
 
 interface WineMenuDropdownProps {
   onEditDetails: () => void
+  onLocateInCellar: () => void
   onShare: () => void
   onRemove: () => void
 }
 
 export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
   onEditDetails,
+  onLocateInCellar,
   onShare,
   onRemove,
 }) => {
@@ -77,6 +79,17 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
                 >
                   <Icon name="pencil" size={20} color="#722F37" />
                   <Text style={styles.menuItemText}>Edit Details</Text>
+                </TouchableOpacity>
+
+                <View style={styles.menuDivider} />
+
+                <TouchableOpacity
+                  style={[styles.menuItem, styles.menuItemHighlight]}
+                  onPress={() => handleMenuPress(onLocateInCellar)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.locateIcon}>📍</Text>
+                  <Text style={styles.menuItemText}>Locate in Cellar</Text>
                 </TouchableOpacity>
 
                 <View style={styles.menuDivider} />
@@ -153,5 +166,13 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.muted[100],
     marginHorizontal: 12,
+  },
+  menuItemHighlight: {
+    backgroundColor: 'rgba(254, 249, 245, 0.5)',
+  },
+  locateIcon: {
+    fontSize: 20,
+    width: 20,
+    textAlign: 'center',
   },
 })

@@ -119,6 +119,30 @@ export const WineDetailScreenV3 = () => {
     Alert.alert('Coming Soon', 'Wine editor will be implemented.')
   }
 
+  const handleLocateInCellar = () => {
+    // Navigate to Cellars screen with wine highlighting
+    if (!wine || !vintages || vintages.length === 0) {
+      Alert.alert('Not Located', "This wine hasn't been assigned a cellar location yet.")
+      return
+    }
+
+    // Get cellarId from first vintage's first item (lot)
+    const cellarId = vintages[0]?.items?.[0]?.cellar?.id
+    if (!cellarId) {
+      Alert.alert('Not Located', "This wine hasn't been assigned a cellar location yet.")
+      return
+    }
+    
+    // @ts-ignore - navigation typing
+    navigation.navigate('CellarsTab', {
+      screen: 'CellarGrid',
+      params: {
+        cellarId,
+        highlightWineId: wineId,
+      },
+    })
+  }
+
   const handleShare = async () => {
     try {
       await Share.share({
@@ -230,6 +254,7 @@ export const WineDetailScreenV3 = () => {
           </Text>
           <WineMenuDropdown
             onEditDetails={handleEditDetails}
+            onLocateInCellar={handleLocateInCellar}
             onShare={handleShare}
             onRemove={handleRemove}
           />

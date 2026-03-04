@@ -20,6 +20,7 @@ import { AddWishlistStep2 } from '../screens/wishlist/AddWishlistStep2'
 import { AddWineStep1 } from '../screens/wine/AddWineStep1'
 import { AddWineStep2 } from '../screens/wine/AddWineStep2'
 import { CellarsScreen } from '../screens/cellars/CellarsScreen'
+import { CellarGridView } from '../screens/cellars/CellarGridView'
 import { SpacesListScreen } from '../screens/cellars/SpacesListScreen'
 import { CreateSpaceScreen } from '../screens/cellars/CreateSpaceScreen'
 import { SpaceDetailScreen } from '../screens/cellars/SpaceDetailScreen'
@@ -97,6 +98,7 @@ const AnalyticsStack = createNativeStackNavigator()
 const CellarsStackScreen = () => (
   <CellarsStack.Navigator screenOptions={{ headerShown: false }}>
     <CellarsStack.Screen name="CellarsList" component={CellarsScreen} />
+    <CellarsStack.Screen name="CellarGrid" component={CellarGridView} />
     <CellarsStack.Screen name="SpacesList" component={SpacesListScreen} />
     <CellarsStack.Screen name="CreateSpace" component={CreateSpaceScreen} />
     <CellarsStack.Screen name="RoomSetup" component={RoomSetupScreen} />

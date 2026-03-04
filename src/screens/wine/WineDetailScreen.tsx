@@ -184,6 +184,10 @@ export const WineDetailScreen = () => {
     Alert.alert('Coming Soon', 'Wine editor will be implemented.')
   }
 
+  const handleLocateInCellar = () => {
+    Alert.alert('Not Available', 'This feature is only available in the new wine detail view.')
+  }
+
   const handleShare = async () => {
     try {
       await Share.share({
@@ -295,6 +299,7 @@ export const WineDetailScreen = () => {
         </Text>
         <WineMenuDropdown
           onEditDetails={handleEditDetails}
+          onLocateInCellar={handleLocateInCellar}
           onShare={handleShare}
           onRemove={handleRemove}
         />
