@@ -135,7 +135,7 @@ export const WineDetailScreenV3 = () => {
     
     // @ts-ignore - navigation typing
     navigation.navigate('CellarsTab', {
-      screen: 'CellarGrid',
+      screen: 'CellarLocate',
       params: {
         cellarId,
         highlightWineId: wineId,
