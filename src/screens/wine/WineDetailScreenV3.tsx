@@ -121,13 +121,13 @@ export const WineDetailScreenV3 = () => {
 
   const handleLocateInCellar = () => {
     // Navigate to Cellars screen with wine highlighting
-    if (!wine || !vintages || vintages.length === 0) {
+    if (!wine?.vintages || wine.vintages.length === 0) {
       Alert.alert('Not Located', "This wine hasn't been assigned a cellar location yet.")
       return
     }
 
-    // Get cellarId from first vintage's first item (lot)
-    const cellarId = vintages[0]?.items?.[0]?.cellar?.id
+    // Get cellarId from first vintage (use original wine.vintages, not grouped summary)
+    const cellarId = wine.vintages[0]?.cellar?.id
     if (!cellarId) {
       Alert.alert('Not Located', "This wine hasn't been assigned a cellar location yet.")
       return
