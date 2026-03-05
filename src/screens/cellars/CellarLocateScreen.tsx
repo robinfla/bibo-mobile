@@ -24,6 +24,7 @@ interface Bottle {
 interface LocateResponse {
   cellarId: number
   cellarName: string
+  rackId: number
   rackName: string
   position: {
     row: number
@@ -230,7 +231,10 @@ export const CellarLocateScreen = () => {
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            // @ts-ignore
+            navigation.navigate('RackView', { rackId: data.rackId })
+          }}
           activeOpacity={0.7}
         >
           <Icon name="chevron-left" size={24} color="#666" />
@@ -292,21 +296,6 @@ export const CellarLocateScreen = () => {
             </Text>
           </LinearGradient>
         </View>
-
-        {/* View Full Button */}
-        <TouchableOpacity
-          style={styles.viewFullButton}
-          onPress={() => {
-            // @ts-ignore
-            navigation.navigate('CellarGrid', {
-              cellarId,
-              highlightWineId,
-            })
-          }}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.viewFullText}>View full rack (4 bottles) →</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   )
@@ -488,23 +477,6 @@ const styles = StyleSheet.create({
   positionText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#722F37',
-  },
-  viewFullButton: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-    marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  viewFullText: {
-    fontSize: 15,
-    fontWeight: '600',
     color: '#722F37',
   },
 })
