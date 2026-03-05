@@ -24,6 +24,8 @@ interface Bottle {
 interface LocateResponse {
   cellarId: number
   cellarName: string
+  spaceId: number
+  spaceName: string
   rackId: number
   rackName: string
   position: {
@@ -233,7 +235,10 @@ export const CellarLocateScreen = () => {
           style={styles.backButton}
           onPress={() => {
             // @ts-ignore
-            navigation.navigate('RackView', { rackId: data.rackId })
+            navigation.navigate('RackView', { 
+              rackId: data.rackId,
+              spaceId: data.spaceId,
+            })
           }}
           activeOpacity={0.7}
         >
