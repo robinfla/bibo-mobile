@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Modal,
   View,
@@ -8,10 +8,16 @@ import {
   Alert,
   SafeAreaView,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { apiFetch } from '../api/client'
+
+interface Cellar {
+  id: number
+  name: string
+}
 
 interface QuickConsumeModalProps {
   visible: boolean
@@ -23,6 +29,7 @@ interface QuickConsumeModalProps {
   region: string
   stock: number
   wineColor: 'red' | 'white' | 'rose' | 'sparkling' | 'dessert' | 'fortified'
+  cellarId: number
 }
 
 const getWineColor = (color: string): string => {
@@ -47,9 +54,31 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
   region,
   stock,
   wineColor,
+  cellarId,
 }) => {
   const [quantity, setQuantity] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [cellars, setCellars] = useState<Cellar[]>([])
+  const [isLoadingCellars, setIsLoadingCellars] = useState(false)
+
+  useEffect(() => {
+    if (visible) {
+      loadCellars()
+    }
+  }, [visible])
+
+  const loadCellars = async () => {
+    setIsLoadingCellars(true)
+    try {
+      const result = await apiFetch<Cellar[]>('/api/cellars')
+      // Filter out current cellar
+      setCellars(result.filter(c => c.id !== cellarId))
+    } catch (error) {
+      console.error('Failed to load cellars:', error)
+    } finally {
+      setIsLoadingCellars(false)
+    }
+  }
 
   const handleQuantityChange = (delta: number) => {
     const newQuantity = quantity + delta
@@ -58,7 +87,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
     }
   }
 
-  const handleSubmit = async () => {
+  const handleConsume = async () => {
     if (quantity > stock) {
       Alert.alert('Insufficient Stock', `Only ${stock} bottles available.`)
       return
@@ -86,6 +115,56 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
     }
   }
 
+  const handleTransfer = async (targetCellarId: number, targetCellarName: string) => {
+    if (quantity > stock) {
+      Alert.alert('Insufficient Stock', `Only ${stock} bottles available.`)
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      await apiFetch(`/api/inventory/${inventoryLotId}/transfer`, {
+        method: 'POST',
+        body: {
+          targetCellarId,
+          quantity,
+        },
+      })
+
+      Alert.alert('Success', `Transferred ${quantity} bottle(s) to ${targetCellarName}.`)
+      setQuantity(1)
+      onSuccess()
+      onClose()
+    } catch (error: any) {
+      console.error('Failed to transfer wine:', error)
+      Alert.alert('Error', error.message || 'Failed to transfer wine.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const showTransferOptions = () => {
+    if (cellars.length === 0) {
+      Alert.alert('No Other Storages', 'You only have one cellar. Create another cellar to transfer bottles.')
+      return
+    }
+
+    Alert.alert(
+      'Transfer to Storage',
+      'Select destination:',
+      [
+        ...cellars.map(cellar => ({
+          text: cellar.name,
+          onPress: () => handleTransfer(cellar.id, cellar.name),
+        })),
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ]
+    )
+  }
+
   const handleClose = () => {
     setQuantity(1)
     onClose()
@@ -104,7 +183,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
           <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
             <Icon name="close" size={24} color="#666" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Mark as Consumed</Text>
+          <Text style={styles.headerTitle}>Remove Bottle</Text>
           <View style={styles.headerSpacer} />
         </View>
 
@@ -172,26 +251,54 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
             </View>
           </View>
 
-          {/* Submit Button */}
-          <TouchableOpacity
-            style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]}
-            onPress={handleSubmit}
-            disabled={isSubmitting}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={['#722F37', '#944654']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.submitGradient}
+          {/* Action Buttons */}
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
+              onPress={handleConsume}
+              disabled={isSubmitting}
+              activeOpacity={0.8}
             >
-              {isSubmitting ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.submitButtonText}>Mark as Consumed</Text>
-              )}
-            </LinearGradient>
-          </TouchableOpacity>
+              <LinearGradient
+                colors={['#722F37', '#944654']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.actionGradient}
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <>
+                    <Icon name="check-circle-outline" size={20} color="#fff" />
+                    <Text style={styles.actionButtonText}>Mark as{'\n'}Consumed</Text>
+                  </>
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
+              onPress={showTransferOptions}
+              disabled={isSubmitting}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={['#4caf50', '#2e7d32']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.actionGradient}
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <>
+                    <Icon name="swap-horizontal" size={20} color="#fff" />
+                    <Text style={styles.actionButtonText}>Transfer to{'\n'}Another Storage</Text>
+                  </>
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     </Modal>
@@ -322,22 +429,32 @@ const styles = StyleSheet.create({
     minWidth: 80,
     textAlign: 'center',
   },
-  submitButton: {
-    borderRadius: 16,
-    overflow: 'hidden',
+  buttonsContainer: {
+    flexDirection: 'row',
+    gap: 12,
     marginTop: 'auto',
   },
-  submitButtonDisabled: {
+  actionButton: {
+    flex: 1,
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  actionButtonDisabled: {
     opacity: 0.6,
   },
-  submitGradient: {
-    paddingVertical: 18,
+  actionGradient: {
+    paddingVertical: 16,
+    paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 80,
+    gap: 6,
   },
-  submitButtonText: {
-    fontSize: 17,
+  actionButtonText: {
+    fontSize: 13,
     fontWeight: '700',
     color: '#fff',
+    textAlign: 'center',
+    lineHeight: 16,
   },
 })

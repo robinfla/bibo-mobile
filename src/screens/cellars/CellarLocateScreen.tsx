@@ -336,7 +336,7 @@ export const CellarLocateScreen = () => {
       </SafeAreaView>
 
       {/* Quick Consume Modal */}
-      {selectedBottle && (
+      {selectedBottle && data && (
         <QuickConsumeModal
           visible={showConsumeModal}
           onClose={() => {
@@ -350,6 +350,7 @@ export const CellarLocateScreen = () => {
           region={selectedBottle.region}
           stock={selectedBottle.stock}
           wineColor={selectedBottle.color as any}
+          cellarId={data.cellarId}
         />
       )}
     </>
