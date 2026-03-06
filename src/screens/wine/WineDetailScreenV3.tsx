@@ -126,8 +126,18 @@ export const WineDetailScreenV3 = () => {
       return
     }
 
-    // Get cellarId from first vintage (use original wine.vintages, not grouped summary)
-    const cellarId = wine.vintages[0]?.cellar?.id
+    // Filter vintages by selected vintage if one is selected
+    const targetVintages = selectedVintage
+      ? wine.vintages.filter(v => v.vintage === selectedVintage)
+      : wine.vintages
+
+    if (targetVintages.length === 0) {
+      Alert.alert('Not Located', `No bottles of the ${selectedVintage} vintage are in your cellar.`)
+      return
+    }
+
+    // Get cellarId from first matching vintage
+    const cellarId = targetVintages[0]?.cellar?.id
     if (!cellarId) {
       Alert.alert('Not Located', "This wine hasn't been assigned a cellar location yet.")
       return
@@ -139,6 +149,7 @@ export const WineDetailScreenV3 = () => {
       params: {
         cellarId,
         highlightWineId: wineId,
+        vintage: selectedVintage, // Pass selected vintage to filter backend results
       },
     })
   }

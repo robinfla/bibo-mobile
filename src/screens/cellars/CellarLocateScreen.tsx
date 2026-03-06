@@ -7,11 +7,12 @@ import {
   ActivityIndicator,
   Animated,
   SafeAreaView,
+  Alert,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useRoute, useNavigation } from '@react-navigation/native'
-import { apiFetch } from '../../api/client'
+import { apiFetch, ApiError } from '../../api/client'
 
 interface Bottle {
   row: number
@@ -50,7 +51,7 @@ interface LocateResponse {
 export const CellarLocateScreen = () => {
   const route = useRoute<any>()
   const navigation = useNavigation()
-  const { cellarId, highlightWineId } = route.params || {}
+  const { cellarId, highlightWineId, vintage } = route.params || {}
 
   const [data, setData] = useState<LocateResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -80,12 +81,27 @@ export const CellarLocateScreen = () => {
   const loadData = async () => {
     try {
       setIsLoading(true)
+      const vintageParam = vintage ? `&vintage=${vintage}` : ''
       const result = await apiFetch<LocateResponse>(
-        `/api/cellars/${cellarId}/locate?wineId=${highlightWineId}`
+        `/api/cellars/${cellarId}/locate?wineId=${highlightWineId}${vintageParam}`
       )
       setData(result)
     } catch (error) {
       console.error('Failed to load cellar location:', error)
+      const errorMessage = error instanceof ApiError 
+        ? error.message 
+        : 'Failed to load cellar location'
+      
+      Alert.alert(
+        'Location Not Found',
+        errorMessage,
+        [
+          {
+            text: 'OK',
+            onPress: () => navigation.goBack(),
+          },
+        ]
+      )
     } finally {
       setIsLoading(false)
     }
