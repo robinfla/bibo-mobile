@@ -13,12 +13,19 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { apiFetch, ApiError } from '../../api/client'
+import { QuickConsumeModal } from '../../components/QuickConsumeModal'
 
 interface Bottle {
   row: number
   column: number
   wineId: number
+  lotId: number
   color: string
+  wineName: string
+  producerName: string
+  vintage: number | null
+  region: string
+  stock: number
   highlighted: boolean
 }
 
@@ -55,6 +62,8 @@ export const CellarLocateScreen = () => {
 
   const [data, setData] = useState<LocateResponse | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [selectedBottle, setSelectedBottle] = useState<Bottle | null>(null)
+  const [showConsumeModal, setShowConsumeModal] = useState(false)
   const pulseAnim = useRef(new Animated.Value(1)).current
 
   useEffect(() => {
@@ -131,6 +140,20 @@ export const CellarLocateScreen = () => {
     }
   }
 
+  const handleBottleTap = (bottle: Bottle) => {
+    if (bottle.highlighted) {
+      setSelectedBottle(bottle)
+      setShowConsumeModal(true)
+    }
+  }
+
+  const handleConsumeSuccess = () => {
+    setShowConsumeModal(false)
+    setSelectedBottle(null)
+    // Reload data to update stock counts
+    loadData()
+  }
+
   const renderGrid = () => {
     if (!data) return null
 
@@ -148,46 +171,52 @@ export const CellarLocateScreen = () => {
           <View key={`${row}-${col}`} style={styles.slotContainer}>
             {bottle ? (
               isHighlighted ? (
-                <Animated.View
-                  style={[
-                    styles.bottleWrapper,
-                    {
-                      transform: [{ scale: pulseAnim }],
-                    },
-                  ]}
+                <TouchableOpacity
+                  onPress={() => handleBottleTap(bottle)}
+                  activeOpacity={0.7}
+                  style={styles.bottleWrapper}
                 >
-                  <LinearGradient
-                    colors={getHighlightGradient()}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
+                  <Animated.View
                     style={[
-                      styles.bottle,
+                      styles.bottleWrapper,
                       {
-                        shadowColor: getGlowColor(),
-                        shadowOffset: { width: 0, height: 0 },
-                        shadowOpacity: 1,
-                        shadowRadius: 24,
-                        elevation: 16,
+                        transform: [{ scale: pulseAnim }],
                       },
                     ]}
                   >
-                    <View
+                    <LinearGradient
+                      colors={getHighlightGradient()}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
                       style={[
-                        styles.glowRing,
-                        { borderColor: getGlowColor() },
-                      ]}
-                    />
-                    <View
-                      style={[
-                        styles.glowRingOuter,
-                        { 
+                        styles.bottle,
+                        {
                           shadowColor: getGlowColor(),
-                          shadowOpacity: 0.5,
+                          shadowOffset: { width: 0, height: 0 },
+                          shadowOpacity: 1,
+                          shadowRadius: 24,
+                          elevation: 16,
                         },
                       ]}
-                    />
-                  </LinearGradient>
-                </Animated.View>
+                    >
+                      <View
+                        style={[
+                          styles.glowRing,
+                          { borderColor: getGlowColor() },
+                        ]}
+                      />
+                      <View
+                        style={[
+                          styles.glowRingOuter,
+                          { 
+                            shadowColor: getGlowColor(),
+                            shadowOpacity: 0.5,
+                          },
+                        ]}
+                      />
+                    </LinearGradient>
+                  </Animated.View>
+                </TouchableOpacity>
               ) : (
                 <View
                   style={[
@@ -229,9 +258,10 @@ export const CellarLocateScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
+    <>
+      <SafeAreaView style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => {
@@ -303,7 +333,26 @@ export const CellarLocateScreen = () => {
           </LinearGradient>
         </View>
       </View>
-    </SafeAreaView>
+      </SafeAreaView>
+
+      {/* Quick Consume Modal */}
+      {selectedBottle && (
+        <QuickConsumeModal
+          visible={showConsumeModal}
+          onClose={() => {
+            setShowConsumeModal(false)
+            setSelectedBottle(null)
+          }}
+          onSuccess={handleConsumeSuccess}
+          inventoryLotId={selectedBottle.lotId}
+          wineName={`${selectedBottle.producerName} ${selectedBottle.wineName}`}
+          vintage={selectedBottle.vintage}
+          region={selectedBottle.region}
+          stock={selectedBottle.stock}
+          wineColor={selectedBottle.color as any}
+        />
+      )}
+    </>
   )
 }
 
