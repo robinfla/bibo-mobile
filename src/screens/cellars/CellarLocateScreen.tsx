@@ -107,42 +107,27 @@ export const CellarLocateScreen = () => {
     }
   }
 
-  const getHighlightGradient = (color: string): [string, string] => {
-    switch (color) {
-      case 'red':
-        return ['#ff5252', '#d32f2f']
-      case 'white':
-        return ['#ffd54f', '#ffb300']
-      case 'rose':
-        return ['#ff80ab', '#f06292']
-      default:
-        return ['#ff5252', '#d32f2f']
-    }
+  const getHighlightGradient = (): [string, string] => {
+    // Always use green for highlighted bottles
+    return ['#4caf50', '#2e7d32']
   }
 
-  const getGlowColor = (color: string): string => {
-    switch (color) {
-      case 'red':
-        return 'rgba(244, 67, 54, 0.4)'
-      case 'white':
-        return 'rgba(255, 193, 7, 0.4)'
-      case 'rose':
-        return 'rgba(233, 30, 99, 0.4)'
-      default:
-        return 'rgba(244, 67, 54, 0.4)'
-    }
+  const getGlowColor = (): string => {
+    // Green glow for highlighted bottles
+    return 'rgba(76, 175, 80, 0.4)'
   }
 
   const getBottleColor = (color: string): string => {
+    // Much more dimmed colors for non-highlighted bottles
     switch (color) {
       case 'red':
-        return '#ef9a9a'
+        return 'rgba(239, 154, 154, 0.3)' // Very dimmed red
       case 'white':
-        return '#fff59d'
+        return 'rgba(255, 245, 157, 0.3)' // Very dimmed yellow
       case 'rose':
-        return '#f8bbd0'
+        return 'rgba(248, 187, 208, 0.3)' // Very dimmed pink
       default:
-        return '#e0e0e0'
+        return 'rgba(224, 224, 224, 0.3)' // Very dimmed gray
     }
   }
 
@@ -172,13 +157,13 @@ export const CellarLocateScreen = () => {
                   ]}
                 >
                   <LinearGradient
-                    colors={getHighlightGradient(wineColor)}
+                    colors={getHighlightGradient()}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={[
                       styles.bottle,
                       {
-                        shadowColor: getGlowColor(wineColor),
+                        shadowColor: getGlowColor(),
                         shadowOffset: { width: 0, height: 0 },
                         shadowOpacity: 1,
                         shadowRadius: 24,
@@ -189,14 +174,14 @@ export const CellarLocateScreen = () => {
                     <View
                       style={[
                         styles.glowRing,
-                        { borderColor: getGlowColor(wineColor) },
+                        { borderColor: getGlowColor() },
                       ]}
                     />
                     <View
                       style={[
                         styles.glowRingOuter,
                         { 
-                          shadowColor: getGlowColor(wineColor),
+                          shadowColor: getGlowColor(),
                           shadowOpacity: 0.5,
                         },
                       ]}
