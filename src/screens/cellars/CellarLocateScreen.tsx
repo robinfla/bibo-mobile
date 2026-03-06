@@ -235,8 +235,8 @@ export const CellarLocateScreen = () => {
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => {
-            // @ts-ignore
-            navigation.navigate('RackView', { 
+            // @ts-ignore - Replace instead of navigate to remove zoom view from stack
+            navigation.replace('RackView', { 
               rackId: data.rackId,
               spaceId: data.spaceId,
             })
