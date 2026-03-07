@@ -14,9 +14,10 @@ import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { apiFetch } from '../api/client'
 
-interface Cellar {
+interface CellarSpace {
   id: number
   name: string
+  type: string
 }
 
 interface QuickConsumeModalProps {
@@ -58,25 +59,25 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
 }) => {
   const [quantity, setQuantity] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [cellars, setCellars] = useState<Cellar[]>([])
-  const [isLoadingCellars, setIsLoadingCellars] = useState(false)
+  const [spaces, setSpaces] = useState<CellarSpace[]>([])
+  const [isLoadingSpaces, setIsLoadingSpaces] = useState(false)
 
   useEffect(() => {
     if (visible) {
-      loadCellars()
+      loadSpaces()
     }
   }, [visible])
 
-  const loadCellars = async () => {
-    setIsLoadingCellars(true)
+  const loadSpaces = async () => {
+    setIsLoadingSpaces(true)
     try {
-      const result = await apiFetch<Cellar[]>('/api/cellars')
-      // Filter out current cellar
-      setCellars(result.filter(c => c.id !== cellarId))
+      const result = await apiFetch<{ spaces: CellarSpace[] }>(`/api/cellars/${cellarId}/spaces`)
+      // Show all spaces within the same cellar
+      setSpaces(result.spaces || [])
     } catch (error) {
-      console.error('Failed to load cellars:', error)
+      console.error('Failed to load spaces:', error)
     } finally {
-      setIsLoadingCellars(false)
+      setIsLoadingSpaces(false)
     }
   }
 
@@ -115,7 +116,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
     }
   }
 
-  const handleTransfer = async (targetCellarId: number, targetCellarName: string) => {
+  const handleTransfer = async (targetSpaceId: number, targetSpaceName: string) => {
     if (quantity > stock) {
       Alert.alert('Insufficient Stock', `Only ${stock} bottles available.`)
       return
@@ -123,15 +124,15 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
 
     setIsSubmitting(true)
     try {
-      await apiFetch(`/api/inventory/${inventoryLotId}/transfer`, {
+      await apiFetch(`/api/inventory/${inventoryLotId}/transfer-space`, {
         method: 'POST',
         body: {
-          targetCellarId,
+          targetSpaceId,
           quantity,
         },
       })
 
-      Alert.alert('Success', `Transferred ${quantity} bottle(s) to ${targetCellarName}.`)
+      Alert.alert('Success', `Transferred ${quantity} bottle(s) to ${targetSpaceName}.`)
       setQuantity(1)
       onSuccess()
       onClose()
@@ -144,8 +145,8 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
   }
 
   const showTransferOptions = () => {
-    if (cellars.length === 0) {
-      Alert.alert('No Other Storages', 'You only have one cellar. Create another cellar to transfer bottles.')
+    if (spaces.length === 0) {
+      Alert.alert('No Other Spaces', 'No other storage spaces available in this cellar.')
       return
     }
 
@@ -153,9 +154,9 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
       'Transfer to Storage',
       'Select destination:',
       [
-        ...cellars.map(cellar => ({
-          text: cellar.name,
-          onPress: () => handleTransfer(cellar.id, cellar.name),
+        ...spaces.map(space => ({
+          text: space.name,
+          onPress: () => handleTransfer(space.id, space.name),
         })),
         {
           text: 'Cancel',
