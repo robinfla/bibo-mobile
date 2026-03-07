@@ -435,7 +435,7 @@ export const RackViewScreen = () => {
               <View key={r} style={[styles.gridRow, { gap: 4 }]}>
                 {Array.from({ length: rack.columns }, (_, c) => {
                   const slot = rack.slots.find(s => s.row === r + 1 && s.column === c + 1 && s.depthPosition === 1)
-                  if (!slot) return <View key={c} style={{ width: slotSize, height: slotSize }} />
+                  if (!slot) return <View key={c} style={[styles.slot, styles.slotEmpty, { width: slotSize, height: slotSize, borderRadius: slotSize / 2 }]} />
                   const isFilled = !!slot.inventoryLotId
                   const wineColor = slot.wineColor ? WINE_COLORS[slot.wineColor] || colors.muted[400] : undefined
                   const isSelected = selectedSlot?.id === slot.id
