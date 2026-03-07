@@ -28,8 +28,8 @@ export const SpacesListScreen = () => {
 
   const fetchSpaces = useCallback(async () => {
     try {
-      const data = await apiFetch<Space[]>(`/api/cellars/${cellarId}/spaces`)
-      setSpaces(data)
+      const data = await apiFetch<{ cellarId: number; unplacedCount: number; spaces: Space[] }>(`/api/cellars/${cellarId}/spaces`)
+      setSpaces(data.spaces)
     } catch (err) {
       console.error('Failed to fetch spaces:', err)
     } finally {
