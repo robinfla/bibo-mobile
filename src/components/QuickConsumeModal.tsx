@@ -129,9 +129,10 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
   const handleRemoveFromCellar = async () => {
     setIsSubmitting(true)
     try {
-      await apiFetch(`/api/inventory/${inventoryLotId}/unassign`, {
+      await apiFetch('/api/inventory/unassign', {
         method: 'POST',
         body: {
+          lotId: inventoryLotId,
           quantity: 1,
         },
       })
