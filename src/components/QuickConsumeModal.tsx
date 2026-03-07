@@ -164,7 +164,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-            <Icon name="close" size={24} color="#666" />
+            <Icon name="close" size={20} color="#666" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Remove Bottle</Text>
           <View style={styles.headerSpacer} />
@@ -204,54 +204,54 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
             </View>
           </LinearGradient>
 
-          {/* Action Buttons */}
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-              style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
-              onPress={handleConsume}
-              disabled={isSubmitting}
-              activeOpacity={0.8}
+        {/* Action Buttons */}
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
+            onPress={handleConsume}
+            disabled={isSubmitting}
+            activeOpacity={0.8}
+          >
+            <LinearGradient
+              colors={['#722F37', '#944654']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.actionGradient}
             >
-              <LinearGradient
-                colors={['#722F37', '#944654']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.actionGradient}
-              >
-                {isSubmitting ? (
-                  <ActivityIndicator color="#fff" size="small" />
-                ) : (
-                  <>
-                    <Icon name="check-circle-outline" size={20} color="#fff" />
-                    <Text style={styles.actionButtonText}>Mark as{'\n'}Consumed</Text>
-                  </>
-                )}
-              </LinearGradient>
-            </TouchableOpacity>
+              {isSubmitting ? (
+                <ActivityIndicator color="#fff" size="small" />
+              ) : (
+                <>
+                  <Icon name="check-circle-outline" size={20} color="#fff" />
+                  <Text style={styles.actionButtonText}>Mark as{'\n'}Consumed</Text>
+                </>
+              )}
+            </LinearGradient>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
-              onPress={showTransferOptions}
-              disabled={isSubmitting}
-              activeOpacity={0.8}
+          <TouchableOpacity
+            style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
+            onPress={showTransferOptions}
+            disabled={isSubmitting}
+            activeOpacity={0.8}
+          >
+            <LinearGradient
+              colors={['#4caf50', '#2e7d32']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.actionGradient}
             >
-              <LinearGradient
-                colors={['#4caf50', '#2e7d32']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.actionGradient}
-              >
-                {isSubmitting ? (
-                  <ActivityIndicator color="#fff" size="small" />
-                ) : (
-                  <>
-                    <Icon name="swap-horizontal" size={20} color="#fff" />
-                    <Text style={styles.actionButtonText}>Transfer to{'\n'}Another Storage</Text>
-                  </>
-                )}
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
+              {isSubmitting ? (
+                <ActivityIndicator color="#fff" size="small" />
+              ) : (
+                <>
+                  <Icon name="swap-horizontal" size={20} color="#fff" />
+                  <Text style={styles.actionButtonText}>Transfer to{'\n'}Another Storage</Text>
+                </>
+              )}
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
         </View>
       </SafeAreaView>
     </Modal>
@@ -267,36 +267,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(228, 213, 203, 0.15)',
     backgroundColor: '#fff',
   },
   closeButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#f5f5f5',
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '700',
     color: '#1a1a1a',
   },
   headerSpacer: {
-    width: 40,
+    width: 36,
   },
   content: {
-    flex: 1,
     padding: 16,
   },
   wineCard: {
     borderRadius: 20,
     padding: 16,
-    marginBottom: 20,
+    marginBottom: 0,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.2)',
   },
@@ -324,31 +323,31 @@ const styles = StyleSheet.create({
   wineMetaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 3,
   },
   wineVintage: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: '#666',
   },
   wineDivider: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#999',
-    marginHorizontal: 8,
+    marginHorizontal: 6,
   },
   wineRegion: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#666',
   },
   wineStock: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
     color: '#4caf50',
   },
   buttonsContainer: {
     flexDirection: 'row',
     gap: 12,
-    marginTop: 'auto',
+    marginTop: 16,
   },
   actionButton: {
     flex: 1,
@@ -359,12 +358,12 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   actionGradient: {
-    paddingVertical: 14,
-    paddingHorizontal: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 68,
-    gap: 6,
+    minHeight: 60,
+    gap: 4,
   },
   actionButtonText: {
     fontSize: 13,
