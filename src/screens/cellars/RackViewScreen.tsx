@@ -434,8 +434,30 @@ export const RackViewScreen = () => {
             {Array.from({ length: rack.rows }, (_, r) => (
               <View key={r} style={[styles.gridRow, { gap: 4 }]}>
                 {Array.from({ length: rack.columns }, (_, c) => {
-                  const slot = rack.slots.find(s => s.row === r + 1 && s.column === c + 1 && s.depthPosition === 1)
-                  if (!slot) return <View key={c} style={[styles.slot, styles.slotEmpty, { width: slotSize, height: slotSize, borderRadius: slotSize / 2 }]} />
+                  const row = r + 1
+                  const col = c + 1
+                  const slot = rack.slots.find(s => s.row === row && s.column === col && s.depthPosition === 1)
+                  
+                  // Handle positions with no slot record (never assigned or unassigned)
+                  if (!slot) {
+                    const isEmptySelected = selectedEmptySlot?.row === row && selectedEmptySlot?.column === col
+                    return (
+                      <TouchableOpacity
+                        key={c}
+                        style={[
+                          styles.slot, 
+                          styles.slotEmpty, 
+                          { width: slotSize, height: slotSize, borderRadius: slotSize / 2 },
+                          isEmptySelected && styles.slotEmptySelected,
+                        ]}
+                        onPress={() => setSelectedEmptySlot({ row, column: col })}
+                        activeOpacity={0.6}
+                      >
+                        {isEmptySelected && <Text style={{ fontSize: 14, color: '#722F37' }}>+</Text>}
+                      </TouchableOpacity>
+                    )
+                  }
+                  
                   const isFilled = !!slot.inventoryLotId
                   const wineColor = slot.wineColor ? WINE_COLORS[slot.wineColor] || colors.muted[400] : undefined
                   const isSelected = selectedSlot?.id === slot.id
