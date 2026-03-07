@@ -243,6 +243,17 @@ const AuthenticatedTabs = () => {
         <Tab.Screen
           name="HomeTab"
           component={HomeStackScreen}
+          listeners={({ navigation }) => ({
+            tabPress: (e) => {
+              // If already on HomeTab and it has a navigation stack, pop to top
+              const state = navigation.getState()
+              const homeRoute = state.routes.find(r => r.name === 'HomeTab')
+              if (homeRoute?.state?.index && homeRoute.state.index > 0) {
+                e.preventDefault()
+                navigation.navigate('HomeTab', { screen: 'Home' })
+              }
+            },
+          })}
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ color }) => <HomeIcon color={color} size={24} />,
@@ -251,6 +262,17 @@ const AuthenticatedTabs = () => {
         <Tab.Screen
           name="InventoryTab"
           component={InventoryStackScreen}
+          listeners={({ navigation }) => ({
+            tabPress: (e) => {
+              // If already on InventoryTab and it has a navigation stack, pop to top
+              const state = navigation.getState()
+              const inventoryRoute = state.routes.find(r => r.name === 'InventoryTab')
+              if (inventoryRoute?.state?.index && inventoryRoute.state.index > 0) {
+                e.preventDefault()
+                navigation.navigate('InventoryTab', { screen: 'InventoryList' })
+              }
+            },
+          })}
           options={({ route }) => ({
             tabBarLabel: 'Inventory',
             tabBarIcon: ({ color }) => <ListIcon color={color} size={24} />,
@@ -293,6 +315,17 @@ const AuthenticatedTabs = () => {
         <Tab.Screen
           name="AnalyticsTab"
           component={AnalyticsStackScreen}
+          listeners={({ navigation }) => ({
+            tabPress: (e) => {
+              // If already on AnalyticsTab and it has a navigation stack, pop to top
+              const state = navigation.getState()
+              const analyticsRoute = state.routes.find(r => r.name === 'AnalyticsTab')
+              if (analyticsRoute?.state?.index && analyticsRoute.state.index > 0) {
+                e.preventDefault()
+                navigation.navigate('AnalyticsTab', { screen: 'Analytics' })
+              }
+            },
+          })}
           options={{
             tabBarLabel: 'Analytics',
             tabBarIcon: ({ color }) => <ChartIcon color={color} size={24} />,
@@ -301,6 +334,17 @@ const AuthenticatedTabs = () => {
         <Tab.Screen
           name="CellarsTab"
           component={CellarsStackScreen}
+          listeners={({ navigation }) => ({
+            tabPress: (e) => {
+              // If already on CellarsTab and it has a navigation stack, pop to top
+              const state = navigation.getState()
+              const cellarsRoute = state.routes.find(r => r.name === 'CellarsTab')
+              if (cellarsRoute?.state?.index && cellarsRoute.state.index > 0) {
+                e.preventDefault()
+                navigation.navigate('CellarsTab', { screen: 'CellarsList' })
+              }
+            },
+          })}
           options={{
             tabBarLabel: 'Cellars',
             tabBarIcon: ({ color }) => <CellarIcon color={color} size={24} />,
