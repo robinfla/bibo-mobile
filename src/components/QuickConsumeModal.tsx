@@ -31,6 +31,7 @@ interface QuickConsumeModalProps {
   stock: number
   wineColor: 'red' | 'white' | 'rose' | 'sparkling' | 'dessert' | 'fortified'
   cellarId: number
+  currentSpaceId: number
 }
 
 const getWineColor = (color: string): string => {
@@ -56,6 +57,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
   stock,
   wineColor,
   cellarId,
+  currentSpaceId,
 }) => {
   const [quantity, setQuantity] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -71,9 +73,9 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
   const loadSpaces = async () => {
     setIsLoadingSpaces(true)
     try {
-      const result = await apiFetch<{ spaces: CellarSpace[] }>(`/api/cellars/${cellarId}/spaces`)
-      // Show all spaces within the same cellar
-      setSpaces(result.spaces || [])
+      const result = await apiFetch<CellarSpace[]>(`/api/cellars/${cellarId}/spaces`)
+      // Filter out current space - only show other spaces
+      setSpaces((result || []).filter(space => space.id !== currentSpaceId))
     } catch (error) {
       console.error('Failed to load spaces:', error)
     } finally {

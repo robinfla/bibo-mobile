@@ -351,6 +351,7 @@ export const CellarLocateScreen = () => {
           stock={selectedBottle.stock}
           wineColor={selectedBottle.color as any}
           cellarId={data.cellarId}
+          currentSpaceId={data.spaceId}
         />
       )}
     </>
