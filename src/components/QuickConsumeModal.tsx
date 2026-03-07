@@ -59,7 +59,6 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
   cellarId,
   currentSpaceId,
 }) => {
-  const [quantity, setQuantity] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [spaces, setSpaces] = useState<CellarSpace[]>([])
   const [isLoadingSpaces, setIsLoadingSpaces] = useState(false)
@@ -84,31 +83,18 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
     }
   }
 
-  const handleQuantityChange = (delta: number) => {
-    const newQuantity = quantity + delta
-    if (newQuantity >= 1 && newQuantity <= stock) {
-      setQuantity(newQuantity)
-    }
-  }
-
   const handleConsume = async () => {
-    if (quantity > stock) {
-      Alert.alert('Insufficient Stock', `Only ${stock} bottles available.`)
-      return
-    }
-
     setIsSubmitting(true)
     try {
       await apiFetch('/api/history/consume', {
         method: 'POST',
         body: {
           inventoryLotId,
-          quantity,
+          quantity: 1,
         },
       })
 
-      Alert.alert('Success', `Marked ${quantity} bottle(s) as consumed.`)
-      setQuantity(1)
+      Alert.alert('Success', 'Marked 1 bottle as consumed.')
       onSuccess()
       onClose()
     } catch (error: any) {
@@ -120,23 +106,17 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
   }
 
   const handleTransfer = async (targetSpaceId: number, targetSpaceName: string) => {
-    if (quantity > stock) {
-      Alert.alert('Insufficient Stock', `Only ${stock} bottles available.`)
-      return
-    }
-
     setIsSubmitting(true)
     try {
       await apiFetch(`/api/inventory/${inventoryLotId}/transfer-space`, {
         method: 'POST',
         body: {
           targetSpaceId,
-          quantity,
+          quantity: 1,
         },
       })
 
-      Alert.alert('Success', `Transferred ${quantity} bottle(s) to ${targetSpaceName}.`)
-      setQuantity(1)
+      Alert.alert('Success', `Transferred 1 bottle to ${targetSpaceName}.`)
       onSuccess()
       onClose()
     } catch (error: any) {
@@ -170,7 +150,6 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
   }
 
   const handleClose = () => {
-    setQuantity(1)
     onClose()
   }
 
@@ -206,7 +185,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
                   { backgroundColor: getWineColor(wineColor) },
                 ]}
               >
-                <Icon name="bottle-wine" size={32} color="#fff" />
+                <Icon name="bottle-wine" size={28} color="#fff" />
               </View>
 
               <View style={styles.wineInfo}>
@@ -224,36 +203,6 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
               </View>
             </View>
           </LinearGradient>
-
-          {/* Quantity Picker */}
-          <View style={styles.section}>
-            <Text style={styles.sectionLabel}>QUANTITY</Text>
-            <View style={styles.quantityPicker}>
-              <TouchableOpacity
-                style={[
-                  styles.quantityButton,
-                  quantity <= 1 && styles.quantityButtonDisabled,
-                ]}
-                onPress={() => handleQuantityChange(-1)}
-                disabled={quantity <= 1}
-              >
-                <Icon name="minus" size={24} color={quantity <= 1 ? '#ccc' : '#722F37'} />
-              </TouchableOpacity>
-
-              <Text style={styles.quantityValue}>{quantity}</Text>
-
-              <TouchableOpacity
-                style={[
-                  styles.quantityButton,
-                  quantity >= stock && styles.quantityButtonDisabled,
-                ]}
-                onPress={() => handleQuantityChange(1)}
-                disabled={quantity >= stock}
-              >
-                <Icon name="plus" size={24} color={quantity >= stock ? '#ccc' : '#722F37'} />
-              </TouchableOpacity>
-            </View>
-          </View>
 
           {/* Action Buttons */}
           <View style={styles.buttonsContainer}>
@@ -342,12 +291,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 20,
+    padding: 16,
   },
   wineCard: {
     borderRadius: 20,
-    padding: 20,
-    marginBottom: 32,
+    padding: 16,
+    marginBottom: 20,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.2)',
   },
@@ -356,21 +305,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bottleIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
+    marginRight: 14,
   },
   wineInfo: {
     flex: 1,
   },
   wineName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: '#1a1a1a',
-    marginBottom: 4,
+    marginBottom: 3,
   },
   wineMetaRow: {
     flexDirection: 'row',
@@ -396,43 +345,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#4caf50',
   },
-  section: {
-    marginBottom: 32,
-  },
-  sectionLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    color: '#999',
-    marginBottom: 12,
-  },
-  quantityPicker: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 16,
-    gap: 32,
-  },
-  quantityButton: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#f8f4f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  quantityButtonDisabled: {
-    opacity: 0.3,
-  },
-  quantityValue: {
-    fontSize: 48,
-    fontWeight: '800',
-    color: '#722F37',
-    minWidth: 80,
-    textAlign: 'center',
-  },
   buttonsContainer: {
     flexDirection: 'row',
     gap: 12,
@@ -447,11 +359,11 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   actionGradient: {
-    paddingVertical: 16,
+    paddingVertical: 14,
     paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 80,
+    minHeight: 68,
     gap: 6,
   },
   actionButtonText: {
