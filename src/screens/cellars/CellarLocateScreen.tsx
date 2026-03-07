@@ -150,8 +150,10 @@ export const CellarLocateScreen = () => {
   const handleConsumeSuccess = () => {
     setShowConsumeModal(false)
     setSelectedBottle(null)
-    // Reload data to update stock counts
-    loadData()
+    
+    // Navigate back instead of reloading
+    // (wine may have been unassigned and no longer has a location)
+    navigation.goBack()
   }
 
   const renderGrid = () => {
