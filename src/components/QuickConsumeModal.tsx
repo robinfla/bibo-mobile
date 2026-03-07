@@ -83,6 +83,27 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
     }
   }
 
+  const handleRemove = () => {
+    Alert.alert(
+      'Remove Bottle',
+      'What would you like to do?',
+      [
+        {
+          text: 'Mark as Consumed',
+          onPress: handleConsume,
+        },
+        {
+          text: 'Remove from Cellar',
+          onPress: handleRemoveFromCellar,
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+      ]
+    )
+  }
+
   const handleConsume = async () => {
     setIsSubmitting(true)
     try {
@@ -100,6 +121,27 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
     } catch (error: any) {
       console.error('Failed to consume wine:', error)
       Alert.alert('Error', error.message || 'Failed to mark wine as consumed.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleRemoveFromCellar = async () => {
+    setIsSubmitting(true)
+    try {
+      await apiFetch(`/api/inventory/${inventoryLotId}/unassign`, {
+        method: 'POST',
+        body: {
+          quantity: 1,
+        },
+      })
+
+      Alert.alert('Success', 'Removed 1 bottle from cellar location.')
+      onSuccess()
+      onClose()
+    } catch (error: any) {
+      console.error('Failed to remove from cellar:', error)
+      Alert.alert('Error', error.message || 'Failed to remove from cellar.')
     } finally {
       setIsSubmitting(false)
     }
@@ -218,7 +260,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
-              onPress={handleConsume}
+              onPress={handleRemove}
               disabled={isSubmitting}
               activeOpacity={0.8}
             >
@@ -232,8 +274,8 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
                   <ActivityIndicator color="#fff" size="small" />
                 ) : (
                   <>
-                    <Icon name="check-circle-outline" size={20} color="#fff" />
-                    <Text style={styles.actionButtonText}>Mark as{'\n'}Consumed</Text>
+                    <Icon name="close-circle-outline" size={20} color="#fff" />
+                    <Text style={styles.actionButtonText}>Remove</Text>
                   </>
                 )}
               </LinearGradient>
