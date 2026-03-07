@@ -275,7 +275,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
                 ) : (
                   <>
                     <Icon name="close-circle-outline" size={20} color="#fff" />
-                    <Text style={styles.actionButtonText}>Remove</Text>
+                    <Text style={styles.actionButtonText}>Remove{'\n'}Bottle</Text>
                   </>
                 )}
               </LinearGradient>
