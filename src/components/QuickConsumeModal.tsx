@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-  SafeAreaView,
   ActivityIndicator,
   ScrollView,
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { apiFetch } from '../api/client'
@@ -157,21 +157,30 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
     <Modal
       visible={visible}
       animationType="slide"
-      presentationStyle="pageSheet"
+      transparent={true}
       onRequestClose={handleClose}
     >
-      <SafeAreaView style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-            <Icon name="close" size={20} color="#666" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Remove Bottle</Text>
-          <View style={styles.headerSpacer} />
-        </View>
+      <TouchableOpacity 
+        style={styles.modalOverlay}
+        activeOpacity={1}
+        onPress={handleClose}
+      >
+        <TouchableOpacity 
+          style={styles.container}
+          activeOpacity={1}
+          onPress={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+              <Icon name="close" size={20} color="#666" />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Remove Bottle</Text>
+            <View style={styles.headerSpacer} />
+          </View>
 
-        {/* Wine Info Card */}
-        <View style={styles.content}>
+          {/* Wine Info Card */}
+          <View style={styles.content}>
           <LinearGradient
             colors={['#fef9f5', '#f8f4f0']}
             start={{ x: 0, y: 0 }}
@@ -205,63 +214,73 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
           </LinearGradient>
 
         {/* Action Buttons */}
-        <View style={styles.buttonsContainer}>
-          <TouchableOpacity
-            style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
-            onPress={handleConsume}
-            disabled={isSubmitting}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={['#722F37', '#944654']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.actionGradient}
+        <SafeAreaView edges={['bottom']}>
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+              style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
+              onPress={handleConsume}
+              disabled={isSubmitting}
+              activeOpacity={0.8}
             >
-              {isSubmitting ? (
-                <ActivityIndicator color="#fff" size="small" />
-              ) : (
-                <>
-                  <Icon name="check-circle-outline" size={20} color="#fff" />
-                  <Text style={styles.actionButtonText}>Mark as{'\n'}Consumed</Text>
-                </>
-              )}
-            </LinearGradient>
-          </TouchableOpacity>
+              <LinearGradient
+                colors={['#722F37', '#944654']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.actionGradient}
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <>
+                    <Icon name="check-circle-outline" size={20} color="#fff" />
+                    <Text style={styles.actionButtonText}>Mark as{'\n'}Consumed</Text>
+                  </>
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
-            onPress={showTransferOptions}
-            disabled={isSubmitting}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={['#4caf50', '#2e7d32']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.actionGradient}
+            <TouchableOpacity
+              style={[styles.actionButton, isSubmitting && styles.actionButtonDisabled]}
+              onPress={showTransferOptions}
+              disabled={isSubmitting}
+              activeOpacity={0.8}
             >
-              {isSubmitting ? (
-                <ActivityIndicator color="#fff" size="small" />
-              ) : (
-                <>
-                  <Icon name="swap-horizontal" size={20} color="#fff" />
-                  <Text style={styles.actionButtonText}>Transfer to{'\n'}Another Storage</Text>
-                </>
-              )}
-            </LinearGradient>
-          </TouchableOpacity>
+              <LinearGradient
+                colors={['#4caf50', '#2e7d32']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.actionGradient}
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator color="#fff" size="small" />
+                ) : (
+                  <>
+                    <Icon name="swap-horizontal" size={20} color="#fff" />
+                    <Text style={styles.actionButtonText}>Transfer to{'\n'}Another Storage</Text>
+                  </>
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
         </View>
-        </View>
-      </SafeAreaView>
+        </TouchableOpacity>
+      </TouchableOpacity>
     </Modal>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  modalOverlay: {
     flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  container: {
     backgroundColor: '#fef9f5',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    maxHeight: '70%',
   },
   header: {
     flexDirection: 'row',
@@ -348,6 +367,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
     marginTop: 16,
+    paddingBottom: 16,
   },
   actionButton: {
     flex: 1,
