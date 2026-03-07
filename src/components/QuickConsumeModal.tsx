@@ -73,11 +73,12 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
   const loadSpaces = async () => {
     setIsLoadingSpaces(true)
     try {
-      const result = await apiFetch<CellarSpace[]>(`/api/cellars/${cellarId}/spaces`)
+      const result = await apiFetch<{ cellarId: number; unplacedCount: number; spaces: CellarSpace[] }>(`/api/cellars/${cellarId}/spaces`)
       // Filter out current space - only show other spaces
-      setSpaces((result || []).filter(space => space.id !== currentSpaceId))
+      setSpaces((result?.spaces || []).filter(space => space.id !== currentSpaceId))
     } catch (error) {
       console.error('Failed to load spaces:', error)
+      Alert.alert('Error', `Failed to load spaces: ${error}`)
     } finally {
       setIsLoadingSpaces(false)
     }
