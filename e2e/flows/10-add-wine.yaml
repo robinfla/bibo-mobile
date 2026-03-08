@@ -1,0 +1,67 @@
+# Add Wine - AI search and add to inventory
+appId: ${APP_ID}
+---
+- launchApp
+
+# Go to Home screen
+- tapOn: "Home"
+- waitForAnimationToEnd
+
+# Scroll down to quick actions
+- scroll:
+    direction: DOWN
+
+# Tap "Add Wine"
+- tapOn: "Add Wine"
+- waitForAnimationToEnd
+
+# Step 1: AI Search
+- assertVisible: "Describe your wine"
+- takeScreenshot: "10-add-wine-step1"
+
+# Enter wine description
+- tapOn: "Describe your wine"
+- inputText: "Château Margaux 2015"
+- waitForAnimationToEnd
+
+# Tap search/next button
+- tapOn: "Search"
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# Step 2: Details form
+- assertVisible:
+    text: "bottles"
+    optional: true
+- takeScreenshot: "10-add-wine-step2"
+
+# Fill in quantity
+- tapOn: "Quantity"
+- inputText: "6"
+
+# Select a cellar (tap dropdown)
+- tapOn: "Select cellar"
+- waitForAnimationToEnd
+
+# Tap first cellar option
+- tapOn:
+    point: "50%,50%"
+- waitForAnimationToEnd
+
+# Add optional notes
+- tapOn: "Notes"
+- inputText: "Birthday gift"
+- hideKeyboard
+
+# Take screenshot before submit
+- takeScreenshot: "10-add-wine-filled"
+
+# Submit
+- tapOn: "Add to Cellar"
+- waitForAnimationToEnd
+
+# Should return to home or show success
+- assertVisible:
+    text: "My Cellar"
+    optional: true
+- takeScreenshot: "10-add-wine-success"

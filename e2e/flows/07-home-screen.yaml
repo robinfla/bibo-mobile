@@ -1,0 +1,44 @@
+# Home Screen - Verify dashboard elements
+appId: ${APP_ID}
+---
+- launchApp
+
+# Ensure we're on Home tab
+- tapOn: "Home"
+- waitForAnimationToEnd
+
+# Verify main sections
+- assertVisible: "My Cellar"
+- assertVisible: "Ready Tonight"
+
+# Take screenshot of top section
+- takeScreenshot: "07-home-top"
+
+# Scroll down to see quick actions
+- scroll:
+    direction: DOWN
+
+# Verify quick actions grid
+- assertVisible: "Open a Bottle"
+- assertVisible: "Add Wine"
+- assertVisible: "Ask Sommelier"
+
+# Take screenshot of quick actions
+- takeScreenshot: "07-home-actions"
+
+# Verify profile button in header
+- assertVisible:
+    point: "95%,8%" # Top right corner
+
+# Tap profile button
+- tapOn:
+    point: "95%,8%"
+- waitForAnimationToEnd
+
+# Verify profile screen
+- assertVisible: "Bibo"
+- takeScreenshot: "07-profile-screen"
+
+# Go back to home
+- back
+- assertVisible: "My Cellar"

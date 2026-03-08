@@ -1,9 +1,17 @@
-appId: host.exp.Exponent
----
-# Maestro Config for Bibo Wine Cellar Mobile App
-# 
-# Note: appId uses Expo Go for development testing
-# For production builds, update to: com.yourcompany.winecellar
-#
-# Run tests with: maestro test e2e/<flow-name>.yaml
-# Run all tests: maestro test e2e/
+# Maestro E2E Test Configuration for Bibo Wine Cellar App
+
+appId: com.winecellar.mobile # TODO: Update with actual bundle ID from Expo build
+
+# Environment variables for test credentials
+env:
+  TEST_EMAIL: a
+  TEST_PASSWORD: a
+  
+# Global settings
+initFlow: ./flows/00-reset-state.yaml
+
+# Screenshot directory
+screenshotDirectory: ./screenshots
+
+# Timeout settings
+timeout: 10000

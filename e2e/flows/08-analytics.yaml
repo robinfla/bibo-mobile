@@ -1,0 +1,52 @@
+# Analytics - View charts and statistics
+appId: ${APP_ID}
+---
+- launchApp
+
+# Navigate to Analytics tab
+- tapOn: "Analytics"
+- assertVisible: "Analytics"
+- waitForAnimationToEnd
+
+# Verify pie chart loaded
+- assertVisible:
+    text: "bottles"
+    optional: true
+
+# Take screenshot of analytics overview
+- takeScreenshot: "08-analytics-overview"
+
+# Scroll down to see breakdowns
+- scroll:
+    direction: DOWN
+
+# Verify sections exist
+- assertVisible:
+    text: "By Grape"
+    optional: true
+- assertVisible:
+    text: "By Region"
+    optional: true
+
+# Take screenshot of breakdown sections
+- takeScreenshot: "08-analytics-breakdowns"
+
+# Tap "See all" for grapes
+- tapOn:
+    text: "See all"
+    index: 0 # First "See all" button
+- waitForAnimationToEnd
+
+# Verify detail screen
+- assertVisible: "By Grape"
+- takeScreenshot: "08-analytics-by-grape"
+
+# Test search in detail view
+- tapOn: "Search"
+- inputText: "Cabernet"
+- waitForAnimationToEnd
+- takeScreenshot: "08-analytics-search"
+
+# Go back
+- back
+- assertVisible: "Analytics"

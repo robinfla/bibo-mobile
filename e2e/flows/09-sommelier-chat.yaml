@@ -1,0 +1,58 @@
+# Sommelier Chat - Wine pairing recommendations
+appId: ${APP_ID}
+---
+- launchApp
+
+# Go to Home screen
+- tapOn: "Home"
+- waitForAnimationToEnd
+
+# Scroll down to quick actions
+- scroll:
+    direction: DOWN
+
+# Tap "Ask Sommelier"
+- tapOn: "Ask Sommelier"
+- waitForAnimationToEnd
+
+# Verify sommelier screen loaded
+- assertVisible: "Sommelier"
+- takeScreenshot: "09-sommelier-chat"
+
+# Type a pairing question
+- tapOn: "What are you cooking?"
+- inputText: "grilled salmon"
+- waitForAnimationToEnd
+
+# Send message
+- tapOn:
+    point: "95%,95%" # Send button approximate location
+- waitForAnimationToEnd
+
+# Wait for response to appear
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# Take screenshot of response
+- takeScreenshot: "09-sommelier-response"
+
+# Verify wine cards appear
+- assertVisible:
+    text: "bottles in cellar"
+    optional: true
+
+# Tap on a suggested wine card
+- tapOn:
+    point: "50%,60%"
+- waitForAnimationToEnd
+
+# Should navigate to wine detail
+- takeScreenshot: "09-sommelier-wine-detail"
+
+# Go back to chat
+- back
+- waitForAnimationToEnd
+
+# Go back to home
+- back
+- assertVisible: "My Cellar"

@@ -1,0 +1,26 @@
+# Full E2E Test Suite - Runs all flows in sequence
+appId: ${APP_ID}
+---
+# Reset state and login
+- runFlow: ./00-reset-state.yaml
+- runFlow: ./01-login.yaml
+
+# Core user journeys
+- runFlow: ./02-browse-inventory.yaml
+- runFlow: ./03-wine-detail.yaml
+- runFlow: ./07-home-screen.yaml
+- runFlow: ./08-analytics.yaml
+
+# Feature flows
+- runFlow: ./04-consume-wine.yaml
+- runFlow: ./09-sommelier-chat.yaml
+- runFlow: ./10-add-wine.yaml
+- runFlow: ./12-scan-wine.yaml
+
+# Cellar management
+- runFlow: ./05-cellars-navigation.yaml
+- runFlow: ./06-rack-interaction.yaml
+- runFlow: ./11-locate-in-cellar.yaml
+
+# Final screenshot
+- takeScreenshot: "00-full-suite-complete"

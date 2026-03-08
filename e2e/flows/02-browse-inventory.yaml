@@ -1,0 +1,54 @@
+# Browse Inventory - Navigate and filter wine list
+appId: ${APP_ID}
+---
+- launchApp
+
+# Navigate to Inventory tab
+- tapOn: "Inventory"
+- assertVisible: "My Wines"
+
+# Verify inventory list loaded
+- assertVisible: "Cellar"
+- assertVisible: "Wishlist"
+- assertVisible: "History"
+
+# Take screenshot of inventory main view
+- takeScreenshot: "02-inventory-list"
+
+# Test search functionality
+- tapOn: "Search wines..."
+- inputText: "Cabernet"
+- waitForAnimationToEnd
+
+# Verify search results appear
+# Note: Actual wine names will vary based on data
+- takeScreenshot: "02-inventory-search"
+
+# Clear search
+- tapOn:
+    point: "90%,10%" # Close/back button approximate location
+- waitForAnimationToEnd
+
+# Test filter button
+- tapOn:
+    point: "95%,15%" # Filter icon in header
+- waitForAnimationToEnd
+- assertVisible: "Filters"
+- takeScreenshot: "02-inventory-filters"
+
+# Close filters
+- back
+
+# Switch to Wishlist tab
+- tapOn: "Wishlist"
+- waitForAnimationToEnd
+- takeScreenshot: "02-inventory-wishlist"
+
+# Switch to History tab
+- tapOn: "History"
+- waitForAnimationToEnd
+- takeScreenshot: "02-inventory-history"
+
+# Return to Cellar tab
+- tapOn: "Cellar"
+- waitForAnimationToEnd

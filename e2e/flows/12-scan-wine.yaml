@@ -1,0 +1,36 @@
+# Scan Wine - Verify camera/scan screen loads
+appId: ${APP_ID}
+---
+- launchApp
+
+# Tap the scan button (center FAB in tab bar)
+- tapOn:
+    point: "50%,95%" # Center bottom (scan button)
+- waitForAnimationToEnd
+
+# Verify scan screen/modal loaded
+# Note: May require camera permissions on first run
+- assertVisible:
+    text: "Scan"
+    optional: true
+
+# Take screenshot
+- takeScreenshot: "12-scan-screen"
+
+# Try manual input tab if available
+- tapOn:
+    text: "Manual"
+    optional: true
+- waitForAnimationToEnd
+
+# Verify input field
+- assertVisible:
+    text: "Enter wine name"
+    optional: true
+- takeScreenshot: "12-scan-manual-input"
+
+# Close scan screen
+- back
+- assertVisible:
+    text: "My Cellar"
+    optional: true

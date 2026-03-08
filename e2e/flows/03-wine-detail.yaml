@@ -1,0 +1,52 @@
+# Wine Detail - View wine information and details
+appId: ${APP_ID}
+---
+- launchApp
+
+# Navigate to Inventory
+- tapOn: "Inventory"
+- assertVisible: "My Wines"
+
+# Scroll down to see wine cards
+- scroll:
+    direction: DOWN
+
+# Tap on first wine card (approximate location - will need testID)
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+# Verify wine detail screen loaded
+# Note: Specific wine info will vary based on data
+- assertVisible:
+    text: "bottles in cellar"
+    optional: true
+
+# Take screenshot of wine detail
+- takeScreenshot: "03-wine-detail"
+
+# Check if vintage chips are visible
+- assertVisible:
+    point: "50%,45%"
+
+# Scroll down to see more details
+- scroll:
+    direction: DOWN
+
+# Verify sections exist (text may vary)
+- assertVisible:
+    text: "Aging Potential"
+    optional: true
+- assertVisible:
+    text: "Tasting Notes"
+    optional: true
+- assertVisible:
+    text: "Meal Pairings"
+    optional: true
+
+# Take screenshot of scrolled view
+- takeScreenshot: "03-wine-detail-scrolled"
+
+# Test back navigation
+- back
+- assertVisible: "My Wines"

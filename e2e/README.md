@@ -1,173 +1,199 @@
-# Bibo Mobile E2E Tests (Maestro)
+# Bibo Wine Cellar - Maestro E2E Tests
 
-Maestro E2E test flows for the Bibo Wine Cellar mobile app.
+End-to-end test flows for the Bibo Wine Cellar mobile app using [Maestro](https://maestro.mobile.dev/).
 
 ## Prerequisites
 
-1. **Install Maestro**:
+1. **Install Maestro**
    ```bash
    curl -Ls "https://get.maestro.mobile.dev" | bash
    ```
 
-2. **Start Android Emulator** or connect physical device
+2. **Android Emulator or iOS Simulator**
+   - Android: Install Android Studio with an AVD (API 30+)
+   - iOS: Xcode with a simulator (iOS 14+)
 
-3. **Start Expo dev server**:
-   ```bash
-   cd /home/robin/projects/bibo/wine-cellar-mobile
-   npm start
+3. **Build the App**
+   - For Android: `npx expo prebuild --platform android` then build APK/AAB
+   - For iOS: `npx expo prebuild --platform ios` then build via Xcode
+   - Or use `eas build` for cloud builds
+
+## Configuration
+
+1. **Update App ID**
+   
+   Edit `config.yaml` and replace the placeholder app ID with your actual bundle identifier:
+   ```yaml
+   appId: com.yourcompany.winecellar # Update this
    ```
 
-4. **Load app on device/emulator**:
-   - Scan QR code or press 'a' for Android
+2. **Set Test Credentials**
+   
+   The tests use environment variables for login credentials. Update in `config.yaml`:
+   ```yaml
+   env:
+     TEST_EMAIL: your-test-email@example.com
+     TEST_PASSWORD: your-test-password
+   ```
 
 ## Running Tests
 
-### Single Flow
+### Run Individual Flows
+
 ```bash
-maestro test e2e/login.yaml
+# Run a specific test flow
+maestro test e2e/flows/01-login.yaml
+
+# Run with app ID override
+maestro test --app-id com.myapp e2e/flows/01-login.yaml
 ```
 
-### All Flows
+### Run Full Test Suite
+
 ```bash
-maestro test e2e/
+# Run all flows in sequence
+maestro test e2e/flows/00-full-suite.yaml
 ```
 
-### Specific Flows
+### Run with Device Selection
+
 ```bash
-# Core flows
-maestro test e2e/login.yaml
-maestro test e2e/home-screen.yaml
-maestro test e2e/browse-inventory.yaml
+# List available devices
+maestro test --list-devices
 
-# Wine management
-maestro test e2e/wine-detail.yaml
-maestro test e2e/consume-wine.yaml
-maestro test e2e/scan-wine.yaml
+# Run on specific device
+maestro test --device "Pixel_7_API_33" e2e/flows/01-login.yaml
+```
 
-# Physical cellar
-maestro test e2e/cellars-navigation.yaml
-maestro test e2e/rack-interaction.yaml
-maestro test e2e/bin-interaction.yaml
+### Continuous Mode (Watch for Changes)
 
-# Analytics
-maestro test e2e/analytics.yaml
+```bash
+# Re-run tests on file changes
+maestro test --continuous e2e/flows/01-login.yaml
 ```
 
 ## Test Flows
 
-| Flow | Description | Duration |
-|------|-------------|----------|
-| `login.yaml` | Login with credentials | ~10s |
-| `home-screen.yaml` | Verify home screen elements (stats, actions, suggestions) | ~15s |
-| `browse-inventory.yaml` | Navigate inventory, search, filter | ~20s |
-| `wine-detail.yaml` | Tap wine card, view detail screen | ~10s |
-| `consume-wine.yaml` | Open bottle, rate, confirm consumption | ~25s |
-| `cellars-navigation.yaml` | Navigate Cellars → Space → Rack | ~20s |
-| `rack-interaction.yaml` | Tap slot, place bottle in grid rack | ~15s |
-| `bin-interaction.yaml` | Add bottles to bin rack | ~15s |
-| `scan-wine.yaml` | Open scan modal, verify camera/search loads | ~10s |
-| `analytics.yaml` | View analytics charts and stats | ~15s |
+| Flow | File | Description |
+|------|------|-------------|
+| Reset State | `00-reset-state.yaml` | Clear app data and keychain |
+| Login | `01-login.yaml` | Sign in with test credentials |
+| Browse Inventory | `02-browse-inventory.yaml` | Navigate inventory, use search/filters |
+| Wine Detail | `03-wine-detail.yaml` | View wine information |
+| Consume Wine | `04-consume-wine.yaml` | Record bottle consumption |
+| Cellars Navigation | `05-cellars-navigation.yaml` | Browse cellars, spaces, racks |
+| Rack Interaction | `06-rack-interaction.yaml` | Add bottles to rack slots |
+| Home Screen | `07-home-screen.yaml` | Verify dashboard elements |
+| Analytics | `08-analytics.yaml` | View charts and statistics |
+| Sommelier Chat | `09-sommelier-chat.yaml` | Wine pairing recommendations |
+| Add Wine | `10-add-wine.yaml` | AI search and add to inventory |
+| Locate in Cellar | `11-locate-in-cellar.yaml` | Find wine physical location |
+| **Full Suite** | `00-full-suite.yaml` | Run all flows in sequence |
 
-## Configuration
+## Screenshots
 
-- **App ID**: `host.exp.Exponent` (Expo Go for dev)
-- **Production**: Update `appId` to `com.yourcompany.winecellar` in `config.yaml` and all flows
+Test screenshots are saved to `./screenshots/` by default. Configure location in `config.yaml`:
 
-## Test Data
-
-Tests assume:
-- Valid test account: `test@example.com` / `password123`
-- Existing inventory with wines
-- At least one cellar with spaces and racks
-
-## Known Limitations
-
-### Missing testIDs
-Most screens don't have `testID` props yet. Tests use:
-- Text matching (fragile)
-- Point coordinates (approximate)
-- Relative positions
-
-**See `TESTID-TODO.md` for full list of needed testIDs.**
-
-### Workarounds
-- Point coordinates are approximate — may need adjustment for different screen sizes
-- Some flows use `when:visible` conditional blocks for defensive testing
-- Modal dismissal uses `back` as fallback
-
-## Adding TestIDs
-
-To make tests more reliable, add testIDs to components:
-
-```tsx
-<TouchableOpacity testID="home-add-wine-button" onPress={handlePress}>
-  <Text>Add a Wine</Text>
-</TouchableOpacity>
-```
-
-Then update tests:
 ```yaml
-- tapOn:
-    id: "home-add-wine-button"
+screenshotDirectory: ./screenshots
 ```
 
-## Debugging
+## Adding testID Props
 
-### View Maestro hierarchy
-```bash
-maestro hierarchy
-```
+Many flows currently use approximate `point:` coordinates for tapping elements. For more reliable tests:
 
-### Run with verbose logging
-```bash
-maestro test --debug e2e/login.yaml
-```
+1. **See `TESTID-TODO.md`** for a complete list of components that need testID props
+2. **Add testID props** to React Native components:
+   ```tsx
+   <TouchableOpacity testID="login-submit-button">
+   ```
+3. **Update flows** to use testID instead of coordinates:
+   ```yaml
+   # Before (fragile)
+   - tapOn:
+       point: "50%,80%"
+   
+   # After (reliable)
+   - tapOn:
+       id: "login-submit-button"
+   ```
 
-### Take screenshots manually
-Add to any flow:
-```yaml
-- takeScreenshot: "debug-screenshot"
-```
+## Troubleshooting
 
-Screenshots saved to: `~/.maestro/tests/<timestamp>/screenshots/`
+### Tests fail with "Element not found"
+
+- Check if the app is fully loaded (`waitForAnimationToEnd`)
+- Verify text/element exists (use `optional: true` for variable content)
+- Add testID props for more reliable selectors
+
+### Tests timeout
+
+- Increase timeout in config.yaml: `timeout: 15000`
+- Add explicit waits: `waitForAnimationToEnd: { timeout: 5000 }`
+
+### Screenshots not saving
+
+- Ensure `screenshotDirectory` exists or Maestro can create it
+- Check file permissions
+
+### Login fails
+
+- Verify `TEST_EMAIL` and `TEST_PASSWORD` are correct
+- Check if test account exists in the backend
+- Ensure backend API is running and accessible
 
 ## CI/CD Integration
 
 ### GitHub Actions Example
+
 ```yaml
-- name: Run Maestro Tests
-  run: |
-    maestro test e2e/ --format junit --output test-results.xml
+name: E2E Tests
+
+on: [push, pull_request]
+
+jobs:
+  e2e:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Maestro
+        run: curl -Ls "https://get.maestro.mobile.dev" | bash
+      
+      - name: Build iOS app
+        run: |
+          npx expo prebuild --platform ios
+          xcodebuild -workspace ios/App.xcworkspace -scheme App -sdk iphonesimulator
+      
+      - name: Run E2E tests
+        run: maestro test e2e/flows/00-full-suite.yaml
+      
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-screenshots
+          path: e2e/screenshots/
 ```
 
-### Maestro Cloud
-```bash
-maestro cloud --apiKey $MAESTRO_API_KEY e2e/
-```
+## Development Workflow
+
+1. **Write feature** → Add testID props
+2. **Write Maestro flow** → Test locally
+3. **Commit** → CI runs full suite
+4. **Review** → Check screenshots on failures
 
 ## Resources
 
-- [Maestro Docs](https://maestro.mobile.dev)
-- [Maestro CLI Reference](https://maestro.mobile.dev/reference/commands)
-- [Bibo Mobile Repo](https://github.com/your-org/wine-cellar-mobile)
+- [Maestro Documentation](https://maestro.mobile.dev/)
+- [Maestro Cloud](https://cloud.mobile.dev/) - Run tests on real devices
+- [TESTID-TODO.md](./TESTID-TODO.md) - Components needing testID props
 
-## Troubleshooting
+## Next Steps
 
-### "App not found"
-- Ensure app is installed and running on device/emulator
-- Check `appId` in flow files matches your app
-
-### "Element not found"
-- Screenshot the current screen: `maestro hierarchy`
-- Verify text/element exists
-- Add `waitForAnimationToEnd` before assertions
-
-### Flaky tests
-- Increase timeouts: `timeout: 5000`
-- Add explicit waits: `waitForAnimationToEnd`
-- Use testIDs instead of text matching
-
-### Point coordinates wrong
-- Different screen sizes need different coordinates
-- Use testIDs for reliability
-- Fallback: use relative percentage points (50%, 25%, etc.)
+- [ ] Build APK/IPA for testing
+- [ ] Add testID props (see TESTID-TODO.md)
+- [ ] Update flows to use testID instead of coordinates
+- [ ] Set up CI/CD pipeline
+- [ ] Add more test flows for edge cases
+- [ ] Test on real devices via Maestro Cloud

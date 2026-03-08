@@ -1,0 +1,51 @@
+# Locate in Cellar - Find wine physical location
+appId: ${APP_ID}
+---
+- launchApp
+
+# Navigate to Inventory
+- tapOn: "Inventory"
+- assertVisible: "My Wines"
+- waitForAnimationToEnd
+
+# Tap on a wine card
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+# Scroll down to see "Locate in Cellar" button
+- scroll:
+    direction: DOWN
+
+# Tap "Locate in Cellar" button (inside FAB menu)
+# Note: May need to tap FAB first to expand menu
+- tapOn:
+    point: "90%,85%" # FAB approximate location
+- waitForAnimationToEnd
+
+- tapOn: "Locate in Cellar"
+- waitForAnimationToEnd
+
+# Should show zoomed rack view with highlighted bottle
+- assertVisible: "Cellar"
+- takeScreenshot: "11-locate-zoomed-view"
+
+# Verify green highlighted bottle is visible
+- assertVisible:
+    point: "50%,50%" # Center of grid where bottle should be
+
+# Tap on highlighted bottle
+- tapOn:
+    point: "50%,50%"
+- waitForAnimationToEnd
+
+# Verify quick consume modal
+- assertVisible: "Remove Bottle"
+- takeScreenshot: "11-quick-consume-modal"
+
+# Close modal
+- back
+
+# Navigate back
+- back
+- waitForAnimationToEnd

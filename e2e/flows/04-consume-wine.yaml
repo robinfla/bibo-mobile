@@ -1,0 +1,51 @@
+# Consume Wine - Open a bottle and record consumption
+appId: ${APP_ID}
+---
+- launchApp
+
+# Go to Home screen
+- tapOn: "Home"
+- waitForAnimationToEnd
+
+# Tap "Open a Bottle" quick action
+- tapOn: "Open a Bottle"
+- waitForAnimationToEnd
+
+# Verify consume modal opened
+- assertVisible: "Consume Wine"
+
+# Take screenshot of consume modal search step
+- takeScreenshot: "04-consume-search"
+
+# Search for a wine
+- tapOn: "Search wines..."
+- inputText: "Cabernet"
+- waitForAnimationToEnd
+
+# Tap on first search result
+- tapOn:
+    point: "50%,50%"
+- waitForAnimationToEnd
+
+# Verify details step loaded
+- assertVisible: "Quantity"
+- takeScreenshot: "04-consume-details"
+
+# Optional: Add rating (tap stars)
+- tapOn:
+    point: "40%,60%" # Approximate location of rating stars
+
+# Optional: Add notes
+- tapOn: "Notes"
+- inputText: "Excellent with steak"
+- hideKeyboard
+
+# Confirm consumption
+- tapOn: "Mark as Consumed"
+- waitForAnimationToEnd
+
+# Verify success (modal should close)
+- assertVisible: "My Cellar"
+
+# Take screenshot after consume
+- takeScreenshot: "04-consume-complete"

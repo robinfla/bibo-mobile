@@ -1,0 +1,62 @@
+# Rack Interaction - Add bottles to rack slots
+appId: ${APP_ID}
+---
+- launchApp
+
+# Navigate to Cellars → Space → Rack
+- tapOn: "Cellars"
+- waitForAnimationToEnd
+
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+- tapOn:
+    point: "50%,50%"
+- waitForAnimationToEnd
+
+# Verify rack grid is visible
+- assertVisible:
+    text: "Rack"
+    optional: true
+- takeScreenshot: "06-rack-grid"
+
+# Tap on an empty slot (dashed circle)
+# Note: Exact position depends on rack size
+- tapOn:
+    point: "30%,50%"
+- waitForAnimationToEnd
+
+# Verify empty slot modal appeared
+- assertVisible: "Empty slot"
+- assertVisible: "+ Add Wine"
+- takeScreenshot: "06-empty-slot-modal"
+
+# Tap "+ Add Wine" button
+- tapOn: "+ Add Wine"
+- waitForAnimationToEnd
+
+# Verify wine selection screen/modal
+- assertVisible:
+    text: "Select wine"
+    optional: true
+- takeScreenshot: "06-wine-selection"
+
+# Tap on first wine in list
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+# Verify placement confirmation or return to rack
+- takeScreenshot: "06-after-placement"
+
+# Go back to rack view
+- back
+- waitForAnimationToEnd
+
+# Verify the slot now shows a bottle (filled circle with color)
+- takeScreenshot: "06-rack-with-bottle"

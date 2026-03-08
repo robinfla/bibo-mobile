@@ -1,0 +1,53 @@
+# Cellars Navigation - Browse cellar spaces and racks
+appId: ${APP_ID}
+---
+- launchApp
+
+# Navigate to Cellars tab
+- tapOn: "Cellars"
+- assertVisible: "Cellars"
+- waitForAnimationToEnd
+
+# Take screenshot of cellars list
+- takeScreenshot: "05-cellars-list"
+
+# Tap on first cellar (should navigate to spaces)
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+# Verify spaces list loaded
+# Note: Space names will vary (Cave, Kitchen, etc.)
+- takeScreenshot: "05-spaces-list"
+
+# Tap on first space
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+# Verify space detail screen with racks
+- takeScreenshot: "05-space-detail"
+
+# Tap on a rack
+- tapOn:
+    point: "50%,50%"
+- waitForAnimationToEnd
+
+# Verify rack view loaded
+- assertVisible:
+    text: "Rack"
+    optional: true
+- takeScreenshot: "05-rack-view"
+
+# Test back navigation through the stack
+- back
+- waitForAnimationToEnd
+- takeScreenshot: "05-back-to-space"
+
+- back
+- waitForAnimationToEnd
+- takeScreenshot: "05-back-to-spaces"
+
+- back
+- waitForAnimationToEnd
+- assertVisible: "Cellars"

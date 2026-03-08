@@ -1,0 +1,6 @@
+# Reset app state before tests
+appId: ${APP_ID}
+---
+- clearState
+- clearKeychain
+- launchApp

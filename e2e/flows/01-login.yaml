@@ -1,0 +1,25 @@
+# Login Flow - Sign in with test credentials
+appId: ${APP_ID}
+---
+- launchApp
+
+# Wait for login screen to load
+- assertVisible: "Sign in to your cellar"
+
+# Enter email
+- tapOn: "Email"
+- inputText: "${TEST_EMAIL}"
+
+# Enter password
+- tapOn: "Password"
+- inputText: "${TEST_PASSWORD}"
+
+# Tap login button
+- tapOn: "Sign in"
+
+# Verify successful login - should see home screen
+- assertVisible: "My Cellar"
+- assertVisible: "Ready Tonight"
+
+# Take screenshot of logged-in state
+- takeScreenshot: "01-login-success"
