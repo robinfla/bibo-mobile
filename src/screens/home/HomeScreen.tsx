@@ -226,9 +226,13 @@ export const HomeScreen = () => {
                 <TouchableOpacity
                   key={wine.id}
                   style={styles.wineCard}
-                  onPress={() => navigation.navigate('WineDetail' as never, {
-                    wineId: wine.id
-                  } as never)}
+                  onPress={() => {
+                    // @ts-ignore - Navigate to nested WineDetail screen
+                    navigation.navigate('InventoryTab', {
+                      screen: 'WineDetail',
+                      params: { wineId: wine.id },
+                    })
+                  }}
                   activeOpacity={0.7}
                 >
                   {/* Wine Image */}
