@@ -19,6 +19,7 @@ import { ConsumeWineModal } from '../../components/ConsumeWineModal'
 
 interface WineSuggestion {
   id: string
+  wineId: number
   name: string
   vintage: number
   region: string
@@ -230,7 +231,7 @@ export const HomeScreen = () => {
                     // @ts-ignore - Navigate to nested WineDetail screen
                     navigation.navigate('InventoryTab', {
                       screen: 'WineDetail',
-                      params: { wineId: wine.id },
+                      params: { wineId: wine.wineId },
                     })
                   }}
                   activeOpacity={0.7}
