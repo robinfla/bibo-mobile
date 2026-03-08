@@ -67,7 +67,17 @@ export const CellarLocateScreen = () => {
   const pulseAnim = useRef(new Animated.Value(1)).current
 
   useEffect(() => {
-    if (!cellarId || !highlightWineId) return
+    if (!cellarId || !highlightWineId) {
+      // Missing params - navigate to cellars list
+      Alert.alert(
+        'Navigation Error',
+        'Missing location information',
+        [{ text: 'OK', onPress: () => navigation.navigate('CellarsList' as never) }],
+        { cancelable: false }
+      )
+      return
+    }
+    
     loadData()
     
     // Start pulse animation
@@ -95,11 +105,11 @@ export const CellarLocateScreen = () => {
         `/api/cellars/${cellarId}/locate?wineId=${highlightWineId}${vintageParam}`
       )
       setData(result)
-    } catch (error) {
-      console.error('Failed to load cellar location:', error)
-      const errorMessage = error instanceof ApiError 
-        ? error.message 
-        : 'Failed to load cellar location'
+    } catch (error: any) {
+      // Don't log to console to avoid toast notification
+      const errorMessage = error?.message || "This wine hasn't been assigned a rack location yet"
+      
+      setIsLoading(false)
       
       Alert.alert(
         'Location Not Found',
@@ -107,10 +117,16 @@ export const CellarLocateScreen = () => {
         [
           {
             text: 'OK',
-            onPress: () => navigation.goBack(),
+            onPress: () => {
+              // Navigate to Cellars list instead of going back
+              // (going back might return to broken screen)
+              navigation.navigate('CellarsList' as never)
+            },
           },
-        ]
+        ],
+        { cancelable: false }
       )
+      return
     } finally {
       setIsLoading(false)
     }
@@ -259,6 +275,19 @@ export const CellarLocateScreen = () => {
     )
   }
 
+  // Guard against missing data
+  if (!isLoading && !data) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center', padding: 20 }]}>
+          <Text style={{ fontSize: 16, color: '#999', textAlign: 'center' }}>
+            Unable to load cellar location
+          </Text>
+        </View>
+      </SafeAreaView>
+    )
+  }
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -267,6 +296,10 @@ export const CellarLocateScreen = () => {
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => {
+            if (!data) {
+              navigation.goBack()
+              return
+            }
             // @ts-ignore - Replace instead of navigate to remove zoom view from stack
             navigation.replace('RackView', { 
               rackId: data.rackId,
@@ -280,7 +313,7 @@ export const CellarLocateScreen = () => {
 
         <View style={styles.headerContent}>
           <Text style={styles.headerTitle}>Cellars</Text>
-          <Text style={styles.headerSubtitle}>{data.cellarName}</Text>
+          <Text style={styles.headerSubtitle}>{data?.cellarName || ''}</Text>
         </View>
 
         <View style={styles.headerSpacer} />
