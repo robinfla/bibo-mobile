@@ -228,13 +228,10 @@ export const HomeScreen = () => {
                   key={wine.id}
                   style={styles.wineCard}
                   onPress={() => {
-                    // @ts-ignore - Navigate to nested WineDetail screen with returnTo param
+                    // @ts-ignore - Navigate to nested WineDetail screen
                     navigation.navigate('InventoryTab', {
                       screen: 'WineDetail',
-                      params: { 
-                        wineId: wine.wineId,
-                        returnTo: 'Home',
-                      },
+                      params: { wineId: wine.wineId },
                     })
                   }}
                   activeOpacity={0.7}

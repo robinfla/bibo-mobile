@@ -31,21 +31,11 @@ export const WineDetailScreenV3 = () => {
   const route = useRoute<any>()
   const navigation = useNavigation()
   const wineId = route.params?.wineId
-  const returnTo = route.params?.returnTo
 
   const [wine, setWine] = useState<WineDetail | null>(null)
   const [selectedVintage, setSelectedVintage] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
-  const handleBack = () => {
-    if (returnTo === 'Home') {
-      // @ts-ignore - Navigate to Home tab
-      navigation.navigate('HomeTab')
-    } else {
-      navigation.goBack()
-    }
-  }
 
   useEffect(() => {
     if (!wineId) return
@@ -185,7 +175,7 @@ export const WineDetailScreenV3 = () => {
           style: 'destructive',
           onPress: () => {
             Alert.alert('Removed', 'Wine removed from cellar.')
-            handleBack()
+            navigation.goBack()
           },
         },
       ]
@@ -249,7 +239,7 @@ export const WineDetailScreenV3 = () => {
           <View style={styles.heroNav}>
             <TouchableOpacity
               style={styles.backButton}
-              onPress={handleBack}
+              onPress={() => navigation.goBack()}
               activeOpacity={0.7}
             >
               <Text style={styles.backButtonText}>‹</Text>

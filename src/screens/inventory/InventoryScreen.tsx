@@ -172,7 +172,10 @@ export const InventoryScreen = ({ route }: any) => {
       <View style={styles.headerTop}>
         <TouchableOpacity 
           style={styles.backButton} 
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            // @ts-ignore - Navigate to Home tab
+            navigation.navigate('HomeTab')
+          }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Icon name="chevron-left" size={28} color="#722F37" />
