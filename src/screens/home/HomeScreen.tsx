@@ -226,9 +226,8 @@ export const HomeScreen = () => {
                 <TouchableOpacity
                   key={wine.id}
                   style={styles.wineCard}
-                  onPress={() => navigation.navigate('InventoryTab' as never, {
-                    screen: 'WineDetail',
-                    params: { wineId: wine.id }
+                  onPress={() => navigation.navigate('WineDetail' as never, {
+                    wineId: wine.id
                   } as never)}
                   activeOpacity={0.7}
                 >

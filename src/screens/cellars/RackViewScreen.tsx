@@ -109,7 +109,7 @@ export const RackViewScreen = () => {
         wineName: l.wineName || l.wine?.name || 'Unknown',
         producerName: l.producerName || l.producer?.name || '',
         vintage: l.vintage,
-        color: l.color || l.wine?.color || 'red',
+        color: l.wineColor || l.color || l.wine?.color || 'red',
         quantity: l.quantity ?? l.qty ?? 1,
       }))
       setSearchResults(lots)
@@ -450,7 +450,10 @@ export const RackViewScreen = () => {
                           { width: slotSize, height: slotSize, borderRadius: slotSize / 2 },
                           isEmptySelected && styles.slotEmptySelected,
                         ]}
-                        onPress={() => setSelectedEmptySlot({ row, column: col })}
+                        onPress={() => {
+                          setSelectedSlot(null)
+                          setSelectedEmptySlot({ row, column: col })
+                        }}
                         activeOpacity={0.6}
                       >
                         {isEmptySelected && <Text style={{ fontSize: 14, color: '#722F37' }}>+</Text>}
