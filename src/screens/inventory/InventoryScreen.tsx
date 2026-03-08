@@ -176,9 +176,10 @@ export const InventoryScreen = ({ route }: any) => {
             // @ts-ignore - Navigate to Home tab
             navigation.navigate('HomeTab')
           }}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+          activeOpacity={0.6}
         >
-          <Icon name="chevron-left" size={28} color="#722F37" />
+          <Icon name="chevron-left" size={32} color="#722F37" />
         </TouchableOpacity>
         <Text style={styles.title}>My Wines</Text>
         <View style={styles.backButton} />
@@ -363,8 +364,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   backButton: {
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },
