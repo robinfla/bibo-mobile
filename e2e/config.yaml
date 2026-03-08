@@ -1,0 +1,9 @@
+appId: host.exp.Exponent
+---
+# Maestro Config for Bibo Wine Cellar Mobile App
+# 
+# Note: appId uses Expo Go for development testing
+# For production builds, update to: com.yourcompany.winecellar
+#
+# Run tests with: maestro test e2e/<flow-name>.yaml
+# Run all tests: maestro test e2e/

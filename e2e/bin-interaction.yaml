@@ -1,0 +1,92 @@
+appId: host.exp.Exponent
+---
+# Bin Rack Interaction Flow
+# Tests opening a bin rack, adding bottles, and verifying count updates
+
+- launchApp
+
+# Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@example.com"
+      - tapOn: "Password"
+      - inputText: "password123"
+      - tapOn: "Sign In"
+      - waitForAnimationToEnd
+
+# Navigate to Cellars → Space → Rack
+- tapOn:
+    point: "90%,95%"
+- waitForAnimationToEnd
+
+- tapOn:
+    point: "50%,30%"
+- waitForAnimationToEnd
+
+- tapOn:
+    point: "50%,30%"
+- waitForAnimationToEnd
+
+# Scroll to find bin rack
+- scrollUntilVisible:
+    element: "Bin"
+    direction: DOWN
+    timeout: 3000
+
+- tapOn: "Bin"
+- waitForAnimationToEnd
+
+- takeScreenshot: "18-bin-rack"
+
+# Tap on a bin cell
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+# Should see bin detail or add interface
+- runFlow:
+    when:
+      visible: "Add bottles"
+    commands:
+      - tapOn: "Add bottles"
+      - waitForAnimationToEnd
+
+# Search for wine to add
+- runFlow:
+    when:
+      visible: "Search"
+    commands:
+      - tapOn: "Search"
+      - inputText: "Merlot"
+      - waitForAnimationToEnd
+      - takeScreenshot: "19-bin-search"
+      # Select first result
+      - tapOn:
+          point: "50%,35%"
+      - waitForAnimationToEnd
+
+# Increase quantity if needed
+- runFlow:
+    when:
+      visible: "+"
+    commands:
+      - tapOn: "+"
+      - tapOn: "+"
+
+# Confirm addition
+- runFlow:
+    when:
+      visible: "Add"
+    commands:
+      - tapOn: "Add"
+      - waitForAnimationToEnd
+
+# Verify bin count updated
+- takeScreenshot: "20-bin-updated"
+
+# Should see bottle count on bin cell
+- assertVisible:
+    regex: "[0-9]+"

@@ -1,0 +1,32 @@
+appId: host.exp.Exponent
+---
+# Login Flow
+# Tests user authentication with valid credentials
+
+- launchApp:
+    clearState: true
+    clearKeychain: true
+
+- assertVisible: "Wine Cellar"
+- assertVisible: "Sign in to your account"
+
+# Enter credentials
+- tapOn: "Email"
+- inputText: "test@example.com"
+
+- tapOn: "Password"
+- inputText: "password123"
+
+# Submit login
+- tapOn: "Sign In"
+
+# Wait for home screen to load
+- waitForAnimationToEnd:
+    timeout: 5000
+
+# Verify successful login - should see home screen elements
+- assertVisible: "Hello"
+- assertVisible: "YOUR COLLECTION"
+- assertVisible: "Quick Actions"
+
+- takeScreenshot: "01-logged-in-home"

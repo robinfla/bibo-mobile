@@ -489,13 +489,16 @@ export const RackViewScreen = () => {
         {/* See wine list */}
         {filled > 0 && (
           <TouchableOpacity style={styles.wineListLink} onPress={() => {
-            // Navigate to inventory filtered by this cellar
+            // Navigate to inventory filtered by wines in this rack only
             // @ts-ignore
             navigation.navigate('InventoryTab', {
               screen: 'InventoryList',
               params: { 
                 tab: 'cellar',
-                filter: { cellarId },
+                filter: { 
+                  lotIds: rackLotIds,
+                  label: rack.name || `${rack.columns}×${rack.rows} ${isBin ? 'Casier' : 'Rack'}`,
+                },
               },
             })
           }}>

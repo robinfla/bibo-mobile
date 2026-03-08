@@ -1,0 +1,69 @@
+appId: host.exp.Exponent
+---
+# Rack Interaction Flow
+# Tests tapping an empty slot and placing a bottle in a grid rack
+
+- launchApp
+
+# Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@example.com"
+      - tapOn: "Password"
+      - inputText: "password123"
+      - tapOn: "Sign In"
+      - waitForAnimationToEnd
+
+# Navigate to Cellars → Space → Rack
+- tapOn:
+    point: "90%,95%"
+- waitForAnimationToEnd
+
+- tapOn:
+    point: "50%,30%"
+- waitForAnimationToEnd
+
+- tapOn:
+    point: "50%,30%"
+- waitForAnimationToEnd
+
+# Find and tap on grid rack (if type=grid exists)
+- runFlow:
+    when:
+      visible: "Grid"
+    commands:
+      - tapOn: "Grid"
+
+- tapOn:
+    point: "50%,35%"
+- waitForAnimationToEnd
+
+- takeScreenshot: "15-rack-grid"
+
+# Tap on an empty slot (center of grid)
+- tapOn:
+    point: "50%,40%"
+- waitForAnimationToEnd
+
+# Should see search/select wine interface
+- runFlow:
+    when:
+      visible: "Search"
+    commands:
+      - tapOn: "Search"
+      - inputText: "Cab"
+      - waitForAnimationToEnd
+      - takeScreenshot: "16-rack-search"
+      # Tap first result
+      - tapOn:
+          point: "50%,35%"
+      - waitForAnimationToEnd
+
+# Verify bottle placed (grid should update)
+- assertVisible:
+    regex: "(Left Wall|Right Wall|Back Wall)"
+
+- takeScreenshot: "17-rack-bottle-placed"

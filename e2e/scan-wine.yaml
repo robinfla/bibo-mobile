@@ -1,0 +1,58 @@
+appId: host.exp.Exponent
+---
+# Scan Wine Flow
+# Tests opening the scan modal and verifying camera/input screen loads
+
+- launchApp
+
+# Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@example.com"
+      - tapOn: "Password"
+      - inputText: "password123"
+      - tapOn: "Sign In"
+      - waitForAnimationToEnd
+
+# Tap the central scan button in tab bar (elevated bordeaux circle)
+# Located at center-bottom, elevated
+- tapOn:
+    point: "50%,95%"
+- waitForAnimationToEnd
+
+# Verify scan modal opened
+- assertVisible:
+    regex: "(Scan|Camera|Take Photo|Upload Photo|Manual Search)"
+
+- takeScreenshot: "21-scan-modal-opened"
+
+# Test manual search option
+- runFlow:
+    when:
+      visible: "Manual Search"
+    commands:
+      - tapOn: "Manual Search"
+      - waitForAnimationToEnd
+      - assertVisible: "Search"
+      - takeScreenshot: "22-scan-manual-search"
+      - tapOn: "Search"
+      - inputText: "Château"
+      - waitForAnimationToEnd
+      - takeScreenshot: "23-scan-manual-results"
+
+# Close scan modal
+- runFlow:
+    when:
+      visible: "Close"
+    commands:
+      - tapOn: "Close"
+
+# Alternative: tap outside or back
+- back
+- waitForAnimationToEnd
+
+# Verify returned to home
+- assertVisible: "Quick Actions"

@@ -1,0 +1,80 @@
+appId: host.exp.Exponent
+---
+# Home Screen Flow
+# Verifies all home screen elements: stats card, action grid, wine suggestions
+
+- launchApp
+
+# Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@example.com"
+      - tapOn: "Password"
+      - inputText: "password123"
+      - tapOn: "Sign In"
+      - waitForAnimationToEnd
+
+# Verify header
+- assertVisible: "Hello"
+- assertVisible: "What's calling you tonight?"
+
+# Verify stats card
+- assertVisible: "YOUR COLLECTION"
+- assertVisible: "bottles in your cellar"
+- assertVisible:
+    regex: "[0-9]+"
+
+- takeScreenshot: "24-home-header-stats"
+
+# Verify quick actions section
+- assertVisible: "Quick Actions"
+- assertVisible: "Add a Wine"
+- assertVisible: "Scan label or enter details"
+- assertVisible: "Open a Bottle"
+- assertVisible: "Mark one as consumed"
+- assertVisible: "Ask the Sommelier"
+- assertVisible: "Get personalized recommendations"
+
+- takeScreenshot: "25-home-quick-actions"
+
+# Scroll to see wine suggestions
+- scrollUntilVisible:
+    element: "Ready Tonight"
+    direction: DOWN
+    timeout: 3000
+
+# Verify wine suggestions section (if any wines exist)
+- runFlow:
+    when:
+      visible: "Ready Tonight"
+    commands:
+      - assertVisible: "See all ›"
+      - takeScreenshot: "26-home-suggestions"
+
+# Test pull-to-refresh
+- scroll:
+    direction: DOWN
+    distance: 300
+
+- waitForAnimationToEnd:
+    timeout: 2000
+
+- takeScreenshot: "27-home-refreshed"
+
+# Tap profile button (top-right)
+- tapOn:
+    point: "90%,8%"
+- waitForAnimationToEnd
+
+- assertVisible: "Profile"
+
+- takeScreenshot: "28-profile-screen"
+
+# Return home
+- back
+- waitForAnimationToEnd
+
+- assertVisible: "Quick Actions"

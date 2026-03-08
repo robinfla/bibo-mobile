@@ -56,7 +56,8 @@ export const InventoryScreen = ({ route }: any) => {
     filters.cellarId ||
     filters.vintage ||
     filters.priceMin > 0 ||
-    filters.priceMax < 200
+    filters.priceMax < 200 ||
+    filters.lotIds
   )
 
   // Debounce search
@@ -110,6 +111,9 @@ export const InventoryScreen = ({ route }: any) => {
       }
       if (filters.maturity) {
         params.append('maturity', filters.maturity)
+      }
+      if (filters.lotIds && filters.lotIds.length > 0) {
+        params.append('lotIds', filters.lotIds.join(','))
       }
 
       console.log('📡 Fetching cards with params:', params.toString())
@@ -196,19 +200,33 @@ export const InventoryScreen = ({ route }: any) => {
         </TouchableOpacity>
       </View>
 
-      {/* Active Filter Indicator */}
-      {filters.maturity && (
+      {/* Active Filter Indicators */}
+      {(filters.maturity || filters.label) && (
         <View style={styles.filterChipContainer}>
-          <View style={styles.filterChip}>
-            <Icon name="filter-check" size={16} color="#722F37" />
-            <Text style={styles.filterChipText}>Ready to drink</Text>
-            <TouchableOpacity
-              onPress={() => setFilters((prev) => ({ ...prev, maturity: undefined }))}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <Icon name="close-circle" size={18} color="#722F37" />
-            </TouchableOpacity>
-          </View>
+          {filters.maturity && (
+            <View style={styles.filterChip}>
+              <Icon name="filter-check" size={16} color="#722F37" />
+              <Text style={styles.filterChipText}>Ready to drink</Text>
+              <TouchableOpacity
+                onPress={() => setFilters((prev) => ({ ...prev, maturity: undefined }))}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <Icon name="close-circle" size={18} color="#722F37" />
+              </TouchableOpacity>
+            </View>
+          )}
+          {filters.label && (
+            <View style={styles.filterChip}>
+              <Icon name="filter-check" size={16} color="#722F37" />
+              <Text style={styles.filterChipText}>{filters.label}</Text>
+              <TouchableOpacity
+                onPress={() => setFilters((prev) => ({ ...prev, lotIds: undefined, label: undefined }))}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <Icon name="close-circle" size={18} color="#722F37" />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       )}
 

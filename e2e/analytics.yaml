@@ -1,0 +1,77 @@
+appId: host.exp.Exponent
+---
+# Analytics Flow
+# Tests navigation to analytics tab and verifying charts load
+
+- launchApp
+
+# Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@example.com"
+      - tapOn: "Password"
+      - inputText: "password123"
+      - tapOn: "Sign In"
+      - waitForAnimationToEnd
+
+# Navigate to Analytics tab (4th position, ~75%)
+- tapOn:
+    point: "70%,95%"
+- waitForAnimationToEnd
+
+# Verify analytics screen loaded
+- assertVisible: "Analytics"
+
+- takeScreenshot: "29-analytics-overview"
+
+# Verify composition tab elements
+- assertVisible: "Composition"
+- assertVisible: "Finance"
+
+# Should see stats summary
+- assertVisible:
+    regex: "([0-9]+)"  # Bottle counts
+
+# Should see color breakdown
+- assertVisible:
+    regex: "(Red|White|Rosé)"
+
+- takeScreenshot: "30-analytics-composition"
+
+# Test finance tab
+- tapOn: "Finance"
+- waitForAnimationToEnd
+
+- assertVisible:
+    regex: "(Value|Cost|Portfolio)"
+
+- takeScreenshot: "31-analytics-finance"
+
+# Scroll to see more charts
+- scrollUntilVisible:
+    element: "*"
+    direction: DOWN
+    timeout: 2000
+
+- takeScreenshot: "32-analytics-scrolled"
+
+# Test tapping on a chart/metric for detail view
+- tapOn:
+    point: "50%,35%"
+- waitForAnimationToEnd
+
+# May navigate to detail screen
+- runFlow:
+    when:
+      visible:
+        regex: "(Back|Close)"
+    commands:
+      - takeScreenshot: "33-analytics-detail"
+      - back
+      - waitForAnimationToEnd
+
+# Return to analytics main
+- assertVisible: "Analytics"

@@ -1,0 +1,48 @@
+appId: host.exp.Exponent
+---
+# Wine Detail Flow
+# Tests tapping a wine card and viewing its detail screen
+
+- launchApp
+
+# Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@example.com"
+      - tapOn: "Password"
+      - inputText: "password123"
+      - tapOn: "Sign In"
+      - waitForAnimationToEnd
+
+# Navigate to Inventory
+- tapOn:
+    point: "25%,95%"
+- waitForAnimationToEnd
+
+# Tap first wine card (approximate center of first card)
+- tapOn:
+    point: "50%,25%"
+- waitForAnimationToEnd
+
+# Verify wine detail screen elements
+- assertVisible: "About This Wine"
+- assertVisible: "Wine Info"
+
+- takeScreenshot: "06-wine-detail"
+
+# Test scrolling detail view
+- scrollUntilVisible:
+    element: "*"
+    direction: DOWN
+    timeout: 2000
+
+- takeScreenshot: "07-wine-detail-scrolled"
+
+# Return to inventory
+- back
+- waitForAnimationToEnd
+
+- assertVisible: "Cellar"

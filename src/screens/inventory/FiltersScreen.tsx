@@ -26,6 +26,8 @@ export interface FilterState {
   vintage?: number
   priceMin: number
   priceMax: number
+  lotIds?: number[]
+  label?: string
 }
 
 interface FiltersScreenProps {

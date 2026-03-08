@@ -1,0 +1,80 @@
+appId: host.exp.Exponent
+---
+# Consume Wine Flow
+# Tests opening a bottle, rating it, and confirming consumption
+
+- launchApp
+
+# Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@example.com"
+      - tapOn: "Password"
+      - inputText: "password123"
+      - tapOn: "Sign In"
+      - waitForAnimationToEnd
+
+# From home screen, tap "Open a Bottle" quick action
+- scrollUntilVisible:
+    element: "Open a Bottle"
+    direction: DOWN
+    timeout: 3000
+
+- tapOn: "Open a Bottle"
+- waitForAnimationToEnd
+
+# Verify consume modal opened
+- assertVisible: "Select a bottle to consume"
+
+- takeScreenshot: "08-consume-modal-select"
+
+# Tap first wine in list
+- tapOn:
+    point: "50%,30%"
+- waitForAnimationToEnd
+
+# Enter tasting notes
+- scrollUntilVisible:
+    element: "Your tasting notes"
+    direction: DOWN
+    timeout: 2000
+
+- tapOn: "Your tasting notes"
+- inputText: "Excellent wine with notes of cherry and oak. Perfect with steak."
+
+# Enter pairing (if visible)
+- runFlow:
+    when:
+      visible: "Pairing"
+    commands:
+      - tapOn: "Pairing"
+      - inputText: "Grilled ribeye steak"
+
+# Enter score
+- scrollUntilVisible:
+    element: "Score"
+    direction: DOWN
+    timeout: 2000
+
+- tapOn: "Score"
+- inputText: "95"
+
+- takeScreenshot: "09-consume-modal-filled"
+
+# Confirm consumption
+- scrollUntilVisible:
+    element: "Consume"
+    direction: DOWN
+    timeout: 2000
+
+- tapOn: "Consume"
+- waitForAnimationToEnd:
+    timeout: 3000
+
+# Verify return to home and bottle count updated
+- assertVisible: "YOUR COLLECTION"
+
+- takeScreenshot: "10-consume-complete"

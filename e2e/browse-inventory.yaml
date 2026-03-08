@@ -1,0 +1,63 @@
+appId: host.exp.Exponent
+---
+# Browse Inventory Flow
+# Tests navigation to inventory, scrolling, search, and filters
+
+- launchApp
+
+# Ensure logged in (tap through login if needed)
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@example.com"
+      - tapOn: "Password"
+      - inputText: "password123"
+      - tapOn: "Sign In"
+      - waitForAnimationToEnd
+
+# Navigate to Inventory tab
+- tapOn:
+    point: "25%,95%"  # First tab (Home is ~12.5%, Inventory is ~25%)
+- waitForAnimationToEnd
+
+# Verify inventory screen loaded
+- assertVisible: "Cellar"
+- assertVisible: "Wishlist"
+- assertVisible: "History"
+
+- takeScreenshot: "02-inventory-list"
+
+# Test search functionality
+- tapOn: "Search wines..."
+- inputText: "Cabernet"
+- waitForAnimationToEnd:
+    timeout: 1000
+
+- takeScreenshot: "03-inventory-search"
+
+# Clear search
+- tapOn: "Search wines..."
+- clearText
+- waitForAnimationToEnd
+
+# Test filters - tap filter icon (usually top-right)
+- tapOn:
+    point: "90%,10%"  # Approximate filter button location
+- waitForAnimationToEnd
+
+- assertVisible: "Sort"
+- takeScreenshot: "04-inventory-filters"
+
+# Close filter modal
+- tapOn: "Apply"
+- waitForAnimationToEnd
+
+# Scroll through inventory
+- scrollUntilVisible:
+    element: "*"
+    direction: DOWN
+    timeout: 2000
+
+- takeScreenshot: "05-inventory-scrolled"

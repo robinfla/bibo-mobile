@@ -1,0 +1,72 @@
+appId: host.exp.Exponent
+---
+# Cellars Navigation Flow
+# Tests navigating through Cellars → Space → Rack hierarchy
+
+- launchApp
+
+# Login if needed
+- runFlow:
+    when:
+      visible: "Sign In"
+    commands:
+      - tapOn: "Email"
+      - inputText: "test@example.com"
+      - tapOn: "Password"
+      - inputText: "password123"
+      - tapOn: "Sign In"
+      - waitForAnimationToEnd
+
+# Navigate to Cellars tab (rightmost tab)
+- tapOn:
+    point: "90%,95%"
+- waitForAnimationToEnd
+
+# Verify cellars list screen
+- assertVisible: "Cellars"
+
+- takeScreenshot: "11-cellars-list"
+
+# Tap first cellar card
+- tapOn:
+    point: "50%,30%"
+- waitForAnimationToEnd
+
+# Should see spaces list
+- assertVisible: "Spaces"
+
+- takeScreenshot: "12-spaces-list"
+
+# Tap first space
+- tapOn:
+    point: "50%,30%"
+- waitForAnimationToEnd
+
+# Should see space detail with racks
+- assertVisible: "Racks"
+
+- takeScreenshot: "13-space-detail"
+
+# Tap first rack
+- tapOn:
+    point: "50%,35%"
+- waitForAnimationToEnd
+
+# Verify rack view loaded (grid or bin)
+- assertVisible:
+    regex: "(Left Wall|Right Wall|Back Wall|Floor|Rack)"
+
+- takeScreenshot: "14-rack-view"
+
+# Navigate back through hierarchy
+- back
+- waitForAnimationToEnd
+- assertVisible: "Racks"
+
+- back
+- waitForAnimationToEnd
+- assertVisible: "Spaces"
+
+- back
+- waitForAnimationToEnd
+- assertVisible: "Cellars"
