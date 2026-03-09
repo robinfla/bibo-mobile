@@ -15,6 +15,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { SommelierSidebar } from '../../components/SommelierSidebar'
 
 interface WineSuggestion {
   wineId: number
@@ -343,18 +344,19 @@ export const SommelierScreen = ({ route }: any) => {
         </LinearGradient>
       </KeyboardAvoidingView>
 
-      {/* Sidebar Placeholder - TODO: Implement full sidebar component */}
-      {showSidebar && (
-        <TouchableOpacity
-          style={styles.sidebarOverlay}
-          onPress={() => setShowSidebar(false)}
-          activeOpacity={1}
-        >
-          <View style={styles.sidebarContainer}>
-            <Text style={styles.sidebarText}>Sidebar coming soon...</Text>
-          </View>
-        </TouchableOpacity>
-      )}
+      {/* Sidebar */}
+      <SommelierSidebar
+        visible={showSidebar}
+        onClose={() => setShowSidebar(false)}
+        onConversationSelect={(conversationId) => {
+          setCurrentConversationId(conversationId)
+          fetchConversationHistory(conversationId)
+        }}
+        onProfilePress={() => {
+          // @ts-ignore - Navigation typing
+          navigation.navigate('TasteProfile')
+        }}
+      />
     </SafeAreaView>
   )
 }
@@ -579,26 +581,5 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  sidebarOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  sidebarContainer: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    width: 300,
-    backgroundColor: '#fff',
-    padding: 20,
-  },
-  sidebarText: {
-    fontSize: 16,
-    color: '#2c1810',
   },
 })
