@@ -19,13 +19,17 @@ export const TasteProfileEmptyScreen = () => {
   const handleAnalyzeCellar = async () => {
     setIsAnalyzing(true)
     try {
-      await apiFetch('/api/profile/analyze', {
+      // Start a new conversation with analysis prompt
+      const response = await apiFetch<{ conversationId: string; message: string }>('/api/chat/sommelier', {
         method: 'POST',
+        body: {
+          message: 'Please analyze my wine cellar and tell me about my taste preferences. Look at what wines I have, their regions, grapes, and colors. Based on this collection, what can you tell me about my wine personality and what I might enjoy?',
+        },
       })
       
-      // Navigate to summary screen after analysis
+      // Navigate to chat to see the analysis
       // @ts-ignore - Navigation typing
-      navigation.replace('TasteProfile')
+      navigation.replace('SommelierChat', { conversationId: response.conversationId })
     } catch (error) {
       console.error('Failed to analyze cellar:', error)
       // TODO: Show error message
