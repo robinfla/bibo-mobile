@@ -32,23 +32,26 @@ interface Message {
   timestamp: Date
 }
 
+const SUGGESTION_PROMPTS = [
+  { emoji: '🍽️', text: 'Suggest wine for my meal' },
+  { emoji: '🏛️', text: 'Explore my cellar' },
+  { emoji: '🌍', text: 'Teach me about Bordeaux' },
+  { emoji: '💰', text: 'Find a red under $30' },
+  { emoji: '📚', text: 'Learn about regions' },
+  { emoji: '🍇', text: 'Grape varieties guide' },
+]
+
 export const SommelierScreen = ({ route }: any) => {
   const navigation = useNavigation()
   const scrollViewRef = useRef<ScrollView>(null)
   const conversationId = route?.params?.conversationId
   
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      type: 'assistant',
-      text: "Hello! I'm your wine sommelier. Tell me what you're eating or craving, and I'll suggest the perfect wine from your cellar.",
-      timestamp: new Date(),
-    },
-  ])
+  const [messages, setMessages] = useState<Message[]>([])
   const [inputText, setInputText] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [inputHeight, setInputHeight] = useState(44)
   const [currentConversationId, setCurrentConversationId] = useState<string | undefined>(conversationId)
+  const [showSidebar, setShowSidebar] = useState(false)
 
   useEffect(() => {
     // Fetch conversation history if conversationId exists
@@ -84,13 +87,14 @@ export const SommelierScreen = ({ route }: any) => {
     }
   }
 
-  const handleSend = async () => {
-    if (!inputText.trim() || isLoading) return
+  const handleSend = async (text?: string) => {
+    const messageText = text || inputText.trim()
+    if (!messageText || isLoading) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
-      text: inputText.trim(),
+      text: messageText,
       timestamp: new Date(),
     }
 
@@ -138,6 +142,10 @@ export const SommelierScreen = ({ route }: any) => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleSuggestionPress = (suggestion: typeof SUGGESTION_PROMPTS[0]) => {
+    handleSend(suggestion.text)
   }
 
   const handleWinePress = (wineId: number) => {
@@ -221,29 +229,28 @@ export const SommelierScreen = ({ route }: any) => {
     )
   }
 
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <Text style={styles.emptyIcon}>🍷</Text>
+      <Text style={styles.emptyTitle}>What are we up to today?</Text>
+    </View>
+  )
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <LinearGradient
-            colors={['#722F37', '#944654']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.sommelierIcon}
-          >
-            <Text style={styles.sommelierEmoji}>🎩</Text>
-          </LinearGradient>
-          <Text style={styles.headerTitle}>Sommelier Assistant</Text>
-        </View>
-
         <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => navigation.goBack()}
+          style={styles.menuButton}
+          onPress={() => setShowSidebar(true)}
           activeOpacity={0.7}
         >
-          <Icon name="close" size={20} color="#666" />
+          <Icon name="menu" size={24} color="#2c1810" />
         </TouchableOpacity>
+        
+        <Text style={styles.headerTitle}>Bibo Sommelier</Text>
+        
+        <View style={styles.menuButton} />
       </View>
 
       {/* Chat Container */}
@@ -264,7 +271,7 @@ export const SommelierScreen = ({ route }: any) => {
             contentContainerStyle={styles.messagesContent}
             showsVerticalScrollIndicator={false}
           >
-            {messages.map((message, index) => renderMessage(message, index))}
+            {messages.length === 0 ? renderEmptyState() : messages.map((message, index) => renderMessage(message, index))}
             {isLoading && (
               <View style={[styles.messageContainer, styles.assistantContainer]}>
                 <View style={styles.assistantBubble}>
@@ -274,20 +281,43 @@ export const SommelierScreen = ({ route }: any) => {
             )}
           </ScrollView>
 
+          {/* Suggestion Carousel (only show when no messages) */}
+          {messages.length === 0 && (
+            <View style={styles.carouselContainer}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.carouselContent}
+              >
+                {SUGGESTION_PROMPTS.map((suggestion, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.suggestionChip}
+                    onPress={() => handleSuggestionPress(suggestion)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.suggestionEmoji}>{suggestion.emoji}</Text>
+                    <Text style={styles.suggestionText}>{suggestion.text}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
+
           {/* Input Container */}
           <View style={styles.inputContainer}>
             <TextInput
               style={[styles.input, { height: Math.max(44, inputHeight) }]}
               value={inputText}
               onChangeText={setInputText}
-              placeholder="What are you eating or craving?"
+              placeholder="Ask me anything about wine"
               placeholderTextColor="#999"
               multiline
               onContentSizeChange={(e) =>
                 setInputHeight(Math.min(100, e.nativeEvent.contentSize.height))
               }
               returnKeyType="send"
-              onSubmitEditing={handleSend}
+              onSubmitEditing={() => handleSend()}
               blurOnSubmit={false}
             />
 
@@ -296,7 +326,7 @@ export const SommelierScreen = ({ route }: any) => {
                 styles.sendButtonContainer,
                 (!inputText.trim() || isLoading) && styles.sendButtonDisabled,
               ]}
-              onPress={handleSend}
+              onPress={() => handleSend()}
               disabled={!inputText.trim() || isLoading}
               activeOpacity={0.8}
             >
@@ -306,12 +336,25 @@ export const SommelierScreen = ({ route }: any) => {
                 end={{ x: 1, y: 1 }}
                 style={styles.sendButton}
               >
-                <Icon name="arrow-up" size={20} color="#fff" />
+                <Icon name="send" size={18} color="#fff" />
               </LinearGradient>
             </TouchableOpacity>
           </View>
         </LinearGradient>
       </KeyboardAvoidingView>
+
+      {/* Sidebar Placeholder - TODO: Implement full sidebar component */}
+      {showSidebar && (
+        <TouchableOpacity
+          style={styles.sidebarOverlay}
+          onPress={() => setShowSidebar(false)}
+          activeOpacity={1}
+        >
+          <View style={styles.sidebarContainer}>
+            <Text style={styles.sidebarText}>Sidebar coming soon...</Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   )
 }
@@ -319,45 +362,28 @@ export const SommelierScreen = ({ route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fef9f5',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(228, 213, 203, 0.15)',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  sommelierIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+  menuButton: {
+    width: 44,
+    height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  sommelierEmoji: {
-    fontSize: 20,
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: '800',
-    color: '#1a1a1a',
-  },
-  closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
-    alignItems: 'center',
+    fontWeight: '700',
+    color: '#2c1810',
   },
   keyboardAvoid: {
     flex: 1,
@@ -369,11 +395,27 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   messagesContent: {
-    padding: 20,
-    gap: 16,
+    padding: 16,
+    flexGrow: 1,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  emptyIcon: {
+    fontSize: 64,
+    marginBottom: 16,
+  },
+  emptyTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#722F37',
+    textAlign: 'center',
   },
   messageContainer: {
-    marginBottom: 16,
+    marginBottom: 12,
   },
   assistantContainer: {
     alignItems: 'flex-start',
@@ -383,30 +425,26 @@ const styles = StyleSheet.create({
   },
   assistantBubble: {
     backgroundColor: '#fff',
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
-    borderRadius: 20,
-    borderBottomLeftRadius: 4,
+    borderColor: 'rgba(228, 213, 203, 0.3)',
     padding: 14,
-    paddingHorizontal: 18,
-    maxWidth: '80%',
+    maxWidth: '85%',
     shadowColor: '#722F37',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
+    shadowOpacity: 0.06,
     shadowRadius: 8,
     elevation: 2,
   },
   assistantText: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#1a1a1a',
+    color: '#2c1810',
   },
   userBubble: {
-    borderRadius: 20,
-    borderBottomRightRadius: 4,
+    borderRadius: 18,
     padding: 14,
-    paddingHorizontal: 18,
-    maxWidth: '80%',
+    maxWidth: '85%',
   },
   userText: {
     fontSize: 15,
@@ -415,96 +453,122 @@ const styles = StyleSheet.create({
   },
   typingText: {
     fontSize: 15,
-    color: '#999',
+    color: '#8a7568',
     fontStyle: 'italic',
   },
   suggestionsContainer: {
     marginTop: 12,
-    gap: 8,
+    gap: 10,
   },
   wineCard: {
-    marginTop: 8,
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowColor: '#2c1810',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
   },
   wineCardGradient: {
     flexDirection: 'row',
     padding: 12,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
+    gap: 12,
   },
   wineImageContainer: {
-    width: 56,
-    height: 70,
-    marginRight: 12,
+    width: 60,
+    height: 80,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#f5f5f5',
   },
   wineImage: {
-    width: 56,
-    height: 70,
-    borderRadius: 10,
+    width: '100%',
+    height: '100%',
   },
   wineImagePlaceholder: {
-    width: 56,
-    height: 70,
-    borderRadius: 10,
-    backgroundColor: '#f5f5f5',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#f5f5f5',
   },
   wineInfo: {
     flex: 1,
     justifyContent: 'center',
   },
   wineName: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: '#2c1810',
     marginBottom: 4,
   },
   wineRegion: {
-    fontSize: 13,
-    fontWeight: '500',
-    color: '#666',
+    fontSize: 12,
+    color: '#8a7568',
     marginBottom: 6,
   },
   pairingNote: {
-    fontSize: 13,
-    fontWeight: '500',
+    fontSize: 12,
     color: '#722F37',
     fontStyle: 'italic',
+  },
+  carouselContainer: {
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(228, 213, 203, 0.3)',
+  },
+  carouselContent: {
+    paddingHorizontal: 16,
+    gap: 10,
+  },
+  suggestionChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(228, 213, 203, 0.3)',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  suggestionEmoji: {
+    fontSize: 18,
+  },
+  suggestionText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2c1810',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     padding: 12,
-    paddingHorizontal: 20,
-    paddingBottom: 24,
-    gap: 12,
+    gap: 8,
     backgroundColor: '#fff',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(228, 213, 203, 0.15)',
+    borderTopColor: 'rgba(228, 213, 203, 0.3)',
   },
   input: {
     flex: 1,
-    minHeight: 44,
-    maxHeight: 100,
-    borderRadius: 22,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
+    borderRadius: 22,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#1a1a1a',
+    color: '#2c1810',
+    maxHeight: 100,
   },
   sendButtonContainer: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 6,
   },
   sendButtonDisabled: {
     opacity: 0.4,
@@ -515,5 +579,26 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  sidebarOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  sidebarContainer: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 300,
+    backgroundColor: '#fff',
+    padding: 20,
+  },
+  sidebarText: {
+    fontSize: 16,
+    color: '#2c1810',
   },
 })

@@ -141,7 +141,6 @@ const AnalyticsStackScreen = () => (
 
 const SommelierStackScreen = () => (
   <SommelierStack.Navigator screenOptions={{ headerShown: false }}>
-    <SommelierStack.Screen name="ConversationList" component={ConversationListScreen} />
     <SommelierStack.Screen name="SommelierChat" component={SommelierScreen} />
     <SommelierStack.Screen name="TasteProfile" component={TasteProfileScreen} />
     <SommelierStack.Screen name="SommelierOnboarding" component={SommelierOnboardingScreen} />
