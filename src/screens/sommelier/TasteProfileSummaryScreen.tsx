@@ -66,8 +66,15 @@ export const TasteProfileSummaryScreen = () => {
 
   const fetchCellarMetrics = async () => {
     try {
-      const data = await apiFetch<{ totalBottles: number; uniqueWines: number; totalRegions: number }>('/api/profile/cellar-metrics')
-      setCellarMetrics(data)
+      const data = await apiFetch<{
+        totals: { bottles: number; lots: number }
+        byRegion: Array<{ regionId: number }>
+      }>('/api/reports/stats')
+      setCellarMetrics({
+        totalBottles: data.totals.bottles,
+        uniqueWines: data.totals.lots,
+        totalRegions: data.byRegion.length,
+      })
     } catch (error) {
       console.error('Failed to fetch cellar metrics:', error)
     }
