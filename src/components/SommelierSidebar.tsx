@@ -8,6 +8,7 @@ import {
   TextInput,
   Modal,
   Animated,
+  SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
@@ -160,20 +161,21 @@ export const SommelierSidebar = ({
           ]}
           onStartShouldSetResponder={() => true}
         >
-          {/* Header */}
-          <View style={styles.sidebarHeader}>
-            <Text style={styles.sidebarTitle}>Conversations</Text>
-            <TouchableOpacity
-              style={styles.newChatButton}
-              onPress={() => {
-                onNewChat()
-                onClose()
-              }}
-              activeOpacity={0.7}
-            >
-              <Icon name="plus" size={20} color="#722F37" />
-            </TouchableOpacity>
-          </View>
+          <SafeAreaView style={styles.sidebarContent}>
+            {/* Header */}
+            <View style={styles.sidebarHeader}>
+              <Text style={styles.sidebarTitle}>Conversations</Text>
+              <TouchableOpacity
+                style={styles.newChatButton}
+                onPress={() => {
+                  onNewChat()
+                  onClose()
+                }}
+                activeOpacity={0.7}
+              >
+                <Icon name="plus" size={20} color="#722F37" />
+              </TouchableOpacity>
+            </View>
 
           {/* Search Bar */}
           <View style={styles.searchContainer}>
@@ -234,6 +236,7 @@ export const SommelierSidebar = ({
               <Text style={styles.profileText}>Profile</Text>
             </LinearGradient>
           </TouchableOpacity>
+          </SafeAreaView>
         </Animated.View>
       </TouchableOpacity>
     </Modal>
@@ -257,6 +260,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 12,
     elevation: 10,
+  },
+  sidebarContent: {
+    flex: 1,
   },
   sidebarHeader: {
     flexDirection: 'row',
