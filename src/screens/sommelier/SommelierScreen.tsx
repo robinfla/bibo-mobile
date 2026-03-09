@@ -405,6 +405,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: '#2c1810',
+    fontFamily: 'Nunito_700Bold',
   },
   keyboardAvoid: {
     flex: 1,
@@ -434,6 +435,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#722F37',
     textAlign: 'center',
+    fontFamily: 'Nunito_700Bold',
   },
   messageContainer: {
     marginBottom: 12,
@@ -461,6 +463,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
     color: '#2c1810',
+    fontFamily: 'Nunito_400Regular',
   },
   userBubble: {
     borderRadius: 18,
@@ -471,6 +474,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
     color: '#fff',
+    fontFamily: 'Nunito_400Regular',
   },
   typingText: {
     fontSize: 15,
@@ -521,16 +525,19 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#2c1810',
     marginBottom: 4,
+    fontFamily: 'Nunito_700Bold',
   },
   wineRegion: {
     fontSize: 12,
     color: '#8a7568',
     marginBottom: 6,
+    fontFamily: 'Nunito_400Regular',
   },
   pairingNote: {
     fontSize: 12,
     color: '#722F37',
     fontStyle: 'italic',
+    fontFamily: 'Nunito_400Regular',
   },
   carouselContainer: {
     paddingVertical: 12,
@@ -564,6 +571,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#2c1810',
+    fontFamily: 'Nunito_600SemiBold',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -585,6 +593,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#2c1810',
     maxHeight: 100,
+    fontFamily: 'Nunito_400Regular',
   },
   sendButtonContainer: {
     width: 44,
