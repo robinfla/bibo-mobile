@@ -43,12 +43,14 @@ interface TasteProfile {
 export const TasteProfileSummaryScreen = () => {
   const navigation = useNavigation()
   const [profile, setProfile] = useState<TasteProfile | null>(null)
+  const [cellarMetrics, setCellarMetrics] = useState<{ totalBottles: number; uniqueWines: number; totalRegions: number } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [additionalInput, setAdditionalInput] = useState('')
   const [isSending, setIsSending] = useState(false)
 
   useEffect(() => {
     fetchProfile()
+    fetchCellarMetrics()
   }, [])
 
   const fetchProfile = async () => {
@@ -59,6 +61,15 @@ export const TasteProfileSummaryScreen = () => {
       console.error('Failed to fetch profile:', error)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const fetchCellarMetrics = async () => {
+    try {
+      const data = await apiFetch<{ totalBottles: number; uniqueWines: number; totalRegions: number }>('/api/profile/cellar-metrics')
+      setCellarMetrics(data)
+    } catch (error) {
+      console.error('Failed to fetch cellar metrics:', error)
     }
   }
 
@@ -177,11 +188,11 @@ export const TasteProfileSummaryScreen = () => {
             {/* Stats Grid */}
             <View style={styles.statsGrid}>
               <View style={styles.statCard}>
-                <Text style={styles.statValue}>{profile.metrics.totalBottles}</Text>
+                <Text style={styles.statValue}>{cellarMetrics?.totalBottles || profile.metrics.totalBottles}</Text>
                 <Text style={styles.statLabel}>Bottles in Cellar</Text>
               </View>
               <View style={styles.statCard}>
-                <Text style={styles.statValue}>{profile.regionInterests?.length || 0}</Text>
+                <Text style={styles.statValue}>{cellarMetrics?.totalRegions || profile.regionInterests?.length || 0}</Text>
                 <Text style={styles.statLabel}>Regions Explored</Text>
               </View>
               <View style={styles.statCard}>
