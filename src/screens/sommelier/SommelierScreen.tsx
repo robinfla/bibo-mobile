@@ -361,18 +361,18 @@ export const SommelierScreen = ({ route }: any) => {
             const data = await apiFetch<{ profile: any; onboardingCompleted: boolean }>('/api/profile/taste')
             
             if (!data.profile || !data.onboardingCompleted) {
-              // No profile exists, go to onboarding
+              // No profile exists, show empty state with options
               // @ts-ignore - Navigation typing
-              navigation.navigate('SommelierOnboarding')
+              navigation.navigate('TasteProfileEmpty')
             } else {
               // Profile exists, go to summary
               // @ts-ignore - Navigation typing
               navigation.navigate('TasteProfile')
             }
           } catch (error) {
-            // On error (404 or other), assume no profile, go to onboarding
+            // On error (404 or other), assume no profile, show empty state
             // @ts-ignore - Navigation typing
-            navigation.navigate('SommelierOnboarding')
+            navigation.navigate('TasteProfileEmpty')
           }
         }}
       />

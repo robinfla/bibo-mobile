@@ -168,11 +168,6 @@ export const TasteProfileSummaryScreen = () => {
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
-            {/* Profile Icon */}
-            <View style={styles.iconContainer}>
-              <Text style={styles.profileIcon}>👤</Text>
-            </View>
-
             {/* AI Summary Card */}
             <View style={styles.summaryCard}>
               <Text style={styles.summaryLabel}>Based on everything I know...</Text>

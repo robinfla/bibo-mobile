@@ -34,6 +34,7 @@ import { SommelierOnboardingScreen } from '../screens/sommelier/SommelierOnboard
 import { ConversationListScreen } from '../screens/sommelier/ConversationListScreen'
 import { TasteProfileScreen } from '../screens/sommelier/TasteProfileScreen'
 import { TasteProfileSummaryScreen } from '../screens/sommelier/TasteProfileSummaryScreen'
+import { TasteProfileEmptyScreen } from '../screens/sommelier/TasteProfileEmptyScreen'
 import type { InventoryLot } from '../types/api'
 
 type InventoryStackParamList = {
@@ -64,17 +65,16 @@ const SommelierIcon = ({ color, size }: { color: string; size: number }) => (
   <Icon name="message-text-outline" size={size} color={color} />
 )
 
-// Scan button — elevated bordeaux circle, centered in tab bar
+// Scan button — flat bordeaux circle, centered in tab bar
 const ScanButton = () => (
   <View
     style={{
-      width: 60,
-      height: 60,
-      borderRadius: 30,
+      width: 48,
+      height: 48,
+      borderRadius: 24,
       backgroundColor: '#722F37',
       justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: 24,
       shadowColor: '#722F37',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.3,
@@ -144,6 +144,7 @@ const SommelierStackScreen = () => (
   <SommelierStack.Navigator screenOptions={{ headerShown: false }}>
     <SommelierStack.Screen name="SommelierChat" component={SommelierScreen} />
     <SommelierStack.Screen name="TasteProfile" component={TasteProfileSummaryScreen} />
+    <SommelierStack.Screen name="TasteProfileEmpty" component={TasteProfileEmptyScreen} />
     <SommelierStack.Screen name="SommelierOnboarding" component={SommelierOnboardingScreen} />
   </SommelierStack.Navigator>
 )
