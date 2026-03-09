@@ -107,7 +107,7 @@ export const SommelierScreen = ({ route }: any) => {
       }>('/api/chat/sommelier', {
         method: 'POST',
         body: {
-          prompt: userMessage.text,
+          message: userMessage.text,
           conversationId: currentConversationId,
         },
       })
