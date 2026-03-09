@@ -3,6 +3,7 @@ import { View, Text, ActivityIndicator, StyleSheet, Platform } from 'react-nativ
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useAuth } from '../auth/AuthContext'
 import { colors } from '../theme/colors'
 import { LoginScreen } from '../screens/LoginScreen'
@@ -29,6 +30,9 @@ import { RackViewScreen } from '../screens/cellars/RackViewScreen'
 import { RoomSetupScreen } from '../screens/cellars/RoomSetupScreen'
 import { FridgeSetupScreen } from '../screens/cellars/FridgeSetupScreen'
 import { SommelierScreen } from '../screens/sommelier/SommelierScreen'
+import { SommelierOnboardingScreen } from '../screens/sommelier/SommelierOnboardingScreen'
+import { ConversationListScreen } from '../screens/sommelier/ConversationListScreen'
+import { TasteProfileScreen } from '../screens/sommelier/TasteProfileScreen'
 import type { InventoryLot } from '../types/api'
 
 type InventoryStackParamList = {
@@ -53,6 +57,10 @@ const ListIcon = ({ color, size }: { color: string; size: number }) => (
 
 const ChartIcon = ({ color, size }: { color: string; size: number }) => (
   <Text style={{ fontSize: size + 2, color, lineHeight: size + 6 }}>📊</Text>
+)
+
+const SommelierIcon = ({ color, size }: { color: string; size: number }) => (
+  <Icon name="message-text-outline" size={size} color={color} />
 )
 
 // Scan button — elevated bordeaux circle, centered in tab bar
@@ -94,6 +102,7 @@ const DummyScreen = () => <View />;
 
 const CellarsStack = createNativeStackNavigator()
 const AnalyticsStack = createNativeStackNavigator()
+const SommelierStack = createNativeStackNavigator()
 
 const CellarsStackScreen = () => (
   <CellarsStack.Navigator screenOptions={{ headerShown: false }}>
@@ -128,6 +137,15 @@ const AnalyticsStackScreen = () => (
       options={{ headerShown: false }}
     />
   </AnalyticsStack.Navigator>
+)
+
+const SommelierStackScreen = () => (
+  <SommelierStack.Navigator screenOptions={{ headerShown: false }}>
+    <SommelierStack.Screen name="ConversationList" component={ConversationListScreen} />
+    <SommelierStack.Screen name="SommelierChat" component={SommelierScreen} />
+    <SommelierStack.Screen name="TasteProfile" component={TasteProfileScreen} />
+    <SommelierStack.Screen name="SommelierOnboarding" component={SommelierOnboardingScreen} />
+  </SommelierStack.Navigator>
 )
 
 const HomeStackScreen = () => (
@@ -313,22 +331,22 @@ const AuthenticatedTabs = () => {
           }}
         />
         <Tab.Screen
-          name="AnalyticsTab"
-          component={AnalyticsStackScreen}
+          name="SommelierTab"
+          component={SommelierStackScreen}
           listeners={({ navigation }) => ({
             tabPress: (e) => {
-              // If already on AnalyticsTab and it has a navigation stack, pop to top
+              // If already on SommelierTab and it has a navigation stack, pop to top
               const state = navigation.getState()
-              const analyticsRoute = state.routes.find(r => r.name === 'AnalyticsTab')
-              if (analyticsRoute?.state?.index && analyticsRoute.state.index > 0) {
+              const sommelierRoute = state.routes.find(r => r.name === 'SommelierTab')
+              if (sommelierRoute?.state?.index && sommelierRoute.state.index > 0) {
                 e.preventDefault()
-                navigation.navigate('AnalyticsTab', { screen: 'Analytics' })
+                navigation.navigate('SommelierTab', { screen: 'ConversationList' })
               }
             },
           })}
           options={{
-            tabBarLabel: 'Analytics',
-            tabBarIcon: ({ color }) => <ChartIcon color={color} size={24} />,
+            tabBarLabel: 'Sommelier',
+            tabBarIcon: ({ color }) => <SommelierIcon color={color} size={24} />,
           }}
         />
         <Tab.Screen
