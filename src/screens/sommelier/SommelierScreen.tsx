@@ -32,9 +32,11 @@ interface Message {
   timestamp: Date
 }
 
-export const SommelierScreen = () => {
+export const SommelierScreen = ({ route }: any) => {
   const navigation = useNavigation()
   const scrollViewRef = useRef<ScrollView>(null)
+  const conversationId = route?.params?.conversationId
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -46,6 +48,14 @@ export const SommelierScreen = () => {
   const [inputText, setInputText] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [inputHeight, setInputHeight] = useState(44)
+  const [currentConversationId, setCurrentConversationId] = useState<string | undefined>(conversationId)
+
+  useEffect(() => {
+    // Fetch conversation history if conversationId exists
+    if (conversationId) {
+      fetchConversationHistory(conversationId)
+    }
+  }, [conversationId])
 
   useEffect(() => {
     // Scroll to bottom when messages change
@@ -53,6 +63,26 @@ export const SommelierScreen = () => {
       scrollViewRef.current?.scrollToEnd({ animated: true })
     }, 100)
   }, [messages])
+
+  const fetchConversationHistory = async (convId: string) => {
+    try {
+      const data = await apiFetch<{ messages: Array<{ role: string; content: string; timestamp: string }> }>(
+        `/api/chat/${convId}`
+      )
+      
+      if (data.messages && data.messages.length > 0) {
+        const formattedMessages: Message[] = data.messages.map((msg, idx) => ({
+          id: `${idx}`,
+          type: msg.role === 'user' ? 'user' : 'assistant',
+          text: msg.content,
+          timestamp: new Date(msg.timestamp),
+        }))
+        setMessages(formattedMessages)
+      }
+    } catch (error) {
+      console.error('Failed to fetch conversation history:', error)
+    }
+  }
 
   const handleSend = async () => {
     if (!inputText.trim() || isLoading) return
@@ -71,12 +101,21 @@ export const SommelierScreen = () => {
 
     try {
       const response = await apiFetch<{
+        conversationId?: string
         message: string
         suggestions: WineSuggestion[]
       }>('/api/chat/sommelier', {
         method: 'POST',
-        body: { prompt: userMessage.text },
+        body: {
+          prompt: userMessage.text,
+          conversationId: currentConversationId,
+        },
       })
+
+      // Store conversation ID if this is a new conversation
+      if (response.conversationId && !currentConversationId) {
+        setCurrentConversationId(response.conversationId)
+      }
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),

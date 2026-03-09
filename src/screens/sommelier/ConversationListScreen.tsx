@@ -1,12 +1,170 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  RefreshControl,
+  SafeAreaView,
+} from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
+import { apiFetch } from '../../api/client'
+
+interface Conversation {
+  id: string
+  title: string
+  lastMessageAt: string
+}
 
 export const ConversationListScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Conversation List</Text>
-      <Text style={styles.subtext}>Coming soon...</Text>
+  const navigation = useNavigation()
+  const [conversations, setConversations] = useState<Conversation[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const fetchConversations = async (isRefresh = false) => {
+    try {
+      if (isRefresh) {
+        setIsRefreshing(true)
+      } else {
+        setIsLoading(true)
+      }
+
+      const data = await apiFetch<{ conversations: Conversation[] }>('/api/chat/conversations')
+      setConversations(data.conversations || [])
+    } catch (error) {
+      console.error('Failed to fetch conversations:', error)
+    } finally {
+      setIsLoading(false)
+      setIsRefreshing(false)
+    }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchConversations()
+    }, [])
+  )
+
+  const handleNewChat = () => {
+    // @ts-ignore - Navigation typing
+    navigation.navigate('SommelierChat')
+  }
+
+  const handleConversationPress = (conversationId: string) => {
+    // @ts-ignore - Navigation typing
+    navigation.navigate('SommelierChat', { conversationId })
+  }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+    if (diffDays === 0) {
+      return 'Today'
+    } else if (diffDays === 1) {
+      return 'Yesterday'
+    } else if (diffDays < 7) {
+      return `${diffDays} days ago`
+    } else {
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    }
+  }
+
+  const renderConversation = ({ item }: { item: Conversation }) => (
+    <TouchableOpacity
+      style={styles.conversationCard}
+      onPress={() => handleConversationPress(item.id)}
+      activeOpacity={0.7}
+    >
+      <View style={styles.conversationContent}>
+        <Text style={styles.conversationTitle} numberOfLines={1}>
+          {item.title}
+        </Text>
+        <Text style={styles.conversationDate}>{formatDate(item.lastMessageAt)}</Text>
+      </View>
+      <Icon name="chevron-right" size={20} color="#b5a89e" />
+    </TouchableOpacity>
+  )
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyState}>
+      <LinearGradient
+        colors={['#722F37', '#944654']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.emptyIcon}
+      >
+        <Text style={styles.emptyEmoji}>🍷</Text>
+      </LinearGradient>
+      <Text style={styles.emptyTitle}>Start your first conversation</Text>
+      <Text style={styles.emptySubtitle}>Ask me anything about wine</Text>
+      <TouchableOpacity style={styles.newChatButtonEmpty} onPress={handleNewChat} activeOpacity={0.8}>
+        <LinearGradient
+          colors={['#722F37', '#944654']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.newChatGradient}
+        >
+          <Icon name="plus" size={20} color="#fff" />
+          <Text style={styles.newChatText}>New Chat</Text>
+        </LinearGradient>
+      </TouchableOpacity>
     </View>
+  )
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <LinearGradient
+        colors={['#fef9f5', '#f8f0e8']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradient}
+      >
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Sommelier</Text>
+          <TouchableOpacity
+            style={styles.newChatButton}
+            onPress={handleNewChat}
+            activeOpacity={0.7}
+          >
+            <LinearGradient
+              colors={['#722F37', '#944654']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.newChatButtonGradient}
+            >
+              <Icon name="plus" size={18} color="#fff" />
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+
+        {/* Conversation List */}
+        {!isLoading && conversations.length === 0 ? (
+          renderEmptyState()
+        ) : (
+          <FlatList
+            data={conversations}
+            renderItem={renderConversation}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContent}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={() => fetchConversations(true)}
+                tintColor="#722F37"
+              />
+            }
+          />
+        )}
+      </LinearGradient>
+    </SafeAreaView>
   )
 }
 
@@ -14,17 +172,118 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fef9f5',
+  },
+  gradient: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
+  },
+  headerTitle: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#2c1810',
+  },
+  newChatButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  newChatButtonGradient: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
+  listContent: {
+    padding: 20,
+    paddingTop: 0,
+  },
+  conversationCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#2c1810',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  conversationContent: {
+    flex: 1,
+  },
+  conversationTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#2c1810',
+    marginBottom: 4,
+  },
+  conversationDate: {
+    fontSize: 14,
+    color: '#8a7568',
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
+  emptyIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  emptyEmoji: {
+    fontSize: 40,
+  },
+  emptyTitle: {
     fontSize: 24,
     fontWeight: '700',
     color: '#2c1810',
     marginBottom: 8,
+    textAlign: 'center',
   },
-  subtext: {
+  emptySubtitle: {
     fontSize: 16,
     color: '#8a7568',
+    marginBottom: 32,
+    textAlign: 'center',
+  },
+  newChatButtonEmpty: {
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 6,
+  },
+  newChatGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 16,
+  },
+  newChatText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#fff',
   },
 })
