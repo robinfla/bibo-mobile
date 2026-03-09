@@ -160,8 +160,9 @@ export const SommelierOnboardingScreen = () => {
         body: answers,
       })
       
+      // Navigate back to chat screen
       // @ts-ignore - Navigation
-      navigation.replace('ConversationList')
+      navigation.navigate('SommelierChat')
     } catch (error) {
       console.error('Failed to submit onboarding:', error)
     }
