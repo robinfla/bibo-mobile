@@ -233,7 +233,7 @@ export const SommelierSidebar = ({
               style={styles.profileGradient}
             >
               <Icon name="account" size={20} color="#fff" />
-              <Text style={styles.profileText}>Profile</Text>
+              <Text style={styles.profileText}>Taste Profile</Text>
             </LinearGradient>
           </TouchableOpacity>
           </SafeAreaView>

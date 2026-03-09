@@ -33,6 +33,7 @@ import { SommelierScreen } from '../screens/sommelier/SommelierScreen'
 import { SommelierOnboardingScreen } from '../screens/sommelier/SommelierOnboardingScreen'
 import { ConversationListScreen } from '../screens/sommelier/ConversationListScreen'
 import { TasteProfileScreen } from '../screens/sommelier/TasteProfileScreen'
+import { TasteProfileSummaryScreen } from '../screens/sommelier/TasteProfileSummaryScreen'
 import type { InventoryLot } from '../types/api'
 
 type InventoryStackParamList = {
@@ -142,7 +143,7 @@ const AnalyticsStackScreen = () => (
 const SommelierStackScreen = () => (
   <SommelierStack.Navigator screenOptions={{ headerShown: false }}>
     <SommelierStack.Screen name="SommelierChat" component={SommelierScreen} />
-    <SommelierStack.Screen name="TasteProfile" component={TasteProfileScreen} />
+    <SommelierStack.Screen name="TasteProfile" component={TasteProfileSummaryScreen} />
     <SommelierStack.Screen name="SommelierOnboarding" component={SommelierOnboardingScreen} />
   </SommelierStack.Navigator>
 )

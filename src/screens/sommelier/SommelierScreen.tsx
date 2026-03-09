@@ -356,9 +356,24 @@ export const SommelierScreen = ({ route }: any) => {
           setMessages([])
           setCurrentConversationId(undefined)
         }}
-        onProfilePress={() => {
-          // @ts-ignore - Navigation typing
-          navigation.navigate('TasteProfile')
+        onProfilePress={async () => {
+          try {
+            const data = await apiFetch<{ profile: any; onboardingCompleted: boolean }>('/api/profile/taste')
+            
+            if (!data.profile || !data.onboardingCompleted) {
+              // No profile exists, go to onboarding
+              // @ts-ignore - Navigation typing
+              navigation.navigate('SommelierOnboarding')
+            } else {
+              // Profile exists, go to summary
+              // @ts-ignore - Navigation typing
+              navigation.navigate('TasteProfile')
+            }
+          } catch (error) {
+            // On error (404 or other), assume no profile, go to onboarding
+            // @ts-ignore - Navigation typing
+            navigation.navigate('SommelierOnboarding')
+          }
         }}
       />
     </SafeAreaView>
