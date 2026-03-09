@@ -14,9 +14,12 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 
 interface Conversation {
-  id: string
-  title: string
-  lastMessageAt: string
+  conversationId: string
+  title: string | null
+  lastMessage: string
+  messageCount: number
+  createdAt: string
+  updatedAt: string
 }
 
 export const ConversationListScreen = () => {
@@ -60,7 +63,15 @@ export const ConversationListScreen = () => {
   }
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
+    if (!dateString) return ''
+    
+    // Handle PostgreSQL timestamp format (space instead of T)
+    const isoString = dateString.replace(' ', 'T')
+    const date = new Date(isoString)
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) return ''
+    
     const now = new Date()
     const diffMs = now.getTime() - date.getTime()
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
@@ -76,17 +87,25 @@ export const ConversationListScreen = () => {
     }
   }
 
+  const getConversationTitle = (item: Conversation) => {
+    if (item.title) return item.title
+    // Generate title from first message, truncate to ~40 chars
+    return item.lastMessage.length > 40 
+      ? item.lastMessage.substring(0, 40) + '...'
+      : item.lastMessage
+  }
+
   const renderConversation = ({ item }: { item: Conversation }) => (
     <TouchableOpacity
       style={styles.conversationCard}
-      onPress={() => handleConversationPress(item.id)}
+      onPress={() => handleConversationPress(item.conversationId)}
       activeOpacity={0.7}
     >
       <View style={styles.conversationContent}>
         <Text style={styles.conversationTitle} numberOfLines={1}>
-          {item.title}
+          {getConversationTitle(item)}
         </Text>
-        <Text style={styles.conversationDate}>{formatDate(item.lastMessageAt)}</Text>
+        <Text style={styles.conversationDate}>{formatDate(item.updatedAt)}</Text>
       </View>
       <Icon name="chevron-right" size={20} color="#b5a89e" />
     </TouchableOpacity>
@@ -152,7 +171,7 @@ export const ConversationListScreen = () => {
           <FlatList
             data={conversations}
             renderItem={renderConversation}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.conversationId}
             contentContainerStyle={styles.listContent}
             refreshControl={
               <RefreshControl
