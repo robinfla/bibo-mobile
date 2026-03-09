@@ -23,7 +23,9 @@ const ONBOARDING_CARDS = [
     type: 'single-select',
     options: [
       { id: 'red', emoji: '🍷', label: 'Red' },
-      { id: 'white', emoji: '🥂', label: 'White & Sparkling' },
+      { id: 'white', emoji: '🤍', label: 'White' },
+      { id: 'sparkling', emoji: '🥂', label: 'Sparkling' },
+      { id: 'orange', emoji: '🧡', label: 'Orange' },
       { id: 'rose', emoji: '🌹', label: 'Rosé' },
     ],
     field: 'color_preference',
