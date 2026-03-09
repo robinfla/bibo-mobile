@@ -26,6 +26,7 @@ interface SommelierSidebarProps {
   visible: boolean
   onClose: () => void
   onConversationSelect: (conversationId: string) => void
+  onNewChat: () => void
   onProfilePress: () => void
 }
 
@@ -33,6 +34,7 @@ export const SommelierSidebar = ({
   visible,
   onClose,
   onConversationSelect,
+  onNewChat,
   onProfilePress,
 }: SommelierSidebarProps) => {
   const [conversations, setConversations] = useState<Conversation[]>([])
@@ -158,6 +160,21 @@ export const SommelierSidebar = ({
           ]}
           onStartShouldSetResponder={() => true}
         >
+          {/* Header */}
+          <View style={styles.sidebarHeader}>
+            <Text style={styles.sidebarTitle}>Conversations</Text>
+            <TouchableOpacity
+              style={styles.newChatButton}
+              onPress={() => {
+                onNewChat()
+                onClose()
+              }}
+              activeOpacity={0.7}
+            >
+              <Icon name="plus" size={20} color="#722F37" />
+            </TouchableOpacity>
+          </View>
+
           {/* Search Bar */}
           <View style={styles.searchContainer}>
             <Icon name="magnify" size={20} color="#8a7568" style={styles.searchIcon} />
@@ -241,6 +258,34 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 10,
   },
+  sidebarHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 12,
+  },
+  sidebarTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#2c1810',
+  },
+  newChatButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(228, 213, 203, 0.3)',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -248,7 +293,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    margin: 16,
+    marginHorizontal: 16,
+    marginBottom: 12,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     shadowColor: '#722F37',

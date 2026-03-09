@@ -352,6 +352,10 @@ export const SommelierScreen = ({ route }: any) => {
           setCurrentConversationId(conversationId)
           fetchConversationHistory(conversationId)
         }}
+        onNewChat={() => {
+          setMessages([])
+          setCurrentConversationId(undefined)
+        }}
         onProfilePress={() => {
           // @ts-ignore - Navigation typing
           navigation.navigate('TasteProfile')
