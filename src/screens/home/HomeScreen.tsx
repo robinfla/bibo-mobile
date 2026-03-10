@@ -241,7 +241,7 @@ export const HomeScreen = () => {
                   <Text style={styles.analyticsTitle}>Cellar Insights</Text>
                 </View>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('AnalyticsTab' as never)}
+                  onPress={() => navigation.navigate('Analytics' as never)}
                   activeOpacity={0.7}
                 >
                   <Text style={styles.analyticsLink}>View Full Analytics ›</Text>

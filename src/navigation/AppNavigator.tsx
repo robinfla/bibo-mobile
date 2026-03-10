@@ -187,6 +187,11 @@ const HomeStackScreen = () => (
       component={SommelierScreen}
       options={{ headerShown: false }}
     />
+    <HomeStack.Screen
+      name="Analytics"
+      component={AnalyticsScreen}
+      options={{ headerShown: false }}
+    />
   </HomeStack.Navigator>
 )
 
