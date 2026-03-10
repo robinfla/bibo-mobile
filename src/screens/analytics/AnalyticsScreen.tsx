@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import Svg, { Circle, G } from 'react-native-svg'
 import { apiFetch } from '../../api/client'
 
@@ -221,7 +222,17 @@ export const AnalyticsScreen = () => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Analytics</Text>
+          <View style={styles.headerTop}>
+            <TouchableOpacity 
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}
+              activeOpacity={0.7}
+            >
+              <Icon name="chevron-left" size={28} color="#722F37" />
+            </TouchableOpacity>
+            <Text style={styles.title}>Analytics</Text>
+            <View style={styles.backButton} />
+          </View>
           
           {/* Tabs */}
           <View style={styles.tabs}>
@@ -484,12 +495,24 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 20,
   },
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 28,
     fontWeight: '800',
     color: '#1a1a1a',
     textAlign: 'center',
-    marginBottom: 16,
+    flex: 1,
   },
   tabs: {
     flexDirection: 'row',

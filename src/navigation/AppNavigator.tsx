@@ -269,12 +269,12 @@ const AuthenticatedTabs = () => {
           component={HomeStackScreen}
           listeners={({ navigation }) => ({
             tabPress: (e) => {
-              // If already on HomeTab and it has a navigation stack, pop to top
+              // Always pop to Home when tapping Home tab
               const state = navigation.getState()
               const homeRoute = state.routes.find(r => r.name === 'HomeTab')
               if (homeRoute?.state?.index && homeRoute.state.index > 0) {
                 e.preventDefault()
-                navigation.navigate('HomeTab', { screen: 'Home' })
+                navigation.navigate('HomeTab', { screen: 'HomeMain' })
               }
             },
           })}
