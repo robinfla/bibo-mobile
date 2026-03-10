@@ -29,6 +29,7 @@ interface SommelierSidebarProps {
   onConversationSelect: (conversationId: string) => void
   onNewChat: () => void
   onProfilePress: () => void
+  onSettingsPress: () => void
 }
 
 export const SommelierSidebar = ({
@@ -37,6 +38,7 @@ export const SommelierSidebar = ({
   onConversationSelect,
   onNewChat,
   onProfilePress,
+  onSettingsPress,
 }: SommelierSidebarProps) => {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [filteredConversations, setFilteredConversations] = useState<Conversation[]>([])
@@ -165,16 +167,28 @@ export const SommelierSidebar = ({
             {/* Header */}
             <View style={styles.sidebarHeader}>
               <Text style={styles.sidebarTitle}>Conversations</Text>
-              <TouchableOpacity
-                style={styles.newChatButton}
-                onPress={() => {
-                  onNewChat()
-                  onClose()
-                }}
-                activeOpacity={0.7}
-              >
-                <Icon name="plus" size={20} color="#722F37" />
-              </TouchableOpacity>
+              <View style={styles.headerButtons}>
+                <TouchableOpacity
+                  style={styles.headerIconButton}
+                  onPress={() => {
+                    onSettingsPress()
+                    onClose()
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Icon name="cog-outline" size={20} color="#722F37" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.newChatButton}
+                  onPress={() => {
+                    onNewChat()
+                    onClose()
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Icon name="plus" size={20} color="#722F37" />
+                </TouchableOpacity>
+              </View>
             </View>
 
           {/* Search Bar */}
@@ -276,6 +290,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '800',
     color: '#2c1810',
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  headerIconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(228, 213, 203, 0.3)',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   newChatButton: {
     width: 36,

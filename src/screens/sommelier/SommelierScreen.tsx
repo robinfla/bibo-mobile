@@ -408,6 +408,10 @@ export const SommelierScreen = ({ route }: any) => {
             navigation.navigate('TasteProfileEmpty')
           }
         }}
+        onSettingsPress={() => {
+          // @ts-ignore - Navigation typing
+          navigation.navigate('SommelierSettings')
+        }}
       />
     </SafeAreaView>
   )

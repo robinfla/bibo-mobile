@@ -31,6 +31,7 @@ import { RoomSetupScreen } from '../screens/cellars/RoomSetupScreen'
 import { FridgeSetupScreen } from '../screens/cellars/FridgeSetupScreen'
 import { SommelierScreen } from '../screens/sommelier/SommelierScreen'
 import { SommelierOnboardingScreen } from '../screens/sommelier/SommelierOnboardingScreen'
+import { SommelierSettingsScreen } from '../screens/sommelier/SommelierSettingsScreen'
 import { ConversationListScreen } from '../screens/sommelier/ConversationListScreen'
 import { TasteProfileScreen } from '../screens/sommelier/TasteProfileScreen'
 import { TasteProfileSummaryScreen } from '../screens/sommelier/TasteProfileSummaryScreen'
@@ -146,6 +147,7 @@ const SommelierStackScreen = () => (
     <SommelierStack.Screen name="TasteProfile" component={TasteProfileSummaryScreen} />
     <SommelierStack.Screen name="TasteProfileEmpty" component={TasteProfileEmptyScreen} />
     <SommelierStack.Screen name="SommelierOnboarding" component={SommelierOnboardingScreen} />
+    <SommelierStack.Screen name="SommelierSettings" component={SommelierSettingsScreen} />
   </SommelierStack.Navigator>
 )
 

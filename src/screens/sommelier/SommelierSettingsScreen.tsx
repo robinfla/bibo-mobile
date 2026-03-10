@@ -1,0 +1,332 @@
+import React, { useState, useEffect } from 'react'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+  ActivityIndicator,
+} from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+import { apiFetch } from '../../api/client'
+
+interface PersonalityConfig {
+  tone: 'professional' | 'friendly' | 'casual' | 'playful'
+  verbosity: 'concise' | 'balanced' | 'detailed'
+  formality: 'formal' | 'casual' | 'expert'
+  teachingStyle: 'skip' | 'explain' | 'deep'
+  recommendationStyle: 'safe' | 'adventurous' | 'balanced'
+  priceSensitivity: 'budget' | 'value' | 'premium'
+  regionalPreference: 'classic' | 'modern' | 'balanced'
+}
+
+const DEFAULT_PERSONALITY: PersonalityConfig = {
+  tone: 'friendly',
+  verbosity: 'balanced',
+  formality: 'casual',
+  teachingStyle: 'explain',
+  recommendationStyle: 'balanced',
+  priceSensitivity: 'value',
+  regionalPreference: 'balanced',
+}
+
+const PERSONALITY_OPTIONS = {
+  tone: [
+    { value: 'professional', label: 'Professional', emoji: '👔', description: 'Expert sommelier at a high-end restaurant' },
+    { value: 'friendly', label: 'Friendly', emoji: '😊', description: 'Warm and approachable wine buddy' },
+    { value: 'casual', label: 'Casual', emoji: '🤙', description: 'Laid-back friend who knows wine' },
+    { value: 'playful', label: 'Playful', emoji: '🎉', description: 'Fun and enthusiastic wine lover' },
+  ],
+  verbosity: [
+    { value: 'concise', label: 'Concise', emoji: '📝', description: 'Short and to the point' },
+    { value: 'balanced', label: 'Balanced', emoji: '⚖️', description: 'Right amount of detail' },
+    { value: 'detailed', label: 'Detailed', emoji: '📚', description: 'In-depth explanations' },
+  ],
+  formality: [
+    { value: 'formal', label: 'Formal Sommelier', emoji: '🎩', description: 'Traditional wine service' },
+    { value: 'casual', label: 'Casual Friend', emoji: '👋', description: 'Like chatting with a friend' },
+    { value: 'expert', label: 'Wine Geek', emoji: '🤓', description: 'Technical and precise' },
+  ],
+  teachingStyle: [
+    { value: 'skip', label: 'Skip Basics', emoji: '⏭️', description: 'Assume I know wine' },
+    { value: 'explain', label: 'Explain Concepts', emoji: '💡', description: 'Teach when relevant' },
+    { value: 'deep', label: 'Deep Dive', emoji: '🔬', description: 'Always educate me' },
+  ],
+  recommendationStyle: [
+    { value: 'safe', label: 'Safe Picks', emoji: '✅', description: 'Classic, crowd-pleasing wines' },
+    { value: 'adventurous', label: 'Adventurous', emoji: '🚀', description: 'Push me to explore' },
+    { value: 'balanced', label: 'Balanced', emoji: '🎯', description: 'Mix of familiar and new' },
+  ],
+  priceSensitivity: [
+    { value: 'budget', label: 'Budget-Conscious', emoji: '💰', description: 'Focus on value wines under €20' },
+    { value: 'value', label: 'Value-Focused', emoji: '💎', description: 'Best quality for the price' },
+    { value: 'premium', label: 'Premium-First', emoji: '👑', description: 'Don\'t worry about price' },
+  ],
+  regionalPreference: [
+    { value: 'classic', label: 'Classic (Old World)', emoji: '🏛️', description: 'France, Italy, Spain focus' },
+    { value: 'modern', label: 'Modern (New World)', emoji: '🌎', description: 'US, Australia, SA focus' },
+    { value: 'balanced', label: 'Balanced', emoji: '🌍', description: 'Best from everywhere' },
+  ],
+}
+
+export const SommelierSettingsScreen = () => {
+  const navigation = useNavigation()
+  const [personality, setPersonality] = useState<PersonalityConfig>(DEFAULT_PERSONALITY)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
+
+  useEffect(() => {
+    fetchPersonality()
+  }, [])
+
+  const fetchPersonality = async () => {
+    try {
+      setIsLoading(true)
+      const data = await apiFetch<{ personality: PersonalityConfig }>('/api/profile/sommelier-personality')
+      setPersonality(data.personality || DEFAULT_PERSONALITY)
+    } catch (error) {
+      console.error('Failed to fetch personality:', error)
+      setPersonality(DEFAULT_PERSONALITY)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true)
+      await apiFetch('/api/profile/sommelier-personality', {
+        method: 'PUT',
+        body: { personality },
+      })
+      navigation.goBack()
+    } catch (error) {
+      console.error('Failed to save personality:', error)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const renderSection = (
+    key: keyof PersonalityConfig,
+    title: string,
+    description: string
+  ) => {
+    const options = PERSONALITY_OPTIONS[key]
+    
+    return (
+      <View style={styles.section} key={key}>
+        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={styles.sectionDescription}>{description}</Text>
+        
+        <View style={styles.optionsGrid}>
+          {options.map((option) => {
+            const isSelected = personality[key] === option.value
+            
+            return (
+              <TouchableOpacity
+                key={option.value}
+                style={[styles.optionCard, isSelected && styles.optionCardSelected]}
+                onPress={() => setPersonality({ ...personality, [key]: option.value })}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.optionEmoji}>{option.emoji}</Text>
+                <Text style={[styles.optionLabel, isSelected && styles.optionLabelSelected]}>
+                  {option.label}
+                </Text>
+                <Text style={styles.optionDescription}>{option.description}</Text>
+                {isSelected && (
+                  <View style={styles.checkmark}>
+                    <Icon name="check-circle" size={20} color="#722F37" />
+                  </View>
+                )}
+              </TouchableOpacity>
+            )
+          })}
+        </View>
+      </View>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#722F37" />
+      </View>
+    )
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+          activeOpacity={0.7}
+        >
+          <Icon name="chevron-left" size={28} color="#722F37" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Sommelier Personality</Text>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={handleSave}
+          disabled={isSaving}
+          activeOpacity={0.7}
+        >
+          {isSaving ? (
+            <ActivityIndicator size="small" color="#722F37" />
+          ) : (
+            <Text style={styles.saveButtonText}>Save</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
+        <View style={styles.intro}>
+          <Text style={styles.introEmoji}>🍷</Text>
+          <Text style={styles.introTitle}>Customize Your Sommelier</Text>
+          <Text style={styles.introText}>
+            Shape how your AI sommelier interacts with you. Choose the personality traits that match your style.
+          </Text>
+        </View>
+
+        {renderSection('tone', 'Tone', 'How should I sound?')}
+        {renderSection('verbosity', 'Detail Level', 'How much should I explain?')}
+        {renderSection('formality', 'Formality', 'What\'s our relationship?')}
+        {renderSection('teachingStyle', 'Teaching Style', 'How much should I educate?')}
+        {renderSection('recommendationStyle', 'Recommendations', 'How adventurous should I be?')}
+        {renderSection('priceSensitivity', 'Price Sensitivity', 'How should I consider budget?')}
+        {renderSection('regionalPreference', 'Regional Focus', 'Where should I look first?')}
+      </ScrollView>
+    </SafeAreaView>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fef9f5',
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fef9f5',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#fef9f5',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#2c1810',
+  },
+  saveButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    minWidth: 60,
+    alignItems: 'center',
+  },
+  saveButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#722F37',
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 40,
+  },
+  intro: {
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+  },
+  introEmoji: {
+    fontSize: 48,
+    marginBottom: 12,
+  },
+  introTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#2c1810',
+    marginBottom: 8,
+  },
+  introText: {
+    fontSize: 15,
+    color: '#8a7568',
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  section: {
+    paddingHorizontal: 20,
+    marginBottom: 32,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#2c1810',
+    marginBottom: 4,
+  },
+  sectionDescription: {
+    fontSize: 14,
+    color: '#8a7568',
+    marginBottom: 16,
+  },
+  optionsGrid: {
+    gap: 12,
+  },
+  optionCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: 'rgba(228, 213, 203, 0.3)',
+    position: 'relative',
+  },
+  optionCardSelected: {
+    borderColor: '#722F37',
+    backgroundColor: '#fef9f5',
+  },
+  optionEmoji: {
+    fontSize: 28,
+    marginBottom: 8,
+  },
+  optionLabel: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#2c1810',
+    marginBottom: 4,
+  },
+  optionLabelSelected: {
+    color: '#722F37',
+  },
+  optionDescription: {
+    fontSize: 13,
+    color: '#8a7568',
+    lineHeight: 18,
+  },
+  checkmark: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+  },
+})
