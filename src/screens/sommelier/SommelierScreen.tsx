@@ -137,6 +137,11 @@ export const SommelierScreen = ({ route }: any) => {
       let currentText = ''
       
       for (let i = 0; i < words.length; i++) {
+        // Hide thinking bubble as soon as first word appears
+        if (i === 0) {
+          setIsLoading(false)
+        }
+        
         currentText += (i > 0 ? ' ' : '') + words[i]
         
         setMessages((prev) =>
@@ -160,7 +165,6 @@ export const SommelierScreen = ({ route }: any) => {
             : msg
         )
       )
-    } finally {
       setIsLoading(false)
     }
   }
@@ -271,7 +275,13 @@ export const SommelierScreen = ({ route }: any) => {
         
         <Text style={styles.headerTitle}>Bibo Sommelier</Text>
         
-        <View style={styles.menuButton} />
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => navigation.goBack()}
+          activeOpacity={0.7}
+        >
+          <Icon name="close" size={24} color="#2c1810" />
+        </TouchableOpacity>
       </View>
 
       {/* Chat Container */}
