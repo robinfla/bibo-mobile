@@ -275,13 +275,16 @@ export const SommelierScreen = ({ route }: any) => {
         
         <Text style={styles.headerTitle}>Bibo Sommelier</Text>
         
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => navigation.goBack()}
-          activeOpacity={0.7}
-        >
-          <Icon name="close" size={24} color="#2c1810" />
-        </TouchableOpacity>
+        {conversationId && (
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => navigation.navigate('SommelierChat' as never)}
+            activeOpacity={0.7}
+          >
+            <Icon name="close" size={24} color="#2c1810" />
+          </TouchableOpacity>
+        )}
+        {!conversationId && <View style={styles.menuButton} />}
       </View>
 
       {/* Chat Container */}
