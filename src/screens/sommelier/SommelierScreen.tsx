@@ -104,6 +104,16 @@ export const SommelierScreen = ({ route }: any) => {
     setInputHeight(44)
     setIsLoading(true)
 
+    // Create placeholder message for streaming effect
+    const assistantMessageId = (Date.now() + 1).toString()
+    const placeholderMessage: Message = {
+      id: assistantMessageId,
+      type: 'assistant',
+      text: '',
+      timestamp: new Date(),
+    }
+    setMessages((prev) => [...prev, placeholderMessage])
+
     try {
       const response = await apiFetch<{
         conversationId?: string
@@ -122,24 +132,34 @@ export const SommelierScreen = ({ route }: any) => {
         setCurrentConversationId(response.conversationId)
       }
 
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        text: response.message,
-        suggestions: response.suggestions,
-        timestamp: new Date(),
+      // Stream the response word by word
+      const words = response.message.split(' ')
+      let currentText = ''
+      
+      for (let i = 0; i < words.length; i++) {
+        currentText += (i > 0 ? ' ' : '') + words[i]
+        
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantMessageId
+              ? { ...msg, text: currentText, suggestions: i === words.length - 1 ? response.suggestions : undefined }
+              : msg
+          )
+        )
+        
+        // Wait between words (faster for short words, slower for long ones)
+        const delay = Math.min(50, 20 + words[i].length * 3)
+        await new Promise(resolve => setTimeout(resolve, delay))
       }
-
-      setMessages((prev) => [...prev, assistantMessage])
     } catch (error) {
       console.error('Sommelier request failed:', error)
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        text: "I'm sorry, I couldn't process that request. Please try again.",
-        timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, errorMessage])
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === assistantMessageId
+            ? { ...msg, text: "I'm sorry, I couldn't process that request. Please try again." }
+            : msg
+        )
+      )
     } finally {
       setIsLoading(false)
     }
