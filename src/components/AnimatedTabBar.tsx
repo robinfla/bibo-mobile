@@ -143,7 +143,7 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
                   {IconComponent && IconComponent({
                     focused: isFocused,
                     color: isFocused ? '#722F37' : colors.muted[400],
-                    size: 24,
+                    size: 20,
                   })}
                 </View>
                 {typeof label === 'string' && label && (
@@ -193,7 +193,7 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
               {IconComponent && IconComponent({
                 focused: false,
                 color: '#722F37',
-                size: 24,
+                size: 20,
               })}
             </TouchableOpacity>
           )
@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
     height: Platform.OS === 'ios' ? 88 : 72,
-    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
-    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 28 : 16,
+    paddingTop: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.06,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   blobContainer: {
     position: 'absolute',
-    top: 8,
+    top: 12,
     left: -32, // Center the 64px blob (half of blob width)
     width: 64,
     height: 56,
@@ -257,8 +257,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconContainer: {
-    width: 32,
-    height: 32,
+    width: 28,
+    height: 28,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -268,6 +268,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 11,
     fontWeight: '600',
-    marginTop: 2,
+    marginTop: 4,
   },
 })
