@@ -8,34 +8,47 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
   const blobPosition = useRef(new Animated.Value(0)).current
   const blobScale = useRef(new Animated.Value(1)).current
 
-  // Calculate blob position based on active tab
-  const activeIndex = state.index
-  const tabCount = state.routes.length
-  const tabWidth = 100 / tabCount
+  // Separate scan tab from regular tabs
+  const regularTabs = state.routes.filter((route) => {
+    const { options } = descriptors[route.key]
+    return route.name !== 'ScanTab' && options.tabBarLabel !== ''
+  })
+  
+  const scanTab = state.routes.find((route) => {
+    const { options } = descriptors[route.key]
+    return route.name === 'ScanTab' || options.tabBarLabel === ''
+  })
+
+  // Find active index among regular tabs only
+  const activeRoute = state.routes[state.index]
+  const activeRegularIndex = regularTabs.findIndex((route) => route.key === activeRoute.key)
 
   useEffect(() => {
-    // Animate blob to active tab position
-    Animated.spring(blobPosition, {
-      toValue: activeIndex,
-      useNativeDriver: true,
-      tension: 40,
-      friction: 7,
-    }).start()
+    // Only animate blob if active tab is a regular tab (not scan)
+    if (activeRegularIndex >= 0) {
+      // Animate blob to active tab position
+      Animated.spring(blobPosition, {
+        toValue: activeRegularIndex,
+        useNativeDriver: true,
+        tension: 40,
+        friction: 7,
+      }).start()
 
-    // Pulse animation when changing tabs
-    Animated.sequence([
-      Animated.timing(blobScale, {
-        toValue: 1.2,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(blobScale, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-    ]).start()
-  }, [activeIndex])
+      // Pulse animation when changing tabs
+      Animated.sequence([
+        Animated.timing(blobScale, {
+          toValue: 1.2,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(blobScale, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]).start()
+    }
+  }, [activeRegularIndex])
 
   // Continuous floating animation
   const floatAnim = useRef(new Animated.Value(0)).current
@@ -57,9 +70,11 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
     ).start()
   }, [])
 
+  const regularTabWidth = 100 / regularTabs.length
+
   const blobTranslateX = blobPosition.interpolate({
-    inputRange: [0, tabCount - 1],
-    outputRange: [tabWidth / 2, ((tabCount - 1) * tabWidth) + (tabWidth / 2)],
+    inputRange: [0, regularTabs.length - 1],
+    outputRange: [regularTabWidth / 2, ((regularTabs.length - 1) * regularTabWidth) + (regularTabWidth / 2)],
   })
 
   const floatY = floatAnim.interpolate({
@@ -74,6 +89,7 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
         style={[
           styles.blobContainer,
           {
+            width: `${regularTabWidth}%`,
             transform: [
               { translateX: blobTranslateX },
               { translateY: floatY },
@@ -90,94 +106,112 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
         />
       </Animated.View>
 
-      {/* Tab buttons */}
+      {/* Main tabs container */}
       <View style={styles.tabsContainer}>
-        {state.routes.map((route, index) => {
-          const { options } = descriptors[route.key]
-          
-          // Handle scan button separately (no label, custom style)
-          const isScanButton = route.name === 'ScanTab' || options.tabBarLabel === ''
-          
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-              ? options.title
-              : route.name
+        {/* Regular tabs on the left */}
+        <View style={styles.regularTabsContainer}>
+          {regularTabs.map((route) => {
+            const { options } = descriptors[route.key]
+            const label =
+              options.tabBarLabel !== undefined
+                ? options.tabBarLabel
+                : options.title !== undefined
+                ? options.title
+                : route.name
 
-          const isFocused = state.index === index
+            const routeIndex = state.routes.findIndex((r) => r.key === route.key)
+            const isFocused = state.index === routeIndex
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            })
+            const onPress = () => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              })
 
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name)
+              if (!isFocused && !event.defaultPrevented) {
+                navigation.navigate(route.name)
+              }
             }
-          }
 
-          const onLongPress = () => {
-            navigation.emit({
-              type: 'tabLongPress',
-              target: route.key,
-            })
-          }
+            const onLongPress = () => {
+              navigation.emit({
+                type: 'tabLongPress',
+                target: route.key,
+              })
+            }
 
-          // Get icon component
-          const IconComponent = options.tabBarIcon
+            const IconComponent = options.tabBarIcon
 
-          // Render scan button without blob effect
-          if (isScanButton) {
             return (
               <TouchableOpacity
                 key={route.key}
                 accessibilityRole="button"
+                accessibilityState={isFocused ? { selected: true } : {}}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
                 onPress={onPress}
                 onLongPress={onLongPress}
                 style={styles.tab}
               >
-                {IconComponent && IconComponent({
-                  focused: false,
-                  color: '#722F37',
-                  size: 24,
-                })}
+                <View style={[styles.iconContainer, isFocused && styles.iconContainerActive]}>
+                  {IconComponent && IconComponent({
+                    focused: isFocused,
+                    color: isFocused ? '#722F37' : colors.muted[400],
+                    size: 24,
+                  })}
+                </View>
+                {typeof label === 'string' && label && (
+                  <Animated.Text
+                    style={[
+                      styles.label,
+                      { color: isFocused ? '#722F37' : colors.muted[400] },
+                    ]}
+                  >
+                    {label}
+                  </Animated.Text>
+                )}
               </TouchableOpacity>
             )
+          })}
+        </View>
+
+        {/* Divider */}
+        {scanTab && (
+          <View style={styles.divider} />
+        )}
+
+        {/* Scan button on the right */}
+        {scanTab && (() => {
+          const { options } = descriptors[scanTab.key]
+          const IconComponent = options.tabBarIcon
+
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: scanTab.key,
+              canPreventDefault: true,
+            })
+
+            if (!event.defaultPrevented) {
+              navigation.navigate(scanTab.name)
+            }
           }
 
           return (
             <TouchableOpacity
-              key={route.key}
+              key={scanTab.key}
               accessibilityRole="button"
-              accessibilityState={isFocused ? { selected: true } : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
               onPress={onPress}
-              onLongPress={onLongPress}
-              style={styles.tab}
+              style={styles.scanButton}
             >
-              <View style={[styles.iconContainer, isFocused && styles.iconContainerActive]}>
-                {IconComponent && IconComponent({
-                  focused: isFocused,
-                  color: isFocused ? '#722F37' : colors.muted[400],
-                  size: 24,
-                })}
-              </View>
-              {typeof label === 'string' && label && (
-                <Animated.Text
-                  style={[
-                    styles.label,
-                    { color: isFocused ? '#722F37' : colors.muted[400] },
-                  ]}
-                >
-                  {label}
-                </Animated.Text>
-              )}
+              {IconComponent && IconComponent({
+                focused: false,
+                color: '#722F37',
+                size: 24,
+              })}
             </TouchableOpacity>
           )
-        })}
+        })()}
       </View>
     </View>
   )
@@ -200,7 +234,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     left: 0,
-    width: '20%',
     height: 56,
     alignItems: 'center',
     justifyContent: 'center',
@@ -213,12 +246,28 @@ const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: 'row',
     height: '100%',
+    alignItems: 'center',
+  },
+  regularTabsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  divider: {
+    width: 1,
+    height: 40,
+    backgroundColor: colors.muted[200],
+    marginHorizontal: 8,
   },
   tab: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 4,
+  },
+  scanButton: {
+    width: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   iconContainer: {
     width: 32,
