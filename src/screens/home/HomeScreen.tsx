@@ -274,24 +274,36 @@ export const HomeScreen = () => {
 
               {/* Mini Bar Chart */}
               <View style={styles.miniChart}>
-                {analyticsData.chartData.map((item, index) => (
-                  <View key={index} style={styles.chartBarContainer}>
-                    <View style={styles.chartBarWrapper}>
-                      <LinearGradient
-                        colors={['rgba(114, 47, 55, 0.15)', 'rgba(114, 47, 55, 0.25)']}
-                        start={{ x: 0, y: 0 }}
-                        end={{ x: 0, y: 1 }}
-                        style={[
-                          styles.chartBar,
-                          { height: `${(item.value / item.maxValue) * 100}%` },
-                        ]}
-                      />
+                {analyticsData.chartData.map((item, index) => {
+                  // Pastel color palette for each bar
+                  const pastelColors: readonly [string, string][] = [
+                    ['rgba(255, 182, 193, 0.6)', 'rgba(255, 182, 193, 0.9)'] as const, // Pastel pink
+                    ['rgba(173, 216, 230, 0.6)', 'rgba(173, 216, 230, 0.9)'] as const, // Pastel blue
+                    ['rgba(255, 218, 185, 0.6)', 'rgba(255, 218, 185, 0.9)'] as const, // Pastel peach
+                    ['rgba(221, 160, 221, 0.6)', 'rgba(221, 160, 221, 0.9)'] as const, // Pastel purple
+                    ['rgba(152, 251, 152, 0.6)', 'rgba(152, 251, 152, 0.9)'] as const, // Pastel green
+                  ]
+                  const barColors = pastelColors[index % pastelColors.length]
+                  
+                  return (
+                    <View key={index} style={styles.chartBarContainer}>
+                      <View style={styles.chartBarWrapper}>
+                        <LinearGradient
+                          colors={barColors}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 0, y: 1 }}
+                          style={[
+                            styles.chartBar,
+                            { height: `${(item.value / item.maxValue) * 100}%` },
+                          ]}
+                        />
+                      </View>
+                      <Text style={styles.chartLabel} numberOfLines={1}>
+                        {item.label}
+                      </Text>
                     </View>
-                    <Text style={styles.chartLabel} numberOfLines={1}>
-                      {item.label}
-                    </Text>
-                  </View>
-                ))}
+                  )
+                })}
               </View>
             </View>
           </View>
