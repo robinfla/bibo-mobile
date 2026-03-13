@@ -1,8 +1,12 @@
-import React, { useEffect, useRef } from 'react'
-import { View, TouchableOpacity, Platform, Animated, StyleSheet } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, TouchableOpacity, Platform, Animated, StyleSheet, Dimensions } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { colors } from '../theme/colors'
+
+const SCREEN_WIDTH = Dimensions.get('window').width
+const SCAN_BUTTON_WIDTH = 80
+const DIVIDER_WIDTH = 17 // 1px divider + 8px margin on each side
 
 export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const blobPosition = useRef(new Animated.Value(0)).current
@@ -70,11 +74,18 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
     ).start()
   }, [])
 
-  const regularTabWidth = 100 / regularTabs.length
+  // Calculate available width for regular tabs (screen width - scan button - divider)
+  const regularTabsWidth = SCREEN_WIDTH - SCAN_BUTTON_WIDTH - DIVIDER_WIDTH
+  const singleTabWidth = regularTabsWidth / regularTabs.length
+  
+  // Create array of blob positions in pixels
+  const blobPositions = regularTabs.map((_, index) => {
+    return (index * singleTabWidth) + (singleTabWidth / 2)
+  })
 
   const blobTranslateX = blobPosition.interpolate({
-    inputRange: [0, regularTabs.length - 1],
-    outputRange: [regularTabWidth / 2, ((regularTabs.length - 1) * regularTabWidth) + (regularTabWidth / 2)],
+    inputRange: regularTabs.map((_, index) => index),
+    outputRange: blobPositions,
   })
 
   const floatY = floatAnim.interpolate({
@@ -89,7 +100,6 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
         style={[
           styles.blobContainer,
           {
-            width: `${regularTabWidth}%`,
             transform: [
               { translateX: blobTranslateX },
               { translateY: floatY },
@@ -233,7 +243,8 @@ const styles = StyleSheet.create({
   blobContainer: {
     position: 'absolute',
     top: 8,
-    left: 0,
+    left: -32, // Center the 64px blob (half of blob width)
+    width: 64,
     height: 56,
     alignItems: 'center',
     justifyContent: 'center',
