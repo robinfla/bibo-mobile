@@ -278,30 +278,17 @@ const AuthenticatedTabs = () => {
               }
             },
           })}
-          options={({ route }) => ({
-            tabBarLabel: 'Inventory',
-            tabBarIcon: ({ color }) => <ListIcon color={color} size={24} />,
-            tabBarStyle: (() => {
-              const routeName = getFocusedRouteNameFromRoute(route)
-              // Hide tab bar on WineDetail screen
-              if (routeName === 'WineDetail') {
-                return { display: 'none' }
-              }
-              return {
-                backgroundColor: colors.white,
-                borderTopColor: colors.muted[200],
-                borderTopWidth: 0,
-                height: Platform.OS === 'ios' ? 88 : 72,
-                paddingBottom: Platform.OS === 'ios' ? 24 : 12,
-                paddingTop: 8,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: -2 },
-                shadowOpacity: 0.06,
-                shadowRadius: 8,
-                elevation: 10,
-              }
-            })(),
-          })}
+          options={({ route }) => {
+            const routeName = getFocusedRouteNameFromRoute(route)
+            // Hide tab bar on WineDetail screen for full immersion
+            const hideTabBar = routeName === 'WineDetail'
+            
+            return {
+              tabBarLabel: 'Inventory',
+              tabBarIcon: ({ color }) => <ListIcon color={color} size={24} />,
+              tabBarStyle: hideTabBar ? { display: 'none' } : undefined,
+            }
+          }}
         />
         <Tab.Screen
           name="ScanTab"
@@ -331,9 +318,16 @@ const AuthenticatedTabs = () => {
               }
             },
           })}
-          options={{
-            tabBarLabel: 'Sommelier',
-            tabBarIcon: ({ color }) => <SommelierIcon color={color} size={24} />,
+          options={({ route }) => {
+            const routeName = getFocusedRouteNameFromRoute(route)
+            // Hide tab bar on SommelierChat screen for immersive chat experience
+            const hideTabBar = routeName === 'SommelierChat'
+            
+            return {
+              tabBarLabel: 'Sommelier',
+              tabBarIcon: ({ color }) => <SommelierIcon color={color} size={24} />,
+              tabBarStyle: hideTabBar ? { display: 'none' } : undefined,
+            }
           }}
         />
         <Tab.Screen
