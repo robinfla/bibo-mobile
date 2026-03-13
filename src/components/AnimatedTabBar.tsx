@@ -5,8 +5,10 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { colors } from '../theme/colors'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
-const SCAN_BUTTON_WIDTH = 80
-const DIVIDER_WIDTH = 17 // 1px divider + 8px margin on each side
+const SCAN_BUTTON_WIDTH = 48
+const SCAN_MARGIN = 8
+const DIVIDER_WIDTH = 25 // 1px divider + 12px margin on each side
+const CONTAINER_PADDING = 24 // 12px on each side
 
 export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarProps) => {
   const blobPosition = useRef(new Animated.Value(0)).current
@@ -56,13 +58,14 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
 
   // Removed continuous floating animation - blob should stay still when focused
 
-  // Calculate available width for regular tabs (screen width - scan button - divider)
-  const regularTabsWidth = SCREEN_WIDTH - SCAN_BUTTON_WIDTH - DIVIDER_WIDTH
+  // Calculate available width for regular tabs
+  // Screen width - container margins (32px) - container padding (24px) - scan button - scan margin - divider
+  const regularTabsWidth = SCREEN_WIDTH - 32 - CONTAINER_PADDING - SCAN_BUTTON_WIDTH - SCAN_MARGIN - DIVIDER_WIDTH
   const singleTabWidth = regularTabsWidth / regularTabs.length
   
-  // Create array of blob positions in pixels
+  // Create array of blob positions in pixels (offset by left padding)
   const blobPositions = regularTabs.map((_, index) => {
-    return (index * singleTabWidth) + (singleTabWidth / 2)
+    return (index * singleTabWidth) + (singleTabWidth / 2) + 12 // +12 for container paddingLeft
   })
 
   const blobTranslateX = blobPosition.interpolate({
@@ -72,7 +75,7 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
 
   return (
     <View style={styles.container}>
-      {/* Animated gradient blob */}
+      {/* Animated active tab background pill */}
       <Animated.View
         style={[
           styles.blobContainer,
@@ -85,9 +88,9 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
         ]}
       >
         <LinearGradient
-          colors={['rgba(114, 47, 55, 0.15)', 'rgba(148, 70, 84, 0.08)']}
+          colors={['rgba(114, 47, 55, 0.12)', 'rgba(148, 70, 84, 0.18)']}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+          end={{ x: 1, y: 0 }}
           style={styles.blob}
         />
       </Animated.View>
@@ -205,35 +208,38 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
 
 const styles = StyleSheet.create({
   container: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 20 : 16,
+    left: 16,
+    right: 16,
     backgroundColor: colors.white,
-    height: Platform.OS === 'ios' ? 88 : 72,
-    paddingBottom: Platform.OS === 'ios' ? 28 : 16,
-    paddingTop: 12,
+    height: 64,
+    borderRadius: 32,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 10,
-    position: 'relative',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 12,
   },
   blobContainer: {
     position: 'absolute',
-    top: 12,
-    left: -32, // Center the 64px blob (half of blob width)
-    width: 64,
-    height: 56,
+    top: 8,
+    left: -30, // Half of blob width to center it
+    width: 60,
+    height: 48,
     alignItems: 'center',
     justifyContent: 'center',
   },
   blob: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: '100%',
+    height: '100%',
+    borderRadius: 24,
   },
   tabsContainer: {
     flexDirection: 'row',
     height: '100%',
     alignItems: 'center',
+    paddingHorizontal: 12,
   },
   regularTabsContainer: {
     flex: 1,
@@ -241,33 +247,36 @@ const styles = StyleSheet.create({
   },
   divider: {
     width: 1,
-    height: 40,
+    height: 32,
     backgroundColor: colors.muted[200],
-    marginHorizontal: 8,
+    marginHorizontal: 12,
   },
   tab: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 4,
   },
   scanButton: {
-    width: 80,
+    width: 48,
+    height: 48,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: colors.white,
+    borderRadius: 24,
+    marginLeft: 8,
   },
   iconContainer: {
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
   iconContainerActive: {
-    transform: [{ scale: 1.1 }],
+    transform: [{ scale: 1.05 }],
   },
   label: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '600',
-    marginTop: 4,
+    marginTop: 3,
   },
 })
