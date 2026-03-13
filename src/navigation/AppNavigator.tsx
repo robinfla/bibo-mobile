@@ -36,6 +36,7 @@ import { ConversationListScreen } from '../screens/sommelier/ConversationListScr
 import { TasteProfileScreen } from '../screens/sommelier/TasteProfileScreen'
 import { TasteProfileSummaryScreen } from '../screens/sommelier/TasteProfileSummaryScreen'
 import { TasteProfileEmptyScreen } from '../screens/sommelier/TasteProfileEmptyScreen'
+import { AnimatedTabBar } from '../components/AnimatedTabBar'
 import type { InventoryLot } from '../types/api'
 
 type InventoryStackParamList = {
@@ -239,31 +240,9 @@ const AuthenticatedTabs = () => {
   return (
     <>
       <Tab.Navigator
+        tabBar={(props) => <AnimatedTabBar {...props} />}
         screenOptions={{
           headerShown: false,
-          tabBarStyle: {
-            backgroundColor: colors.white,
-            borderTopColor: colors.muted[200],
-            borderTopWidth: 0,
-            height: Platform.OS === 'ios' ? 88 : 72,
-            paddingBottom: Platform.OS === 'ios' ? 24 : 12,
-            paddingTop: 8,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: -2 },
-            shadowOpacity: 0.06,
-            shadowRadius: 8,
-            elevation: 10,
-          },
-          tabBarActiveTintColor: '#722F37',
-          tabBarInactiveTintColor: colors.muted[400],
-          tabBarLabelStyle: {
-            fontSize: 11,
-            fontWeight: '600',
-            marginTop: 2,
-          },
-          tabBarIconStyle: {
-            marginBottom: -2,
-          },
         }}
       >
         <Tab.Screen
