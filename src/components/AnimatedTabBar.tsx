@@ -54,25 +54,7 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
     }
   }, [activeRegularIndex])
 
-  // Continuous floating animation
-  const floatAnim = useRef(new Animated.Value(0)).current
-
-  useEffect(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(floatAnim, {
-          toValue: 1,
-          duration: 3000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(floatAnim, {
-          toValue: 0,
-          duration: 3000,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start()
-  }, [])
+  // Removed continuous floating animation - blob should stay still when focused
 
   // Calculate available width for regular tabs (screen width - scan button - divider)
   const regularTabsWidth = SCREEN_WIDTH - SCAN_BUTTON_WIDTH - DIVIDER_WIDTH
@@ -88,11 +70,6 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
     outputRange: blobPositions,
   })
 
-  const floatY = floatAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -8],
-  })
-
   return (
     <View style={styles.container}>
       {/* Animated gradient blob */}
@@ -102,7 +79,6 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
           {
             transform: [
               { translateX: blobTranslateX },
-              { translateY: floatY },
               { scale: blobScale },
             ],
           },
