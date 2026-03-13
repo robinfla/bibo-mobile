@@ -614,6 +614,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     padding: 12,
+    paddingBottom: Platform.OS === 'ios' ? 100 : 90, // Space for floating tab bar
     gap: 8,
     backgroundColor: '#fff',
     borderTopWidth: 1,

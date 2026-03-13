@@ -318,16 +318,9 @@ const AuthenticatedTabs = () => {
               }
             },
           })}
-          options={({ route }) => {
-            const routeName = getFocusedRouteNameFromRoute(route)
-            // Hide tab bar on SommelierChat screen for immersive chat experience
-            const hideTabBar = routeName === 'SommelierChat'
-            
-            return {
-              tabBarLabel: 'Sommelier',
-              tabBarIcon: ({ color }) => <SommelierIcon color={color} size={24} />,
-              tabBarStyle: hideTabBar ? { display: 'none' } : undefined,
-            }
+          options={{
+            tabBarLabel: 'Sommelier',
+            tabBarIcon: ({ color }) => <SommelierIcon color={color} size={24} />,
           }}
         />
         <Tab.Screen
