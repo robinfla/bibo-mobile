@@ -36,6 +36,7 @@ import { ConversationListScreen } from '../screens/sommelier/ConversationListScr
 import { TasteProfileScreen } from '../screens/sommelier/TasteProfileScreen'
 import { TasteProfileSummaryScreen } from '../screens/sommelier/TasteProfileSummaryScreen'
 import { TasteProfileEmptyScreen } from '../screens/sommelier/TasteProfileEmptyScreen'
+import { WineSearchScreen, KBWineDetailScreen } from '../screens/search'
 import { AnimatedTabBar } from '../components/AnimatedTabBar'
 import type { InventoryLot } from '../types/api'
 
@@ -193,6 +194,16 @@ const HomeStackScreen = () => (
     <HomeStack.Screen
       name="Analytics"
       component={AnalyticsScreen}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="WineSearch"
+      component={WineSearchScreen}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="KBWineDetail"
+      component={KBWineDetailScreen}
       options={{ headerShown: false }}
     />
   </HomeStack.Navigator>

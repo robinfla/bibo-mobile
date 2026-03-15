@@ -228,6 +228,22 @@ export const HomeScreen = () => {
             </View>
             <Icon name="chevron-right" size={24} color="#999" />
           </TouchableOpacity>
+
+          {/* Search Wines */}
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate('WineSearch' as never)}
+            activeOpacity={0.7}
+          >
+            <View style={styles.actionIcon}>
+              <Text style={styles.actionIconEmoji}>🔍</Text>
+            </View>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>Search Wines</Text>
+              <Text style={styles.actionSubtitle}>Browse 493K+ wines in our database</Text>
+            </View>
+            <Icon name="chevron-right" size={24} color="#999" />
+          </TouchableOpacity>
         </View>
 
         {/* Analytics Widget */}

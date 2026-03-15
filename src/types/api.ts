@@ -342,6 +342,56 @@ export interface CreateWishlistItem {
 }
 
 // Wine Detail
+// Knowledge Base types
+export interface KBSearchResult {
+  id: number
+  wineName: string
+  producer: string
+  region: string | null
+  country: string | null
+  countryCode: string | null
+  appellation: string | null
+  color: string | null
+  imageUrl: string | null
+  thumbnailUrl: string | null
+  score: number | null
+  foodPairings: string[]
+}
+
+export interface KBSearchResponse {
+  query: string
+  count: number
+  results: KBSearchResult[]
+}
+
+export interface KBWineEnrichment {
+  wineName: string
+  producer: string
+  region: string | null
+  country: string | null
+  countryCode: string | null
+  appellation: string | null
+  color: string | null
+  grape: string | null
+  imageUrl: string | null
+  thumbnailUrl: string | null
+  acidity: number | null
+  intensity: number | null
+  sweetness: number | null
+  tannin: number | null
+  agingPeakMin: number | null
+  agingPeakMax: number | null
+  agingDeclineMin: number | null
+  foodPairings: string[]
+  criticReviews: Array<{
+    vintage: number | null
+    score: number | null
+    tastingNote: string | null
+    critic: string | null
+    source: string
+  }>
+}
+
 export interface WineDetailResponse {
   id: number
   name: string
