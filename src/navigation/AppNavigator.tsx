@@ -37,6 +37,12 @@ import { TasteProfileScreen } from '../screens/sommelier/TasteProfileScreen'
 import { TasteProfileSummaryScreen } from '../screens/sommelier/TasteProfileSummaryScreen'
 import { TasteProfileEmptyScreen } from '../screens/sommelier/TasteProfileEmptyScreen'
 import { WineSearchScreen, KBWineDetailScreen } from '../screens/search'
+import { WineScanCameraScreen } from '../screens/scan/WineScanCameraScreen'
+import { WineScanLoadingScreen } from '../screens/scan/WineScanLoadingScreen'
+import { WineScanResultScreen } from '../screens/scan/WineScanResultScreen'
+import { QuickTastingReviewScreen } from '../screens/tasting/QuickTastingReviewScreen'
+import { ComprehensiveTastingReviewScreen } from '../screens/tasting/ComprehensiveTastingReviewScreen'
+import { AddToWishlistScreen } from '../screens/wishlist/AddToWishlistScreen'
 import { AnimatedTabBar } from '../components/AnimatedTabBar'
 import type { InventoryLot } from '../types/api'
 
@@ -50,6 +56,7 @@ type InventoryStackParamList = {
 
 const HomeStack = createNativeStackNavigator()
 const InventoryStack = createNativeStackNavigator<InventoryStackParamList>()
+const ScanStack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
 const HomeIcon = ({ color, size }: { color: string; size: number }) => (
@@ -98,6 +105,19 @@ const ScanButton = () => (
 // Cellars icon
 const CellarIcon = ({ color, size }: { color: string; size: number }) => (
   <Text style={{ fontSize: size + 2, color, lineHeight: size + 6 }}>🏠</Text>
+)
+
+// Scan Stack Screen
+const ScanStackScreen = () => (
+  <ScanStack.Navigator screenOptions={{ headerShown: false }}>
+    <ScanStack.Screen name="WineScanCamera" component={WineScanCameraScreen} />
+    <ScanStack.Screen name="WineScanLoading" component={WineScanLoadingScreen} />
+    <ScanStack.Screen name="WineScanResult" component={WineScanResultScreen} />
+    <ScanStack.Screen name="QuickTastingReview" component={QuickTastingReviewScreen} />
+    <ScanStack.Screen name="ComprehensiveTastingReview" component={ComprehensiveTastingReviewScreen} />
+    <ScanStack.Screen name="AddToWishlist" component={AddToWishlistScreen} />
+    <ScanStack.Screen name="AddWine" component={AddWineStep1} />
+  </ScanStack.Navigator>
 )
 
 // Dummy screen — scan tab never actually renders, it opens a modal
@@ -303,13 +323,13 @@ const AuthenticatedTabs = () => {
         />
         <Tab.Screen
           name="ScanTab"
-          component={DummyScreen}
-          listeners={{
+          component={ScanStackScreen}
+          listeners={({ navigation }) => ({
             tabPress: (e) => {
-              e.preventDefault()
-              setShowScan(true)
+              // Navigate to camera screen
+              navigation.navigate('ScanTab', { screen: 'WineScanCamera' })
             },
-          }}
+          })}
           options={{
             tabBarLabel: '',
             tabBarIcon: () => <ScanButton />,
