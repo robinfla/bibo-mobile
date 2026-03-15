@@ -14,6 +14,8 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
   const blobPosition = useRef(new Animated.Value(0)).current
   const blobScale = useRef(new Animated.Value(1)).current
 
+  const activeRoute = state.routes[state.index]
+
   // Separate scan tab from regular tabs
   const regularTabs = state.routes.filter((route) => {
     const { options } = descriptors[route.key]
@@ -26,7 +28,6 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
   })
 
   // Find active index among regular tabs only
-  const activeRoute = state.routes[state.index]
   const activeRegularIndex = regularTabs.findIndex((route) => route.key === activeRoute.key)
 
   useEffect(() => {
@@ -55,6 +56,11 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
       ]).start()
     }
   }, [activeRegularIndex])
+
+  // Hide tab bar when ScanTab is active (must be after all hooks)
+  if (activeRoute.name === 'ScanTab') {
+    return null
+  }
 
   // Removed continuous floating animation - blob should stay still when focused
 

@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
   },
   instructionsContainer: {
     position: 'absolute',
-    bottom: 120,
+    bottom: 160,
     left: 0,
     right: 0,
     alignItems: 'center',

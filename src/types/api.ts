@@ -464,3 +464,60 @@ export interface WineDetailResponse {
     cellarName: string | null
   }>
 }
+
+export interface Tasting {
+  id: number
+  wineId: number
+  userId: number
+  vintage: number | null
+  rating: number | null
+  
+  // Visual assessment
+  visualColor: string | null
+  visualColorPosition: number | null
+  visualIntensity: string | null
+  visualIntensityValue: number | null
+  visualClarity: string | null
+  visualClarityValue: number | null
+  visualViscosity: string | null
+  visualViscosityValue: number | null
+  
+  // Nose
+  noseIntensity: string | null
+  noseIntensityValue: number | null
+  noseDevelopment: string | null
+  noseDevelopmentValue: number | null
+  noseAromas: string[] | null
+  
+  // Palate
+  palateSweetness: string | null
+  palateSweetnessValue: number | null
+  palateAcidity: string | null
+  palateAcidityValue: number | null
+  palateTannin: string | null
+  palateTanninValue: number | null
+  palateBody: string | null
+  palateBodyValue: number | null
+  palateAlcohol: number | null
+  palateAlcoholValue: number | null
+  palateFinish: string | null
+  palateFinishValue: number | null
+  palateFlavors: string[] | null
+  
+  // Context
+  contextPeople: string[] | null
+  contextPlace: string | null
+  contextMeal: string | null
+  contextTemperature: number | null
+  contextDecantedMinutes: number | null
+  
+  // Notes & Photos
+  notes: string | null
+  photos: string[] | null
+  
+  createdAt: string
+  updatedAt: string
+}
+
+export type CreateTastingInput = Omit<Tasting, 'id' | 'userId' | 'createdAt' | 'updatedAt'>
+export type UpdateTastingInput = Partial<CreateTastingInput>
