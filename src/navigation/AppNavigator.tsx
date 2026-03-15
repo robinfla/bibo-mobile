@@ -41,7 +41,7 @@ import { WineScanCameraScreen } from '../screens/scan/WineScanCameraScreen'
 import { WineScanLoadingScreen } from '../screens/scan/WineScanLoadingScreen'
 import { WineScanResultScreen } from '../screens/scan/WineScanResultScreen'
 import { QuickTastingReviewScreen } from '../screens/tasting/QuickTastingReviewScreen'
-import { ComprehensiveTastingReviewScreen } from '../screens/tasting/ComprehensiveTastingReviewScreen'
+import { ComprehensiveTastingScreen } from '../screens/tasting/ComprehensiveTastingScreen'
 import { AddToWishlistScreen } from '../screens/wishlist/AddToWishlistScreen'
 import { AnimatedTabBar } from '../components/AnimatedTabBar'
 import type { InventoryLot } from '../types/api'
@@ -114,7 +114,7 @@ const ScanStackScreen = () => (
     <ScanStack.Screen name="WineScanLoading" component={WineScanLoadingScreen} />
     <ScanStack.Screen name="WineScanResult" component={WineScanResultScreen} />
     <ScanStack.Screen name="QuickTastingReview" component={QuickTastingReviewScreen} />
-    <ScanStack.Screen name="ComprehensiveTastingReview" component={ComprehensiveTastingReviewScreen} />
+    <ScanStack.Screen name="ComprehensiveTastingReview" component={ComprehensiveTastingScreen} />
     <ScanStack.Screen name="AddToWishlist" component={AddToWishlistScreen} />
     <ScanStack.Screen name="AddWine" component={AddWineStep1} />
   </ScanStack.Navigator>
