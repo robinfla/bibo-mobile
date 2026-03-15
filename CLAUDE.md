@@ -143,6 +143,40 @@ rm -rf .expo node_modules/.cache
 npx expo start --clear
 ```
 
+## Design Resources
+
+All design docs and mockups are in `docs/`:
+
+```
+docs/
+├── DESIGN-SYSTEM.md      # Full design system (colors, spacing, components)
+├── DESIGN_TOKENS.md      # Design tokens for implementation
+├── DESIGNS.md            # Design decisions log
+├── sommelier-design-spec.md    # Sommelier AI UX spec
+├── sommelier-handoff-spec.md   # Sommelier implementation spec
+├── INVENTORY_REDESIGN_SPEC.md  # Inventory screens spec
+└── mockups/              # Final approved mockups (PNGs)
+    ├── inventory-list-final.png
+    ├── detail-v5.png
+    ├── sommelier-final.png
+    ├── taste-profile-summary-v2.png
+    ├── home-with-analytics-widget.png
+    ├── mockup-add-wine-final.png
+    ├── mockup-analytics-final.png
+    └── ...
+```
+
+### Design Principles
+- **Theme:** "Warm Sommelier" — cozy wine bar, not clinical
+- **Colors:** Warm off-white (`#FEF9F5`), wine red sparingly (`#722F37`)
+- **Corners:** 16-24px radius
+- **Touch targets:** 44px minimum
+- **No harsh borders** — use shadows instead
+
+### Full Mockup Archive
+Additional mockups (iterations, alternatives) are in:
+`~/.openclaw/workspace-johnny/` (Johnny's design workspace)
+
 ## Related Projects
 - `../wine-cellar/` — Backend API
 - `../bibo-knowledge/` — Wine reference database
