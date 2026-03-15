@@ -10,12 +10,19 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image,
+  Alert,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { Audio } from 'expo-av'
+import * as ImagePicker from 'expo-image-picker'
 import { apiFetch } from '../../api/client'
 import { SommelierSidebar } from '../../components/SommelierSidebar'
+import { VoiceRecordingBar } from '../../components/VoiceRecordingBar'
+import { VoiceMessageBubble } from '../../components/VoiceMessageBubble'
+import { PhotoMessageBubble } from '../../components/PhotoMessageBubble'
+import { PhotoPickerSheet } from '../../components/PhotoPickerSheet'
 
 interface WineSuggestion {
   wineId: number
@@ -28,7 +35,12 @@ interface WineSuggestion {
 interface Message {
   id: string
   type: 'user' | 'assistant'
+  messageType?: 'text' | 'voice' | 'photo' | 'label_scan'
   text: string
+  audioUrl?: string
+  duration?: number
+  imageUrl?: string
+  caption?: string
   suggestions?: WineSuggestion[]
   timestamp: Date
 }
@@ -53,6 +65,11 @@ export const SommelierScreen = ({ route }: any) => {
   const [inputHeight, setInputHeight] = useState(44)
   const [currentConversationId, setCurrentConversationId] = useState<string | undefined>(conversationId)
   const [showSidebar, setShowSidebar] = useState(false)
+  const [showPhotoPicker, setShowPhotoPicker] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
+  const [recordingDuration, setRecordingDuration] = useState(0)
+  const [audioRecording, setAudioRecording] = useState<Audio.Recording | null>(null)
+  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     // Fetch conversation history if conversationId exists
@@ -86,6 +103,288 @@ export const SommelierScreen = ({ route }: any) => {
     } catch (error) {
       console.error('Failed to fetch conversation history:', error)
     }
+  }
+
+  // Voice recording functions
+  const startRecording = async () => {
+    try {
+      const permission = await Audio.requestPermissionsAsync()
+      if (!permission.granted) {
+        Alert.alert(
+          'Microphone Permission',
+          'Bibo needs microphone access to record voice messages. Please enable it in Settings.',
+          [{ text: 'OK' }]
+        )
+        return
+      }
+
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      })
+
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      )
+      
+      setAudioRecording(recording)
+      setIsRecording(true)
+      setRecordingDuration(0)
+
+      // Start timer
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingDuration((prev) => {
+          if (prev >= 60) {
+            // Auto-send at 60 seconds
+            sendVoiceMessage()
+            return prev
+          }
+          return prev + 1
+        })
+      }, 1000)
+    } catch (error) {
+      console.error('Failed to start recording:', error)
+      Alert.alert('Recording Error', 'Failed to start recording. Please try again.')
+    }
+  }
+
+  const cancelRecording = async () => {
+    if (audioRecording) {
+      await audioRecording.stopAndUnloadAsync()
+      setAudioRecording(null)
+    }
+    if (recordingTimerRef.current) {
+      clearInterval(recordingTimerRef.current)
+      recordingTimerRef.current = null
+    }
+    setIsRecording(false)
+    setRecordingDuration(0)
+  }
+
+  const sendVoiceMessage = async () => {
+    if (!audioRecording) return
+
+    try {
+      // Stop recording
+      await audioRecording.stopAndUnloadAsync()
+      const uri = audioRecording.getURI()
+      
+      if (recordingTimerRef.current) {
+        clearInterval(recordingTimerRef.current)
+        recordingTimerRef.current = null
+      }
+
+      if (!uri) {
+        throw new Error('No recording URI')
+      }
+
+      // Upload audio file
+      const formData = new FormData()
+      formData.append('audio', {
+        uri,
+        name: 'voice-message.m4a',
+        type: 'audio/m4a',
+      } as any)
+
+      const uploadResponse = await fetch('https://cellar.zubi.wine/api/upload/audio', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${await getAuthToken()}`,
+        },
+      })
+
+      if (!uploadResponse.ok) {
+        throw new Error('Upload failed')
+      }
+
+      const { url } = await uploadResponse.json()
+
+      // Add voice message to chat
+      const voiceMessage: Message = {
+        id: Date.now().toString(),
+        type: 'user',
+        messageType: 'voice',
+        text: '',
+        audioUrl: `https://cellar.zubi.wine${url}`,
+        duration: recordingDuration,
+        timestamp: new Date(),
+      }
+
+      setMessages((prev) => [...prev, voiceMessage])
+      setIsRecording(false)
+      setRecordingDuration(0)
+      setAudioRecording(null)
+      setIsLoading(true)
+
+      // Send to sommelier
+      const response = await apiFetch<{
+        conversationId?: string
+        message: string
+        suggestions: WineSuggestion[]
+      }>('/api/chat/sommelier', {
+        method: 'POST',
+        body: {
+          type: 'voice',
+          audioUrl: `https://cellar.zubi.wine${url}`,
+          duration: recordingDuration,
+          conversationId: currentConversationId,
+        },
+      })
+
+      if (response.conversationId && !currentConversationId) {
+        setCurrentConversationId(response.conversationId)
+      }
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'assistant',
+        text: response.message,
+        suggestions: response.suggestions,
+        timestamp: new Date(),
+      }
+
+      setMessages((prev) => [...prev, assistantMessage])
+      setIsLoading(false)
+    } catch (error) {
+      console.error('Failed to send voice message:', error)
+      Alert.alert('Upload Error', 'Failed to send voice message. Please try again.')
+      setIsRecording(false)
+      setRecordingDuration(0)
+      setAudioRecording(null)
+      setIsLoading(false)
+    }
+  }
+
+  // Photo functions
+  const handleTakePhoto = async () => {
+    const permission = await ImagePicker.requestCameraPermissionsAsync()
+    if (!permission.granted) {
+      Alert.alert(
+        'Camera Permission',
+        'Bibo needs camera access to take photos. Please enable it in Settings.',
+        [{ text: 'OK' }]
+      )
+      return
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.85,
+    })
+
+    if (!result.canceled && result.assets[0]) {
+      await uploadAndSendPhoto(result.assets[0].uri)
+    }
+  }
+
+  const handleChooseFromGallery = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
+    if (!permission.granted) {
+      Alert.alert(
+        'Photo Library Permission',
+        'Bibo needs photo library access. Please enable it in Settings.',
+        [{ text: 'OK' }]
+      )
+      return
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.85,
+    })
+
+    if (!result.canceled && result.assets[0]) {
+      await uploadAndSendPhoto(result.assets[0].uri)
+    }
+  }
+
+  const handleScanLabel = async () => {
+    // Use existing wine scan functionality
+    // @ts-ignore - navigation typing
+    navigation.navigate('ScanWine')
+  }
+
+  const uploadAndSendPhoto = async (uri: string) => {
+    try {
+      setIsLoading(true)
+
+      // Upload image
+      const formData = new FormData()
+      formData.append('image', {
+        uri,
+        name: 'photo.jpg',
+        type: 'image/jpeg',
+      } as any)
+
+      const uploadResponse = await fetch('https://cellar.zubi.wine/api/upload/image', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${await getAuthToken()}`,
+        },
+      })
+
+      if (!uploadResponse.ok) {
+        throw new Error('Upload failed')
+      }
+
+      const { url } = await uploadResponse.json()
+
+      // Add photo message to chat
+      const photoMessage: Message = {
+        id: Date.now().toString(),
+        type: 'user',
+        messageType: 'photo',
+        text: '',
+        imageUrl: `https://cellar.zubi.wine${url}`,
+        timestamp: new Date(),
+      }
+
+      setMessages((prev) => [...prev, photoMessage])
+
+      // Send to sommelier
+      const response = await apiFetch<{
+        conversationId?: string
+        message: string
+        suggestions: WineSuggestion[]
+      }>('/api/chat/sommelier', {
+        method: 'POST',
+        body: {
+          type: 'photo',
+          imageUrl: `https://cellar.zubi.wine${url}`,
+          conversationId: currentConversationId,
+        },
+      })
+
+      if (response.conversationId && !currentConversationId) {
+        setCurrentConversationId(response.conversationId)
+      }
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'assistant',
+        text: response.message,
+        suggestions: response.suggestions,
+        timestamp: new Date(),
+      }
+
+      setMessages((prev) => [...prev, assistantMessage])
+      setIsLoading(false)
+    } catch (error) {
+      console.error('Failed to send photo:', error)
+      Alert.alert('Upload Error', 'Failed to send photo. Please try again.')
+      setIsLoading(false)
+    }
+  }
+
+  const getAuthToken = async () => {
+    // TODO: Get actual auth token from your auth system
+    return '41040187dfc4b0bf953a62a83a8a4d1e658a330631f86697eab76e8438068715'
   }
 
   const handleSend = async (text?: string) => {
@@ -237,6 +536,40 @@ export const SommelierScreen = ({ route }: any) => {
       )
     }
 
+    // User message - check type
+    if (message.messageType === 'voice' && message.audioUrl) {
+      return (
+        <VoiceMessageBubble
+          key={message.id}
+          audioUrl={message.audioUrl}
+          duration={message.duration || 0}
+          timestamp={message.timestamp.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        />
+      )
+    }
+
+    if ((message.messageType === 'photo' || message.messageType === 'label_scan') && message.imageUrl) {
+      return (
+        <PhotoMessageBubble
+          key={message.id}
+          imageUrl={message.imageUrl}
+          caption={message.caption}
+          timestamp={message.timestamp.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+          onPress={() => {
+            // TODO: Open full-screen image viewer
+            console.log('Open image:', message.imageUrl)
+          }}
+        />
+      )
+    }
+
+    // Regular text message
     return (
       <View
         key={message.id}
@@ -340,39 +673,67 @@ export const SommelierScreen = ({ route }: any) => {
 
           {/* Input Container */}
           <View style={styles.inputContainer}>
-            <TextInput
-              style={[styles.input, { height: Math.max(44, inputHeight) }]}
-              value={inputText}
-              onChangeText={setInputText}
-              placeholder="Ask me anything about wine"
-              placeholderTextColor="#999"
-              multiline
-              onContentSizeChange={(e) =>
-                setInputHeight(Math.min(100, e.nativeEvent.contentSize.height))
-              }
-              returnKeyType="send"
-              onSubmitEditing={() => handleSend()}
-              blurOnSubmit={false}
-            />
+            {isRecording ? (
+              <VoiceRecordingBar
+                duration={recordingDuration}
+                onCancel={cancelRecording}
+                onSend={sendVoiceMessage}
+              />
+            ) : (
+              <View style={styles.inputRow}>
+                {/* Camera Icon */}
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  onPress={() => setShowPhotoPicker(true)}
+                  activeOpacity={0.7}
+                >
+                  <Icon name="camera" size={20} color="#722F37" />
+                </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[
-                styles.sendButtonContainer,
-                (!inputText.trim() || isLoading) && styles.sendButtonDisabled,
-              ]}
-              onPress={() => handleSend()}
-              disabled={!inputText.trim() || isLoading}
-              activeOpacity={0.8}
-            >
-              <LinearGradient
-                colors={['#722F37', '#944654']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.sendButton}
-              >
-                <Icon name="send" size={18} color="#fff" />
-              </LinearGradient>
-            </TouchableOpacity>
+                {/* Text Input */}
+                <TextInput
+                  style={[styles.input, { height: Math.max(44, inputHeight) }]}
+                  value={inputText}
+                  onChangeText={setInputText}
+                  placeholder="Ask me anything about wine"
+                  placeholderTextColor="#999"
+                  multiline
+                  onContentSizeChange={(e) =>
+                    setInputHeight(Math.min(100, e.nativeEvent.contentSize.height))
+                  }
+                  returnKeyType="send"
+                  onSubmitEditing={() => handleSend()}
+                  blurOnSubmit={false}
+                />
+
+                {/* Mic Icon (or Send Button if text exists) */}
+                {inputText.trim() ? (
+                  <TouchableOpacity
+                    style={styles.sendButtonContainer}
+                    onPress={() => handleSend()}
+                    disabled={isLoading}
+                    activeOpacity={0.8}
+                  >
+                    <LinearGradient
+                      colors={['#722F37', '#944654']}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 1 }}
+                      style={styles.sendButton}
+                    >
+                      <Icon name="arrow-up" size={18} color="#fff" />
+                    </LinearGradient>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.iconButton}
+                    onPress={startRecording}
+                    activeOpacity={0.7}
+                  >
+                    <Icon name="microphone" size={20} color="#722F37" />
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
           </View>
         </LinearGradient>
       </KeyboardAvoidingView>
@@ -412,6 +773,15 @@ export const SommelierScreen = ({ route }: any) => {
           // @ts-ignore - Navigation typing
           navigation.navigate('SommelierSettings')
         }}
+      />
+
+      {/* Photo Picker Sheet */}
+      <PhotoPickerSheet
+        visible={showPhotoPicker}
+        onClose={() => setShowPhotoPicker(false)}
+        onTakePhoto={handleTakePhoto}
+        onChooseFromGallery={handleChooseFromGallery}
+        onScanLabel={handleScanLabel}
       />
     </SafeAreaView>
   )
@@ -611,14 +981,24 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_600SemiBold',
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
     padding: 12,
     paddingBottom: Platform.OS === 'ios' ? 100 : 90, // Space for floating tab bar
-    gap: 8,
     backgroundColor: '#fff',
     borderTopWidth: 1,
     borderTopColor: 'rgba(228, 213, 203, 0.3)',
+  },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 8,
+  },
+  iconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(114, 47, 55, 0.08)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   input: {
     flex: 1,
