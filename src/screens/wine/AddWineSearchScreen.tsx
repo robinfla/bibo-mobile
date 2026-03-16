@@ -63,18 +63,13 @@ export const AddWineSearchScreen = () => {
         `/api/knowledge/search?q=${encodeURIComponent(query)}&limit=10`
       )
       setSearchResults(response.results)
-      
-      // Navigate to no results screen if count is 0
-      if (response.count === 0) {
-        navigation.navigate('AddWineNoResults', { query })
-      }
     } catch (error) {
       console.error('Search failed:', error)
       setSearchResults([])
     } finally {
       setIsSearching(false)
     }
-  }, [navigation])
+  }, [])
 
   const handleSearchChange = (text: string) => {
     setSearchQuery(text)
@@ -156,6 +151,14 @@ export const AddWineSearchScreen = () => {
     </TouchableOpacity>
   )
 
+  const handleAddManually = () => {
+    navigation.navigate('AddWineStep2', {
+      wine: {
+        name: searchQuery, // Pre-fill with search query
+      },
+    })
+  }
+
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.emptyIcon}>🍷</Text>
@@ -178,6 +181,44 @@ export const AddWineSearchScreen = () => {
           <Text style={styles.scanLabelText}>Scan Label</Text>
         </LinearGradient>
       </TouchableOpacity>
+    </View>
+  )
+
+  const renderNoResultsState = () => (
+    <View style={styles.noResultsContainer}>
+      <Text style={styles.noResultsIcon}>🤷</Text>
+      <Text style={styles.noResultsTitle}>No results found</Text>
+      <Text style={styles.noResultsMessage}>
+        We couldn't find <Text style={styles.queryText}>{searchQuery}</Text> in our wine database.
+      </Text>
+
+      {/* Action Buttons */}
+      <View style={styles.actionsContainer}>
+        <TouchableOpacity
+          style={styles.addManuallyButton}
+          onPress={handleAddManually}
+          activeOpacity={0.8}
+        >
+          <LinearGradient
+            colors={['#722F37', '#944654']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.addManuallyGradient}
+          >
+            <Icon name="plus" size={20} color="white" />
+            <Text style={styles.addManuallyText}>Add Manually</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.tryScanButton}
+          onPress={handleScanPress}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.tryScanEmoji}>📷</Text>
+          <Text style={styles.tryScanText}>Try Scanning Label</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 
@@ -256,9 +297,7 @@ export const AddWineSearchScreen = () => {
             showsVerticalScrollIndicator={true}
           />
         ) : hasSearched && searchQuery.length >= 2 ? (
-          <View style={styles.loadingContainer}>
-            <Text style={styles.noResultsText}>No wines found</Text>
-          </View>
+          renderNoResultsState()
         ) : (
           renderEmptyState()
         )}
@@ -359,9 +398,87 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  noResultsText: {
-    fontSize: 16,
+  noResultsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+    paddingTop: 60,
+    paddingBottom: 60,
+  },
+  noResultsIcon: {
+    fontSize: 72,
+    opacity: 0.4,
+    marginBottom: 24,
+  },
+  noResultsTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#722F37',
+    marginBottom: 12,
+  },
+  noResultsMessage: {
+    fontSize: 15,
     color: 'rgba(45, 45, 45, 0.6)',
+    textAlign: 'center',
+    lineHeight: 22.5,
+    marginBottom: 32,
+  },
+  queryText: {
+    fontWeight: '600',
+    color: '#722F37',
+  },
+  actionsContainer: {
+    width: '100%',
+    maxWidth: 300,
+    gap: 12,
+  },
+  addManuallyButton: {
+    borderRadius: 16,
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  addManuallyGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderRadius: 16,
+  },
+  addManuallyText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'white',
+  },
+  tryScanButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    backgroundColor: 'white',
+    borderWidth: 1.5,
+    borderColor: 'rgba(228, 213, 203, 0.4)',
+    borderRadius: 16,
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  tryScanEmoji: {
+    fontSize: 20,
+  },
+  tryScanText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#722F37',
   },
   listContent: {
     paddingHorizontal: 20,
