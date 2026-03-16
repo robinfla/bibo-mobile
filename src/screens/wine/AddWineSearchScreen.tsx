@@ -19,18 +19,20 @@ import Svg, { Path } from 'react-native-svg'
 type NavigationProp = NativeStackNavigationProp<any>
 
 interface WineSearchResult {
-  wineId: string
-  name: string
+  id: number
+  wineName: string
   producer: string
-  vintage?: number
   region: string
-  type: 'red' | 'white' | 'rose' | 'sparkling' | 'dessert' | 'fortified'
-  imageUrl?: string
+  country?: string
+  color: string | null
+  imageUrl?: string | null
+  thumbnailUrl?: string | null
 }
 
 interface SearchResponse {
-  results: WineSearchResult[]
+  query: string
   count: number
+  results: WineSearchResult[]
 }
 
 const CameraSvg = () => (
@@ -58,7 +60,7 @@ export const AddWineSearchScreen = () => {
     setHasSearched(true)
     try {
       const response = await apiFetch<SearchResponse>(
-        `/api/wines/search?q=${encodeURIComponent(query)}&limit=10`
+        `/api/knowledge/search?q=${encodeURIComponent(query)}&limit=10`
       )
       setSearchResults(response.results)
       
@@ -98,11 +100,10 @@ export const AddWineSearchScreen = () => {
     // Navigate to add details screen (cellar location, quantity, etc.)
     navigation.navigate('AddWineStep2', {
       wine: {
-        id: wine.wineId,
-        name: wine.name,
-        vintage: wine.vintage,
+        id: wine.id,
+        name: wine.wineName,
         region: wine.region,
-        color: wine.type,
+        color: wine.color || 'red',
       },
     })
   }
@@ -112,7 +113,7 @@ export const AddWineSearchScreen = () => {
     navigation.navigate('ScanTab', { screen: 'WineScanCamera' })
   }
 
-  const getTypeColor = (type: string): string => {
+  const getTypeColor = (type: string | null): string => {
     const colors: Record<string, string> = {
       red: '#722F37',
       white: '#F4E8D0',
@@ -121,7 +122,7 @@ export const AddWineSearchScreen = () => {
       dessert: '#D4A574',
       fortified: '#8B4513',
     }
-    return colors[type] || '#722F37'
+    return colors[type || 'red'] || '#722F37'
   }
 
   const renderWineCard = ({ item }: { item: WineSearchResult }) => (
@@ -132,7 +133,7 @@ export const AddWineSearchScreen = () => {
     >
       <View style={styles.wineImageContainer}>
         <LinearGradient
-          colors={[getTypeColor(item.type), getTypeColor(item.type) + 'DD']}
+          colors={[getTypeColor(item.color), getTypeColor(item.color) + 'DD']}
           style={styles.wineImagePlaceholder}
         >
           <Text style={styles.wineImageEmoji}>🍷</Text>
@@ -141,13 +142,13 @@ export const AddWineSearchScreen = () => {
 
       <View style={styles.wineInfo}>
         <Text style={styles.wineName} numberOfLines={2}>
-          {item.name}
+          {item.wineName}
         </Text>
         <Text style={styles.wineProducer} numberOfLines={1}>
           {item.producer}
         </Text>
         <Text style={styles.wineMeta} numberOfLines={1}>
-          {item.vintage ? `${item.vintage} • ` : ''}{item.region}
+          {item.region}{item.country ? `, ${item.country}` : ''}
         </Text>
       </View>
 
@@ -250,7 +251,7 @@ export const AddWineSearchScreen = () => {
           <FlatList
             data={searchResults}
             renderItem={renderWineCard}
-            keyExtractor={(item) => item.wineId}
+            keyExtractor={(item) => String(item.id)}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={true}
           />
