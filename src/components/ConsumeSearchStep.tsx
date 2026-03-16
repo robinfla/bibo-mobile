@@ -159,6 +159,7 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
             renderItem={renderWineCard}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={true}
             ListEmptyComponent={
               searchQuery.length >= 2 ? (
                 <View style={styles.emptyContainer}>
@@ -188,20 +189,13 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-end',
+    backgroundColor: '#fff',
   },
   modal: {
+    flex: 1,
     backgroundColor: '#fff',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
     paddingTop: 24,
     paddingBottom: 40,
-    height: '85%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    elevation: 10,
   },
   header: {
     flexDirection: 'row',
@@ -249,6 +243,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: 24,
+    paddingBottom: 40,
   },
   wineCard: {
     flexDirection: 'row',
