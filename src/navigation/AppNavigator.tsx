@@ -20,6 +20,8 @@ import { AddWishlistStep1 } from '../screens/wishlist/AddWishlistStep1'
 import { AddWishlistStep2 } from '../screens/wishlist/AddWishlistStep2'
 import { AddWineStep1 } from '../screens/wine/AddWineStep1'
 import { AddWineStep2 } from '../screens/wine/AddWineStep2'
+import { AddWineSearchScreen } from '../screens/wine/AddWineSearchScreen'
+import { AddWineNoResultsScreen } from '../screens/wine/AddWineNoResultsScreen'
 import { CellarsScreen } from '../screens/cellars/CellarsScreen'
 import { CellarLocateScreen } from '../screens/cellars/CellarLocateScreen'
 import { SpacesListScreen } from '../screens/cellars/SpacesListScreen'
@@ -116,7 +118,10 @@ const ScanStackScreen = () => (
     <ScanStack.Screen name="QuickTastingReview" component={QuickTastingReviewScreen} />
     <ScanStack.Screen name="ComprehensiveTastingReview" component={ComprehensiveTastingScreen} />
     <ScanStack.Screen name="AddToWishlist" component={AddToWishlistScreen} />
-    <ScanStack.Screen name="AddWine" component={AddWineStep1} />
+    <ScanStack.Screen name="AddWine" component={AddWineSearchScreen} />
+    <ScanStack.Screen name="AddWineSearch" component={AddWineSearchScreen} />
+    <ScanStack.Screen name="AddWineNoResults" component={AddWineNoResultsScreen} />
+    <ScanStack.Screen name="AddWineStep2" component={AddWineStep2} />
   </ScanStack.Navigator>
 )
 
@@ -198,7 +203,17 @@ const HomeStackScreen = () => (
     />
     <HomeStack.Screen
       name="AddWineStep1"
-      component={AddWineStep1}
+      component={AddWineSearchScreen}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="AddWineSearch"
+      component={AddWineSearchScreen}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="AddWineNoResults"
+      component={AddWineNoResultsScreen}
       options={{ headerShown: false }}
     />
     <HomeStack.Screen
