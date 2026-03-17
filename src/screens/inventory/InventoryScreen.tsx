@@ -8,8 +8,6 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  ActionSheetIOS,
-  Platform,
   SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -140,30 +138,6 @@ export const InventoryScreen = ({ route }: any) => {
   const handleApplyFilters = (newFilters: FilterState) => {
     setFilters(newFilters)
     setShowFilterModal(false)
-  }
-
-  const handleFabPress = () => {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: ['Cancel', 'Add Manually', 'Scan Bottle', 'Quick Log'],
-          cancelButtonIndex: 0,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 1) {
-            navigation.navigate('AddWine')
-          } else if (buttonIndex === 2) {
-            navigation.navigate('ScanBottle')
-          } else if (buttonIndex === 3) {
-            // TODO: Implement quick log
-          }
-        },
-      )
-    } else {
-      // Android: show custom modal
-      // For now, just navigate to add wine
-      navigation.navigate('AddWine')
-    }
   }
 
   const renderHeader = () => (
@@ -320,24 +294,6 @@ export const InventoryScreen = ({ route }: any) => {
       {activeTab === 'cellar' && renderCellarTab()}
       {activeTab === 'wishlist' && <WishlistTabNew />}
       {activeTab === 'history' && <HistoryTab />}
-
-      {/* FAB - Only show on cellar tab */}
-      {activeTab === 'cellar' && (
-        <TouchableOpacity style={styles.fabContainer} onPress={handleFabPress} activeOpacity={0.8}>
-          <LinearGradient
-            colors={['#ff69b4', '#ff1493']}
-            style={styles.fab}
-          >
-            {/* Scan/viewfinder icon with 4 corners */}
-            <View style={{ width: 32, height: 32, position: 'relative' }}>
-              <View style={{ position: 'absolute', top: 0, left: 0, width: 10, height: 10, borderTopWidth: 3, borderLeftWidth: 3, borderColor: '#fff', borderTopLeftRadius: 3 }} />
-              <View style={{ position: 'absolute', top: 0, right: 0, width: 10, height: 10, borderTopWidth: 3, borderRightWidth: 3, borderColor: '#fff', borderTopRightRadius: 3 }} />
-              <View style={{ position: 'absolute', bottom: 0, left: 0, width: 10, height: 10, borderBottomWidth: 3, borderLeftWidth: 3, borderColor: '#fff', borderBottomLeftRadius: 3 }} />
-              <View style={{ position: 'absolute', bottom: 0, right: 0, width: 10, height: 10, borderBottomWidth: 3, borderRightWidth: 3, borderColor: '#fff', borderBottomRightRadius: 3 }} />
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-      )}
 
       {/* Filter Modal */}
       <FiltersScreen
@@ -501,31 +457,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: 'center',
     lineHeight: 22.5,
-  },
-  fabContainer: {
-    position: 'absolute',
-    right: 20,
-    bottom: 90,
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    overflow: 'hidden',
-    shadowColor: '#ff1493',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 24,
-    elevation: 8,
-  },
-  fab: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fabIcon: {
-    fontSize: 26,
-    fontWeight: '300',
-    color: '#fff',
   },
   filterChipContainer: {
     paddingHorizontal: 16,
