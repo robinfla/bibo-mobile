@@ -9,8 +9,9 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { X, MagnifyingGlass, XCircle } from 'phosphor-react-native'
 import { LinearGradient } from 'expo-linear-gradient'
+import Svg, { Circle, Path, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg'
 import { apiFetch } from '../api/client'
 
 interface Wine {
@@ -29,17 +30,79 @@ interface ConsumeSearchStepProps {
   onClose: () => void
 }
 
+const COLORS = {
+  bg: '#FEF5E9',
+  inputBg: '#FFF8F0',
+  pink: '#FFB3C6',
+  yellow: '#FFE57A',
+  hotpink: '#FF6B9E',
+  text: '#2D2323',
+  subtext: '#8C7C7C',
+}
+
 const getWineColor = (color: string): string => {
   const colorMap: Record<string, string> = {
-    red: '#722F37',
+    red: '#84454E',
     white: '#F4E8D0',
-    rose: '#FFC0CB',
-    sparkling: '#FFD700',
+    rose: '#FFB3C6',
+    sparkling: '#FFE57A',
     dessert: '#D4A574',
     fortified: '#8B4513',
   }
   return colorMap[color] || '#ccc'
 }
+
+const MagnifyingGlassIllustration = () => (
+  <View style={illustrationStyles.wrapper}>
+    {/* Gradient blur blob behind */}
+    <LinearGradient
+      colors={[COLORS.pink, COLORS.yellow]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={illustrationStyles.blob}
+    />
+    <View style={illustrationStyles.iconContainer}>
+      <Svg width={120} height={120} viewBox="0 0 120 120" fill="none">
+        <Defs>
+          <SvgLinearGradient id="magGrad" x1="10" y1="10" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+            <Stop offset="0%" stopColor="#FFB3C6" />
+            <Stop offset="100%" stopColor="#FFE57A" />
+          </SvgLinearGradient>
+        </Defs>
+        {/* Lens */}
+        <Circle cx={50} cy={50} r={36} stroke="url(#magGrad)" strokeWidth={12} />
+        {/* Handle */}
+        <Path d="M75 75L108 108" stroke="url(#magGrad)" strokeWidth={14} strokeLinecap="round" />
+        {/* Highlight */}
+        <Path d="M50 24C55 24 60 27 64 31" stroke="white" strokeWidth={4} strokeLinecap="round" opacity={0.9} />
+        <Circle cx={34} cy={34} r={3} fill="white" opacity={0.8} />
+      </Svg>
+    </View>
+  </View>
+)
+
+const illustrationStyles = StyleSheet.create({
+  wrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    width: 200,
+    height: 200,
+  },
+  blob: {
+    position: 'absolute',
+    width: 260,
+    height: 260,
+    borderRadius: 130,
+    opacity: 0.35,
+  },
+  iconContainer: {
+    width: 128,
+    height: 128,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
 
 export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
   onSelectWine,
@@ -81,6 +144,11 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
     setSearchTimeout(timeout)
   }
 
+  const handleClearSearch = () => {
+    setSearchQuery('')
+    setWines([])
+  }
+
   const renderWineCard = ({ item }: { item: Wine }) => (
     <TouchableOpacity
       style={styles.wineCard}
@@ -88,8 +156,8 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
       activeOpacity={0.7}
     >
       <View style={styles.wineImageContainer}>
-        <View style={[styles.wineImagePlaceholder, { backgroundColor: '#f5f5f5' }]}>
-          <Icon name="bottle-wine" size={40} color="#ccc" />
+        <View style={[styles.wineImagePlaceholder, { backgroundColor: COLORS.inputBg }]}>
+          <Text style={styles.wineEmoji}>🍷</Text>
           <View style={[styles.colorBadge, { backgroundColor: getWineColor(item.color) }]} />
         </View>
       </View>
@@ -110,22 +178,26 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
         </View>
       </View>
 
-      <LinearGradient
-        colors={['#10b981', '#059669']}
-        style={styles.stockBadge}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
+      <View style={styles.stockBadge}>
         <Text style={styles.stockText}>
           {item.stock} {item.stock === 1 ? 'bottle' : 'bottles'}
         </Text>
-      </LinearGradient>
+      </View>
     </TouchableOpacity>
   )
 
+  const hasResults = wines.length > 0
+  const hasSearched = searchQuery.length >= 2
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.modal}>
+      <LinearGradient
+        colors={['#fef9f5', '#f8f4f0']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.modal}
+      >
+        {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Consume Wine</Text>
           <TouchableOpacity
@@ -133,25 +205,34 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
             onPress={onClose}
             activeOpacity={0.7}
           >
-            <Icon name="close" size={20} color="#666" />
+            <X size={14} weight="bold" color={COLORS.subtext} />
           </TouchableOpacity>
         </View>
 
+        {/* Search Bar */}
         <View style={styles.searchContainer}>
-          <Icon name="magnify" size={20} color="#999" style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search your cellar..."
-            value={searchQuery}
-            onChangeText={handleSearchChange}
-            autoFocus
-            placeholderTextColor="#999"
-          />
+          <View style={styles.searchBar}>
+            <Text style={{ fontSize: 20, opacity: 0.4 }}>🔍</Text>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search your cellar..."
+              value={searchQuery}
+              onChangeText={handleSearchChange}
+              autoFocus
+              placeholderTextColor="rgba(45, 45, 45, 0.4)"
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={handleClearSearch} activeOpacity={0.7} style={{ padding: 4 }}>
+                <XCircle size={18} weight="fill" color="rgba(45, 45, 45, 0.4)" />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
 
+        {/* Content */}
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#722F37" />
+            <ActivityIndicator size="large" color={COLORS.hotpink} />
           </View>
         ) : (
           <FlatList
@@ -160,28 +241,25 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={true}
+            keyboardShouldPersistTaps="handled"
             ListEmptyComponent={
-              searchQuery.length >= 2 ? (
+              hasSearched ? (
                 <View style={styles.emptyContainer}>
-                  <Icon name="bottle-wine-outline" size={48} color="#ccc" />
-                  <Text style={styles.emptyText}>No wines found</Text>
-                  <Text style={styles.emptySubtext}>
-                    Try a different search term
-                  </Text>
+                  <MagnifyingGlass size={48} weight="regular" color="#d4c4b0" />
+                  <Text style={styles.emptyTitle}>No wines found</Text>
+                  <Text style={styles.emptySubtext}>Try a different search term</Text>
                 </View>
               ) : (
                 <View style={styles.emptyContainer}>
-                  <Icon name="magnify" size={48} color="#ccc" />
-                  <Text style={styles.emptyText}>Search your cellar</Text>
-                  <Text style={styles.emptySubtext}>
-                    Type at least 2 characters to search
-                  </Text>
+                  <MagnifyingGlassIllustration />
+                  <Text style={styles.emptyTitle}>Search your cellar</Text>
+                  <Text style={styles.emptySubtext}>Type at least 2 characters to search</Text>
                 </View>
               )
             }
           />
         )}
-      </View>
+      </LinearGradient>
     </SafeAreaView>
   )
 }
@@ -189,94 +267,119 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fef9f5',
   },
   modal: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 24,
+    paddingTop: 16,
     paddingBottom: 40,
   },
+
+  // Header
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 24,
-    marginBottom: 20,
+    paddingTop: 16,
+    paddingBottom: 20,
   },
   title: {
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: COLORS.text,
     letterSpacing: -0.5,
   },
   closeButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 1,
   },
+
+  // Search
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8f8f8',
-    borderRadius: 24,
-    paddingHorizontal: 16,
-    marginHorizontal: 24,
-    height: 48,
+    paddingHorizontal: 24,
     marginBottom: 16,
   },
-  searchIcon: {
-    marginRight: 8,
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(228, 213, 203, 0.3)',
+    shadowColor: '#722F37',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#1a1a1a',
+    color: '#2d2d2d',
+    padding: 0,
   },
+
+  // Loading
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  // List
   listContent: {
     paddingHorizontal: 24,
     paddingBottom: 40,
+    flexGrow: 1,
   },
+
+  // Wine Cards
   wineCard: {
     flexDirection: 'row',
     backgroundColor: '#fff',
     borderRadius: 18,
-    padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
-    shadowColor: '#722F37',
+    padding: 14,
+    marginBottom: 10,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
-    shadowRadius: 8,
+    shadowRadius: 10,
     elevation: 2,
   },
   wineImageContainer: {
-    marginRight: 16,
+    marginRight: 14,
   },
   wineImagePlaceholder: {
-    width: 72,
-    height: 90,
+    width: 64,
+    height: 80,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
   },
+  wineEmoji: {
+    fontSize: 28,
+  },
   colorBadge: {
     position: 'absolute',
     bottom: 4,
     right: 4,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
     borderWidth: 2,
     borderColor: '#fff',
   },
@@ -287,7 +390,7 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: COLORS.text,
     marginBottom: 6,
   },
   wineMetaRow: {
@@ -295,7 +398,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   vintageChip: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: COLORS.inputBg,
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -304,39 +407,45 @@ const styles = StyleSheet.create({
   vintageText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#666',
+    color: COLORS.subtext,
   },
   regionText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#999',
+    color: COLORS.subtext,
     flex: 1,
   },
   stockBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderRadius: 12,
     alignSelf: 'flex-start',
     marginTop: 8,
+    backgroundColor: '#E8F5E9',
   },
   stockText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fff',
+    color: '#2E7D32',
   },
+
+  // Empty states
   emptyContainer: {
     alignItems: 'center',
-    paddingTop: 80,
+    paddingTop: 60,
   },
-  emptyText: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#666',
-    marginTop: 16,
+  emptyTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: COLORS.text,
+    marginTop: 8,
+    letterSpacing: -0.3,
   },
   emptySubtext: {
-    fontSize: 14,
-    color: '#999',
-    marginTop: 4,
+    fontSize: 16,
+    fontWeight: '500',
+    color: COLORS.subtext,
+    marginTop: 8,
+    textAlign: 'center',
   },
 })
