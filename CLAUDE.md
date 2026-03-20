@@ -34,20 +34,26 @@ src/
 
 ## Design System
 
+**See `DESIGN.md` for the complete, definitive design system.**
+
 ### Theme: "Warm Sommelier"
 - Cozy wine bar aesthetic, not cold/clinical
-- Background: `#FEF9F5` (warm off-white)
-- Wine red: `#722F37` (accent, sparingly)
-- Cards: `#FFFFFF` with subtle shadows
-- Border radius: 16-24px
+
+### Core Palette (DEFINITIVE — March 2026)
+- `coral` `#F28482` — Primary (buttons, active tab, scan button)
+- `honey` `#F6BD60` — Secondary (gradients, icons, warm accents)
+- `linen` `#F7EDE2` — Background
+- `rose` `#F5CAC3` — Soft accent
+- `teal` `#84A59D` — Tertiary (status, success)
 
 ### Typography
-- Titles: 24-28px, weight 700
-- Body: 16px, weight 400
-- Secondary: 14px, `#666666`
+- **Font:** Nunito Sans everywhere (`@expo-google-fonts/nunito-sans`)
+- Titles: 22-38px, weight 700-800
+- Body: 15-17px, weight 400-500
+- Secondary: 13px, `#6b7280`
 
 ### Components
-- Rounded cards with soft shadows
+- Rounded cards (24-28px radius) with soft shadows
 - Bottom tab bar with elevated scan button
 - Pull-to-refresh on lists
 
