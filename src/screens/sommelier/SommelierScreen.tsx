@@ -14,7 +14,7 @@ import {
   Animated,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { CaretLeft, DotsThreeVertical, Camera, Microphone, ChatCircleDots, Wine as WineIcon } from 'phosphor-react-native'
+import { List, DotsThreeVertical, Camera, Microphone, ChatCircleDots, Wine as WineIcon } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
@@ -614,7 +614,7 @@ export const SommelierScreen = ({ route }: any) => {
           onPress={() => setShowSidebar(true)}
           activeOpacity={0.7}
         >
-          <CaretLeft size={24} weight="bold" color={C.brown} />
+          <List size={24} weight="bold" color={C.brown} />
         </TouchableOpacity>
 
         <View style={styles.headerCenter}>
@@ -713,15 +713,6 @@ export const SommelierScreen = ({ route }: any) => {
               />
             ) : (
               <View style={styles.inputRow}>
-                {/* Camera */}
-                <TouchableOpacity
-                  style={styles.frostedButton}
-                  onPress={() => setShowPhotoPicker(true)}
-                  activeOpacity={0.7}
-                >
-                  <Camera size={24} weight="regular" color={C.brown} />
-                </TouchableOpacity>
-
                 {/* Text Input */}
                 <View style={styles.inputWrapper}>
                   <TextInput
@@ -748,6 +739,15 @@ export const SommelierScreen = ({ route }: any) => {
                     </TouchableOpacity>
                   )}
                 </View>
+
+                {/* Camera */}
+                <TouchableOpacity
+                  style={styles.frostedButton}
+                  onPress={() => setShowPhotoPicker(true)}
+                  activeOpacity={0.7}
+                >
+                  <Camera size={24} weight="regular" color={C.brown} />
+                </TouchableOpacity>
 
                 {/* Send */}
                 <TouchableOpacity
