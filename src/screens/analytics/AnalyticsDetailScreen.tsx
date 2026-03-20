@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 interface AnalyticsItem {
   id: string
@@ -94,7 +95,7 @@ export const AnalyticsDetailScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#722F37" />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -104,7 +105,7 @@ export const AnalyticsDetailScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-          <Icon name="chevron-left" size={28} color="#722F37" />
+          <Icon name="chevron-left" size={28} color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{title}</Text>
         <View style={{ width: 40 }} />
@@ -124,17 +125,17 @@ export const AnalyticsDetailScreen = () => {
 
       {/* Search */}
       <View style={styles.searchContainer}>
-        <Icon name="magnify" size={20} color="#999" style={styles.searchIcon} />
+        <Icon name="magnify" size={20} color={colors.textTertiary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder={getPlaceholder()}
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textTertiary}
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
         {searchQuery.length > 0 && (
           <TouchableOpacity onPress={() => setSearchQuery('')}>
-            <Icon name="close-circle" size={20} color="#999" />
+            <Icon name="close-circle" size={20} color={colors.textTertiary} />
           </TouchableOpacity>
         )}
       </View>
@@ -169,7 +170,7 @@ export const AnalyticsDetailScreen = () => {
               <View style={styles.progressBarContainer}>
                 <View style={styles.progressBarTrack}>
                   <LinearGradient
-                    colors={['#722F37', '#944654']}
+                    colors={[colors.coral, colors.coralDark]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={[styles.progressBarFill, { width: `${barWidth}%` }]}
@@ -192,13 +193,13 @@ export const AnalyticsDetailScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   centered: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -210,17 +211,17 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     letterSpacing: -0.5,
   },
   statsBar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(228, 213, 203, 0.15)',
+    borderBottomColor: colors.borderSubtle,
   },
   stat: {
     alignItems: 'center',
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#999',
+    color: colors.textTertiary,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
     marginBottom: 6,
@@ -236,13 +237,13 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#722F37',
+    color: colors.coral,
     letterSpacing: -1,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
+    borderColor: colors.borderSubtle,
   },
   searchIcon: {
     marginRight: 8,
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   listContent: {
     paddingHorizontal: 20,
@@ -267,14 +268,14 @@ const styles = StyleSheet.create({
   itemCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 18,
     padding: 16,
     marginBottom: 12,
     gap: 16,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
-    shadowColor: '#722F37',
+    borderColor: colors.borderSubtle,
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 16,
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: '#f8f4f0',
+    backgroundColor: colors.muted[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -297,12 +298,12 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     letterSpacing: -0.2,
   },
   itemCount: {
     fontSize: 13,
-    color: '#999',
+    color: colors.textTertiary,
     fontWeight: '600',
     marginTop: 2,
   },
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     height: 8,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.muted[100],
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -325,6 +326,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
   },
 })

@@ -665,7 +665,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   searchButton: {
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
@@ -721,7 +721,7 @@ const styles = StyleSheet.create({
   },
   scoreText: {
     fontSize: 12,
-    color: colors.primary[600],
+    color: colors.coral,
     marginTop: 2,
   },
   addNewButton: {
@@ -735,7 +735,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   addNewText: {
-    color: colors.primary[600],
+    color: colors.coral,
     fontSize: 15,
     fontWeight: '600',
   },
@@ -795,8 +795,8 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   dropdownItemSelected: {
-    backgroundColor: colors.primary[600],
-    borderColor: colors.primary[600],
+    backgroundColor: colors.coral,
+    borderColor: colors.coral,
   },
   dropdownItemText: {
     fontSize: 13,
@@ -853,8 +853,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   grapeChipSelected: {
-    backgroundColor: colors.primary[600],
-    borderColor: colors.primary[600],
+    backgroundColor: colors.coral,
+    borderColor: colors.coral,
   },
   grapeChipText: {
     fontSize: 12,
@@ -891,7 +891,7 @@ const styles = StyleSheet.create({
   },
   confirmBtn: {
     flex: 1,
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 8,
     paddingVertical: 14,
     alignItems: 'center',

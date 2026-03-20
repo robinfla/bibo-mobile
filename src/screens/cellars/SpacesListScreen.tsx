@@ -69,7 +69,7 @@ export const SpacesListScreen = () => {
   if (loading) {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
-        <ActivityIndicator size="large" color="#722F37" style={{ marginTop: 100 }} />
+        <ActivityIndicator size="large" color={colors.coral} style={{ marginTop: 100 }} />
       </View>
     )
   }
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.muted[50] },
   header: { paddingHorizontal: 20, paddingBottom: 12 },
   backBtn: { paddingVertical: 8 },
-  backText: { fontSize: 16, color: '#722F37', fontWeight: '600' },
+  backText: { fontSize: 16, color: colors.coral, fontWeight: '600' },
   title: { fontSize: 28, fontWeight: '800', color: colors.muted[900], marginTop: 4 },
   subtitle: { fontSize: 14, color: colors.muted[500], marginTop: 2 },
   content: { padding: 20, paddingTop: 8 },
@@ -188,26 +188,26 @@ const styles = StyleSheet.create({
   emptyIcon: { fontSize: 48, marginBottom: 16 },
   emptyTitle: { fontSize: 18, fontWeight: '700', color: colors.muted[900], textAlign: 'center' },
   emptyDesc: { fontSize: 14, color: colors.muted[500], textAlign: 'center', marginTop: 8, paddingHorizontal: 20 },
-  createBtn: { marginTop: 24, backgroundColor: '#722F37', paddingHorizontal: 28, paddingVertical: 14, borderRadius: 12 },
-  createBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  createBtn: { marginTop: 24, backgroundColor: colors.coral, paddingHorizontal: 28, paddingVertical: 14, borderRadius: 12 },
+  createBtnText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
 
   // Space card
   spaceCard: { marginBottom: 16, borderRadius: 16, overflow: 'hidden' },
   spaceGradient: { padding: 20 },
   spaceHeader: { flexDirection: 'row', alignItems: 'center' },
   spaceIcon: { fontSize: 28, marginRight: 12 },
-  spaceName: { fontSize: 20, fontWeight: '700', color: '#fff' },
+  spaceName: { fontSize: 20, fontWeight: '700', color: colors.textInverse },
   spaceType: { fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
   chevron: { fontSize: 28, color: 'rgba(255,255,255,0.4)', fontWeight: '300' },
 
   statsRow: { flexDirection: 'row', marginTop: 16, gap: 24 },
   stat: { alignItems: 'center' },
-  statValue: { fontSize: 20, fontWeight: '700', color: '#fff' },
+  statValue: { fontSize: 20, fontWeight: '700', color: colors.textInverse },
   statLabel: { fontSize: 11, color: 'rgba(255,255,255,0.5)', marginTop: 2 },
 
   fillBarBg: { height: 4, backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 2, marginTop: 14 },
-  fillBar: { height: 4, backgroundColor: '#722F37', borderRadius: 2 },
+  fillBar: { height: 4, backgroundColor: colors.coral, borderRadius: 2 },
 
   addSpaceBtn: { alignItems: 'center', paddingVertical: 16, marginTop: 8 },
-  addSpaceBtnText: { fontSize: 16, fontWeight: '600', color: '#722F37' },
+  addSpaceBtnText: { fontSize: 16, fontWeight: '600', color: colors.coral },
 })

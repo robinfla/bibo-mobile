@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { apiFetch, ApiError } from '../../api/client'
+import { colors } from '../../theme/colors'
 import { QuickConsumeModal } from '../../components/QuickConsumeModal'
 
 interface Bottle {
@@ -262,7 +263,7 @@ export const CellarLocateScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#722F37" />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -280,7 +281,7 @@ export const CellarLocateScreen = () => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={[styles.container, { justifyContent: 'center', alignItems: 'center', padding: 20 }]}>
-          <Text style={{ fontSize: 16, color: '#999', textAlign: 'center' }}>
+          <Text style={{ fontSize: 16, color: colors.textTertiary, textAlign: 'center' }}>
             Unable to load cellar location
           </Text>
         </View>
@@ -308,7 +309,7 @@ export const CellarLocateScreen = () => {
           }}
           activeOpacity={0.7}
         >
-          <Icon name="chevron-left" size={24} color="#666" />
+          <Icon name="chevron-left" size={24} color={colors.textSecondary} />
         </TouchableOpacity>
 
         <View style={styles.headerContent}>
@@ -322,17 +323,17 @@ export const CellarLocateScreen = () => {
       {/* Filter Chips */}
       <View style={styles.filtersContainer}>
         <LinearGradient
-          colors={['#722F37', '#944654']}
+          colors={[colors.coral, colors.coralDark]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.filterChip}
         >
-          <Icon name="filter-check" size={16} color="#fff" />
+          <Icon name="filter-check" size={16} color={colors.textInverse} />
           <Text style={styles.filterChipText}>{data.filters.wineName}</Text>
         </LinearGradient>
         {data.filters.vintage && (
           <LinearGradient
-            colors={['#722F37', '#944654']}
+            colors={[colors.coral, colors.coralDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.filterChip}
@@ -356,7 +357,7 @@ export const CellarLocateScreen = () => {
 
           {/* Position Label */}
           <LinearGradient
-            colors={['#fef9f5', '#f8f4f0']}
+            colors={[colors.linen, '#f8f4f0']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.positionLabel}
@@ -396,17 +397,17 @@ export const CellarLocateScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   errorText: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
   },
   header: {
     flexDirection: 'row',
@@ -416,13 +417,13 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(228, 213, 203, 0.15)',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.muted[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -433,12 +434,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   headerSubtitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#666',
+    color: colors.textSecondary,
     marginTop: 2,
   },
   headerSpacer: {
@@ -462,7 +463,7 @@ const styles = StyleSheet.create({
   filterChipText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
   },
   content: {
     flex: 1,
@@ -471,13 +472,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   rackCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 24,
     padding: 24,
     width: '100%',
     maxWidth: 360,
     alignItems: 'center',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 16,
@@ -486,18 +487,18 @@ const styles = StyleSheet.create({
   rackTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   rackSubtitle: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#666',
+    color: colors.textSecondary,
     marginTop: 2,
   },
   zoomLabel: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#999',
+    color: colors.textTertiary,
     letterSpacing: 0.5,
     marginTop: 12,
     marginBottom: 20,
@@ -531,7 +532,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: '#e0e0e0',
+    borderColor: colors.muted[200],
   },
   glowRing: {
     position: 'absolute',
@@ -569,6 +570,6 @@ const styles = StyleSheet.create({
   positionText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
   },
 })

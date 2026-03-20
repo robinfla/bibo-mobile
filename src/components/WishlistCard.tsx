@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { colors } from '../theme/colors'
 
 type Priority = 'must_have' | 'nice_to_have' | 'someday'
 
@@ -62,7 +63,7 @@ export const WishlistCard: React.FC<WishlistCardProps> = ({
     >
       {/* Wine Image */}
       <LinearGradient
-        colors={['#8b4d5a', '#722F37']}
+        colors={[colors.coral, colors.coral]}
         style={styles.wineImage}
       >
         <Text style={styles.wineImageEmoji}>🍷</Text>
@@ -107,14 +108,14 @@ export const WishlistCard: React.FC<WishlistCardProps> = ({
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
     gap: 14,
     borderWidth: 1,
-    borderColor: '#f0f0f0',
-    shadowColor: '#722F37',
+    borderColor: colors.muted[100],
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 12,
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     lineHeight: 20.8,
   },
   priorityBadge: {
@@ -161,17 +162,17 @@ const styles = StyleSheet.create({
   },
   meta: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textSecondary,
   },
   budget: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
   },
   notes: {
     fontSize: 12,
     fontStyle: 'italic',
-    color: '#999',
+    color: colors.textTertiary,
     lineHeight: 16.8,
     maxHeight: 32,
   },

@@ -18,6 +18,7 @@ import { TastingSlider } from '../../components/TastingSlider'
 import { ColorGradientPicker } from '../../components/ColorGradientPicker'
 import { PhotoPickerRow } from '../../components/PhotoPickerRow'
 import type { CreateTastingInput } from '../../types/api'
+import { colors } from '../../theme/colors'
 
 export const ComprehensiveTastingScreen = () => {
   const navigation = useNavigation()
@@ -196,7 +197,7 @@ export const ComprehensiveTastingScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="close" size={24} color="#722F37" />
+          <Ionicons name="close" size={24} color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Tasting Review</Text>
         <View style={{ width: 44 }} />
@@ -298,7 +299,7 @@ export const ComprehensiveTastingScreen = () => {
             value={noseAromas.join(', ')}
             onChangeText={(text) => setNoseAromas(text.split(',').map(a => a.trim()).filter(Boolean))}
             placeholder="e.g., Blackcurrant, Cherry, Vanilla..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
           />
         </View>
 
@@ -360,7 +361,7 @@ export const ComprehensiveTastingScreen = () => {
             value={palateFlavors.join(', ')}
             onChangeText={(text) => setPalateFlavors(text.split(',').map(f => f.trim()).filter(Boolean))}
             placeholder="e.g., Dark fruit, Spice, Oak..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
           />
         </View>
 
@@ -369,59 +370,59 @@ export const ComprehensiveTastingScreen = () => {
           <Text style={styles.sectionTitle}>Context</Text>
 
           <View style={styles.contextRow}>
-            <Ionicons name="people" size={20} color="#722F37" />
+            <Ionicons name="people" size={20} color={colors.coral} />
             <TextInput
               style={styles.contextInput}
               value={contextPeople}
               onChangeText={setContextPeople}
               placeholder="Tasting companions (comma-separated)"
-              placeholderTextColor="#b5a89e"
+              placeholderTextColor={colors.textTertiary}
             />
           </View>
 
           <View style={styles.contextRow}>
-            <Ionicons name="location" size={20} color="#722F37" />
+            <Ionicons name="location" size={20} color={colors.coral} />
             <TextInput
               style={styles.contextInput}
               value={contextPlace}
               onChangeText={setContextPlace}
               placeholder="Place"
-              placeholderTextColor="#b5a89e"
+              placeholderTextColor={colors.textTertiary}
             />
           </View>
 
           <View style={styles.contextRow}>
-            <Ionicons name="restaurant" size={20} color="#722F37" />
+            <Ionicons name="restaurant" size={20} color={colors.coral} />
             <TextInput
               style={styles.contextInput}
               value={contextMeal}
               onChangeText={setContextMeal}
               placeholder="Meal pairing"
-              placeholderTextColor="#b5a89e"
+              placeholderTextColor={colors.textTertiary}
             />
           </View>
 
           <View style={styles.servingGrid}>
             <View style={styles.servingItem}>
-              <Ionicons name="thermometer" size={20} color="#722F37" />
+              <Ionicons name="thermometer" size={20} color={colors.coral} />
               <TextInput
                 style={styles.servingInput}
                 value={contextTemperature}
                 onChangeText={setContextTemperature}
                 placeholder="Temp (°C)"
-                placeholderTextColor="#b5a89e"
+                placeholderTextColor={colors.textTertiary}
                 keyboardType="numeric"
               />
             </View>
 
             <View style={styles.servingItem}>
-              <Ionicons name="wine" size={20} color="#722F37" />
+              <Ionicons name="wine" size={20} color={colors.coral} />
               <TextInput
                 style={styles.servingInput}
                 value={contextDecanted}
                 onChangeText={setContextDecanted}
                 placeholder="Decanted (min)"
-                placeholderTextColor="#b5a89e"
+                placeholderTextColor={colors.textTertiary}
                 keyboardType="numeric"
               />
             </View>
@@ -437,7 +438,7 @@ export const ComprehensiveTastingScreen = () => {
             value={notes}
             onChangeText={setNotes}
             placeholder="Write your tasting impressions..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             multiline
             numberOfLines={4}
           />
@@ -453,7 +454,7 @@ export const ComprehensiveTastingScreen = () => {
           activeOpacity={0.7}
         >
           <LinearGradient
-            colors={['#722F37', '#944654']}
+            colors={[colors.coral, colors.coralDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.saveButtonGradient}
@@ -473,7 +474,7 @@ export const ComprehensiveTastingScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -482,7 +483,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === 'ios' ? 60 : 40,
     paddingBottom: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(228, 213, 203, 0.3)',
   },
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
   },
   scrollView: {
     flex: 1,
@@ -505,13 +506,13 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   wineCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 20,
     padding: 20,
     marginBottom: 24,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 16,
@@ -525,7 +526,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 120,
     borderRadius: 8,
-    backgroundColor: '#f8f4f0',
+    backgroundColor: colors.linen,
     marginRight: 16,
   },
   wineInfo: {
@@ -535,16 +536,16 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 6,
   },
   vintageText: {
     fontWeight: '600',
-    color: 'rgba(45, 45, 45, 0.6)',
+    color: colors.textSecondary,
   },
   producerName: {
     fontSize: 14,
-    color: 'rgba(45, 45, 45, 0.5)',
+    color: colors.textTertiary,
   },
   ratingSection: {
     borderTopWidth: 1,
@@ -554,17 +555,17 @@ const styles = StyleSheet.create({
   ratingLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#2D2D2D',
+    color: colors.textPrimary,
     marginBottom: 4,
   },
   ratingValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 12,
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 20,
     padding: 20,
     marginBottom: 16,
@@ -574,25 +575,25 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 20,
   },
   subsectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#2D2D2D',
+    color: colors.textPrimary,
     marginBottom: 8,
     marginTop: 8,
   },
   textInput: {
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#2D2D2D',
+    color: colors.textPrimary,
   },
   contextRow: {
     flexDirection: 'row',
@@ -602,14 +603,14 @@ const styles = StyleSheet.create({
   },
   contextInput: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#2D2D2D',
+    color: colors.textPrimary,
   },
   servingGrid: {
     flexDirection: 'row',
@@ -624,24 +625,24 @@ const styles = StyleSheet.create({
   },
   servingInput: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
-    color: '#2D2D2D',
+    color: colors.textPrimary,
   },
   notesInput: {
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#2D2D2D',
+    color: colors.textPrimary,
     minHeight: 120,
     textAlignVertical: 'top',
     marginBottom: 16,
@@ -649,7 +650,7 @@ const styles = StyleSheet.create({
   saveButton: {
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -663,6 +664,6 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
   },
 })

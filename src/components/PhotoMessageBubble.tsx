@@ -7,6 +7,7 @@ import {
   Image,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { colors } from '../theme/colors'
 
 interface PhotoMessageBubbleProps {
   imageUrl: string
@@ -24,7 +25,7 @@ export const PhotoMessageBubble: React.FC<PhotoMessageBubbleProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#722F37', '#944654']}
+        colors={[colors.coral, colors.coralDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.bubble}
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderBottomRightRadius: 4,
     padding: 4,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 12,
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
   },
   caption: {
     fontSize: 14,
-    color: '#fff',
+    color: colors.textInverse,
     fontFamily: 'NunitoSans_400Regular',
   },
   timestamp: {

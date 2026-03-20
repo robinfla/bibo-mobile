@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { colors } from '../theme/colors'
 
 interface VoiceRecordingBarProps {
   duration: number
@@ -49,7 +50,7 @@ const WaveformBar: React.FC<{ height: number; delay: number }> = ({ height, dela
       ]}
     >
       <LinearGradient
-        colors={['#722F37', '#944654']}
+        colors={[colors.coral, colors.coralDark]}
         style={styles.waveformGradient}
       />
     </Animated.View>
@@ -130,12 +131,12 @@ export const VoiceRecordingBar: React.FC<VoiceRecordingBarProps> = ({
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={['#722F37', '#944654']}
+            colors={[colors.coral, colors.coralDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.sendButton}
           >
-            <Icon name="arrow-up" size={18} color="#fff" />
+            <Icon name="arrow-up" size={18} color={colors.textInverse} />
           </LinearGradient>
         </TouchableOpacity>
       </View>
@@ -151,11 +152,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingTop: 12,
     paddingBottom: 8,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 2,
-    borderColor: '#722F37',
+    borderColor: colors.coral,
     borderRadius: 24,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 16,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   timer: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
     fontFamily: 'NunitoSans_600SemiBold',
     fontVariant: ['tabular-nums'],
     minWidth: 40,
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 12,

@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { colors } from '../theme/colors'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -73,7 +74,7 @@ export const PhotoPickerSheet: React.FC<PhotoPickerSheetProps> = ({
             <View style={styles.header}>
               <Text style={styles.title}>Send Photo</Text>
               <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-                <Icon name="close" size={20} color="#722F37" />
+                <Icon name="close" size={20} color={colors.coral} />
               </TouchableOpacity>
             </View>
 
@@ -149,12 +150,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     borderTopWidth: 1,
     borderTopColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     fontFamily: 'NunitoSans_700Bold',
   },
   closeButton: {
@@ -190,13 +191,13 @@ const styles = StyleSheet.create({
   optionCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     padding: 16,
     paddingHorizontal: 20,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 12,
@@ -220,13 +221,13 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 2,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   optionSubtitle: {
     fontSize: 13,
-    color: '#8a7568',
+    color: colors.textSecondary,
     fontFamily: 'NunitoSans_400Regular',
   },
 })

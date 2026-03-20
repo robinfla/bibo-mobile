@@ -12,6 +12,7 @@ import { CameraView, CameraType, useCameraPermissions } from 'expo-camera'
 import * as ImagePicker from 'expo-image-picker'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { colors } from '../../theme/colors'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -35,7 +36,7 @@ export const WineScanCameraScreen = () => {
   if (!permission.granted) {
     return (
       <View style={styles.permissionContainer}>
-        <Icon name="camera-off" size={64} color="#722F37" />
+        <Icon name="camera-off" size={64} color={colors.coral} />
         <Text style={styles.permissionTitle}>Camera Access Required</Text>
         <Text style={styles.permissionText}>
           Bibo needs camera access to scan wine labels
@@ -119,7 +120,7 @@ export const WineScanCameraScreen = () => {
         {/* Top Bar */}
         <View style={styles.topBar}>
           <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-            <Icon name="close" size={28} color="#fff" />
+            <Icon name="close" size={28} color={colors.textInverse} />
           </TouchableOpacity>
 
           <View style={styles.topControls}>
@@ -127,11 +128,11 @@ export const WineScanCameraScreen = () => {
               <Icon
                 name={flash ? 'flash' : 'flash-off'}
                 size={24}
-                color="#fff"
+                color={colors.textInverse}
               />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton} onPress={flipCamera}>
-              <Icon name="camera-flip" size={24} color="#fff" />
+              <Icon name="camera-flip" size={24} color={colors.textInverse} />
             </TouchableOpacity>
           </View>
         </View>
@@ -194,7 +195,7 @@ export const WineScanCameraScreen = () => {
             onPress={handleGalleryPick}
             activeOpacity={0.8}
           >
-            <Icon name="image" size={28} color="#fff" />
+            <Icon name="image" size={28} color={colors.textInverse} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -221,26 +222,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     paddingHorizontal: 40,
   },
   permissionTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginTop: 24,
     marginBottom: 12,
     fontFamily: 'NunitoSans_700Bold',
   },
   permissionText: {
     fontSize: 16,
-    color: '#8a7568',
+    color: colors.textSecondary,
     textAlign: 'center',
     marginBottom: 32,
     fontFamily: 'NunitoSans_400Regular',
   },
   permissionButton: {
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
     paddingHorizontal: 32,
     paddingVertical: 16,
     borderRadius: 12,
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
   permissionButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   topBar: {
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSans_600SemiBold',
   },
   modeTabTextActive: {
-    color: '#722F37',
+    color: colors.coral,
   },
   dimOverlay: {
     ...StyleSheet.absoluteFillObject,
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 24,
     height: 24,
-    borderColor: '#fff',
+    borderColor: colors.textInverse,
     borderWidth: 3,
   },
   cornerTopLeft: {
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
   instructionsText: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#fff',
+    color: colors.textInverse,
     textShadowColor: 'rgba(0, 0, 0, 0.6)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 8,
@@ -390,7 +391,7 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: colors.textInverse,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
     height: 72,
     borderRadius: 36,
     borderWidth: 4,
-    borderColor: '#fff',
+    borderColor: colors.textInverse,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -407,7 +408,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#fff',
+    backgroundColor: colors.textInverse,
   },
   spacer: {
     width: 56,

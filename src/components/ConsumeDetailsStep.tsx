@@ -14,6 +14,7 @@ import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { apiFetch } from '../api/client'
 import { ScorePickerModal } from './ScorePickerModal'
+import { colors } from '../theme/colors'
 
 interface Wine {
   id: string
@@ -35,7 +36,7 @@ interface ConsumeDetailsStepProps {
 
 const getWineColor = (color: string): string => {
   const colorMap: Record<string, string> = {
-    red: '#722F37',
+    red: colors.wine.red,
     white: '#F4E8D0',
     rose: '#FFC0CB',
     sparkling: '#FFD700',
@@ -114,7 +115,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
             onPress={onBack}
             activeOpacity={0.7}
           >
-            <Icon name="chevron-left" size={24} color="#666" />
+            <Icon name="chevron-left" size={24} color={colors.textSecondary} />
           </TouchableOpacity>
           <Text style={styles.title}>Mark as Consumed</Text>
           <TouchableOpacity
@@ -122,14 +123,14 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
             onPress={onClose}
             activeOpacity={0.7}
           >
-            <Icon name="close" size={20} color="#666" />
+            <Icon name="close" size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContent}>
           {/* Wine Card */}
           <LinearGradient
-            colors={['#fef9f5', '#f8f4f0']}
+            colors={[colors.linen, '#f8f4f0']}
             style={styles.wineCard}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -174,7 +175,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
                 disabled={quantity === 1}
                 activeOpacity={0.7}
               >
-                <Icon name="minus" size={24} color={quantity === 1 ? '#ccc' : '#722F37'} />
+                <Icon name="minus" size={24} color={quantity === 1 ? colors.muted[300] : colors.coral} />
               </TouchableOpacity>
 
               <Text style={styles.quantityDisplay}>{quantity}</Text>
@@ -188,7 +189,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
                 disabled={quantity === wine.stock}
                 activeOpacity={0.7}
               >
-                <Icon name="plus" size={24} color={quantity === wine.stock ? '#ccc' : '#722F37'} />
+                <Icon name="plus" size={24} color={quantity === wine.stock ? colors.muted[300] : colors.coral} />
               </TouchableOpacity>
             </View>
           </View>
@@ -220,7 +221,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
                   <Text style={styles.ratingPlaceholder}>Tap to rate</Text>
                   <View style={styles.ratingStars}>
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <Icon key={star} name="star-outline" size={24} color="#ccc" />
+                      <Icon key={star} name="star-outline" size={24} color={colors.muted[300]} />
                     ))}
                   </View>
                 </>
@@ -234,7 +235,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
             <TextInput
               style={styles.notesInput}
               placeholder="How was it? Any memorable flavors or pairings?"
-              placeholderTextColor="#999"
+              placeholderTextColor={colors.textTertiary}
               value={notes}
               onChangeText={setNotes}
               multiline
@@ -250,13 +251,13 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
             activeOpacity={0.8}
           >
             <LinearGradient
-              colors={['#722F37', '#8b3a45']}
+              colors={[colors.coral, colors.coralDark]}
               style={styles.submitButton}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
               {isSubmitting ? (
-                <ActivityIndicator color="#fff" />
+                <ActivityIndicator color={colors.textInverse} />
               ) : (
                 <Text style={styles.submitButtonText}>Mark as Consumed</Text>
               )}
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modal: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingTop: 24,
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     letterSpacing: -0.5,
   },
   closeButton: {
@@ -351,7 +352,7 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: colors.surface,
   },
   wineInfo: {
     flex: 1,
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 6,
   },
   wineMetaRow: {
@@ -378,12 +379,12 @@ const styles = StyleSheet.create({
   vintageText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#666',
+    color: colors.textSecondary,
   },
   regionText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#999',
+    color: colors.textTertiary,
     flex: 1,
   },
   stockText: {
@@ -397,7 +398,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#666',
+    color: colors.textSecondary,
     marginBottom: 12,
     letterSpacing: 0.5,
   },
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -429,7 +430,7 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: '800',
     marginHorizontal: 40,
-    color: '#722F37',
+    color: colors.coral,
   },
   ratingRow: {
     flexDirection: 'row',
@@ -442,12 +443,12 @@ const styles = StyleSheet.create({
   },
   ratingPlaceholder: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
   },
   ratingValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
   },
   ratingStars: {
     flexDirection: 'row',
@@ -458,7 +459,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 16,
     fontSize: 16,
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     minHeight: 100,
   },
   submitButtonContainer: {
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.25,
     shadowRadius: 20,
@@ -478,7 +479,7 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
     letterSpacing: 0.5,
   },
 })

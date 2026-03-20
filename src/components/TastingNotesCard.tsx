@@ -20,7 +20,7 @@ export const TastingNotesCard: React.FC<TastingNotesCardProps> = ({
       {score && (
         <View style={styles.scoreContainer}>
           <LinearGradient
-            colors={['#722F37', '#5a252d']}
+            colors={[colors.coral, colors.coralDark]}
             style={styles.scoreCircle}
           >
             <Text style={styles.scoreNumber}>{score}</Text>
@@ -59,11 +59,11 @@ const styles = StyleSheet.create({
   scoreNumber: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   scoreMax: {
     fontSize: 14,
-    color: '#fff',
+    color: colors.textInverse,
     marginTop: -4,
   },
   scoreLabel: {
@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
   },
   notesContainer: {
     flex: 1,
-    backgroundColor: '#f5f5f3',
+    backgroundColor: colors.muted[100],
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e5e5e3',
+    borderColor: colors.muted[200],
     padding: 12,
     minHeight: 80,
     justifyContent: 'center',
@@ -83,6 +83,6 @@ const styles = StyleSheet.create({
   notesText: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#1f2937',
+    color: colors.textPrimary,
   },
 })

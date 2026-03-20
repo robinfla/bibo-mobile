@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 interface Conversation {
   conversationId: string
@@ -107,14 +108,14 @@ export const ConversationListScreen = () => {
         </Text>
         <Text style={styles.conversationDate}>{formatDate(item.updatedAt)}</Text>
       </View>
-      <Icon name="chevron-right" size={20} color="#b5a89e" />
+      <Icon name="chevron-right" size={20} color={colors.textTertiary} />
     </TouchableOpacity>
   )
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
       <LinearGradient
-        colors={['#722F37', '#944654']}
+        colors={[colors.coral, colors.coralDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.emptyIcon}
@@ -125,12 +126,12 @@ export const ConversationListScreen = () => {
       <Text style={styles.emptySubtitle}>Ask me anything about wine</Text>
       <TouchableOpacity style={styles.newChatButtonEmpty} onPress={handleNewChat} activeOpacity={0.8}>
         <LinearGradient
-          colors={['#722F37', '#944654']}
+          colors={[colors.coral, colors.coralDark]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.newChatGradient}
         >
-          <Icon name="plus" size={20} color="#fff" />
+          <Icon name="plus" size={20} color={colors.textInverse} />
           <Text style={styles.newChatText}>New Chat</Text>
         </LinearGradient>
       </TouchableOpacity>
@@ -140,7 +141,7 @@ export const ConversationListScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#fef9f5', '#f8f0e8']}
+        colors={[colors.linen, colors.linen]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -154,12 +155,12 @@ export const ConversationListScreen = () => {
             activeOpacity={0.7}
           >
             <LinearGradient
-              colors={['#722F37', '#944654']}
+              colors={[colors.coral, colors.coralDark]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.newChatButtonGradient}
             >
-              <Icon name="plus" size={18} color="#fff" />
+              <Icon name="plus" size={18} color={colors.textInverse} />
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -177,7 +178,7 @@ export const ConversationListScreen = () => {
               <RefreshControl
                 refreshing={isRefreshing}
                 onRefresh={() => fetchConversations(true)}
-                tintColor="#722F37"
+                tintColor={colors.coral}
               />
             }
           />
@@ -190,7 +191,7 @@ export const ConversationListScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   gradient: {
     flex: 1,
@@ -206,13 +207,13 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#2c1810',
+    color: colors.textPrimary,
   },
   newChatButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -232,11 +233,11 @@ const styles = StyleSheet.create({
   conversationCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
-    shadowColor: '#2c1810',
+    shadowColor: colors.textPrimary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
@@ -248,12 +249,12 @@ const styles = StyleSheet.create({
   conversationTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 4,
   },
   conversationDate: {
     fontSize: 14,
-    color: '#8a7568',
+    color: colors.textSecondary,
   },
   emptyState: {
     flex: 1,
@@ -275,18 +276,18 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtitle: {
     fontSize: 16,
-    color: '#8a7568',
+    color: colors.textSecondary,
     marginBottom: 32,
     textAlign: 'center',
   },
   newChatButtonEmpty: {
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 12,
@@ -303,6 +304,6 @@ const styles = StyleSheet.create({
   newChatText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
 })

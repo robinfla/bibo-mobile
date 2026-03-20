@@ -105,7 +105,7 @@ export const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.muted[50],
+    backgroundColor: colors.linen,
   },
   inner: {
     flex: 1,
@@ -127,9 +127,9 @@ const styles = StyleSheet.create({
     color: colors.muted[500],
   },
   errorBox: {
-    backgroundColor: '#fef2f2',
+    backgroundColor: 'rgba(239, 68, 68, 0.08)',
     borderWidth: 1,
-    borderColor: '#fecaca',
+    borderColor: 'rgba(239, 68, 68, 0.2)',
     borderRadius: 8,
     padding: 12,
     marginBottom: 16,
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     color: colors.muted[900],
   },
   button: {
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 8,
     paddingVertical: 14,
     alignItems: 'center',

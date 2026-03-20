@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Slider from '@react-native-community/slider'
+import { colors } from '../theme/colors'
 
 interface TastingSliderProps {
   label: string
@@ -34,9 +35,9 @@ export const TastingSlider: React.FC<TastingSliderProps> = ({
           minimumValue={min}
           maximumValue={max}
           step={step}
-          minimumTrackTintColor="#722F37"
+          minimumTrackTintColor={colors.coral}
           maximumTrackTintColor="#E4D5CB"
-          thumbTintColor="#722F37"
+          thumbTintColor={colors.coral}
         />
       </View>
       <View style={styles.labelsRow}>
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#2D2D2D',
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   sliderContainer: {

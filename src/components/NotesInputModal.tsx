@@ -10,6 +10,7 @@ import {
   SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { colors } from '../theme/colors'
 
 interface NotesInputModalProps {
   visible: boolean
@@ -87,7 +88,7 @@ export const NotesInputModal: React.FC<NotesInputModalProps> = ({
                 value={notes}
                 onChangeText={handleTextChange}
                 placeholder="Share your thoughts about this wine..."
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textTertiary}
                 multiline
                 textAlignVertical="top"
                 autoFocus
@@ -130,7 +131,7 @@ export const NotesInputModal: React.FC<NotesInputModalProps> = ({
               onPress={handleSave}
             >
               <LinearGradient
-                colors={['#722F37', '#944654']}
+                colors={[colors.coral, colors.coralDark]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.saveButtonGradient}
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
@@ -176,13 +177,13 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: 24,
-    color: '#666',
+    color: colors.textSecondary,
     fontWeight: '300',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   scroll: {
     flex: 1,
@@ -194,18 +195,18 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     textAlign: 'center',
     marginBottom: 24,
     paddingHorizontal: 20,
   },
   inputContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     marginBottom: 24,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   textInput: {
     minHeight: 150,
     fontSize: 16,
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     padding: 16,
     lineHeight: 24,
   },
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
   },
   charCounterText: {
     fontSize: 12,
-    color: '#999',
+    color: colors.textTertiary,
   },
   promptsSection: {
     marginBottom: 24,
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
   promptsLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: colors.textSecondary,
     marginBottom: 12,
   },
   promptsGrid: {
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   promptChip: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     borderRadius: 20,
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   },
   promptChipText: {
     fontSize: 13,
-    color: '#555',
+    color: colors.textSecondary,
     fontWeight: '500',
   },
   infoBox: {
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     lineHeight: 21,
   },
   footer: {
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
   saveButton: {
     borderRadius: 14,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -300,6 +301,6 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
 })

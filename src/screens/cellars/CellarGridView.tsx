@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 interface GridSlot {
   slotNumber: number
@@ -94,14 +95,14 @@ export const CellarGridView = () => {
   }
 
   const getBottleColor = (slot: GridSlot) => {
-    if (slot.isEmpty) return '#e0e0e0'
-    if (slot.highlighted) return '#722F37'
+    if (slot.isEmpty) return colors.muted[200]
+    if (slot.highlighted) return colors.coral
     
     switch (slot.color) {
-      case 'red': return '#8b3a45'
+      case 'red': return colors.coralDark
       case 'white': return '#f4e8d0'
       case 'rose': return '#ff9999'
-      default: return '#999'
+      default: return colors.textTertiary
     }
   }
 
@@ -112,7 +113,7 @@ export const CellarGridView = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#722F37" />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -126,7 +127,7 @@ export const CellarGridView = () => {
           onPress={() => navigation.goBack()}
           activeOpacity={0.7}
         >
-          <Icon name="chevron-left" size={24} color="#666" />
+          <Icon name="chevron-left" size={24} color={colors.textSecondary} />
         </TouchableOpacity>
 
         <View style={styles.headerContent}>
@@ -141,7 +142,7 @@ export const CellarGridView = () => {
       {locateInfo && (
         <View style={styles.filtersContainer}>
           <View style={styles.filterChip}>
-            <Icon name="filter-check" size={16} color="#fff" />
+            <Icon name="filter-check" size={16} color={colors.textInverse} />
             <Text style={styles.filterChipText}>{locateInfo.filters.wineName}</Text>
           </View>
           {locateInfo.filters.vintage && (
@@ -221,13 +222,13 @@ export const CellarGridView = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -237,13 +238,13 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(228, 213, 203, 0.15)',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.muted[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -254,12 +255,12 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   headerSubtitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#666',
+    color: colors.textSecondary,
     marginTop: 2,
   },
   headerSpacer: {
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
   filterChipText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
   },
   infoBanner: {
     flexDirection: 'row',
@@ -323,14 +324,14 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
     justifyContent: 'center',
     alignItems: 'center',
   },
   rowLabelText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   shelf: {
     flex: 1,
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 4,
     borderColor: 'rgba(114, 47, 55, 0.3)',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.6,
     shadowRadius: 20,

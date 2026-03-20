@@ -16,16 +16,7 @@ import { Ionicons } from '@expo/vector-icons'
 import debounce from 'lodash.debounce'
 import { apiFetch } from '../../api/client'
 import { KBSearchResult, KBSearchResponse } from '../../types/api'
-
-const COLORS = {
-  background: '#FEF9F5',
-  card: '#FFFFFF',
-  text: '#1A1A1A',
-  textSecondary: '#666666',
-  wineRed: '#722F37',
-  border: '#E8E0D8',
-  inputBg: '#FAF7F4',
-}
+import { colors } from '../../theme/colors'
 
 const WineSearchScreen: React.FC = () => {
   const navigation = useNavigation()
@@ -74,7 +65,7 @@ const WineSearchScreen: React.FC = () => {
 
   const getColorDot = (color: string | null) => {
     const colorMap: Record<string, string> = {
-      red: '#722F37',
+      red: '#F28482',
       white: '#F5E6C8',
       rosé: '#FFB6C1',
       sparkling: '#E8E0D8',
@@ -90,7 +81,7 @@ const WineSearchScreen: React.FC = () => {
         <Image source={{ uri: item.thumbnailUrl }} style={styles.wineImage} resizeMode="contain" />
       ) : (
         <View style={[styles.wineImage, styles.placeholderImage]}>
-          <Ionicons name="wine-outline" size={32} color={COLORS.border} />
+          <Ionicons name="wine-outline" size={32} color={colors.muted[200]} />
         </View>
       )}
       
@@ -122,7 +113,7 @@ const WineSearchScreen: React.FC = () => {
         )}
       </View>
       
-      <Ionicons name="chevron-forward" size={20} color={COLORS.border} />
+      <Ionicons name="chevron-forward" size={20} color={colors.muted[200]} />
     </TouchableOpacity>
   )
 
@@ -134,11 +125,11 @@ const WineSearchScreen: React.FC = () => {
       </View>
 
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color={COLORS.textSecondary} style={styles.searchIcon} />
+        <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search by wine, producer, or region..."
-          placeholderTextColor={COLORS.textSecondary}
+          placeholderTextColor={colors.textSecondary}
           value={query}
           onChangeText={handleQueryChange}
           autoCapitalize="none"
@@ -147,20 +138,20 @@ const WineSearchScreen: React.FC = () => {
         />
         {query.length > 0 && (
           <TouchableOpacity onPress={() => { setQuery(''); setResults([]); setSearched(false); }}>
-            <Ionicons name="close-circle" size={20} color={COLORS.textSecondary} />
+            <Ionicons name="close-circle" size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         )}
       </View>
 
       {loading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.wineRed} />
+          <ActivityIndicator size="large" color={colors.coral} />
         </View>
       )}
 
       {!loading && searched && results.length === 0 && (
         <View style={styles.emptyContainer}>
-          <Ionicons name="search-outline" size={48} color={COLORS.border} />
+          <Ionicons name="search-outline" size={48} color={colors.muted[200]} />
           <Text style={styles.emptyText}>No wines found for "{query}"</Text>
           <Text style={styles.emptySubtext}>Try a different search term</Text>
         </View>
@@ -179,7 +170,7 @@ const WineSearchScreen: React.FC = () => {
 
       {!searched && !loading && (
         <View style={styles.emptyContainer}>
-          <Ionicons name="wine-outline" size={48} color={COLORS.border} />
+          <Ionicons name="wine-outline" size={48} color={colors.muted[200]} />
           <Text style={styles.emptyText}>Search our wine database</Text>
           <Text style={styles.emptySubtext}>Find wines to add to your cellar</Text>
         </View>
@@ -191,7 +182,7 @@ const WineSearchScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.linen,
   },
   header: {
     paddingHorizontal: 20,
@@ -201,24 +192,24 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '700',
-    color: COLORS.text,
+    color: colors.textPrimary,
   },
   subtitle: {
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
     marginTop: 4,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.inputBg,
+    backgroundColor: colors.muted[50],
     marginHorizontal: 20,
     marginVertical: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: colors.muted[200],
   },
   searchIcon: {
     marginRight: 12,
@@ -226,7 +217,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: COLORS.text,
+    color: colors.textPrimary,
   },
   loadingContainer: {
     flex: 1,
@@ -242,13 +233,13 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
-    color: COLORS.text,
+    color: colors.textPrimary,
     marginTop: 16,
     textAlign: 'center',
   },
   emptySubtext: {
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
     marginTop: 8,
     textAlign: 'center',
   },
@@ -259,7 +250,7 @@ const styles = StyleSheet.create({
   wineCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.card,
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 12,
     marginBottom: 12,
@@ -273,7 +264,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 80,
     borderRadius: 8,
-    backgroundColor: COLORS.inputBg,
+    backgroundColor: colors.muted[50],
   },
   placeholderImage: {
     justifyContent: 'center',
@@ -298,11 +289,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '600',
-    color: COLORS.text,
+    color: colors.textPrimary,
   },
   producer: {
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
     marginTop: 2,
     marginLeft: 18,
   },
@@ -314,10 +305,10 @@ const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 12,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
   },
   scoreBadge: {
-    backgroundColor: COLORS.wineRed,
+    backgroundColor: colors.coral,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 10,
@@ -330,7 +321,7 @@ const styles = StyleSheet.create({
   },
   pairings: {
     fontSize: 12,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
     marginTop: 4,
     marginLeft: 18,
   },

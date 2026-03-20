@@ -43,9 +43,9 @@ const WineGlassIllustration = () => (
     <Svg viewBox="0 0 120 160" width={128} height={160}>
       <Defs>
         <SvgLinearGradient id="wineColor" x1="0%" y1="0%" x2="0%" y2="100%">
-          <Stop offset="0%" stopColor="#E2959D" stopOpacity={0.85} />
-          <Stop offset="40%" stopColor="#C25A68" stopOpacity={0.9} />
-          <Stop offset="100%" stopColor="#84454E" stopOpacity={0.95} />
+          <Stop offset="0%" stopColor="#F28482" stopOpacity={0.85} />
+          <Stop offset="40%" stopColor="#e85d75" stopOpacity={0.9} />
+          <Stop offset="100%" stopColor="#e85d75" stopOpacity={0.95} />
         </SvgLinearGradient>
         <SvgLinearGradient id="glassLeft" x1="0%" y1="0%" x2="100%" y2="0%">
           <Stop offset="0%" stopColor="#ffffff" stopOpacity={0.6} />
@@ -57,24 +57,24 @@ const WineGlassIllustration = () => (
         </SvgLinearGradient>
       </Defs>
       {/* Glass rim */}
-      <Ellipse cx={60} cy={24} rx={32} ry={7} fill="none" stroke="#E5D1D3" strokeWidth={1.5} opacity={0.6} />
+      <Ellipse cx={60} cy={24} rx={32} ry={7} fill="none" stroke="#F5CAC3" strokeWidth={1.5} opacity={0.6} />
       {/* Wine liquid */}
       <G>
         <Path d="M 32 65 C 32 88, 45 108, 60 108 C 75 108, 88 88, 88 65 C 72 68, 48 68, 32 65 Z" fill="url(#wineColor)" />
-        <Ellipse cx={60} cy={65} rx={28} ry={4.5} fill="#ECAAB1" opacity={0.95} />
+        <Ellipse cx={60} cy={65} rx={28} ry={4.5} fill="#F5CAC3" opacity={0.95} />
         <Path d="M 35 70 C 37 85, 45 100, 55 105" fill="none" stroke="#ffffff" strokeWidth={2} strokeLinecap="round" opacity={0.3} />
       </G>
       {/* Glass bowl */}
-      <Path d="M 28 24 L 30 45 C 32 75, 42 110, 60 110 C 78 110, 88 75, 90 45 L 92 24" fill="none" stroke="#E5D1D3" strokeWidth={1.5} strokeLinejoin="round" />
+      <Path d="M 28 24 L 30 45 C 32 75, 42 110, 60 110 C 78 110, 88 75, 90 45 L 92 24" fill="none" stroke="#F5CAC3" strokeWidth={1.5} strokeLinejoin="round" />
       <Path d="M 28 24 L 30 45 C 32 75, 42 110, 60 110 C 78 110, 88 75, 90 45 L 92 24" fill="url(#glassLeft)" opacity={0.5} />
       <Path d="M 28 24 L 30 45 C 32 75, 42 110, 60 110 C 78 110, 88 75, 90 45 L 92 24" fill="url(#glassRight)" opacity={0.3} />
       {/* Glass top curve */}
-      <Path d="M 28 24 C 28 28, 42 31, 60 31 C 78 31, 92 28, 92 24" fill="none" stroke="#E5D1D3" strokeWidth={1.5} />
+      <Path d="M 28 24 C 28 28, 42 31, 60 31 C 78 31, 92 28, 92 24" fill="none" stroke="#F5CAC3" strokeWidth={1.5} />
       {/* Stem */}
-      <Path d="M 58 110 L 58 145 M 62 110 L 62 145" stroke="#E5D1D3" strokeWidth={1.5} />
+      <Path d="M 58 110 L 58 145 M 62 110 L 62 145" stroke="#F5CAC3" strokeWidth={1.5} />
       <Rect x={58} y={110} width={4} height={35} fill="#ffffff" opacity={0.4} />
       {/* Base */}
-      <Ellipse cx={60} cy={146} rx={24} ry={5.5} fill="rgba(255,255,255,0.7)" stroke="#E5D1D3" strokeWidth={1.5} />
+      <Ellipse cx={60} cy={146} rx={24} ry={5.5} fill="rgba(255,255,255,0.7)" stroke="#F5CAC3" strokeWidth={1.5} />
       <Ellipse cx={60} cy={146} rx={20} ry={3.5} fill="none" stroke="#ffffff" strokeWidth={1} opacity={0.8} />
       {/* Glass highlight */}
       <Path d="M 34 35 C 36 60, 44 85, 52 100" fill="none" stroke="#ffffff" strokeWidth={3} strokeLinecap="round" opacity={0.4} />
@@ -169,14 +169,14 @@ export const AddWineSearchScreen = () => {
 
   const getTypeColor = (type: string | null): string => {
     const map: Record<string, string> = {
-      red: '#84454E',
-      white: '#F4E8D0',
-      rose: '#F9D8D6',
-      sparkling: '#FFD700',
-      dessert: '#D4A574',
-      fortified: '#8B4513',
+      red: colors.wine.red,
+      white: colors.wine.white,
+      rose: colors.wine.rose,
+      sparkling: colors.wine.sparkling,
+      dessert: colors.wine.dessert,
+      fortified: colors.wine.fortified,
     }
-    return map[type || 'red'] || '#84454E'
+    return map[type || 'red'] || colors.wine.red
   }
 
   const renderWineCard = ({ item }: { item: WineSearchResult }) => (
@@ -206,7 +206,7 @@ export const AddWineSearchScreen = () => {
         </Text>
       </View>
 
-      <CaretRight size={18} weight="bold" color="#d0acb1" />
+      <CaretRight size={18} weight="bold" color="#F5CAC3" />
     </TouchableOpacity>
   )
 
@@ -240,7 +240,7 @@ export const AddWineSearchScreen = () => {
           onPress={handleScanPress}
           activeOpacity={0.8}
         >
-          <Camera size={20} weight="regular" color="#84454E" />
+          <Camera size={20} weight="regular" color="#e85d75" />
           <Text style={styles.tryScanText}>Try Scanning Label</Text>
         </TouchableOpacity>
       </View>
@@ -267,14 +267,14 @@ export const AddWineSearchScreen = () => {
             onPress={handleScanPress}
             activeOpacity={0.8}
           >
-            <Camera size={22} weight="regular" color="#84454E" />
+            <Camera size={22} weight="regular" color="#e85d75" />
           </TouchableOpacity>
         </View>
 
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
-            <MagnifyingGlass size={20} weight="regular" color="#d0acb1" style={{ marginLeft: 4 }} />
+            <MagnifyingGlass size={20} weight="regular" color="#F5CAC3" style={{ marginLeft: 4 }} />
             <TextInput
               style={styles.searchInput}
               value={searchQuery}
@@ -290,7 +290,7 @@ export const AddWineSearchScreen = () => {
                 style={styles.clearButton}
                 activeOpacity={0.7}
               >
-                <XCircle size={18} weight="fill" color="#d0acb1" />
+                <XCircle size={18} weight="fill" color="#F5CAC3" />
               </TouchableOpacity>
             )}
           </View>
@@ -315,7 +315,7 @@ export const AddWineSearchScreen = () => {
         {/* Results or Empty State */}
         {isSearching ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#84454E" />
+            <ActivityIndicator size="large" color="#e85d75" />
           </View>
         ) : searchResults.length > 0 ? (
           <FlatList
@@ -339,7 +339,7 @@ export const AddWineSearchScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FCFAF8',
+    backgroundColor: '#F7EDE2',
   },
   inner: {
     flex: 1,
@@ -362,8 +362,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#f4ebec',
-    shadowColor: '#6f363e',
+    borderColor: '#F5CAC3',
+    shadowColor: '#e85d75',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
@@ -372,19 +372,19 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#5c2f35',
+    color: '#111827',
     letterSpacing: -0.3,
   },
   cameraButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F9D8D6',
+    backgroundColor: '#F5CAC3',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(229, 169, 169, 0.2)',
-    shadowColor: '#E5A9A9',
+    shadowColor: '#F5CAC3',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 14,
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 4,
     gap: 8,
-    shadowColor: '#6f363e',
+    shadowColor: '#e85d75',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.04,
     shadowRadius: 30,
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#5c2f35',
+    color: '#111827',
     fontWeight: '500',
     paddingVertical: 12,
     letterSpacing: 0.2,
@@ -434,15 +434,15 @@ const styles = StyleSheet.create({
   chip: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: '#f9f5f6',
+    backgroundColor: '#F7EDE2',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#f4ebec',
+    borderColor: '#F5CAC3',
   },
   chipText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#5c2f35',
+    color: '#111827',
   },
 
   // Loading
@@ -470,7 +470,7 @@ const styles = StyleSheet.create({
   noResultsTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#5c2f35',
+    color: '#111827',
     marginBottom: 12,
   },
   noResultsMessage: {
@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
   },
   queryText: {
     fontWeight: '600',
-    color: '#84454E',
+    color: '#e85d75',
   },
   actionsContainer: {
     width: '100%',
@@ -491,8 +491,8 @@ const styles = StyleSheet.create({
   },
   addManuallyButton: {
     borderRadius: 16,
-    backgroundColor: '#84454E',
-    shadowColor: '#6f363e',
+    backgroundColor: '#e85d75',
+    shadowColor: '#e85d75',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 12,
@@ -519,11 +519,11 @@ const styles = StyleSheet.create({
     gap: 10,
     backgroundColor: 'white',
     borderWidth: 1,
-    borderColor: '#f4ebec',
+    borderColor: '#F5CAC3',
     borderRadius: 16,
     paddingHorizontal: 24,
     paddingVertical: 16,
-    shadowColor: '#6f363e',
+    shadowColor: '#e85d75',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
   tryScanText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#84454E',
+    color: '#e85d75',
   },
 
   // Wine cards
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1,
     borderColor: 'rgba(244, 235, 236, 0.6)',
-    shadowColor: '#6f363e',
+    shadowColor: '#e85d75',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.04,
     shadowRadius: 16,
@@ -576,16 +576,16 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#5c2f35',
+    color: '#111827',
     marginBottom: 3,
   },
   wineProducer: {
     fontSize: 13,
-    color: '#9b5b64',
+    color: '#6b7280',
     marginBottom: 2,
   },
   wineMeta: {
     fontSize: 12,
-    color: '#b68087',
+    color: '#9ca3af',
   },
 })

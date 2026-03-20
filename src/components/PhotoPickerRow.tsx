@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
+import { colors } from '../theme/colors'
 
 interface PhotoPickerRowProps {
   photos: string[]
@@ -36,7 +37,7 @@ export const PhotoPickerRow: React.FC<PhotoPickerRowProps> = ({ photos, onChange
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.addButton} onPress={pickImage}>
-        <Ionicons name="camera" size={20} color="#722F37" />
+        <Ionicons name="camera" size={20} color={colors.coral} />
         <Text style={styles.addButtonText}>Add Photos</Text>
       </TouchableOpacity>
 
@@ -49,7 +50,7 @@ export const PhotoPickerRow: React.FC<PhotoPickerRowProps> = ({ photos, onChange
                 style={styles.removeButton}
                 onPress={() => removePhoto(index)}
               >
-                <Ionicons name="close-circle" size={24} color="#722F37" />
+                <Ionicons name="close-circle" size={24} color={colors.coral} />
               </TouchableOpacity>
             </View>
           ))}
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: '#722F37',
+    borderColor: colors.coral,
     borderStyle: 'dashed',
     backgroundColor: 'rgba(114, 47, 55, 0.05)',
   },
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 14,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
   },
   photosScroll: {
     marginTop: 16,

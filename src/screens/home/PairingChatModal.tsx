@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     marginVertical: 4,
   },
   userBubble: {
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 16,
     borderBottomRightRadius: 4,
     paddingHorizontal: 16,
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     maxHeight: 100,
   },
   sendButton: {
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,

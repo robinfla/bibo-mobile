@@ -49,7 +49,7 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
         onPress={handleButtonPress}
         activeOpacity={0.7}
       >
-        <Icon name="dots-horizontal" size={24} color="#1f2937" />
+        <Icon name="dots-horizontal" size={24} color={colors.textPrimary} />
       </TouchableOpacity>
 
       {/* Dropdown Menu */}
@@ -77,7 +77,7 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
                   onPress={() => handleMenuPress(onEditDetails)}
                   activeOpacity={0.7}
                 >
-                  <Icon name="pencil" size={20} color="#722F37" />
+                  <Icon name="pencil" size={20} color={colors.coral} />
                   <Text style={styles.menuItemText}>Edit Details</Text>
                 </TouchableOpacity>
 
@@ -99,7 +99,7 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
                   onPress={() => handleMenuPress(onShare)}
                   activeOpacity={0.7}
                 >
-                  <Icon name="share-variant" size={20} color="#722F37" />
+                  <Icon name="share-variant" size={20} color={colors.coral} />
                   <Text style={styles.menuItemText}>Share Wine</Text>
                 </TouchableOpacity>
 
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   menuCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 12,
     minWidth: 220,
     shadowColor: '#000',
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 15,
-    color: '#1f2937',
+    color: colors.textPrimary,
     fontWeight: '500',
   },
   menuItemDanger: {

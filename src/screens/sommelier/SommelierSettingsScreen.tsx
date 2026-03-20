@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 interface PersonalityConfig {
   tone: 'professional' | 'friendly' | 'casual' | 'playful'
@@ -140,7 +141,7 @@ export const SommelierSettingsScreen = () => {
                 <Text style={styles.optionDescription}>{option.description}</Text>
                 {isSelected && (
                   <View style={styles.checkmark}>
-                    <Icon name="check-circle" size={20} color="#722F37" />
+                    <Icon name="check-circle" size={20} color={colors.coral} />
                   </View>
                 )}
               </TouchableOpacity>
@@ -154,7 +155,7 @@ export const SommelierSettingsScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#722F37" />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -168,7 +169,7 @@ export const SommelierSettingsScreen = () => {
           onPress={() => navigation.goBack()}
           activeOpacity={0.7}
         >
-          <Icon name="chevron-left" size={28} color="#722F37" />
+          <Icon name="chevron-left" size={28} color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Sommelier Personality</Text>
         <TouchableOpacity
@@ -178,7 +179,7 @@ export const SommelierSettingsScreen = () => {
           activeOpacity={0.7}
         >
           {isSaving ? (
-            <ActivityIndicator size="small" color="#722F37" />
+            <ActivityIndicator size="small" color={colors.coral} />
           ) : (
             <Text style={styles.saveButtonText}>Save</Text>
           )}
@@ -209,13 +210,13 @@ export const SommelierSettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -223,9 +224,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
+    borderBottomColor: colors.borderSubtle,
   },
   backButton: {
     width: 40,
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
   },
   saveButton: {
     paddingHorizontal: 16,
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
   },
   scroll: {
     flex: 1,
@@ -267,12 +268,12 @@ const styles = StyleSheet.create({
   introTitle: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   introText: {
     fontSize: 15,
-    color: '#8a7568',
+    color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 22,
   },
@@ -283,28 +284,28 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 4,
   },
   sectionDescription: {
     fontSize: 14,
-    color: '#8a7568',
+    color: colors.textSecondary,
     marginBottom: 16,
   },
   optionsGrid: {
     gap: 12,
   },
   optionCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
     borderWidth: 2,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
+    borderColor: colors.borderSubtle,
     position: 'relative',
   },
   optionCardSelected: {
-    borderColor: '#722F37',
-    backgroundColor: '#fef9f5',
+    borderColor: colors.coral,
+    backgroundColor: colors.linen,
   },
   optionEmoji: {
     fontSize: 28,
@@ -313,15 +314,15 @@ const styles = StyleSheet.create({
   optionLabel: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 4,
   },
   optionLabelSelected: {
-    color: '#722F37',
+    color: colors.coral,
   },
   optionDescription: {
     fontSize: 13,
-    color: '#8a7568',
+    color: colors.textSecondary,
     lineHeight: 18,
   },
   checkmark: {

@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { colors } from '../theme/colors'
 
 interface WineActionFABProps {
   onConsume: () => void
@@ -88,7 +89,7 @@ export const WineActionFAB: React.FC<WineActionFABProps> = ({
               <Text style={styles.labelText}>Consume Wine</Text>
             </View>
             <View style={styles.secondaryFAB}>
-              <Icon name="glass-wine" size={22} color="#fff" />
+              <Icon name="glass-wine" size={22} color={colors.textInverse} />
             </View>
           </TouchableOpacity>
         </Animated.View>
@@ -111,7 +112,7 @@ export const WineActionFAB: React.FC<WineActionFABProps> = ({
               <Text style={styles.labelText}>Add Tasting Note</Text>
             </View>
             <View style={styles.secondaryFAB}>
-              <Icon name="note-edit" size={22} color="#fff" />
+              <Icon name="note-edit" size={22} color={colors.textInverse} />
             </View>
           </TouchableOpacity>
         </Animated.View>
@@ -123,7 +124,7 @@ export const WineActionFAB: React.FC<WineActionFABProps> = ({
           activeOpacity={0.8}
         >
           <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
-            <Icon name="plus" size={28} color="#fff" />
+            <Icon name="plus" size={28} color={colors.textInverse} />
           </Animated.View>
         </TouchableOpacity>
       </View>
@@ -148,10 +149,10 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
     shadowRadius: 12,
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   label: {
-    backgroundColor: '#1f2937',
+    backgroundColor: colors.muted[800],
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   labelText: {
-    color: '#fff',
+    color: colors.textInverse,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#944654',
+    backgroundColor: colors.coralDark,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',

@@ -34,7 +34,7 @@ export const WineCard: React.FC<WineCardProps> = ({ card, onPress }) => {
     >
       {/* Image Section */}
       <LinearGradient
-        colors={['#8B4049', '#722F37']}
+        colors={[colors.coral, colors.coral]}
         style={styles.imageSection}
       >
         {/* Vintage Badge */}
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     flex: 1,
     marginRight: 8,
   },
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   producer: {
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     marginTop: 2,
   },
   valueRow: {
@@ -159,11 +159,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#e8e8e8',
+    borderTopColor: colors.muted[200],
   },
   purchasePrice: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textSecondary,
   },
   valueChange: {
     flexDirection: 'row',

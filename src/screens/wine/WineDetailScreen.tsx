@@ -22,11 +22,11 @@ import { WineMenuDropdown } from '../../components/WineMenuDropdown'
 import type { WineDetail, InventoryLot } from '../../types/api'
 
 const MATURITY_BADGES = {
-  to_age: { emoji: '🍇', label: 'To Age', bg: '#dbeafe', fg: '#1e40af' },
-  approaching: { emoji: '🍷', label: 'Approaching', bg: '#fef3c7', fg: '#92400e' },
-  peak: { emoji: '✨', label: 'Peak', bg: '#fef9c3', fg: '#854d0e' },
-  past_prime: { emoji: '📉', label: 'Past Prime', bg: '#fecaca', fg: '#991b1b' },
-  declining: { emoji: '⚠️', label: 'Declining', bg: '#fed7aa', fg: '#9a3412' },
+  to_age: { emoji: '🍇', label: 'To Age', bg: colors.status.youngBg, fg: colors.status.young },
+  approaching: { emoji: '🍷', label: 'Approaching', bg: colors.status.approachingBg, fg: colors.status.approaching },
+  peak: { emoji: '✨', label: 'Peak', bg: colors.status.peakBg, fg: colors.status.peak },
+  past_prime: { emoji: '📉', label: 'Past Prime', bg: colors.status.pastPrimeBg, fg: colors.status.pastPrime },
+  declining: { emoji: '⚠️', label: 'Declining', bg: colors.status.pastPrimeBg, fg: colors.status.pastPrime },
   unknown: { emoji: '', label: '', bg: 'transparent', fg: 'transparent' },
 }
 
@@ -262,7 +262,7 @@ export const WineDetailScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={colors.primary[600]} />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -307,7 +307,7 @@ export const WineDetailScreen = () => {
 
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
       {/* Header with bottle image */}
-      <LinearGradient colors={['#8B4049', '#722F37']} style={styles.header}>
+      <LinearGradient colors={[colors.coral, colors.coral]} style={styles.header}>
         {wine.bottleImageUrl ? (
           <Image source={{ uri: wine.bottleImageUrl }} style={styles.bottleImage} resizeMode="contain" />
         ) : (
@@ -513,13 +513,13 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     fontSize: 24,
-    color: '#1f2937',
+    color: colors.textPrimary,
   },
   navTitle: {
     flex: 1,
     fontSize: 18,
     fontWeight: '700',
-    color: '#1f2937',
+    color: colors.textPrimary,
   },
   scrollContainer: {
     flex: 1,
@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   retryButton: {
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 8,
     paddingHorizontal: 24,
     paddingVertical: 10,
@@ -584,12 +584,12 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     textAlign: 'center',
   },
   producerName: {
     fontSize: 16,
-    color: colors.primary[600],
+    color: colors.coral,
     marginTop: 4,
     textAlign: 'center',
   },
@@ -605,7 +605,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   sectionSubtitle: {
@@ -631,8 +631,8 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   vintageTabActive: {
-    backgroundColor: '#722F37',
-    borderColor: '#722F37',
+    backgroundColor: colors.coral,
+    borderColor: colors.coral,
   },
   vintageTabText: {
     fontSize: 14,
@@ -672,7 +672,7 @@ const styles = StyleSheet.create({
   drinkingWindowDate: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   valueRow: {
     flexDirection: 'row',
@@ -682,7 +682,7 @@ const styles = StyleSheet.create({
   valueChangeCenter: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#16a34a',
+    color: colors.teal,
   },
   valueLabel: {
     fontSize: 12,
@@ -692,14 +692,14 @@ const styles = StyleSheet.create({
   valueAmount: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   valueRight: {
     alignItems: 'flex-end',
   },
   valueChange: {
     fontSize: 13,
-    color: '#16a34a',
+    color: colors.teal,
     fontWeight: '600',
     marginTop: 4,
   },
@@ -740,7 +740,7 @@ const styles = StyleSheet.create({
   commentsText: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#1f2937',
+    color: colors.textPrimary,
   },
   grapesGrid: {
     flexDirection: 'row',

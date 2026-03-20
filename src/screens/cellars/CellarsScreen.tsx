@@ -35,17 +35,17 @@ const COUNTRY_NAMES: Record<string, string> = {
 
 const HERO_GRADIENTS: [string, string][] = [
   ['#1a1a2e', '#16213e'],
-  ['#722F37', '#4a1a1f'],
+  [colors.coral, '#4a1a1f'],
   ['#1e3a2f', '#0f2620'],
   ['#2d1b4e', '#1a0f30'],
 ]
 
 const MATURITY_COLORS = {
-  to_age: '#3b82f6',
-  approaching: '#f59e0b',
-  peak: '#22c55e',
-  past_prime: '#f97316',
-  declining: '#ef4444',
+  to_age: colors.status.young,
+  approaching: colors.status.approaching,
+  peak: colors.status.peak,
+  past_prime: colors.status.pastPrime,
+  declining: colors.status.pastPrime,
 }
 
 const MATURITY_LABELS = {
@@ -117,7 +117,7 @@ export const CellarsScreen = () => {
   if (loading) {
     return (
       <View style={[styles.centered, { paddingTop: insets.top }]}>
-        <ActivityIndicator size="large" color={colors.primary[600]} />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   heroName: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#fff',
+    color: colors.textInverse,
   },
   heroLocation: {
     fontSize: 12,
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   heroCount: {
     fontSize: 48,
     fontWeight: '800',
-    color: '#fff',
+    color: colors.textInverse,
     lineHeight: 48,
   },
   heroCountLabel: {
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   },
   maturityStatBold: {
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
 
   empty: { textAlign: 'center', color: colors.muted[400], marginTop: 32, fontSize: 15 },

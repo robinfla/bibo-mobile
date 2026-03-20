@@ -21,28 +21,28 @@ type InventoryStackParamList = {
 
 type Props = NativeStackScreenProps<InventoryStackParamList, 'InventoryDetail'>
 
-const WINE_COLORS: Record<string, string> = {
-  red: '#ef4444',
-  white: '#fcd34d',
-  rose: '#f472b6',
-  rosé: '#f472b6',
-  sparkling: '#facc15',
-  dessert: '#fb923c',
-  fortified: '#a855f7',
+const getWineColor = (color: string): string => {
+  const map: Record<string, string> = {
+    red: colors.wine.red,
+    white: colors.wine.white,
+    rose: colors.wine.rose,
+    rosé: colors.wine.rose,
+    sparkling: colors.wine.sparkling,
+    dessert: colors.wine.dessert,
+    fortified: colors.wine.fortified,
+  }
+  return map[color.toLowerCase()] ?? colors.muted[400]
 }
 
-const getWineColor = (color: string): string =>
-  WINE_COLORS[color.toLowerCase()] ?? colors.muted[400]
-
 const MATURITY_COLORS: Record<string, { bg: string; text: string }> = {
-  peak: { bg: '#dcfce7', text: '#15803d' },
-  ready: { bg: '#dcfce7', text: '#15803d' },
-  approaching: { bg: '#fef3c7', text: '#b45309' },
-  declining: { bg: '#fef3c7', text: '#b45309' },
-  to_age: { bg: '#dbeafe', text: '#1d4ed8' },
-  past_prime: { bg: '#fef3c7', text: '#92400e' },
-  past: { bg: '#fef2f2', text: '#dc2626' },
-  unknown: { bg: '#f3f4f6', text: '#6b7280' },
+  peak: { bg: colors.status.peakBg, text: colors.status.peak },
+  ready: { bg: colors.status.peakBg, text: colors.status.peak },
+  approaching: { bg: colors.status.approachingBg, text: colors.status.approaching },
+  declining: { bg: colors.status.approachingBg, text: colors.status.approaching },
+  to_age: { bg: colors.status.youngBg, text: colors.status.young },
+  past_prime: { bg: colors.status.pastPrimeBg, text: colors.status.pastPrime },
+  past: { bg: colors.status.pastPrimeBg, text: colors.status.pastPrime },
+  unknown: { bg: colors.muted[100], text: colors.textSecondary },
 }
 
 const getMaturityStyle = (status: MaturityInfo['status']) =>
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   consumeButton: {
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
   },
   confirmButton: {
     flex: 1,
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 8,
     paddingVertical: 14,
     alignItems: 'center',

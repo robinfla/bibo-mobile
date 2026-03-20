@@ -152,7 +152,7 @@ export const WishlistTab = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={colors.primary[600]} />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20,
     backgroundColor: colors.muted[100],
   },
-  filterTabActive: { backgroundColor: colors.primary[600] },
+  filterTabActive: { backgroundColor: colors.coral },
   filterTabText: { fontSize: 14, fontWeight: '600', color: colors.muted[700] },
   filterTabTextActive: { color: colors.white },
 
@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 18, fontWeight: '700', color: colors.muted[700], marginBottom: 4 },
   emptySubtitle: { fontSize: 14, color: colors.muted[500], textAlign: 'center', marginBottom: 16 },
   emptyButton: {
-    backgroundColor: colors.primary[600], borderRadius: 8,
+    backgroundColor: colors.coral, borderRadius: 8,
     paddingHorizontal: 20, paddingVertical: 12,
   },
   emptyButtonText: { color: colors.white, fontSize: 15, fontWeight: '600' },
@@ -446,11 +446,11 @@ const styles = StyleSheet.create({
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
   cardHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 },
   typeBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 12 },
-  typeBadgeWine: { backgroundColor: '#fef3c7' },
-  typeBadgeProducer: { backgroundColor: '#f3e8ff' },
+  typeBadgeWine: { backgroundColor: colors.honeyLight },
+  typeBadgeProducer: { backgroundColor: colors.coralLight },
   typeBadgeText: { fontSize: 11, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.5 },
-  typeBadgeTextWine: { color: '#92400e' },
-  typeBadgeTextProducer: { color: '#7c3aed' },
+  typeBadgeTextWine: { color: colors.honeyDark },
+  typeBadgeTextProducer: { color: colors.coralDark },
   vintageText: { fontSize: 13, color: colors.muted[500] },
   regionText: { fontSize: 13, color: colors.muted[500] },
   deleteBtn: { padding: 4 },
@@ -463,14 +463,14 @@ const styles = StyleSheet.create({
     marginTop: 8, paddingTop: 8, borderTopWidth: 1, borderTopColor: colors.muted[100],
   },
   priceText: { fontSize: 14, fontWeight: '700', color: colors.muted[700] },
-  linkText: { fontSize: 13, fontWeight: '600', color: colors.primary[600] },
+  linkText: { fontSize: 13, fontWeight: '600', color: colors.coral },
   dateText: { fontSize: 12, color: colors.muted[400], marginLeft: 'auto' },
 
   // FAB
   fab: {
     position: 'absolute', bottom: 20, right: 20,
     width: 56, height: 56, borderRadius: 28,
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     justifyContent: 'center', alignItems: 'center',
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25, shadowRadius: 4, elevation: 5,
@@ -504,9 +504,9 @@ const styles = StyleSheet.create({
     flex: 1, paddingVertical: 10, borderRadius: 8,
     borderWidth: 1, borderColor: colors.muted[300], alignItems: 'center',
   },
-  typeBtnActive: { borderColor: colors.primary[600], backgroundColor: colors.primary[50] },
+  typeBtnActive: { borderColor: colors.coral, backgroundColor: colors.coralLight },
   typeBtnText: { fontSize: 14, fontWeight: '600', color: colors.muted[600] },
-  typeBtnTextActive: { color: colors.primary[700] },
+  typeBtnTextActive: { color: colors.coralDark },
 
   priceRow: { gap: 8 },
   currencyPicker: { flexDirection: 'row', gap: 6, marginTop: 6 },
@@ -514,9 +514,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10, paddingVertical: 6, borderRadius: 6,
     borderWidth: 1, borderColor: colors.muted[300],
   },
-  currencyBtnActive: { borderColor: colors.primary[600], backgroundColor: colors.primary[50] },
+  currencyBtnActive: { borderColor: colors.coral, backgroundColor: colors.coralLight },
   currencyText: { fontSize: 12, fontWeight: '600', color: colors.muted[600] },
-  currencyTextActive: { color: colors.primary[700] },
+  currencyTextActive: { color: colors.coralDark },
 
   regionScroll: { maxHeight: 44, marginBottom: 4 },
   regionChips: { flexDirection: 'row', gap: 6 },
@@ -524,9 +524,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10, paddingVertical: 6, borderRadius: 6,
     borderWidth: 1, borderColor: colors.muted[300], backgroundColor: colors.muted[50],
   },
-  regionChipActive: { borderColor: colors.primary[600], backgroundColor: colors.primary[50] },
+  regionChipActive: { borderColor: colors.coral, backgroundColor: colors.coralLight },
   regionChipText: { fontSize: 12, fontWeight: '500', color: colors.muted[600] },
-  regionChipTextActive: { color: colors.primary[700] },
+  regionChipTextActive: { color: colors.coralDark },
 
   modalButtons: { flexDirection: 'row', gap: 12, marginTop: 20 },
   cancelBtn: {
@@ -535,7 +535,7 @@ const styles = StyleSheet.create({
   },
   cancelText: { color: colors.muted[700], fontSize: 16, fontWeight: '600' },
   saveBtn: {
-    flex: 1, backgroundColor: colors.primary[600],
+    flex: 1, backgroundColor: colors.coral,
     borderRadius: 8, paddingVertical: 14, alignItems: 'center',
   },
   saveText: { color: colors.white, fontSize: 16, fontWeight: '600' },

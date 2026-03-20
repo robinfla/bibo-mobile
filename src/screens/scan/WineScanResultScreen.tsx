@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { WineScanActionsSheet } from '../../components/WineScanActionsSheet'
+import { colors } from '../../theme/colors'
 
 export const WineScanResultScreen = () => {
   const navigation = useNavigation()
@@ -42,13 +43,13 @@ export const WineScanResultScreen = () => {
   }
 
   const getTypeColor = (type: string): [string, string] => {
-    const colors: Record<string, [string, string]> = {
-      red: ['#722F37', '#944654'],
-      white: ['#f4d03f', '#d4af37'],
-      rose: ['#ff6b9d', '#ff8fb3'],
-      sparkling: ['#d4af37', '#f4d03f'],
+    const typeColors: Record<string, [string, string]> = {
+      red: [colors.coral, colors.coralDark],
+      white: [colors.honey, colors.honeyDark],
+      rose: [colors.rose, colors.coral],
+      sparkling: [colors.honeyDark, colors.honey],
     }
-    return colors[type] || colors.red
+    return typeColors[type] || typeColors.red
   }
 
   const getTypeName = (type: string) => {
@@ -79,7 +80,7 @@ export const WineScanResultScreen = () => {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {/* Hero Background */}
         <LinearGradient
-          colors={['#f5e6d3', '#e8d4b8']}
+          colors={[colors.linen, colors.rose]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.heroBackground}
@@ -87,14 +88,14 @@ export const WineScanResultScreen = () => {
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity style={styles.headerButton} onPress={() => navigation.goBack()}>
-              <Icon name="arrow-left" size={24} color="#722F37" />
+              <Icon name="arrow-left" size={24} color={colors.coral} />
             </TouchableOpacity>
             <View style={styles.headerActions}>
               <TouchableOpacity style={styles.headerButton}>
-                <Icon name="share-variant" size={20} color="#722F37" />
+                <Icon name="share-variant" size={20} color={colors.coral} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.headerButton}>
-                <Icon name="link-variant" size={20} color="#722F37" />
+                <Icon name="link-variant" size={20} color={colors.coral} />
               </TouchableOpacity>
             </View>
           </View>
@@ -120,7 +121,7 @@ export const WineScanResultScreen = () => {
         <View style={styles.contentCard}>
           {/* Wine Type Badge */}
           <LinearGradient
-            colors={['#d4af37', '#f4d03f']}
+            colors={[colors.honeyDark, colors.honey]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.typeBadge}
@@ -158,7 +159,7 @@ export const WineScanResultScreen = () => {
                   >
                     {selectedVintage === vintage ? (
                       <LinearGradient
-                        colors={['#d4af37', '#f4d03f']}
+                        colors={[colors.honeyDark, colors.honey]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={styles.vintageChipGradient}
@@ -203,7 +204,7 @@ export const WineScanResultScreen = () => {
 
       {/* Fixed Bottom Action Buttons */}
       <LinearGradient
-        colors={['rgba(255, 255, 255, 0.98)', 'white']}
+        colors={['rgba(255, 255, 255, 0.98)', colors.surface]}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.bottomActions}
@@ -213,7 +214,7 @@ export const WineScanResultScreen = () => {
           onPress={() => setShowActions(true)}
           activeOpacity={0.7}
         >
-          <Icon name="dots-horizontal" size={18} color="#722F37" />
+          <Icon name="dots-horizontal" size={18} color={colors.coral} />
           <Text style={styles.actionsButtonText}>Actions</Text>
         </TouchableOpacity>
 
@@ -223,12 +224,12 @@ export const WineScanResultScreen = () => {
           activeOpacity={0.7}
         >
           <LinearGradient
-            colors={['#722F37', '#944654']}
+            colors={[colors.coral, colors.coralDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.addButtonGradient}
           >
-            <Icon name="plus" size={18} color="#fff" />
+            <Icon name="plus" size={18} color={colors.textInverse} />
             <Text style={styles.addButtonText}>Add</Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -247,7 +248,7 @@ export const WineScanResultScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
   },
   scrollView: {
     flex: 1,
@@ -267,10 +268,10 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
     shadowRadius: 32,
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
     fontSize: 64,
   },
   contentCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
     marginTop: -20,
@@ -336,26 +337,26 @@ const styles = StyleSheet.create({
   typeBadgeText: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#2d2d2d',
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_700Bold',
   },
   region: {
     fontSize: 15,
-    color: 'rgba(45, 45, 45, 0.6)',
+    color: colors.textSecondary,
     marginBottom: 8,
     fontFamily: 'NunitoSans_400Regular',
   },
   wineName: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#722F37',
+    color: colors.coral,
     lineHeight: 34,
     marginBottom: 8,
     fontFamily: 'NunitoSans_800ExtraBold',
   },
   producer: {
     fontSize: 17,
-    color: 'rgba(45, 45, 45, 0.7)',
+    color: colors.textSecondary,
     marginBottom: 24,
     fontFamily: 'NunitoSans_400Regular',
   },
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 12,
     fontFamily: 'NunitoSans_600SemiBold',
   },
@@ -376,7 +377,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 24,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 2,
     borderColor: 'rgba(228, 213, 203, 0.4)',
   },
@@ -392,13 +393,13 @@ const styles = StyleSheet.create({
   vintageChipText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   vintageChipTextActive: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2d2d2d',
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   maturitySection: {
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
   },
   maturityLabel: {
     fontSize: 14,
-    color: 'rgba(45, 45, 45, 0.6)',
+    color: colors.textSecondary,
     fontFamily: 'NunitoSans_400Regular',
   },
   warningIcon: {
@@ -433,12 +434,12 @@ const styles = StyleSheet.create({
   warningIconText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   maturityValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_700Bold',
   },
   bottomActions: {
@@ -465,10 +466,10 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 16,
     borderRadius: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 2,
     borderColor: 'rgba(228, 213, 203, 0.4)',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -477,14 +478,14 @@ const styles = StyleSheet.create({
   actionsButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   addButton: {
     flex: 1,
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -500,7 +501,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
     fontFamily: 'NunitoSans_600SemiBold',
   },
 })

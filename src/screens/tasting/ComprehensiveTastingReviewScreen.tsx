@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 export const ComprehensiveTastingReviewScreen = () => {
   const navigation = useNavigation()
@@ -79,7 +80,7 @@ export const ComprehensiveTastingReviewScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-          <Icon name="close" size={24} color="#722F37" />
+          <Icon name="close" size={24} color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Comprehensive Review</Text>
         <View style={{ width: 44 }} />
@@ -105,7 +106,7 @@ export const ComprehensiveTastingReviewScreen = () => {
             value={visual}
             onChangeText={setVisual}
             placeholder="Color, clarity, intensity..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             multiline
           />
         </View>
@@ -118,7 +119,7 @@ export const ComprehensiveTastingReviewScreen = () => {
             value={nose}
             onChangeText={setNose}
             placeholder="Primary, secondary, tertiary aromas..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             multiline
           />
         </View>
@@ -131,7 +132,7 @@ export const ComprehensiveTastingReviewScreen = () => {
             value={palate}
             onChangeText={setPalate}
             placeholder="Body, tannins, acidity, alcohol, flavors..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             multiline
           />
         </View>
@@ -144,7 +145,7 @@ export const ComprehensiveTastingReviewScreen = () => {
             value={finish}
             onChangeText={setFinish}
             placeholder="Length, quality..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             multiline
           />
         </View>
@@ -188,7 +189,7 @@ export const ComprehensiveTastingReviewScreen = () => {
             value={pairing}
             onChangeText={setPairing}
             placeholder="Recommended dishes, flavors, ingredients..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             multiline
           />
         </View>
@@ -201,7 +202,7 @@ export const ComprehensiveTastingReviewScreen = () => {
             value={context}
             onChangeText={setContext}
             placeholder="Where tasted, occasion, company, serving conditions..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             multiline
           />
         </View>
@@ -214,7 +215,7 @@ export const ComprehensiveTastingReviewScreen = () => {
             value={notes}
             onChangeText={setNotes}
             placeholder="Any other observations or thoughts..."
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             multiline
           />
         </View>
@@ -227,7 +228,7 @@ export const ComprehensiveTastingReviewScreen = () => {
             value={date}
             onChangeText={setDate}
             placeholder="YYYY-MM-DD"
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
           />
         </View>
 
@@ -239,7 +240,7 @@ export const ComprehensiveTastingReviewScreen = () => {
           activeOpacity={0.7}
         >
           <LinearGradient
-            colors={['#722F37', '#944654']}
+            colors={[colors.coral, colors.coralDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.saveButtonGradient}
@@ -259,7 +260,7 @@ export const ComprehensiveTastingReviewScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === 'ios' ? 60 : 40,
     paddingBottom: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(228, 213, 203, 0.3)',
   },
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     fontFamily: 'NunitoSans_700Bold',
   },
   scrollView: {
@@ -297,19 +298,19 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 6,
     fontFamily: 'NunitoSans_700Bold',
   },
   wineVintage: {
     fontSize: 17,
-    color: '#8a7568',
+    color: colors.textSecondary,
     marginBottom: 8,
     fontFamily: 'NunitoSans_400Regular',
   },
   timeEstimate: {
     fontSize: 14,
-    color: '#8a7568',
+    color: colors.textSecondary,
     fontFamily: 'NunitoSans_400Regular',
   },
   section: {
@@ -318,19 +319,19 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 12,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   textInput: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#2c1810',
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_400Regular',
     minHeight: 80,
     textAlignVertical: 'top',
@@ -352,7 +353,7 @@ const styles = StyleSheet.create({
   },
   ratingFill: {
     height: '100%',
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
   },
   ratingNumbers: {
     flexDirection: 'row',
@@ -366,36 +367,36 @@ const styles = StyleSheet.create({
   },
   ratingNumberText: {
     fontSize: 14,
-    color: '#8a7568',
+    color: colors.textSecondary,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   ratingNumberTextActive: {
-    color: '#722F37',
+    color: colors.coral,
     fontWeight: '700',
   },
   ratingValue: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     fontFamily: 'NunitoSans_700Bold',
     minWidth: 48,
     textAlign: 'center',
   },
   dateInput: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    color: '#2c1810',
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_400Regular',
   },
   saveButton: {
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
     fontFamily: 'NunitoSans_600SemiBold',
   },
 })

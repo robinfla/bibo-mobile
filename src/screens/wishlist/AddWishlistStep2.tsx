@@ -131,7 +131,7 @@ export const AddWishlistStep2 = () => {
             <TextInput
               style={styles.input}
               placeholder="e.g. Château Margaux"
-              placeholderTextColor="#aaa"
+              placeholderTextColor={colors.textTertiary}
               value={manualName}
               onChangeText={setManualName}
             />
@@ -140,7 +140,7 @@ export const AddWishlistStep2 = () => {
             <TextInput
               style={styles.input}
               placeholder="e.g. 2015"
-              placeholderTextColor="#aaa"
+              placeholderTextColor={colors.textTertiary}
               value={manualVintage}
               onChangeText={setManualVintage}
               keyboardType="number-pad"
@@ -150,7 +150,7 @@ export const AddWishlistStep2 = () => {
             <TextInput
               style={styles.input}
               placeholder="e.g. Bordeaux"
-              placeholderTextColor="#aaa"
+              placeholderTextColor={colors.textTertiary}
               value={manualRegion}
               onChangeText={setManualRegion}
             />
@@ -159,7 +159,7 @@ export const AddWishlistStep2 = () => {
             <TextInput
               style={styles.input}
               placeholder="e.g. Red, White, Rosé"
-              placeholderTextColor="#aaa"
+              placeholderTextColor={colors.textTertiary}
               value={manualColor}
               onChangeText={setManualColor}
             />
@@ -220,7 +220,7 @@ export const AddWishlistStep2 = () => {
           <TextInput
             style={styles.input}
             placeholder="e.g. $150"
-            placeholderTextColor="#aaa"
+            placeholderTextColor={colors.textTertiary}
             value={budget}
             onChangeText={setBudget}
             keyboardType="numeric"
@@ -233,7 +233,7 @@ export const AddWishlistStep2 = () => {
           <TextInput
             style={styles.input}
             placeholder="Wine.com, local shop, auction..."
-            placeholderTextColor="#aaa"
+            placeholderTextColor={colors.textTertiary}
             value={whereToBuy}
             onChangeText={setWhereToBuy}
           />
@@ -245,7 +245,7 @@ export const AddWishlistStep2 = () => {
           <TextInput
             style={[styles.input, styles.textArea]}
             placeholder="Special occasion? Gift idea? Just curious?"
-            placeholderTextColor="#aaa"
+            placeholderTextColor={colors.textTertiary}
             value={notes}
             onChangeText={setNotes}
             multiline
@@ -262,7 +262,7 @@ export const AddWishlistStep2 = () => {
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={isSubmitting ? ['#e0e0e0', '#e0e0e0'] : ['#8B4049', '#722F37']}
+            colors={isSubmitting ? [colors.muted[300], colors.muted[300]] : [colors.coral, colors.coral]}
             style={styles.submitGradient}
           >
             <Text style={[styles.submitButtonText, isSubmitting && styles.submitButtonTextDisabled]}>
@@ -281,7 +281,7 @@ export const AddWishlistStep2 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff8e8',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -291,17 +291,17 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: colors.muted[200],
   },
   backButton: {
     fontSize: 16,
-    color: '#722F37',
+    color: colors.coral,
     fontWeight: '600',
   },
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   scrollContent: {
     padding: 20,
@@ -312,21 +312,21 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 8,
     letterSpacing: -0.5,
   },
   heroSubtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textSecondary,
   },
   wineCard: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 20,
     padding: 16,
     marginBottom: 16,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 20,
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 90,
     borderRadius: 12,
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -356,22 +356,22 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 4,
     letterSpacing: -0.3,
   },
   wineMeta: {
     fontSize: 14,
-    color: '#888',
+    color: colors.textSecondary,
   },
   infoBanner: {
-    backgroundColor: '#fffbf0',
+    backgroundColor: colors.honeyLight,
     borderLeftWidth: 4,
-    borderLeftColor: '#ffc107',
+    borderLeftColor: colors.honey,
     borderRadius: 16,
     padding: 14,
     marginBottom: 24,
-    shadowColor: '#ffc107',
+    shadowColor: colors.honey,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
   },
   infoBannerText: {
     fontSize: 14,
-    color: '#555',
+    color: colors.textSecondary,
     lineHeight: 20,
   },
   section: {
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#555',
+    color: colors.textSecondary,
     marginBottom: 10,
   },
   priorityContainer: {
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
   },
   priorityChip: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 18,
     padding: 16,
     alignItems: 'center',
@@ -408,9 +408,9 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   priorityChipSelected: {
-    backgroundColor: '#f5b731',
+    backgroundColor: colors.honey,
     transform: [{ scale: 1.05 }],
-    shadowColor: '#f5b731',
+    shadowColor: colors.honey,
     shadowOpacity: 0.25,
     shadowRadius: 20,
     elevation: 6,
@@ -427,18 +427,18 @@ const styles = StyleSheet.create({
   priorityLabel: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#666',
+    color: colors.textSecondary,
   },
   priorityLabelSelected: {
-    color: '#fff',
+    color: colors.textInverse,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
@@ -465,10 +465,10 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   submitButtonTextDisabled: {
-    color: '#999',
+    color: colors.textTertiary,
   },
   decorationTop: {
     position: 'absolute',

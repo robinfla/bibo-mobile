@@ -147,12 +147,12 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
           shadowColor: '#8b4513',
         }
       default:
-        return { 
-          backgroundColor: colors.muted[100], 
+        return {
+          backgroundColor: colors.muted[100],
           iconColor: colors.muted[300],
-          cardBg: '#fff',
+          cardBg: colors.surface,
           borderColor: 'rgba(228, 213, 203, 0.2)',
-          shadowColor: '#722F37',
+          shadowColor: colors.coral,
         }
     }
   }
@@ -230,13 +230,13 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 18,
     marginBottom: 14,
     padding: 16,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.2)',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 16,
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 12,
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     letterSpacing: -0.3,
     lineHeight: 23.4,
   },
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 14,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: '#D9D0C8',
   },
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 14,
     transform: [{ scale: 1.05 }],
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.25,
     shadowRadius: 10,
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
   vintageChipTextActive: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   bottleCount: {
     flexDirection: 'row',

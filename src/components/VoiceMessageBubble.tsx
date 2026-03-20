@@ -8,6 +8,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { Audio } from 'expo-av'
+import { colors } from '../theme/colors'
 
 interface VoiceMessageBubbleProps {
   audioUrl: string
@@ -74,7 +75,7 @@ export const VoiceMessageBubble: React.FC<VoiceMessageBubbleProps> = ({
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#722F37', '#944654']}
+        colors={[colors.coral, colors.coralDark]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.bubble}
@@ -87,7 +88,7 @@ export const VoiceMessageBubble: React.FC<VoiceMessageBubbleProps> = ({
           <Icon
             name={isPlaying ? 'pause' : 'play'}
             size={16}
-            color="#722F37"
+            color={colors.coral}
           />
         </TouchableOpacity>
 
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderBottomRightRadius: 4,
     gap: 12,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 12,
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },

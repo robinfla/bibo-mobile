@@ -13,20 +13,10 @@ import { useRoute, useNavigation, RouteProp } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import { apiFetch } from '../../api/client'
 import { KBWineEnrichment } from '../../types/api'
+import { colors } from '../../theme/colors'
 
 type RouteParams = {
   KBWineDetail: { kbWineId: number }
-}
-
-const COLORS = {
-  background: '#FEF9F5',
-  card: '#FFFFFF',
-  text: '#1A1A1A',
-  textSecondary: '#666666',
-  wineRed: '#722F37',
-  border: '#E8E0D8',
-  inputBg: '#FAF7F4',
-  gold: '#D4A574',
 }
 
 const KBWineDetailScreen: React.FC = () => {
@@ -73,7 +63,7 @@ const KBWineDetailScreen: React.FC = () => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.wineRed} />
+          <ActivityIndicator size="large" color={colors.coral} />
         </View>
       </SafeAreaView>
     )
@@ -112,7 +102,7 @@ const KBWineDetailScreen: React.FC = () => {
         {/* Header with back button */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+            <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         </View>
 
@@ -122,7 +112,7 @@ const KBWineDetailScreen: React.FC = () => {
             <Image source={{ uri: wine.imageUrl }} style={styles.wineImage} resizeMode="contain" />
           ) : (
             <View style={[styles.wineImage, styles.placeholderImage]}>
-              <Ionicons name="wine-outline" size={80} color={COLORS.border} />
+              <Ionicons name="wine-outline" size={80} color={colors.muted[200]} />
             </View>
           )}
         </View>
@@ -135,7 +125,7 @@ const KBWineDetailScreen: React.FC = () => {
           <View style={styles.metaRow}>
             {wine.region && (
               <View style={styles.metaChip}>
-                <Ionicons name="location-outline" size={14} color={COLORS.textSecondary} />
+                <Ionicons name="location-outline" size={14} color={colors.textSecondary} />
                 <Text style={styles.metaChipText}>{wine.region}</Text>
               </View>
             )}
@@ -175,7 +165,7 @@ const KBWineDetailScreen: React.FC = () => {
             <Text style={styles.sectionTitle}>Drinking Window</Text>
             <View style={styles.card}>
               <View style={styles.agingRow}>
-                <Ionicons name="time-outline" size={20} color={COLORS.wineRed} />
+                <Ionicons name="time-outline" size={20} color={colors.coral} />
                 <Text style={styles.agingText}>
                   Best enjoyed {wine.agingPeakMin}–{wine.agingPeakMax} years from vintage
                 </Text>
@@ -252,7 +242,7 @@ const KBWineDetailScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.linen,
   },
   loadingContainer: {
     flex: 1,
@@ -267,12 +257,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: COLORS.text,
+    color: colors.textPrimary,
     marginBottom: 16,
   },
   backLink: {
     fontSize: 16,
-    color: COLORS.wineRed,
+    color: colors.coral,
     fontWeight: '600',
   },
   header: {
@@ -283,7 +273,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: COLORS.card,
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -302,7 +292,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   placeholderImage: {
-    backgroundColor: COLORS.inputBg,
+    backgroundColor: colors.muted[50],
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -313,12 +303,12 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 24,
     fontWeight: '700',
-    color: COLORS.text,
+    color: colors.textPrimary,
     textAlign: 'center',
   },
   producer: {
     fontSize: 18,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
     marginTop: 4,
   },
   metaRow: {
@@ -331,7 +321,7 @@ const styles = StyleSheet.create({
   metaChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.inputBg,
+    backgroundColor: colors.muted[50],
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
@@ -339,11 +329,11 @@ const styles = StyleSheet.create({
   },
   metaChipText: {
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
   },
   grapeText: {
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
     marginTop: 12,
   },
   section: {
@@ -353,11 +343,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: COLORS.text,
+    color: colors.textPrimary,
     marginBottom: 12,
   },
   card: {
-    backgroundColor: COLORS.card,
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
     shadowColor: '#000',
@@ -374,24 +364,24 @@ const styles = StyleSheet.create({
   tasteLabel: {
     width: 80,
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
   },
   tasteBarContainer: {
     flex: 1,
     height: 8,
-    backgroundColor: COLORS.inputBg,
+    backgroundColor: colors.muted[50],
     borderRadius: 4,
     marginHorizontal: 12,
   },
   tasteBarFill: {
     height: '100%',
-    backgroundColor: COLORS.wineRed,
+    backgroundColor: colors.coral,
     borderRadius: 4,
   },
   tasteValue: {
     width: 30,
     fontSize: 14,
-    color: COLORS.text,
+    color: colors.textPrimary,
     fontWeight: '600',
     textAlign: 'right',
   },
@@ -402,11 +392,11 @@ const styles = StyleSheet.create({
   },
   agingText: {
     fontSize: 16,
-    color: COLORS.text,
+    color: colors.textPrimary,
   },
   agingNote: {
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
     marginTop: 8,
     marginLeft: 32,
   },
@@ -416,17 +406,17 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   pairingChip: {
-    backgroundColor: COLORS.inputBg,
+    backgroundColor: colors.muted[50],
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 16,
   },
   pairingText: {
     fontSize: 14,
-    color: COLORS.text,
+    color: colors.textPrimary,
   },
   reviewCard: {
-    backgroundColor: COLORS.card,
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
@@ -442,7 +432,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   scoreBadge: {
-    backgroundColor: COLORS.wineRed,
+    backgroundColor: colors.coral,
     width: 48,
     height: 48,
     borderRadius: 24,
@@ -460,16 +450,16 @@ const styles = StyleSheet.create({
   reviewVintage: {
     fontSize: 16,
     fontWeight: '600',
-    color: COLORS.text,
+    color: colors.textPrimary,
   },
   reviewCritic: {
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
     marginTop: 2,
   },
   tastingNote: {
     fontSize: 14,
-    color: COLORS.text,
+    color: colors.textPrimary,
     lineHeight: 22,
     fontStyle: 'italic',
   },
@@ -478,18 +468,18 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.linen,
     paddingHorizontal: 20,
     paddingVertical: 16,
     paddingBottom: 32,
     borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    borderTopColor: colors.muted[200],
   },
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.wineRed,
+    backgroundColor: colors.coral,
     paddingVertical: 16,
     borderRadius: 16,
     gap: 8,

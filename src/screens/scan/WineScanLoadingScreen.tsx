@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 const WineGlassIcon = ({ fillLevel }: { fillLevel: Animated.Value }) => {
   return (
     <View style={{ width: 80, height: 80, justifyContent: 'center', alignItems: 'center' }}>
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   },
   cancelText: {
     fontSize: 16,
-    color: '#fff',
+    color: colors.textInverse,
     fontFamily: 'NunitoSans_400Regular',
   },
   imageContainer: {
@@ -270,7 +271,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 40,
     height: 40,
-    borderColor: '#d4af37',
+    borderColor: colors.honey,
     borderWidth: 3,
   },
   cornerTopLeft: {
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 2,
-    backgroundColor: '#d4af37',
+    backgroundColor: colors.honey,
     opacity: 0.8,
   },
   iconContainer: {
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 18,
     fontWeight: '500',
-    color: '#fff',
+    color: colors.textInverse,
     marginBottom: 8,
     fontFamily: 'NunitoSans_500Medium',
   },

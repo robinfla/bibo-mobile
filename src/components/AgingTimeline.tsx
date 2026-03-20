@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#1f2937',
+    backgroundColor: colors.textPrimary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   labelYear: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1f2937',
+    color: colors.textPrimary,
     marginBottom: 2,
   },
   labelText: {

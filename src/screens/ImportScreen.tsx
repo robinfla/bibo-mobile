@@ -307,16 +307,16 @@ export const ImportScreen = ({ navigation }: any) => {
 
         {validationSummary && (
           <View style={styles.summaryGrid}>
-            <View style={[styles.summaryCard, { backgroundColor: '#f0fdf4' }]}>
-              <Text style={[styles.summaryNum, { color: '#16a34a' }]}>{validationSummary.valid}</Text>
+            <View style={[styles.summaryCard, { backgroundColor: colors.status.peakBg }]}>
+              <Text style={[styles.summaryNum, { color: colors.teal }]}>{validationSummary.valid}</Text>
               <Text style={styles.summaryLabel}>Valid</Text>
             </View>
-            <View style={[styles.summaryCard, { backgroundColor: '#fef2f2' }]}>
-              <Text style={[styles.summaryNum, { color: '#dc2626' }]}>{validationSummary.invalid}</Text>
+            <View style={[styles.summaryCard, { backgroundColor: colors.status.pastPrimeBg }]}>
+              <Text style={[styles.summaryNum, { color: colors.danger }]}>{validationSummary.invalid}</Text>
               <Text style={styles.summaryLabel}>Invalid</Text>
             </View>
-            <View style={[styles.summaryCard, { backgroundColor: '#fffbeb' }]}>
-              <Text style={[styles.summaryNum, { color: '#d97706' }]}>{validationSummary.duplicates}</Text>
+            <View style={[styles.summaryCard, { backgroundColor: colors.status.approachingBg }]}>
+              <Text style={[styles.summaryNum, { color: colors.honeyDark }]}>{validationSummary.duplicates}</Text>
               <Text style={styles.summaryLabel}>Dupes</Text>
             </View>
           </View>
@@ -337,8 +337,8 @@ export const ImportScreen = ({ navigation }: any) => {
             key={row.rowIndex}
             style={[
               styles.rowCard,
-              !row.isValid && { borderLeftColor: '#dc2626', borderLeftWidth: 3 },
-              row.isDuplicate && row.isValid && { borderLeftColor: '#d97706', borderLeftWidth: 3 },
+              !row.isValid && { borderLeftColor: colors.danger, borderLeftWidth: 3 },
+              row.isDuplicate && row.isValid && { borderLeftColor: colors.honeyDark, borderLeftWidth: 3 },
             ]}
           >
             <View style={styles.rowHeader}>
@@ -413,7 +413,7 @@ export const ImportScreen = ({ navigation }: any) => {
 
   const renderLoading = (label: string) => (
     <View style={styles.centered}>
-      <ActivityIndicator size="large" color={colors.primary[600]} />
+      <ActivityIndicator size="large" color={colors.coral} />
       <Text style={[styles.subtitle, { marginTop: 16 }]}>{label}</Text>
     </View>
   )
@@ -439,14 +439,14 @@ export const ImportScreen = ({ navigation }: any) => {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.muted[50] },
+  container: { flex: 1, backgroundColor: colors.linen },
   header: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1,
     borderBottomColor: colors.muted[200],
   },
   backBtn: { width: 60 },
-  backText: { fontSize: 16, color: colors.primary[600], fontWeight: '600' },
+  backText: { fontSize: 16, color: colors.coral, fontWeight: '600' },
   headerTitle: { fontSize: 17, fontWeight: '700', color: colors.muted[900] },
 
   scroll: { flex: 1 },
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
   subtitle: { fontSize: 14, color: colors.muted[500], textAlign: 'center', marginBottom: 24 },
 
   primaryButton: {
-    backgroundColor: colors.primary[600], borderRadius: 12,
+    backgroundColor: colors.coral, borderRadius: 12,
     paddingHorizontal: 24, paddingVertical: 14, minWidth: 120, alignItems: 'center',
   },
   primaryButtonText: { color: colors.white, fontSize: 16, fontWeight: '600' },
@@ -493,7 +493,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   chipSelected: {
-    backgroundColor: colors.primary[600], borderColor: colors.primary[600],
+    backgroundColor: colors.coral, borderColor: colors.coral,
   },
   chipText: { fontSize: 13, color: colors.muted[700] },
   chipTextSelected: { color: colors.white, fontWeight: '600' },
@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
     borderColor: colors.muted[400], justifyContent: 'center', alignItems: 'center',
     marginRight: 10,
   },
-  checkboxChecked: { backgroundColor: colors.primary[600], borderColor: colors.primary[600] },
+  checkboxChecked: { backgroundColor: colors.coral, borderColor: colors.coral },
   checkmark: { color: colors.white, fontSize: 14, fontWeight: '700' },
   checkboxLabel: { fontSize: 14, color: colors.muted[700] },
 
@@ -524,8 +524,8 @@ const styles = StyleSheet.create({
   },
   rowWine: { flex: 1, fontSize: 14, fontWeight: '600', color: colors.muted[900], marginRight: 8 },
   rowMeta: { fontSize: 12, color: colors.muted[500] },
-  rowError: { fontSize: 12, color: '#dc2626', marginTop: 4 },
-  rowWarning: { fontSize: 12, color: '#d97706', marginTop: 4 },
+  rowError: { fontSize: 12, color: colors.danger, marginTop: 4 },
+  rowWarning: { fontSize: 12, color: colors.honeyDark, marginTop: 4 },
   moreRows: { textAlign: 'center', color: colors.muted[500], fontSize: 13, marginTop: 8 },
 
   doneIcon: { fontSize: 48, marginBottom: 16 },

@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { colors } from '../theme/colors'
 
 type Priority = 'must_have' | 'nice_to_have' | 'someday'
 
@@ -166,7 +167,7 @@ export const EditWishlistModal: React.FC<EditWishlistModalProps> = ({
                 value={budget}
                 onChangeText={setBudget}
                 placeholder="€0.00"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textTertiary}
                 keyboardType="decimal-pad"
               />
             </View>
@@ -179,7 +180,7 @@ export const EditWishlistModal: React.FC<EditWishlistModalProps> = ({
                 value={notes}
                 onChangeText={setNotes}
                 placeholder="Why do you want this wine?"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textTertiary}
                 multiline
                 numberOfLines={3}
                 textAlignVertical="top"
@@ -191,7 +192,7 @@ export const EditWishlistModal: React.FC<EditWishlistModalProps> = ({
           <View style={styles.footer}>
             <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
               <LinearGradient
-                colors={['#722F37', '#944654']}
+                colors={[colors.coral, colors.coralDark]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.saveButtonGradient}
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '85%',
@@ -235,13 +236,13 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: 24,
-    color: '#666',
+    color: colors.textSecondary,
     fontWeight: '300',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   deleteButton: {
     paddingHorizontal: 12,
@@ -266,13 +267,13 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     textAlign: 'center',
     marginBottom: 6,
   },
   wineMeta: {
     fontSize: 15,
-    color: '#666',
+    color: colors.textSecondary,
     textAlign: 'center',
   },
   section: {
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#333',
+    color: colors.textPrimary,
     marginBottom: 12,
   },
   priorityChips: {
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
   },
   priorityChip: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 2,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     borderRadius: 16,
@@ -319,22 +320,22 @@ const styles = StyleSheet.create({
   priorityChipText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#555',
+    color: colors.textSecondary,
   },
   priorityChipTextActive: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   textArea: {
     minHeight: 80,
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
   saveButton: {
     borderRadius: 14,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -362,6 +363,6 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
 })

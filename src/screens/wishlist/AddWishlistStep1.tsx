@@ -107,7 +107,7 @@ export const AddWishlistStep1 = () => {
           <TextInput
             style={styles.searchInput}
             placeholder="A rich Bordeaux from 2015..."
-            placeholderTextColor="#aaa"
+            placeholderTextColor={colors.textTertiary}
             value={searchQuery}
             onChangeText={setSearchQuery}
             onSubmitEditing={handleSearch}
@@ -161,7 +161,7 @@ export const AddWishlistStep1 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -171,20 +171,20 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: colors.muted[200],
   },
   cancelButton: {
     fontSize: 16,
-    color: '#555',
+    color: colors.textSecondary,
   },
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   skipButton: {
     fontSize: 16,
-    color: '#722F37',
+    color: colors.coral,
     fontWeight: '600',
   },
   scrollContent: {
@@ -197,29 +197,29 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 8,
     letterSpacing: -0.5,
   },
   heroSubtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textSecondary,
     marginBottom: 16,
   },
   aiBadge: {
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 6,
     alignSelf: 'flex-start',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
   },
   aiBadgeText: {
-    color: '#fff',
+    color: colors.textInverse,
     fontSize: 13,
     fontWeight: '700',
   },
@@ -227,13 +227,13 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   searchInput: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 18,
     fontSize: 16,
-    color: '#1a1a1a',
-    shadowColor: '#722F37',
+    color: colors.textPrimary,
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 20,
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   recentTitle: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#999',
+    color: colors.textTertiary,
     letterSpacing: 1,
     marginBottom: 12,
   },
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   chip: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 18,
     paddingHorizontal: 18,
     paddingVertical: 10,
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   },
   chipText: {
     fontSize: 14,
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   divider: {
     flexDirection: 'row',
@@ -282,16 +282,16 @@ const styles = StyleSheet.create({
   dividerText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#999',
+    color: colors.textTertiary,
     marginHorizontal: 16,
     letterSpacing: 1,
   },
   manualButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 20,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: '#d4c4b0',
+    borderColor: colors.muted[300],
     paddingVertical: 18,
     alignItems: 'center',
     shadowColor: '#000',
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
   manualButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
   },
   decorationTop: {
     position: 'absolute',

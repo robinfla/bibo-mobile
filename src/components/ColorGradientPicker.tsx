@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, PanResponder, Animated } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { colors } from '../theme/colors'
 
 interface ColorGradientPickerProps {
   value: number // 0-100
@@ -108,13 +109,13 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#2D2D2D',
+    color: colors.textPrimary,
     marginBottom: 4,
   },
   colorName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 12,
   },
   gradientContainer: {
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: 'white',
     borderWidth: 3,
-    borderColor: '#722F37',
+    borderColor: colors.coral,
     marginLeft: -18, // Center the selector
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

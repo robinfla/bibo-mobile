@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient'
 import { Gear, Plus, MagnifyingGlass, XCircle, User } from 'phosphor-react-native'
 import { apiFetch } from '../api/client'
+import { colors } from '../theme/colors'
 
 interface Conversation {
   conversationId: string
@@ -33,14 +34,14 @@ interface SommelierSidebarProps {
 }
 
 const C = {
-  cream: '#FEF6ED',
-  burgundy: '#6B2D3D',
-  burgundyDark: '#4A1F2A',
-  pink: '#FFB3C6',
-  pinkLight: '#FFD9E2',
-  yellow: '#FFE57A',
-  warmgray: '#8C7A7E',
-  warmgrayLight: '#A8999C',
+  cream: colors.linen,
+  burgundy: colors.coralDark,
+  burgundyDark: colors.coral,
+  pink: colors.rose,
+  pinkLight: colors.rose,
+  yellow: colors.honey,
+  warmgray: colors.textSecondary,
+  warmgrayLight: colors.textTertiary,
 }
 
 export const SommelierSidebar = ({

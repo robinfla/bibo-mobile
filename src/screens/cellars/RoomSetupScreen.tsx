@@ -126,16 +126,16 @@ export const RoomSetupScreen = () => {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8f8f8' },
+  container: { flex: 1, backgroundColor: colors.muted[50] },
   header: { paddingHorizontal: 20, paddingBottom: 12 },
   backBtn: { paddingVertical: 8 },
-  backText: { fontSize: 16, color: '#722F37', fontWeight: '600' },
-  title: { fontSize: 24, fontWeight: '800', color: '#1a1a1a', marginTop: 4 },
-  subtitle: { fontSize: 13, color: '#888', marginTop: 4 },
+  backText: { fontSize: 16, color: colors.coral, fontWeight: '600' },
+  title: { fontSize: 24, fontWeight: '800', color: colors.textPrimary, marginTop: 4 },
+  subtitle: { fontSize: 13, color: colors.textSecondary, marginTop: 4 },
   content: { padding: 20 },
 
-  sectionLabel: { fontSize: 13, fontWeight: '600', color: '#555', marginBottom: 4 },
-  sectionDesc: { fontSize: 12, color: '#aaa', marginBottom: 16 },
+  sectionLabel: { fontSize: 13, fontWeight: '600', color: colors.textSecondary, marginBottom: 4 },
+  sectionDesc: { fontSize: 12, color: colors.textTertiary, marginBottom: 16 },
 
   // Room preview (top-down view)
   roomPreview: {
@@ -144,9 +144,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'relative',
     borderWidth: 2,
-    borderColor: '#e0e0e0',
+    borderColor: colors.muted[200],
     borderRadius: 12,
-    backgroundColor: '#fafafa',
+    backgroundColor: colors.muted[50],
     marginBottom: 16,
   },
 
@@ -168,19 +168,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 4,
   },
-  wallBack: { top: 0, borderBottomWidth: 3, borderBottomColor: '#d1d5db' },
-  wallFront: { bottom: 0, borderTopWidth: 3, borderTopColor: '#d1d5db' },
-  wallLeft: { left: 0, borderRightWidth: 3, borderRightColor: '#d1d5db' },
-  wallRight: { right: 0, borderLeftWidth: 3, borderLeftColor: '#d1d5db' },
+  wallBack: { top: 0, borderBottomWidth: 3, borderBottomColor: colors.muted[300] },
+  wallFront: { bottom: 0, borderTopWidth: 3, borderTopColor: colors.muted[300] },
+  wallLeft: { left: 0, borderRightWidth: 3, borderRightColor: colors.muted[300] },
+  wallRight: { right: 0, borderLeftWidth: 3, borderLeftColor: colors.muted[300] },
 
-  wallActive: { backgroundColor: 'rgba(114,47,55,0.08)' },
-  wallBackActive: { borderBottomColor: '#722F37' },
-  wallFrontActive: { borderTopColor: '#722F37' },
-  wallLeftActive: { borderRightColor: '#722F37' },
-  wallRightActive: { borderLeftColor: '#722F37' },
+  wallActive: { backgroundColor: colors.coralLight },
+  wallBackActive: { borderBottomColor: colors.coral },
+  wallFrontActive: { borderTopColor: colors.coral },
+  wallLeftActive: { borderRightColor: colors.coral },
+  wallRightActive: { borderLeftColor: colors.coral },
 
-  wallLabel: { fontSize: 11, fontWeight: '600', color: '#bbb' },
-  wallLabelActive: { color: '#722F37' },
+  wallLabel: { fontSize: 11, fontWeight: '600', color: colors.muted[300] },
+  wallLabelActive: { color: colors.coral },
 
   floorArea: {
     position: 'absolute',
@@ -190,25 +190,25 @@ const styles = StyleSheet.create({
     bottom: 80,
     borderRadius: 8,
     borderWidth: 1.5,
-    borderColor: '#e0e0e0',
+    borderColor: colors.muted[200],
     borderStyle: 'dashed',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  floorActive: { borderColor: '#722F37', backgroundColor: 'rgba(114,47,55,0.08)' },
+  floorActive: { borderColor: colors.coral, backgroundColor: colors.coralLight },
 
   roomCenter: { position: 'absolute', top: 40, left: 0, right: 0, alignItems: 'center' },
-  roomCenterText: { fontSize: 14, color: '#ccc', fontWeight: '600' },
+  roomCenterText: { fontSize: 14, color: colors.muted[300], fontWeight: '600' },
 
-  selectedCount: { textAlign: 'center', fontSize: 13, color: '#888', marginBottom: 8 },
+  selectedCount: { textAlign: 'center', fontSize: 13, color: colors.textSecondary, marginBottom: 8 },
 
   createBtn: {
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 24,
   },
   createBtnDisabled: { opacity: 0.6 },
-  createBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  createBtnText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
 })

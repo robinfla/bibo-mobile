@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 export const TasteProfileEmptyScreen = () => {
   const navigation = useNavigation()
@@ -46,7 +47,7 @@ export const TasteProfileEmptyScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#fef9f5', '#f8f0e8']}
+        colors={[colors.linen, colors.linen]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -58,7 +59,7 @@ export const TasteProfileEmptyScreen = () => {
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
           >
-            <Icon name="chevron-left" size={28} color="#2c1810" />
+            <Icon name="chevron-left" size={28} color={colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Taste Profile</Text>
           <View style={styles.backButton} />
@@ -94,7 +95,7 @@ export const TasteProfileEmptyScreen = () => {
               </Text>
               {isAnalyzing && (
                 <View style={styles.loadingOverlay}>
-                  <ActivityIndicator color="#722F37" />
+                  <ActivityIndicator color={colors.coral} />
                   <Text style={styles.loadingText}>Analyzing your cellar...</Text>
                 </View>
               )}
@@ -125,7 +126,7 @@ export const TasteProfileEmptyScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   gradient: {
     flex: 1,
@@ -136,9 +137,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
+    borderBottomColor: colors.borderSubtle,
   },
   backButton: {
     width: 44,
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
   },
   content: {
     flex: 1,
@@ -166,13 +167,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     textAlign: 'center',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 15,
-    color: '#8a7568',
+    color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 40,
@@ -181,12 +182,12 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   optionCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
+    borderColor: colors.borderSubtle,
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -204,13 +205,13 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
     flex: 1,
   },
   optionDescription: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#8a7568',
+    color: colors.textSecondary,
   },
   loadingOverlay: {
     position: 'absolute',
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
-    color: '#722F37',
+    color: colors.coral,
     fontWeight: '600',
   },
 })

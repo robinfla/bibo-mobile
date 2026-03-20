@@ -19,6 +19,7 @@ import { useNavigation } from '@react-navigation/native'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 import { SommelierSidebar } from '../../components/SommelierSidebar'
 import { VoiceRecordingBar } from '../../components/VoiceRecordingBar'
 import { VoiceMessageBubble } from '../../components/VoiceMessageBubble'
@@ -56,16 +57,16 @@ const SUGGESTION_PROMPTS = [
 ]
 
 const C = {
-  cream: '#FEF6ED',
-  creamDark: '#F5EBE1',
-  brown: '#5A382E',
-  brownLight: '#8A5A4A',
-  brownMuted: '#A89F9A',
-  pink: '#FFB3C6',
-  pinkLight: '#FFD6E0',
-  pinkDark: '#E88B9E',
-  yellow: '#FFE57A',
-  rose: '#F28FA6',
+  cream: colors.linen,
+  creamDark: colors.linen,
+  brown: colors.textPrimary,
+  brownLight: colors.textSecondary,
+  brownMuted: colors.textTertiary,
+  pink: colors.rose,
+  pinkLight: colors.rose,
+  pinkDark: colors.coral,
+  yellow: colors.honey,
+  rose: colors.coral,
   frosted: 'rgba(255, 255, 255, 0.45)',
   frostedBorder: 'rgba(255, 255, 255, 0.5)',
 }

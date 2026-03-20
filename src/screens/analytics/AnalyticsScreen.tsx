@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import Svg, { Circle, G } from 'react-native-svg'
 import { apiFetch } from '../../api/client'
+import { colors as themeColors } from '../../theme/colors'
 
 interface ColorData {
   red: number
@@ -165,7 +166,7 @@ export const AnalyticsScreen = () => {
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="#ef9a9a"
+            stroke={themeColors.wine.red}
             strokeWidth={strokeWidth}
             fill="none"
             strokeDasharray={`${redLength} ${circumference}`}
@@ -177,7 +178,7 @@ export const AnalyticsScreen = () => {
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="#fff59d"
+            stroke={themeColors.wine.white}
             strokeWidth={strokeWidth}
             fill="none"
             strokeDasharray={`${whiteLength} ${circumference}`}
@@ -190,7 +191,7 @@ export const AnalyticsScreen = () => {
               cx={size / 2}
               cy={size / 2}
               r={radius}
-              stroke="#f8bbd0"
+              stroke={themeColors.wine.rose}
               strokeWidth={strokeWidth}
               fill="none"
               strokeDasharray={`${roseLength} ${circumference}`}
@@ -206,7 +207,7 @@ export const AnalyticsScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#722F37" />
+        <ActivityIndicator size="large" color={themeColors.coral} />
       </View>
     )
   }
@@ -228,7 +229,7 @@ export const AnalyticsScreen = () => {
               onPress={() => navigation.goBack()}
               activeOpacity={0.7}
             >
-              <Icon name="chevron-left" size={28} color="#722F37" />
+              <Icon name="chevron-left" size={28} color={themeColors.coral} />
             </TouchableOpacity>
             <Text style={styles.title}>Analytics</Text>
             <View style={styles.backButton} />
@@ -242,7 +243,7 @@ export const AnalyticsScreen = () => {
             >
               {activeTab === 'composition' ? (
                 <LinearGradient
-                  colors={['#722F37', '#944654']}
+                  colors={[themeColors.coral, themeColors.coralDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.tabGradient}
@@ -260,7 +261,7 @@ export const AnalyticsScreen = () => {
             >
               {activeTab === 'finance' ? (
                 <LinearGradient
-                  colors={['#722F37', '#944654']}
+                  colors={[themeColors.coral, themeColors.coralDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.tabGradient}
@@ -291,7 +292,7 @@ export const AnalyticsScreen = () => {
               <View style={styles.statCard}>
                 <Text style={styles.statLabel}>READY</Text>
                 <LinearGradient
-                  colors={['#722F37', '#944654']}
+                  colors={[themeColors.coral, themeColors.coralDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.statValueGradient}
@@ -319,7 +320,7 @@ export const AnalyticsScreen = () => {
                     activeOpacity={0.7}
                   >
                     <View style={styles.legendLeft}>
-                      <View style={[styles.legendDot, { backgroundColor: '#ef9a9a' }]} />
+                      <View style={[styles.legendDot, { backgroundColor: themeColors.wine.red }]} />
                       <Text style={styles.legendLabel}>Red</Text>
                     </View>
                     <View style={styles.legendRight}>
@@ -334,7 +335,7 @@ export const AnalyticsScreen = () => {
                     activeOpacity={0.7}
                   >
                     <View style={styles.legendLeft}>
-                      <View style={[styles.legendDot, { backgroundColor: '#fff59d' }]} />
+                      <View style={[styles.legendDot, { backgroundColor: themeColors.wine.white }]} />
                       <Text style={styles.legendLabel}>White</Text>
                     </View>
                     <View style={styles.legendRight}>
@@ -349,7 +350,7 @@ export const AnalyticsScreen = () => {
                     activeOpacity={0.7}
                   >
                     <View style={styles.legendLeft}>
-                      <View style={[styles.legendDot, { backgroundColor: '#f8bbd0' }]} />
+                      <View style={[styles.legendDot, { backgroundColor: themeColors.wine.rose }]} />
                       <Text style={styles.legendLabel}>Rosé</Text>
                     </View>
                     <View style={styles.legendRight}>
@@ -397,7 +398,7 @@ export const AnalyticsScreen = () => {
                     <View style={styles.progressBarContainer}>
                       <View style={styles.progressBarTrack}>
                         <LinearGradient
-                          colors={['#722F37', '#944654']}
+                          colors={[themeColors.coral, themeColors.coralDark]}
                           start={{ x: 0, y: 0 }}
                           end={{ x: 1, y: 0 }}
                           style={[styles.progressBarFill, { width: `${barWidth}%` }]}
@@ -445,7 +446,7 @@ export const AnalyticsScreen = () => {
                     <View style={styles.progressBarContainer}>
                       <View style={styles.progressBarTrack}>
                         <LinearGradient
-                          colors={['#722F37', '#944654']}
+                          colors={[themeColors.coral, themeColors.coralDark]}
                           start={{ x: 0, y: 0 }}
                           end={{ x: 1, y: 0 }}
                           style={[styles.progressBarFill, { width: `${barWidth}%` }]}
@@ -474,7 +475,7 @@ export const AnalyticsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: themeColors.linen,
   },
   scroll: {
     flex: 1,
@@ -486,7 +487,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fef9f5',
+    backgroundColor: themeColors.linen,
   },
   
   // Header
@@ -510,7 +511,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: themeColors.textPrimary,
     textAlign: 'center',
     flex: 1,
   },
@@ -531,14 +532,14 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#999',
+    color: themeColors.textTertiary,
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
   tabTextActive: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#fff',
+    color: themeColors.textInverse,
   },
 
   // Stats Overview
@@ -550,13 +551,13 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: themeColors.surface,
     borderRadius: 18,
     paddingVertical: 16,
     paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
-    shadowColor: '#722F37',
+    borderColor: themeColors.borderSubtle,
+    shadowColor: themeColors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 16,
@@ -566,7 +567,7 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#999',
+    color: themeColors.textTertiary,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
     marginBottom: 8,
@@ -574,7 +575,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: themeColors.textPrimary,
     letterSpacing: -1,
   },
   statValueGradient: {
@@ -584,7 +585,7 @@ const styles = StyleSheet.create({
   statValueReady: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#fff',
+    color: themeColors.textInverse,
     letterSpacing: -1,
   },
 
@@ -602,24 +603,24 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: themeColors.textPrimary,
   },
   seeAllLink: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#722F37',
+    color: themeColors.coral,
   },
 
   // Color Pie Chart
   colorCard: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: themeColors.surface,
     borderRadius: 20,
     padding: 20,
     gap: 24,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
-    shadowColor: '#722F37',
+    borderColor: themeColors.borderSubtle,
+    shadowColor: themeColors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 16,
@@ -657,30 +658,30 @@ const styles = StyleSheet.create({
   legendLabel: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#1a1a1a',
+    color: themeColors.textPrimary,
   },
   legendValue: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: themeColors.textPrimary,
   },
   legendArrow: {
     fontSize: 14,
-    color: '#999',
+    color: themeColors.textTertiary,
   },
 
   // List Cards
   listCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: themeColors.surface,
     borderRadius: 18,
     padding: 16,
     marginBottom: 12,
     gap: 16,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
-    shadowColor: '#722F37',
+    borderColor: themeColors.borderSubtle,
+    shadowColor: themeColors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 16,
@@ -690,7 +691,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: '#f8f4f0',
+    backgroundColor: themeColors.muted[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -703,11 +704,11 @@ const styles = StyleSheet.create({
   listTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: themeColors.textPrimary,
   },
   listSubtitle: {
     fontSize: 12,
-    color: '#999',
+    color: themeColors.textTertiary,
     marginTop: 2,
   },
   progressBarContainer: {
@@ -715,7 +716,7 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     height: 8,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: themeColors.muted[100],
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -739,13 +740,13 @@ const styles = StyleSheet.create({
   comingSoonTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: themeColors.textPrimary,
     marginBottom: 8,
     textAlign: 'center',
   },
   comingSoonText: {
     fontSize: 15,
-    color: '#666',
+    color: themeColors.textSecondary,
     textAlign: 'center',
     lineHeight: 22.5,
   },

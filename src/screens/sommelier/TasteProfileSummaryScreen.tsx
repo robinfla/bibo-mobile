@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 interface TasteProfile {
   colorPreference: {
@@ -143,7 +144,7 @@ export const TasteProfileSummaryScreen = () => {
     return (
       <SafeAreaView style={styles.container}>
         <LinearGradient
-          colors={['#fef9f5', '#f8f0e8']}
+          colors={[colors.linen, colors.linen]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradient}
@@ -159,7 +160,7 @@ export const TasteProfileSummaryScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#fef9f5', '#f8f0e8']}
+        colors={[colors.linen, colors.linen]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -171,7 +172,7 @@ export const TasteProfileSummaryScreen = () => {
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
           >
-            <Icon name="chevron-left" size={28} color="#2c1810" />
+            <Icon name="chevron-left" size={28} color={colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Taste Profile</Text>
           <View style={styles.backButton} />
@@ -260,7 +261,7 @@ export const TasteProfileSummaryScreen = () => {
                 value={additionalInput}
                 onChangeText={setAdditionalInput}
                 placeholder="Tell me more about your preferences..."
-                placeholderTextColor="#b5a89e"
+                placeholderTextColor={colors.textTertiary}
                 multiline
               />
               <TouchableOpacity
@@ -273,12 +274,12 @@ export const TasteProfileSummaryScreen = () => {
                 activeOpacity={0.8}
               >
                 <LinearGradient
-                  colors={['#722F37', '#944654']}
+                  colors={[colors.coral, colors.coralDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.sendButton}
                 >
-                  <Icon name="send" size={18} color="#fff" />
+                  <Icon name="send" size={18} color={colors.textInverse} />
                 </LinearGradient>
               </TouchableOpacity>
             </View>
@@ -292,7 +293,7 @@ export const TasteProfileSummaryScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   gradient: {
     flex: 1,
@@ -303,9 +304,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
+    borderBottomColor: colors.borderSubtle,
   },
   backButton: {
     width: 44,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
   },
   loadingContainer: {
     flex: 1,
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#8a7568',
+    color: colors.textSecondary,
   },
   keyboardAvoid: {
     flex: 1,
@@ -344,13 +345,13 @@ const styles = StyleSheet.create({
     fontSize: 64,
   },
   summaryCard: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 20,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
+    borderColor: colors.borderSubtle,
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   summaryLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#8a7568',
+    color: colors.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 8,
@@ -367,7 +368,7 @@ const styles = StyleSheet.create({
   summaryText: {
     fontSize: 16,
     lineHeight: 24,
-    color: '#2c1810',
+    color: colors.textPrimary,
   },
   statsGrid: {
     flexDirection: 'row',
@@ -377,13 +378,13 @@ const styles = StyleSheet.create({
   },
   statCard: {
     width: '48%',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
+    borderColor: colors.borderSubtle,
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -392,12 +393,12 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
-    color: '#8a7568',
+    color: colors.textSecondary,
     textAlign: 'center',
   },
   section: {
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 12,
   },
   chipContainer: {
@@ -418,12 +419,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
+    borderColor: colors.borderSubtle,
   },
   chipDanger: {
     backgroundColor: 'rgba(239, 68, 68, 0.05)',
@@ -435,21 +436,21 @@ const styles = StyleSheet.create({
   chipText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
   },
   chipTextDanger: {
     color: '#dc2626',
   },
   inputContainer: {
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(228, 213, 203, 0.3)',
+    borderTopColor: colors.borderSubtle,
   },
   inputLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 10,
   },
   inputRow: {
@@ -459,14 +460,14 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
+    borderColor: colors.borderSubtle,
     borderRadius: 22,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#2c1810',
+    color: colors.textPrimary,
     maxHeight: 100,
   },
   sendButtonContainer: {

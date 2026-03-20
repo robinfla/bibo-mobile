@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import { colors } from '../../theme/colors'
 
 export const SommelierChatScreen = () => {
   return (
@@ -13,18 +14,18 @@ export const SommelierChatScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     justifyContent: 'center',
     alignItems: 'center',
   },
   text: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   subtext: {
     fontSize: 16,
-    color: '#8a7568',
+    color: colors.textSecondary,
   },
 })

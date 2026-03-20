@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import Svg, { Circle, Line } from 'react-native-svg'
+import { colors } from '../theme/colors'
 
 interface ScorePickerModalProps {
   visible: boolean
@@ -157,7 +158,7 @@ export const ScorePickerModal: React.FC<ScorePickerModalProps> = ({
                 cx={CIRCLE_RADIUS}
                 cy={CIRCLE_RADIUS}
                 r={CIRCLE_RADIUS - TRACK_WIDTH / 2}
-                stroke="#722F37"
+                stroke={colors.coral}
                 strokeWidth={TRACK_WIDTH}
                 fill="none"
                 strokeDasharray={`${(score / 100) * (2 * Math.PI * (CIRCLE_RADIUS - TRACK_WIDTH / 2))} ${2 * Math.PI * (CIRCLE_RADIUS - TRACK_WIDTH / 2)}`}
@@ -187,7 +188,7 @@ export const ScorePickerModal: React.FC<ScorePickerModalProps> = ({
               ]}
             >
               <LinearGradient
-                colors={['#722F37', '#944654']}
+                colors={[colors.coral, colors.coralDark]}
                 style={styles.handleGradient}
               >
                 <Text style={styles.handleStar}>⭐</Text>
@@ -198,7 +199,7 @@ export const ScorePickerModal: React.FC<ScorePickerModalProps> = ({
           {/* Save Button */}
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <LinearGradient
-              colors={['#722F37', '#944654']}
+              colors={[colors.coral, colors.coralDark]}
               style={styles.saveButtonGradient}
             >
               <Text style={styles.saveButtonText}>Save Rating</Text>
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingTop: 16,
@@ -239,18 +240,18 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: 24,
-    color: '#666',
+    color: colors.textSecondary,
     fontWeight: '300',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   wineName: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     textAlign: 'center',
     marginBottom: 32,
     paddingHorizontal: 20,
@@ -279,17 +280,17 @@ const styles = StyleSheet.create({
   scoreNumber: {
     fontSize: 72,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     lineHeight: 80,
   },
   scoreLabel: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
     marginTop: 4,
   },
   instructionText: {
     fontSize: 14,
-    color: '#999',
+    color: colors.textTertiary,
     marginTop: 16,
     textAlign: 'center',
   },
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
     height: HANDLE_SIZE,
     borderRadius: HANDLE_SIZE / 2,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: HANDLE_SIZE / 2,
     borderWidth: 3,
-    borderColor: '#fff',
+    borderColor: colors.surface,
   },
   handleStar: {
     fontSize: 24,
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
   saveButton: {
     borderRadius: 14,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -333,6 +334,6 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
 })

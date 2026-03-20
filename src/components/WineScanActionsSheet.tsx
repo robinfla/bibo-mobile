@@ -11,6 +11,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { colors } from '../theme/colors'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -109,7 +110,7 @@ export const WineScanActionsSheet: React.FC<WineScanActionsSheetProps> = ({
                 activeOpacity={0.7}
               >
                 <LinearGradient
-                  colors={['#722F37', '#944654']}
+                  colors={[colors.coral, colors.coralDark]}
                   style={styles.actionIcon}
                 >
                   <Text style={styles.actionIconEmoji}>⭐</Text>
@@ -127,7 +128,7 @@ export const WineScanActionsSheet: React.FC<WineScanActionsSheetProps> = ({
                 activeOpacity={0.7}
               >
                 <LinearGradient
-                  colors={['#722F37', '#944654']}
+                  colors={[colors.coral, colors.coralDark]}
                   style={styles.actionIcon}
                 >
                   <Text style={styles.actionIconEmoji}>📝</Text>
@@ -145,7 +146,7 @@ export const WineScanActionsSheet: React.FC<WineScanActionsSheetProps> = ({
                 activeOpacity={0.7}
               >
                 <LinearGradient
-                  colors={['#722F37', '#944654']}
+                  colors={[colors.coral, colors.coralDark]}
                   style={styles.actionIcon}
                 >
                   <Text style={styles.actionIconEmoji}>❤️</Text>
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingHorizontal: 20,
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 6,
     fontFamily: 'NunitoSans_700Bold',
   },
@@ -241,23 +242,23 @@ const styles = StyleSheet.create({
   actionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 2,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   actionDescription: {
     fontSize: 13,
-    color: '#8a7568',
+    color: colors.textSecondary,
     fontFamily: 'NunitoSans_400Regular',
   },
   cancelButton: {
     marginTop: 16,
     paddingVertical: 14,
     borderRadius: 14,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.4)',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
     textAlign: 'center',
     fontFamily: 'NunitoSans_600SemiBold',
   },

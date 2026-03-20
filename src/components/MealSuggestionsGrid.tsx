@@ -94,12 +94,12 @@ const styles = StyleSheet.create({
   scoreText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   mealName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1f2937',
+    color: colors.textPrimary,
     textAlign: 'center',
     paddingVertical: 12,
   },

@@ -12,6 +12,7 @@ import { useRoute, useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import Svg, { Path } from 'react-native-svg'
+import { colors } from '../../theme/colors'
 
 type NavigationProp = NativeStackNavigationProp<any>
 
@@ -53,7 +54,7 @@ export const AddWineNoResultsScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#fef9f5', '#f8f4f0']}
+        colors={[colors.linen, '#f8f4f0']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -65,7 +66,7 @@ export const AddWineNoResultsScreen = () => {
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
           >
-            <Icon name="close" size={20} color="#2d2d2d" />
+            <Icon name="close" size={20} color={colors.textPrimary} />
           </TouchableOpacity>
 
           <Text style={styles.headerTitle}>Add Wine</Text>
@@ -76,7 +77,7 @@ export const AddWineNoResultsScreen = () => {
             activeOpacity={0.9}
           >
             <LinearGradient
-              colors={['#722F37', '#944654']}
+              colors={[colors.coral, colors.coralDark]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.scanButtonGradient}
@@ -126,7 +127,7 @@ export const AddWineNoResultsScreen = () => {
               activeOpacity={0.8}
             >
               <LinearGradient
-                colors={['#722F37', '#944654']}
+                colors={[colors.coral, colors.coralDark]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.addManuallyGradient}
@@ -154,7 +155,7 @@ export const AddWineNoResultsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   gradient: {
     flex: 1,
@@ -173,12 +174,12 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: 'white',
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -187,13 +188,13 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
   },
   scanButton: {
     width: 40,
     height: 40,
     borderRadius: 12,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -212,14 +213,14 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
     gap: 12,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#2d2d2d',
+    color: colors.textPrimary,
     padding: 0,
   },
   clearButton: {
@@ -254,7 +255,7 @@ const styles = StyleSheet.create({
   noResultsTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 12,
   },
   noResultsMessage: {
@@ -266,7 +267,7 @@ const styles = StyleSheet.create({
   },
   queryText: {
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
   },
   actionsContainer: {
     width: '100%',
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
   },
   addManuallyButton: {
     borderRadius: 16,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -293,20 +294,20 @@ const styles = StyleSheet.create({
   addManuallyText: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    color: colors.textInverse,
   },
   tryScanButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    backgroundColor: 'white',
+    backgroundColor: colors.surface,
     borderWidth: 1.5,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     borderRadius: 16,
     paddingHorizontal: 24,
     paddingVertical: 16,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -318,6 +319,6 @@ const styles = StyleSheet.create({
   tryScanText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
   },
 })

@@ -12,6 +12,7 @@ import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import Svg, { Polygon, Circle, Line, Text as SvgText } from 'react-native-svg'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 interface TasteProfile {
   flavorProfile: {
@@ -71,7 +72,7 @@ const FlavorWheel = ({ profile }: { profile: TasteProfile['flavorProfile'] }) =>
           cx={center}
           cy={center}
           r={maxRadius * scale}
-          stroke="rgba(44, 24, 16, 0.1)"
+          stroke={colors.coralLight}
           strokeWidth="1"
           fill="none"
         />
@@ -89,7 +90,7 @@ const FlavorWheel = ({ profile }: { profile: TasteProfile['flavorProfile'] }) =>
             y1={center}
             x2={endX}
             y2={endY}
-            stroke="rgba(44, 24, 16, 0.1)"
+            stroke={colors.coralLight}
             strokeWidth="1"
           />
         )
@@ -98,14 +99,14 @@ const FlavorWheel = ({ profile }: { profile: TasteProfile['flavorProfile'] }) =>
       {/* Filled polygon */}
       <Polygon
         points={polygonPoints}
-        fill="rgba(114, 47, 55, 0.15)"
-        stroke="#722F37"
+        fill={colors.coralLight}
+        stroke={colors.coral}
         strokeWidth="2"
       />
 
       {/* Data points */}
       {points.map((point, i) => (
-        <Circle key={i} cx={point.x} cy={point.y} r="4" fill="#722F37" />
+        <Circle key={i} cx={point.x} cy={point.y} r="4" fill={colors.coral} />
       ))}
 
       {/* Axis labels */}
@@ -121,7 +122,7 @@ const FlavorWheel = ({ profile }: { profile: TasteProfile['flavorProfile'] }) =>
             y={labelY}
             fontSize="12"
             fontWeight="600"
-            fill="#2c1810"
+            fill={colors.textPrimary}
             textAnchor="middle"
           >
             {axis.label}
@@ -156,7 +157,7 @@ export const TasteProfileScreen = () => {
     return (
       <SafeAreaView style={styles.container}>
         <LinearGradient
-          colors={['#fef9f5', '#f8f0e8']}
+          colors={[colors.linen, colors.linen]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.gradient}
@@ -174,7 +175,7 @@ export const TasteProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#fef9f5', '#f8f0e8']}
+        colors={[colors.linen, colors.linen]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -186,7 +187,7 @@ export const TasteProfileScreen = () => {
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
           >
-            <Icon name="chevron-left" size={28} color="#2c1810" />
+            <Icon name="chevron-left" size={28} color={colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Your Wine DNA</Text>
           <View style={styles.backButton} />
@@ -228,7 +229,7 @@ export const TasteProfileScreen = () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Price Range</Text>
             <View style={styles.preferenceCard}>
-              <Icon name="cash" size={24} color="#722F37" />
+              <Icon name="cash" size={24} color={colors.coral} />
               <View style={styles.preferenceText}>
                 <Text style={styles.preferenceLabel}>Most comfortable</Text>
                 <Text style={styles.preferenceValue}>${profile.priceRange.min}–${profile.priceRange.max}</Text>
@@ -259,7 +260,7 @@ export const TasteProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   gradient: {
     flex: 1,
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '800',
-    color: '#2c1810',
+    color: colors.textPrimary,
   },
   loadingContainer: {
     flex: 1,
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#8a7568',
+    color: colors.textSecondary,
   },
   scrollView: {
     flex: 1,
@@ -304,15 +305,15 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 16,
   },
   wheelContainer: {
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 20,
     padding: 24,
-    shadowColor: '#2c1810',
+    shadowColor: colors.textPrimary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
@@ -325,10 +326,10 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   typeItem: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
-    shadowColor: '#2c1810',
+    shadowColor: colors.textPrimary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
@@ -346,34 +347,34 @@ const styles = StyleSheet.create({
   typeLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
     flex: 1,
   },
   typePercentage: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginTop: 8,
   },
   typeBar: {
     height: 8,
-    backgroundColor: 'rgba(44, 24, 16, 0.1)',
+    backgroundColor: colors.coralLight,
     borderRadius: 4,
     overflow: 'hidden',
   },
   typeBarFill: {
     height: '100%',
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
     borderRadius: 4,
   },
   preferenceCard: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#2c1810',
+    shadowColor: colors.textPrimary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
@@ -384,13 +385,13 @@ const styles = StyleSheet.create({
   },
   preferenceLabel: {
     fontSize: 14,
-    color: '#8a7568',
+    color: colors.textSecondary,
     marginBottom: 4,
   },
   preferenceValue: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#2c1810',
+    color: colors.textPrimary,
   },
   styleEmoji: {
     fontSize: 32,

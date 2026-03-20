@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { colors } from '../theme/colors'
 
 interface HistoryCardProps {
   wineName: string
@@ -81,10 +82,10 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
       default:
         return { 
           backgroundColor: '#e0e0e0', 
-          iconColor: '#999',
-          cardBg: '#fff',
+          iconColor: colors.textTertiary,
+          cardBg: colors.surface,
           borderColor: 'rgba(228, 213, 203, 0.2)',
-          shadowColor: '#722F37',
+          shadowColor: colors.coral,
         }
     }
   }
@@ -139,7 +140,7 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
         <View style={styles.tastingSection}>
           <TouchableOpacity onPress={onEditScore} activeOpacity={0.7}>
             <LinearGradient
-              colors={['#722F37', '#944654']}
+              colors={[colors.coral, colors.coralDark]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.scoreBadge}
@@ -155,7 +156,7 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
             activeOpacity={0.7}
           >
             <LinearGradient
-              colors={['#f9f9f9', '#f5f5f5']}
+              colors={[colors.muted[50], colors.muted[100]]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.notesBox}
@@ -189,7 +190,7 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
             activeOpacity={0.7}
           >
             <LinearGradient
-              colors={['#f9f9f9', '#f5f5f5']}
+              colors={[colors.muted[50], colors.muted[100]]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.notesBoxFullWidth}
@@ -228,7 +229,7 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
         <View style={styles.tastingSection}>
           <TouchableOpacity onPress={onEditScore} activeOpacity={0.7}>
             <LinearGradient
-              colors={['#722F37', '#944654']}
+              colors={[colors.coral, colors.coralDark]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.scoreBadge}
@@ -298,13 +299,13 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 18,
     padding: 16,
     marginBottom: 14,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.2)',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 16,
@@ -336,12 +337,12 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     letterSpacing: -0.3,
   },
   vintageRegion: {
     fontSize: 13,
-    color: '#999',
+    color: colors.textTertiary,
   },
   consumedDateRow: {
     flexDirection: 'row',
@@ -353,7 +354,7 @@ const styles = StyleSheet.create({
   },
   consumedDate: {
     fontSize: 13,
-    color: '#722F37',
+    color: colors.coral,
     fontWeight: '600',
   },
   tastingSection: {
@@ -371,7 +372,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -380,11 +381,11 @@ const styles = StyleSheet.create({
   scoreNumber: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   scoreDenominator: {
     fontSize: 9,
-    color: '#fff',
+    color: colors.textInverse,
     opacity: 0.8,
     marginTop: -2,
   },
@@ -405,7 +406,7 @@ const styles = StyleSheet.create({
   notesText: {
     fontSize: 14,
     lineHeight: 21,
-    color: '#555',
+    color: colors.textSecondary,
   },
   cta: {
     flexDirection: 'row',
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#999',
+    color: colors.textTertiary,
     textDecorationLine: 'underline',
     textDecorationColor: '#ddd',
     textDecorationStyle: 'solid',

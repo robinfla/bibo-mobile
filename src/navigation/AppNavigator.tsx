@@ -300,7 +300,7 @@ const AuthenticatedTabs = () => {
           })}
           options={{
             tabBarLabel: '',
-            tabBarIcon: () => <CornersOut size={24} weight="bold" color="#722F37" />,
+            tabBarIcon: () => <CornersOut size={24} weight="bold" color={colors.coral} />,
           }}
         />
         <Tab.Screen
@@ -353,7 +353,7 @@ const AuthenticatedTabs = () => {
 
 const LoadingScreen = () => (
   <View style={styles.loading}>
-    <ActivityIndicator size="large" color={colors.primary[600]} />
+    <ActivityIndicator size="large" color={colors.coral} />
   </View>
 )
 

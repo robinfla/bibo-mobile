@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { apiFetch } from '../api/client'
+import { colors } from '../theme/colors'
 
 interface CellarSpace {
   id: number
@@ -36,7 +37,7 @@ interface QuickConsumeModalProps {
 
 const getWineColor = (color: string): string => {
   const colorMap: Record<string, string> = {
-    red: '#722F37',
+    red: colors.wine.red,
     white: '#F4E8D0',
     rose: '#FFC0CB',
     sparkling: '#FFD700',
@@ -216,7 +217,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <Icon name="close" size={20} color="#666" />
+              <Icon name="close" size={20} color={colors.textSecondary} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Remove Bottle</Text>
             <View style={styles.headerSpacer} />
@@ -225,7 +226,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
           {/* Wine Info Card */}
           <View style={styles.content}>
           <LinearGradient
-            colors={['#fef9f5', '#f8f4f0']}
+            colors={[colors.linen, '#f8f4f0']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.wineCard}
@@ -237,7 +238,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
                   { backgroundColor: getWineColor(wineColor) },
                 ]}
               >
-                <Icon name="bottle-wine" size={28} color="#fff" />
+                <Icon name="bottle-wine" size={28} color={colors.textInverse} />
               </View>
 
               <View style={styles.wineInfo}>
@@ -266,7 +267,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
               activeOpacity={0.8}
             >
               <LinearGradient
-                colors={['#722F37', '#944654']}
+                colors={[colors.coral, colors.coralDark]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.actionGradient}
@@ -275,7 +276,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
                   <ActivityIndicator color="#fff" size="small" />
                 ) : (
                   <>
-                    <Icon name="close-circle-outline" size={20} color="#fff" />
+                    <Icon name="close-circle-outline" size={20} color={colors.textInverse} />
                     <Text style={styles.actionButtonText}>Remove{'\n'}Bottle</Text>
                   </>
                 )}
@@ -298,7 +299,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
                   <ActivityIndicator color="#fff" size="small" />
                 ) : (
                   <>
-                    <Icon name="swap-horizontal" size={20} color="#fff" />
+                    <Icon name="swap-horizontal" size={20} color={colors.textInverse} />
                     <Text style={styles.actionButtonText}>Transfer to{'\n'}Another Storage</Text>
                   </>
                 )}
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   container: {
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '70%',
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(228, 213, 203, 0.15)',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
   },
   closeButton: {
     width: 36,
@@ -346,7 +347,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   headerSpacer: {
     width: 36,
@@ -379,7 +380,7 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 3,
   },
   wineMetaRow: {
@@ -390,16 +391,16 @@ const styles = StyleSheet.create({
   wineVintage: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#666',
+    color: colors.textSecondary,
   },
   wineDivider: {
     fontSize: 13,
-    color: '#999',
+    color: colors.textTertiary,
     marginHorizontal: 6,
   },
   wineRegion: {
     fontSize: 13,
-    color: '#666',
+    color: colors.textSecondary,
   },
   wineStock: {
     fontSize: 12,
@@ -431,7 +432,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
     textAlign: 'center',
     lineHeight: 16,
   },

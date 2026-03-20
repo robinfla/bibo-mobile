@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRoute, useNavigation } from '@react-navigation/native'
+import { colors } from '../../theme/colors'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 type Source = 'wine_shop' | 'online' | 'auction' | 'gift' | 'producer' | 'other'
@@ -240,7 +241,7 @@ export const AddWineStep2 = () => {
                   activeOpacity={0.8}
                 >
                   <LinearGradient
-                    colors={['#f9a825', '#fbc02d']}
+                    colors={[colors.honey, colors.honeyDark]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={styles.sourceChipActive}
@@ -281,7 +282,7 @@ export const AddWineStep2 = () => {
           disabled={isSubmitting}
         >
           <LinearGradient
-            colors={['#722F37', '#944654']}
+            colors={[colors.coral, colors.coralDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.submitGradient}
@@ -302,7 +303,7 @@ export const AddWineStep2 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -313,13 +314,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     fontSize: 17,
-    color: '#722F37',
+    color: colors.coral,
     fontWeight: '600',
   },
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   scrollContent: {
     paddingTop: 32,
@@ -332,13 +333,13 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     letterSpacing: -0.8,
     marginBottom: 12,
   },
   heroSubtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textSecondary,
     lineHeight: 24,
   },
   section: {
@@ -347,28 +348,28 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 20,
   },
   sectionTitleOptional: {
-    color: '#999',
+    color: colors.textTertiary,
   },
   label: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#333',
+    color: colors.textPrimary,
     marginBottom: 8,
     marginTop: 12,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   textArea: {
     minHeight: 80,
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
   infoBox: {
     backgroundColor: 'rgba(255, 243, 224, 0.5)',
     borderLeftWidth: 3,
-    borderLeftColor: '#f9a825',
+    borderLeftColor: colors.honey,
     borderRadius: 12,
     padding: 14,
     marginTop: 20,
@@ -391,7 +392,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 14,
-    color: '#666',
+    color: colors.textSecondary,
     lineHeight: 21,
   },
   row: {
@@ -409,7 +410,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   sourceChip: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     borderRadius: 24,
@@ -424,17 +425,17 @@ const styles = StyleSheet.create({
   sourceChipText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#555',
+    color: colors.textSecondary,
   },
   sourceChipTextActive: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
   },
   submitButton: {
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
@@ -448,7 +449,7 @@ const styles = StyleSheet.create({
   submitText: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   decorationTop: {
     position: 'absolute',

@@ -260,14 +260,14 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
       <Text style={styles.subtitle}>Take a photo or upload from your library</Text>
 
       <TouchableOpacity style={styles.optionButton} onPress={takePhoto}>
-        <View style={[styles.optionIcon, { backgroundColor: colors.primary[100] }]}>
+        <View style={[styles.optionIcon, { backgroundColor: colors.coralLight }]}>
           <Text style={styles.optionEmoji}>📷</Text>
         </View>
         <Text style={styles.optionLabel}>Take a Photo</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.optionButton} onPress={chooseFromLibrary}>
-        <View style={[styles.optionIcon, { backgroundColor: colors.secondary?.[100] ?? '#dcfce7' }]}>
+        <View style={[styles.optionIcon, { backgroundColor: colors.honeyLight }]}>
           <Text style={styles.optionEmoji}>🖼️</Text>
         </View>
         <Text style={styles.optionLabel}>Upload from Library</Text>
@@ -306,7 +306,7 @@ export const ScanWineModal = ({ visible, onClose, onSuccess }: ScanWineModalProp
 
   const renderScanningStep = () => (
     <View style={[styles.stepContainer, styles.centered]}>
-      <ActivityIndicator size="large" color={colors.primary[600]} />
+      <ActivityIndicator size="large" color={colors.coral} />
       <Text style={styles.loadingText}>Reading your wine label...</Text>
     </View>
   )
@@ -666,7 +666,7 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     flex: 1,
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 8,
     paddingVertical: 12,
     alignItems: 'center',
@@ -765,7 +765,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   consumeButton: {
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
   },
   
   addToCellarButton: {
-    backgroundColor: colors.primary[600],
+    backgroundColor: colors.coral,
     borderRadius: 8,
     paddingVertical: 14,
     alignItems: 'center',
@@ -907,7 +907,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   manualSearchLinkText: {
-    color: colors.primary[600],
+    color: colors.coral,
     fontSize: 14,
     fontWeight: '600',
   },

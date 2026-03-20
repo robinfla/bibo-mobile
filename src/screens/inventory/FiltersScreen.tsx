@@ -316,9 +316,9 @@ export const FiltersScreen = ({
                   const rounded = Math.round(v / 5) * 5
                   if (rounded < priceMax) setPriceMin(rounded)
                 }}
-                minimumTrackTintColor={colors.primary[500]}
+                minimumTrackTintColor={colors.coral}
                 maximumTrackTintColor={colors.muted[200]}
-                thumbTintColor={colors.primary[600]}
+                thumbTintColor={colors.coral}
               />
               <Text style={styles.sliderHint}>Max price</Text>
               <Slider
@@ -330,9 +330,9 @@ export const FiltersScreen = ({
                   const rounded = Math.round(v / 5) * 5
                   if (rounded > priceMin) setPriceMax(rounded)
                 }}
-                minimumTrackTintColor={colors.primary[500]}
+                minimumTrackTintColor={colors.coral}
                 maximumTrackTintColor={colors.muted[200]}
-                thumbTintColor={colors.primary[600]}
+                thumbTintColor={colors.coral}
               />
             </View>
           </View>
@@ -411,11 +411,11 @@ const styles = StyleSheet.create({
     paddingVertical: 12, paddingHorizontal: 14,
     borderRadius: 10, marginBottom: 4,
   },
-  sortRowActive: { backgroundColor: '#fef3e2' },
+  sortRowActive: { backgroundColor: colors.honeyLight },
   sortIcon: { fontSize: 16, marginRight: 10 },
   sortLabel: { fontSize: 15, color: colors.muted[500], flex: 1 },
   sortLabelActive: { color: colors.muted[900], fontWeight: '600' },
-  checkmark: { fontSize: 16, color: colors.primary[600], fontWeight: '700' },
+  checkmark: { fontSize: 16, color: colors.coral, fontWeight: '700' },
 
   // Chips
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
@@ -425,10 +425,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   chipActive: {
-    backgroundColor: colors.primary[50], borderColor: colors.primary[500],
+    backgroundColor: colors.coralLight, borderColor: colors.coral,
   },
   chipText: { fontSize: 14, fontWeight: '500', color: colors.muted[700] },
-  chipTextActive: { color: colors.primary[700], fontWeight: '600' },
+  chipTextActive: { color: colors.coralDark, fontWeight: '600' },
 
   // Slider
   sliderContainer: { marginTop: 4 },
@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4,
   },
   sliderValue: {
-    fontSize: 15, fontWeight: '700', color: colors.primary[600],
+    fontSize: 15, fontWeight: '700', color: colors.coral,
   },
   sliderHint: {
     fontSize: 12, color: colors.muted[500], marginBottom: 2, marginTop: 8,
@@ -449,10 +449,10 @@ const styles = StyleSheet.create({
     borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12,
   },
   dropdownActive: {
-    borderColor: colors.primary[500], backgroundColor: colors.primary[50],
+    borderColor: colors.coral, backgroundColor: colors.coralLight,
   },
   dropdownText: { fontSize: 15, color: colors.muted[500] },
-  dropdownTextActive: { color: colors.primary[700], fontWeight: '600' },
+  dropdownTextActive: { color: colors.coralDark, fontWeight: '600' },
   dropdownArrow: { fontSize: 12, color: colors.muted[400] },
   dropdownList: {
     marginTop: 6, backgroundColor: colors.white,
@@ -464,9 +464,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14, paddingVertical: 11,
     borderBottomWidth: 1, borderBottomColor: colors.muted[50],
   },
-  dropdownItemActive: { backgroundColor: colors.primary[50] },
+  dropdownItemActive: { backgroundColor: colors.coralLight },
   dropdownItemText: { fontSize: 14, color: colors.muted[700] },
-  dropdownItemTextActive: { color: colors.primary[700], fontWeight: '600' },
+  dropdownItemTextActive: { color: colors.coralDark, fontWeight: '600' },
   dropdownItemClear: { fontSize: 14, color: colors.muted[500], fontWeight: '600' },
 
   // Reset
@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1, borderTopColor: colors.muted[100],
   },
   ctaButton: {
-    backgroundColor: '#b4702a',
+    backgroundColor: colors.coral,
     borderRadius: 14, paddingVertical: 16,
     alignItems: 'center',
   },

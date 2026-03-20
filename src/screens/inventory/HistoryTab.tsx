@@ -126,7 +126,7 @@ export const HistoryTab: React.FC = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#722F37" />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -194,13 +194,13 @@ export const HistoryTab: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   centered: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   listContent: {
     padding: 16,
@@ -224,13 +224,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtitle: {
     fontSize: 15,
-    color: '#666',
+    color: colors.textSecondary,
     lineHeight: 22.5,
     textAlign: 'center',
   },

@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../auth/AuthContext'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { colors } from '../theme/colors'
 
 export const ProfileScreen = () => {
   const navigation = useNavigation()
@@ -77,7 +78,7 @@ export const ProfileScreen = () => {
           onPress={() => navigation.goBack()}
           activeOpacity={0.7}
         >
-          <Icon name="chevron-left" size={24} color="#666" />
+          <Icon name="chevron-left" size={24} color={colors.textSecondary} />
         </TouchableOpacity>
         
         <Text style={styles.title}>Bibo</Text>
@@ -89,7 +90,7 @@ export const ProfileScreen = () => {
         {/* User Info Card */}
         <View style={styles.userCard}>
           <LinearGradient
-            colors={['#722F37', '#944654']}
+            colors={[colors.coral, colors.coralDark]}
             style={styles.avatar}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -118,9 +119,9 @@ export const ProfileScreen = () => {
             onPress={handleImportCSV}
             activeOpacity={0.7}
           >
-            <Icon name="upload" size={24} color="#722F37" />
+            <Icon name="upload" size={24} color={colors.coral} />
             <Text style={styles.menuItemText}>Import from CSV</Text>
-            <Icon name="chevron-right" size={24} color="#999" />
+            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -128,9 +129,9 @@ export const ProfileScreen = () => {
             onPress={handleExportCSV}
             activeOpacity={0.7}
           >
-            <Icon name="download" size={24} color="#722F37" />
+            <Icon name="download" size={24} color={colors.coral} />
             <Text style={styles.menuItemText}>Export to CSV</Text>
-            <Icon name="chevron-right" size={24} color="#999" />
+            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
           </TouchableOpacity>
         </View>
 
@@ -143,9 +144,9 @@ export const ProfileScreen = () => {
             onPress={handleNotifications}
             activeOpacity={0.7}
           >
-            <Icon name="bell-outline" size={24} color="#722F37" />
+            <Icon name="bell-outline" size={24} color={colors.coral} />
             <Text style={styles.menuItemText}>Notifications</Text>
-            <Icon name="chevron-right" size={24} color="#999" />
+            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -153,9 +154,9 @@ export const ProfileScreen = () => {
             onPress={handlePreferences}
             activeOpacity={0.7}
           >
-            <Icon name="tune" size={24} color="#722F37" />
+            <Icon name="tune" size={24} color={colors.coral} />
             <Text style={styles.menuItemText}>Preferences</Text>
-            <Icon name="chevron-right" size={24} color="#999" />
+            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -163,9 +164,9 @@ export const ProfileScreen = () => {
             onPress={handlePrivacy}
             activeOpacity={0.7}
           >
-            <Icon name="shield-outline" size={24} color="#722F37" />
+            <Icon name="shield-outline" size={24} color={colors.coral} />
             <Text style={styles.menuItemText}>Privacy</Text>
-            <Icon name="chevron-right" size={24} color="#999" />
+            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
           </TouchableOpacity>
         </View>
 
@@ -178,9 +179,9 @@ export const ProfileScreen = () => {
             onPress={handleHelp}
             activeOpacity={0.7}
           >
-            <Icon name="help-circle-outline" size={24} color="#722F37" />
+            <Icon name="help-circle-outline" size={24} color={colors.coral} />
             <Text style={styles.menuItemText}>Help & Support</Text>
-            <Icon name="chevron-right" size={24} color="#999" />
+            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -188,9 +189,9 @@ export const ProfileScreen = () => {
             onPress={handleAbout}
             activeOpacity={0.7}
           >
-            <Icon name="information-outline" size={24} color="#722F37" />
+            <Icon name="information-outline" size={24} color={colors.coral} />
             <Text style={styles.menuItemText}>About Bibo</Text>
-            <Icon name="chevron-right" size={24} color="#999" />
+            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -198,9 +199,9 @@ export const ProfileScreen = () => {
             onPress={handleSignOut}
             activeOpacity={0.7}
           >
-            <Icon name="logout" size={24} color="#dc2626" />
+            <Icon name="logout" size={24} color={colors.danger} />
             <Text style={[styles.menuItemText, styles.signOutText]}>Sign Out</Text>
-            <Icon name="chevron-right" size={24} color="#999" />
+            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -211,7 +212,7 @@ export const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -225,14 +226,14 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.muted[100],
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#722F37',
+    color: colors.coral,
     letterSpacing: -0.5,
   },
   headerSpacer: {
@@ -250,11 +251,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 32,
     paddingHorizontal: 24,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     marginHorizontal: 24,
     marginTop: 16,
     borderRadius: 24,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -271,17 +272,17 @@ const styles = StyleSheet.create({
   avatarInitials: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#fff',
+    color: colors.textInverse,
   },
   userName: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 4,
   },
   userEmail: {
     fontSize: 16,
-    color: '#999',
+    color: colors.textTertiary,
     marginBottom: 20,
   },
   editButton: {
@@ -289,12 +290,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#722F37',
+    borderColor: colors.coral,
   },
   editButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
   },
   
   // Sections
@@ -305,14 +306,14 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#999',
+    color: colors.textTertiary,
     letterSpacing: 0.5,
     marginBottom: 12,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderRadius: 16,
@@ -327,13 +328,13 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginLeft: 16,
   },
   signOutItem: {
     marginTop: 8,
   },
   signOutText: {
-    color: '#dc2626',
+    color: colors.danger,
   },
 })

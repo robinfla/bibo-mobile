@@ -18,12 +18,12 @@ import { WineMenuDropdown } from '../../components/WineMenuDropdown'
 import { MealSuggestionsGrid } from '../../components/MealSuggestionsGrid'
 import type { WineDetail } from '../../types/api'
 
-const MATURITY_COLORS = {
-  to_age: { bg: 'linear-gradient(135deg, #e3f2fd, #bbdefb)', color: '#1e40af', label: 'To Age' },
-  approaching: { bg: 'linear-gradient(135deg, #fff3e0, #ffe0b2)', color: '#ef6c00', label: 'Approaching' },
-  peak: { bg: 'linear-gradient(135deg, #e8f5e9, #c8e6c9)', color: '#2e7d32', label: 'Peak' },
-  past_prime: { bg: 'linear-gradient(135deg, #fce4ec, #f8bbd0)', color: '#c2185b', label: 'Past Prime' },
-  declining: { bg: 'linear-gradient(135deg, #fce4ec, #f8bbd0)', color: '#c2185b', label: 'Declining' },
+const MATURITY_COLORS: Record<string, { bg: string; color: string; label: string }> = {
+  to_age: { bg: colors.status.youngBg, color: colors.status.young, label: 'To Age' },
+  approaching: { bg: colors.status.approachingBg, color: colors.status.approaching, label: 'Approaching' },
+  peak: { bg: colors.status.peakBg, color: colors.status.peak, label: 'Peak' },
+  past_prime: { bg: colors.status.pastPrimeBg, color: colors.status.pastPrime, label: 'Past Prime' },
+  declining: { bg: colors.status.pastPrimeBg, color: colors.status.pastPrime, label: 'Declining' },
   unknown: { bg: '#f0f0f0', color: '#999', label: 'Unknown' },
 }
 
@@ -185,7 +185,7 @@ export const WineDetailScreenV3 = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#722F37" />
+        <ActivityIndicator size="large" color="#F28482" />
       </View>
     )
   }
@@ -230,7 +230,7 @@ export const WineDetailScreenV3 = () => {
       <ScrollView style={styles.scrollView}>
         {/* Hero Section */}
         <LinearGradient
-          colors={['#8b4d5a', '#722F37']}
+          colors={['#F28482', '#F28482']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.hero}
@@ -398,7 +398,7 @@ export const WineDetailScreenV3 = () => {
                 {latestTasting?.rating && (
                   <View style={styles.ratingSection}>
                     <LinearGradient
-                      colors={['#8B3A4A', '#722F37']}
+                      colors={['#8B3A4A', '#F28482']}
                       style={styles.ratingCircle}
                     >
                       <Text style={styles.ratingNumber}>{latestTasting.rating}</Text>
@@ -452,7 +452,7 @@ export const WineDetailScreenV3 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: '#F7EDE2',
   },
   scrollView: {
     flex: 1,
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
-    backgroundColor: '#fef9f5',
+    backgroundColor: '#F7EDE2',
   },
   errorText: {
     fontSize: 16,
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   retryButton: {
-    backgroundColor: '#722F37',
+    backgroundColor: '#F28482',
     borderRadius: 8,
     paddingHorizontal: 24,
     paddingVertical: 10,
@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 24,
-    color: '#722F37',
+    color: '#F28482',
     fontWeight: '600',
   },
   typeBadge: {
@@ -573,7 +573,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     marginBottom: 16,
-    shadowColor: '#722F37',
+    shadowColor: '#F28482',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 20,
@@ -600,7 +600,7 @@ const styles = StyleSheet.create({
   vintageChipSelected: {
     backgroundColor: '#6B2D3E',
     transform: [{ scale: 1.05 }],
-    shadowColor: '#722F37',
+    shadowColor: '#F28482',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 12,

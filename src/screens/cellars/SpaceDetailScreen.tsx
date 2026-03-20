@@ -99,7 +99,7 @@ export const SpaceDetailScreen = () => {
   if (loading) {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
-        <ActivityIndicator size="large" color="#722F37" style={{ marginTop: 100 }} />
+        <ActivityIndicator size="large" color={colors.coral} style={{ marginTop: 100 }} />
       </View>
     )
   }
@@ -206,10 +206,10 @@ export const SpaceDetailScreen = () => {
                 // Color intensity based on fill %
                 const wallBg = !hasRacks
                   ? colors.muted[300]
-                  : fillPct > 0.7 ? '#722F37'
-                  : fillPct > 0.3 ? '#9b4a52'
+                  : fillPct > 0.7 ? colors.coral
+                  : fillPct > 0.3 ? colors.coralDark
                   : fillPct > 0 ? '#b86b72'
-                  : '#d4a0a5'
+                  : colors.rose
 
                 return (
                   <TouchableOpacity
@@ -313,7 +313,7 @@ const RackMiniCard = ({ rack, navigation, spaceId, cellarId }: { rack: Rack; nav
                 const binBottles = (rack.bottles || []).filter(b => b.binRow === r + 1 && b.binColumn === c + 1)
                 const fillPct = binBottles.length / (rack.capacity ?? 10)
                 return (
-                  <View key={c} style={[styles.miniBin, fillPct > 0 && { backgroundColor: fillPct > 0.5 ? '#722F37' : '#d4a574' }]} />
+                  <View key={c} style={[styles.miniBin, fillPct > 0 && { backgroundColor: fillPct > 0.5 ? colors.coral : colors.honey }]} />
                 )
               })}
             </View>
@@ -362,12 +362,12 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.muted[50] },
   header: { paddingHorizontal: 20, paddingBottom: 12 },
   backBtn: { paddingVertical: 8 },
-  backText: { fontSize: 16, color: '#722F37', fontWeight: '600' },
+  backText: { fontSize: 16, color: colors.coral, fontWeight: '600' },
   headerRow: { flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between' },
   title: { fontSize: 24, fontWeight: '800', color: colors.muted[900], marginTop: 4 },
   subtitle: { fontSize: 13, color: colors.muted[500], marginTop: 2 },
-  addRackChip: { backgroundColor: '#722F37', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, marginTop: 8 },
-  addRackChipText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  addRackChip: { backgroundColor: colors.coral, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, marginTop: 8 },
+  addRackChipText: { color: colors.textInverse, fontSize: 13, fontWeight: '700' },
   content: { padding: 20, paddingTop: 8 },
 
   // Empty state
@@ -375,13 +375,13 @@ const styles = StyleSheet.create({
   emptyIcon: { fontSize: 48, marginBottom: 16 },
   emptyTitle: { fontSize: 18, fontWeight: '700', color: colors.muted[900] },
   emptyDesc: { fontSize: 14, color: colors.muted[500], textAlign: 'center', marginTop: 8 },
-  createBtn: { marginTop: 24, backgroundColor: '#722F37', paddingHorizontal: 28, paddingVertical: 14, borderRadius: 12 },
-  createBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  createBtn: { marginTop: 24, backgroundColor: colors.coral, paddingHorizontal: 28, paddingVertical: 14, borderRadius: 12 },
+  createBtnText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
 
   // Room viz (interactive floor plan)
   roomViz: {
     height: 280,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     marginBottom: 8,
     position: 'relative',
@@ -394,16 +394,16 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     overflow: 'hidden',
   },
-  wallStripSelected: { borderWidth: 2, borderColor: '#fff' },
-  wallStripName: { fontSize: 11, fontWeight: '700', color: '#fff', letterSpacing: 0.3, zIndex: 1 },
+  wallStripSelected: { borderWidth: 2, borderColor: colors.textInverse },
+  wallStripName: { fontSize: 11, fontWeight: '700', color: colors.textInverse, letterSpacing: 0.3, zIndex: 1 },
   wallStripNameVertical: { writingDirection: 'ltr', transform: [{ rotate: '-90deg' }] },
   // (fill styles removed - using direct backgroundColor)
   roomCenter: {
     position: 'absolute', top: 55, bottom: 55, left: 55, right: 55,
-    backgroundColor: '#f9f6f3', borderRadius: 8,
+    backgroundColor: colors.linen, borderRadius: 8,
     justifyContent: 'center', alignItems: 'center',
   },
-  roomCenterName: { fontSize: 18, fontWeight: '700', color: '#722F37' },
+  roomCenterName: { fontSize: 18, fontWeight: '700', color: colors.coral },
   roomCenterSub: { fontSize: 11, color: colors.muted[500], marginTop: 2 },
   roomCenterTotal: { fontSize: 32, fontWeight: '800', color: colors.muted[900], marginTop: 8 },
   roomCenterTotalLabel: { fontSize: 12, color: colors.muted[500] },
@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
   rackCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,

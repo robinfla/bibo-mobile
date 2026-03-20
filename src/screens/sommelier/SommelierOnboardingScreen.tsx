@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
@@ -65,11 +66,11 @@ const ONBOARDING_CARDS = [
     type: 'multi-select',
     maxSelect: 8,
     options: [
-      { id: 'cabernet', label: 'Cabernet Sauvignon', color: '#722F37' },
-      { id: 'pinot', label: 'Pinot Noir', color: '#944654' },
-      { id: 'syrah', label: 'Syrah/Shiraz', color: '#6B2833' },
-      { id: 'chardonnay', label: 'Chardonnay', color: '#D4E6B5' },
-      { id: 'sauvignon', label: 'Sauvignon Blanc', color: '#C8DFA8' },
+      { id: 'cabernet', label: 'Cabernet Sauvignon', color: colors.coral },
+      { id: 'pinot', label: 'Pinot Noir', color: colors.coralDark },
+      { id: 'syrah', label: 'Syrah/Shiraz', color: colors.coralDark },
+      { id: 'chardonnay', label: 'Chardonnay', color: colors.teal },
+      { id: 'sauvignon', label: 'Sauvignon Blanc', color: colors.teal },
     ],
     field: 'favorite_grapes',
   },
@@ -185,13 +186,13 @@ export const SommelierOnboardingScreen = () => {
               activeOpacity={0.8}
             >
               <LinearGradient
-                colors={['#722F37', '#944654']}
+                colors={[colors.coral, colors.coralDark]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.completeGradient}
               >
                 <Text style={styles.completeButtonText}>Start Chatting</Text>
-                <Icon name="arrow-right" size={20} color="#fff" />
+                <Icon name="arrow-right" size={20} color={colors.textInverse} />
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -287,7 +288,7 @@ export const SommelierOnboardingScreen = () => {
               activeOpacity={0.8}
             >
               <LinearGradient
-                colors={canContinue ? ['#722F37', '#944654'] : ['#ccc', '#aaa']}
+                colors={canContinue ? [colors.coral, colors.coralDark] : [colors.muted[300], colors.muted[400]]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.continueGradient}
@@ -304,7 +305,7 @@ export const SommelierOnboardingScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#fef9f5', '#f8f0e8']}
+        colors={[colors.linen, colors.linen]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.gradient}
@@ -348,7 +349,7 @@ export const SommelierOnboardingScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   gradient: {
     flex: 1,
@@ -364,23 +365,23 @@ const styles = StyleSheet.create({
   headerProgress: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8a7568',
+    color: colors.textSecondary,
   },
   skipText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
   },
   progressBar: {
     height: 4,
-    backgroundColor: 'rgba(44, 24, 16, 0.1)',
+    backgroundColor: colors.coralLight,
     marginHorizontal: 20,
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
     borderRadius: 2,
   },
   scrollView: {
@@ -398,12 +399,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 8,
   },
   cardSubtitle: {
     fontSize: 16,
-    color: '#8a7568',
+    color: colors.textSecondary,
     marginBottom: 32,
   },
   optionsContainer: {
@@ -416,21 +417,21 @@ const styles = StyleSheet.create({
   },
   optionCard: {
     width: (SCREEN_WIDTH - 52) / 2,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 20,
     padding: 24,
     alignItems: 'center',
     borderWidth: 2,
     borderColor: 'transparent',
-    shadowColor: '#2c1810',
+    shadowColor: colors.textPrimary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
   },
   optionCardSelected: {
-    borderColor: '#722F37',
-    backgroundColor: 'rgba(114, 47, 55, 0.05)',
+    borderColor: colors.coral,
+    backgroundColor: colors.coralLight,
   },
   optionEmoji: {
     fontSize: 40,
@@ -439,14 +440,14 @@ const styles = StyleSheet.create({
   optionLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
     textAlign: 'center',
   },
   sliderContainer: {
     gap: 12,
   },
   sliderOption: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 20,
     flexDirection: 'row',
@@ -454,15 +455,15 @@ const styles = StyleSheet.create({
     gap: 16,
     borderWidth: 2,
     borderColor: 'transparent',
-    shadowColor: '#2c1810',
+    shadowColor: colors.textPrimary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
   },
   sliderOptionSelected: {
-    borderColor: '#722F37',
-    backgroundColor: 'rgba(114, 47, 55, 0.05)',
+    borderColor: colors.coral,
+    backgroundColor: colors.coralLight,
   },
   sliderEmoji: {
     fontSize: 32,
@@ -470,25 +471,25 @@ const styles = StyleSheet.create({
   sliderLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
   },
   multiOptionCard: {
     width: (SCREEN_WIDTH - 52) / 2,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderRadius: 14,
     padding: 16,
     alignItems: 'center',
     borderWidth: 2,
     borderColor: 'transparent',
-    shadowColor: '#2c1810',
+    shadowColor: colors.textPrimary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.04,
     shadowRadius: 6,
     elevation: 2,
   },
   multiOptionCardSelected: {
-    borderColor: '#722F37',
-    backgroundColor: 'rgba(114, 47, 55, 0.05)',
+    borderColor: colors.coral,
+    backgroundColor: colors.coralLight,
   },
   optionFlag: {
     fontSize: 24,
@@ -503,17 +504,17 @@ const styles = StyleSheet.create({
   multiOptionLabel: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
     textAlign: 'center',
   },
   multiOptionLabelSelected: {
-    color: '#722F37',
+    color: colors.coral,
   },
   buttonContainer: {
     paddingVertical: 20,
   },
   continueButton: {
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -530,13 +531,13 @@ const styles = StyleSheet.create({
   continueText: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
   completeIcon: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: 'rgba(114, 47, 55, 0.1)',
+    backgroundColor: colors.coralLight,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -548,7 +549,7 @@ const styles = StyleSheet.create({
   },
   completeButton: {
     marginTop: 40,
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 12,
@@ -565,6 +566,6 @@ const styles = StyleSheet.create({
   completeButtonText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.textInverse,
   },
 })

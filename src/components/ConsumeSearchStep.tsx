@@ -13,6 +13,7 @@ import { X, MagnifyingGlass, XCircle } from 'phosphor-react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import Svg, { Circle, Path, Defs, LinearGradient as SvgLinearGradient, Stop } from 'react-native-svg'
 import { apiFetch } from '../api/client'
+import { colors } from '../theme/colors'
 
 interface Wine {
   id: string
@@ -30,22 +31,12 @@ interface ConsumeSearchStepProps {
   onClose: () => void
 }
 
-const COLORS = {
-  bg: '#FEF5E9',
-  inputBg: '#FFF8F0',
-  pink: '#FFB3C6',
-  yellow: '#FFE57A',
-  hotpink: '#FF6B9E',
-  text: '#2D2323',
-  subtext: '#8C7C7C',
-}
-
 const getWineColor = (color: string): string => {
   const colorMap: Record<string, string> = {
     red: '#84454E',
     white: '#F4E8D0',
-    rose: '#FFB3C6',
-    sparkling: '#FFE57A',
+    rose: colors.rose,
+    sparkling: colors.honey,
     dessert: '#D4A574',
     fortified: '#8B4513',
   }
@@ -56,7 +47,7 @@ const MagnifyingGlassIllustration = () => (
   <View style={illustrationStyles.wrapper}>
     {/* Gradient blur blob behind */}
     <LinearGradient
-      colors={[COLORS.pink, COLORS.yellow]}
+      colors={[colors.rose, colors.honey]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={illustrationStyles.blob}
@@ -65,8 +56,8 @@ const MagnifyingGlassIllustration = () => (
       <Svg width={120} height={120} viewBox="0 0 120 120" fill="none">
         <Defs>
           <SvgLinearGradient id="magGrad" x1="10" y1="10" x2="110" y2="110" gradientUnits="userSpaceOnUse">
-            <Stop offset="0%" stopColor="#FFB3C6" />
-            <Stop offset="100%" stopColor="#FFE57A" />
+            <Stop offset="0%" stopColor={colors.rose} />
+            <Stop offset="100%" stopColor={colors.honey} />
           </SvgLinearGradient>
         </Defs>
         {/* Lens */}
@@ -156,7 +147,7 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
       activeOpacity={0.7}
     >
       <View style={styles.wineImageContainer}>
-        <View style={[styles.wineImagePlaceholder, { backgroundColor: COLORS.inputBg }]}>
+        <View style={[styles.wineImagePlaceholder, { backgroundColor: colors.surface }]}>
           <Text style={styles.wineEmoji}>🍷</Text>
           <View style={[styles.colorBadge, { backgroundColor: getWineColor(item.color) }]} />
         </View>
@@ -192,7 +183,7 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#fef9f5', '#f8f4f0']}
+        colors={[colors.linen, '#f8f4f0']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.modal}
@@ -205,7 +196,7 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
             onPress={onClose}
             activeOpacity={0.7}
           >
-            <X size={14} weight="bold" color={COLORS.subtext} />
+            <X size={14} weight="bold" color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
 
@@ -232,7 +223,7 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
         {/* Content */}
         {isLoading ? (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={COLORS.hotpink} />
+            <ActivityIndicator size="large" color={colors.coral} />
           </View>
         ) : (
           <FlatList
@@ -267,7 +258,7 @@ export const ConsumeSearchStep: React.FC<ConsumeSearchStepProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   modal: {
     flex: 1,
@@ -287,7 +278,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '800',
-    color: COLORS.text,
+    color: colors.textPrimary,
     letterSpacing: -0.5,
   },
   closeButton: {
@@ -319,7 +310,7 @@ const styles = StyleSheet.create({
     gap: 12,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -390,7 +381,7 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 16,
     fontWeight: '700',
-    color: COLORS.text,
+    color: colors.textPrimary,
     marginBottom: 6,
   },
   wineMetaRow: {
@@ -398,7 +389,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   vintageChip: {
-    backgroundColor: COLORS.inputBg,
+    backgroundColor: colors.surface,
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -407,12 +398,12 @@ const styles = StyleSheet.create({
   vintageText: {
     fontSize: 13,
     fontWeight: '600',
-    color: COLORS.subtext,
+    color: colors.textSecondary,
   },
   regionText: {
     fontSize: 13,
     fontWeight: '500',
-    color: COLORS.subtext,
+    color: colors.textSecondary,
     flex: 1,
   },
   stockBadge: {
@@ -437,14 +428,14 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 22,
     fontWeight: '800',
-    color: COLORS.text,
+    color: colors.textPrimary,
     marginTop: 8,
     letterSpacing: -0.3,
   },
   emptySubtext: {
     fontSize: 16,
     fontWeight: '500',
-    color: COLORS.subtext,
+    color: colors.textSecondary,
     marginTop: 8,
     textAlign: 'center',
   },

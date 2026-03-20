@@ -319,7 +319,7 @@ export const RackViewScreen = () => {
   if (loading || !rack) {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
-        <ActivityIndicator size="large" color="#722F37" style={{ marginTop: 100 }} />
+        <ActivityIndicator size="large" color={colors.coral} style={{ marginTop: 100 }} />
       </View>
     )
   }
@@ -368,7 +368,7 @@ export const RackViewScreen = () => {
         </Text>
         {editingName ? (
           <TextInput
-            style={[styles.title, { borderBottomWidth: 1.5, borderBottomColor: '#722F37', paddingVertical: 2 }]}
+            style={[styles.title, { borderBottomWidth: 1.5, borderBottomColor: colors.coral, paddingVertical: 2 }]}
             value={nameText}
             onChangeText={setNameText}
             placeholder="Name this rack..."
@@ -412,14 +412,14 @@ export const RackViewScreen = () => {
                     >
                       <View style={[styles.binFill, {
                         height: `${Math.max(fillPct * 100, 0)}%` as any,
-                        backgroundColor: fillPct > 0.8 ? '#722F37' : fillPct > 0.4 ? '#d4a574' : colors.muted[200],
+                        backgroundColor: fillPct > 0.8 ? colors.coral : fillPct > 0.4 ? colors.honey : colors.muted[200],
                       }]} />
                       {getBinLabel(row, col) ? (
-                        <Text style={[styles.binLabel, count > 0 && fillPct > 0.8 && { color: '#fff' }]} numberOfLines={1}>
+                        <Text style={[styles.binLabel, count > 0 && fillPct > 0.8 && { color: colors.textInverse }]} numberOfLines={1}>
                           {getBinLabel(row, col)}
                         </Text>
                       ) : null}
-                      <Text style={[styles.binCount, count > 0 && fillPct > 0.8 && { color: '#fff' }]}>
+                      <Text style={[styles.binCount, count > 0 && fillPct > 0.8 && { color: colors.textInverse }]}>
                         {count}/{capacity}
                       </Text>
                     </TouchableOpacity>
@@ -456,7 +456,7 @@ export const RackViewScreen = () => {
                         }}
                         activeOpacity={0.6}
                       >
-                        {isEmptySelected && <Text style={{ fontSize: 14, color: '#722F37' }}>+</Text>}
+                        {isEmptySelected && <Text style={{ fontSize: 14, color: colors.coral }}>+</Text>}
                       </TouchableOpacity>
                     )
                   }
@@ -477,7 +477,7 @@ export const RackViewScreen = () => {
                       onPress={() => handleSlotPress(slot)}
                       activeOpacity={0.6}
                     >
-                      {isEmptySelected && <Text style={{ fontSize: 14, color: '#722F37' }}>+</Text>}
+                      {isEmptySelected && <Text style={{ fontSize: 14, color: colors.coral }}>+</Text>}
                     </TouchableOpacity>
                   )
                 })}
@@ -734,7 +734,7 @@ const styles = StyleSheet.create({
   header: { paddingHorizontal: 20, paddingBottom: 12 },
   headerTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   backBtn: { paddingVertical: 8 },
-  backText: { fontSize: 16, color: '#722F37', fontWeight: '600' },
+  backText: { fontSize: 16, color: colors.coral, fontWeight: '600' },
   deleteBtn: { padding: 8 },
   deleteText: { fontSize: 20 },
   breadcrumb: { fontSize: 13, color: colors.muted[400], marginTop: 4 },
@@ -743,38 +743,38 @@ const styles = StyleSheet.create({
   content: { padding: 20, paddingTop: 8 },
 
   // Grid
-  gridContainer: { backgroundColor: '#fff', borderRadius: 16, alignItems: 'center', borderWidth: 1, borderColor: colors.muted[200] },
+  gridContainer: { backgroundColor: colors.surface, borderRadius: 16, alignItems: 'center', borderWidth: 1, borderColor: colors.muted[200] },
   gridRow: { flexDirection: 'row', marginBottom: 4 },
   slot: { justifyContent: 'center', alignItems: 'center' },
   slotEmpty: { backgroundColor: colors.muted[100], borderWidth: 1.5, borderColor: colors.muted[300], borderStyle: 'dashed' },
-  slotSelected: { borderWidth: 3, borderColor: '#722F37', borderStyle: 'solid' },
-  slotEmptySelected: { borderWidth: 2.5, borderColor: '#722F37', borderStyle: 'solid', backgroundColor: '#fdf2f3' },
+  slotSelected: { borderWidth: 3, borderColor: colors.coral, borderStyle: 'solid' },
+  slotEmptySelected: { borderWidth: 2.5, borderColor: colors.coral, borderStyle: 'solid', backgroundColor: colors.coralLight },
 
   // Bin cells
   binCell: {
     borderRadius: 12, backgroundColor: colors.muted[100], borderWidth: 1.5,
     borderColor: colors.muted[300], justifyContent: 'center', alignItems: 'center', overflow: 'hidden',
   },
-  binCellSelected: { borderColor: '#722F37', borderWidth: 2.5 },
+  binCellSelected: { borderColor: colors.coral, borderWidth: 2.5 },
   binFill: { position: 'absolute', bottom: 0, left: 0, right: 0, borderRadius: 10 },
   binLabel: { fontSize: 9, fontWeight: '600', color: colors.muted[600], zIndex: 1, marginBottom: 1 },
   binCount: { fontSize: 12, fontWeight: '700', color: colors.muted[400], zIndex: 1 },
 
   // Bin panel
   binPanel: {
-    position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#fff',
+    position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: colors.surface,
     borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20,
     shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.15, shadowRadius: 12, elevation: 20,
   },
   binPanelHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   binLabelInput: {
     fontSize: 18, fontWeight: '700', color: colors.muted[900], borderBottomWidth: 1.5,
-    borderBottomColor: '#722F37', paddingVertical: 4, marginBottom: 4,
+    borderBottomColor: colors.coral, paddingVertical: 4, marginBottom: 4,
   },
   binPanelTitle: { fontSize: 18, fontWeight: '700', color: colors.muted[900] },
   binPanelSub: { fontSize: 13, color: colors.muted[500], marginTop: 2 },
   binPanelBar: { height: 6, backgroundColor: colors.muted[200], borderRadius: 3, marginTop: 12, marginBottom: 12 },
-  binPanelBarFill: { height: 6, backgroundColor: '#722F37', borderRadius: 3 },
+  binPanelBarFill: { height: 6, backgroundColor: colors.coral, borderRadius: 3 },
   binPanelList: { maxHeight: 200 },
   binPanelItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.muted[100] },
   binPanelItemName: { fontSize: 14, fontWeight: '600', color: colors.muted[900] },
@@ -782,16 +782,16 @@ const styles = StyleSheet.create({
   binPanelEmpty: { fontSize: 13, color: colors.muted[400], textAlign: 'center', paddingVertical: 20 },
   binRemoveBtn: { padding: 8 },
   binRemoveText: { fontSize: 14, color: colors.muted[400] },
-  binAddBtn: { backgroundColor: '#722F37', borderRadius: 10, paddingVertical: 12, alignItems: 'center', marginTop: 12 },
-  binAddBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+  binAddBtn: { backgroundColor: colors.coral, borderRadius: 10, paddingVertical: 12, alignItems: 'center', marginTop: 12 },
+  binAddBtnText: { color: colors.textInverse, fontSize: 15, fontWeight: '700' },
 
   // Wine list link
   wineListLink: { alignItems: 'center', marginTop: 16, paddingVertical: 8 },
-  wineListLinkText: { fontSize: 14, color: '#722F37', fontWeight: '600' },
+  wineListLinkText: { fontSize: 14, color: colors.coral, fontWeight: '600' },
 
   // Peek card (grid)
   peekCard: {
-    position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#fff',
+    position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: colors.surface,
     borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 20,
     shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.1, shadowRadius: 12, elevation: 20,
   },
@@ -810,11 +810,11 @@ const styles = StyleSheet.create({
   // Search overlay
   searchOverlay: {
     position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: '#fff', padding: 20,
+    backgroundColor: colors.surface, padding: 20,
   },
   searchHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   searchTitle: { fontSize: 18, fontWeight: '700', color: colors.muted[900] },
-  searchCancel: { fontSize: 16, color: '#722F37', fontWeight: '600' },
+  searchCancel: { fontSize: 16, color: colors.coral, fontWeight: '600' },
   searchBarContainer: { marginBottom: 12 },
   searchBar: {
     backgroundColor: colors.muted[100], borderRadius: 10, paddingHorizontal: 14,
@@ -838,17 +838,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: colors.muted[300],
   },
   qtyBtnText: { fontSize: 16, fontWeight: '600', color: colors.muted[700] },
-  qtyValue: { fontSize: 16, fontWeight: '700', color: '#722F37', minWidth: 20, textAlign: 'center' },
+  qtyValue: { fontSize: 16, fontWeight: '700', color: colors.coral, minWidth: 20, textAlign: 'center' },
   addChip: {
-    width: 28, height: 28, borderRadius: 14, backgroundColor: '#fdf2f3',
-    justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#722F37', marginLeft: 8,
+    width: 28, height: 28, borderRadius: 14, backgroundColor: colors.coralLight,
+    justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: colors.coral, marginLeft: 8,
   },
-  addChipText: { fontSize: 16, fontWeight: '600', color: '#722F37' },
+  addChipText: { fontSize: 16, fontWeight: '600', color: colors.coral },
 
   // Confirm button
   confirmBtn: {
-    backgroundColor: '#722F37', borderRadius: 12, paddingVertical: 16,
+    backgroundColor: colors.coral, borderRadius: 12, paddingVertical: 16,
     alignItems: 'center', marginTop: 12,
   },
-  confirmBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  confirmBtnText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
 })

@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
+import { colors } from '../../theme/colors'
 
 type Priority = 'must-have' | 'nice' | 'someday'
 
@@ -72,7 +73,7 @@ export const AddToWishlistScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-          <Icon name="close" size={24} color="#722F37" />
+          <Icon name="close" size={24} color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Add to Wishlist</Text>
         <View style={{ width: 44 }} />
@@ -105,7 +106,7 @@ export const AddToWishlistScreen = () => {
               >
                 {priority === option.value ? (
                   <LinearGradient
-                    colors={['#722F37', '#944654']}
+                    colors={[colors.coral, colors.coralDark]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.priorityChipGradient}
@@ -132,7 +133,7 @@ export const AddToWishlistScreen = () => {
             value={budget}
             onChangeText={setBudget}
             placeholder="e.g., 50"
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             keyboardType="numeric"
           />
           <Text style={styles.budgetHint}>Maximum price you're willing to pay (EUR)</Text>
@@ -146,7 +147,7 @@ export const AddToWishlistScreen = () => {
             value={notes}
             onChangeText={setNotes}
             placeholder="Why do you want this wine? Where did you taste it? Special occasions?"
-            placeholderTextColor="#b5a89e"
+            placeholderTextColor={colors.textTertiary}
             multiline
             numberOfLines={4}
             textAlignVertical="top"
@@ -163,7 +164,7 @@ export const AddToWishlistScreen = () => {
             <Icon
               name={notify ? 'bell' : 'bell-outline'}
               size={24}
-              color="#722F37"
+              color={colors.coral}
             />
             <View style={styles.notifyToggleText}>
               <Text style={styles.notifyToggleTitle}>Notify me when available</Text>
@@ -189,12 +190,12 @@ export const AddToWishlistScreen = () => {
           activeOpacity={0.7}
         >
           <LinearGradient
-            colors={['#722F37', '#944654']}
+            colors={[colors.coral, colors.coralDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.saveButtonGradient}
           >
-            <Icon name="heart" size={18} color="#fff" />
+            <Icon name="heart" size={18} color={colors.textInverse} />
             <Text style={styles.saveButtonText}>
               {isSaving ? 'Adding...' : 'Add to Wishlist'}
             </Text>
@@ -210,7 +211,7 @@ export const AddToWishlistScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -219,9 +220,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: Platform.OS === 'ios' ? 60 : 40,
     paddingBottom: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
+    borderBottomColor: colors.borderSubtle,
   },
   closeButton: {
     width: 44,
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     fontFamily: 'NunitoSans_700Bold',
   },
   scrollView: {
@@ -248,13 +249,13 @@ const styles = StyleSheet.create({
   wineName: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 6,
     fontFamily: 'NunitoSans_700Bold',
   },
   wineVintage: {
     fontSize: 17,
-    color: '#8a7568',
+    color: colors.textSecondary,
     fontFamily: 'NunitoSans_400Regular',
   },
   section: {
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#722F37',
+    color: colors.coral,
     marginBottom: 12,
     fontFamily: 'NunitoSans_600SemiBold',
   },
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 14,
     borderRadius: 16,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 2,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     alignItems: 'center',
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
   priorityChipText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   priorityChipEmojiActive: {
@@ -309,35 +310,35 @@ const styles = StyleSheet.create({
   priorityChipTextActive: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   budgetInput: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 15,
-    color: '#2c1810',
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_400Regular',
     marginBottom: 8,
   },
   budgetHint: {
     fontSize: 13,
-    color: '#8a7568',
+    color: colors.textSecondary,
     fontFamily: 'NunitoSans_400Regular',
   },
   notesInput: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.4)',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#2c1810',
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_400Regular',
     minHeight: 120,
   },
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     borderRadius: 16,
@@ -364,13 +365,13 @@ const styles = StyleSheet.create({
   notifyToggleTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#2c1810',
+    color: colors.textPrimary,
     marginBottom: 2,
     fontFamily: 'NunitoSans_600SemiBold',
   },
   notifyToggleSubtitle: {
     fontSize: 13,
-    color: '#8a7568',
+    color: colors.textSecondary,
     fontFamily: 'NunitoSans_400Regular',
   },
   switch: {
@@ -382,13 +383,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   switchActive: {
-    backgroundColor: '#722F37',
+    backgroundColor: colors.coral,
   },
   switchThumb: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
   },
   switchThumbActive: {
     marginLeft: 20,
@@ -396,7 +397,7 @@ const styles = StyleSheet.create({
   saveButton: {
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
     fontFamily: 'NunitoSans_600SemiBold',
   },
 })

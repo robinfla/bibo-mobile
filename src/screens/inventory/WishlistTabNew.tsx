@@ -133,7 +133,7 @@ export const WishlistTabNew = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#722F37" />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -172,7 +172,7 @@ export const WishlistTabNew = () => {
         activeOpacity={0.8}
       >
         <LinearGradient
-          colors={['#8b4d5a', '#722F37']}
+          colors={[colors.coral, colors.coral]}
           style={styles.fabGradient}
         >
           <Text style={styles.fabIcon}>+</Text>
@@ -204,13 +204,13 @@ export const WishlistTabNew = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   centered: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   listContent: {
     padding: 16,
@@ -234,13 +234,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     marginBottom: 8,
     textAlign: 'center',
   },
   emptySubtitle: {
     fontSize: 15,
-    color: '#666',
+    color: colors.textSecondary,
     lineHeight: 22.5,
     textAlign: 'center',
   },
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 24,
@@ -268,6 +268,6 @@ const styles = StyleSheet.create({
   fabIcon: {
     fontSize: 26,
     fontWeight: '300',
-    color: '#fff',
+    color: colors.textInverse,
   },
 })

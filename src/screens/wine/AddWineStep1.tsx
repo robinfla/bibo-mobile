@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
+import { colors } from '../../theme/colors'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 type RootStackParamList = {
@@ -96,7 +97,7 @@ export const AddWineStep1 = () => {
           </Text>
           
           <LinearGradient
-            colors={['#722F37', '#944654']}
+            colors={[colors.coral, colors.coralDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.aiBadge}
@@ -166,7 +167,7 @@ export const AddWineStep1 = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.linen,
   },
   header: {
     flexDirection: 'row',
@@ -177,17 +178,17 @@ const styles = StyleSheet.create({
   },
   backButton: {
     fontSize: 17,
-    color: '#722F37',
+    color: colors.coral,
     fontWeight: '600',
   },
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   skipButton: {
     fontSize: 17,
-    color: '#722F37',
+    color: colors.coral,
     fontWeight: '600',
   },
   scrollContent: {
@@ -201,13 +202,13 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#1a1a1a',
+    color: colors.textPrimary,
     letterSpacing: -0.8,
     marginBottom: 12,
   },
   heroSubtitle: {
     fontSize: 16,
-    color: '#666',
+    color: colors.textSecondary,
     lineHeight: 24,
     marginBottom: 16,
   },
@@ -220,21 +221,21 @@ const styles = StyleSheet.create({
   aiBadgeText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.textInverse,
   },
   searchContainer: {
     position: 'relative',
     marginBottom: 32,
   },
   searchInput: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     borderRadius: 16,
     paddingHorizontal: 20,
     paddingVertical: 18,
     fontSize: 16,
-    color: '#1a1a1a',
+    color: colors.textPrimary,
   },
   searchingOverlay: {
     position: 'absolute',
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
   },
   searchingText: {
     fontSize: 16,
-    color: '#722F37',
+    color: colors.coral,
     fontWeight: '600',
   },
   recentSection: {
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
   recentLabel: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#999',
+    color: colors.textTertiary,
     letterSpacing: 1,
     textTransform: 'uppercase',
     marginBottom: 12,
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   recentChip: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: 'rgba(228, 213, 203, 0.3)',
     borderRadius: 20,
@@ -283,7 +284,7 @@ const styles = StyleSheet.create({
   },
   recentChipText: {
     fontSize: 14,
-    color: '#555',
+    color: colors.textSecondary,
     fontWeight: '500',
   },
   divider: {
@@ -300,10 +301,10 @@ const styles = StyleSheet.create({
   dividerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#999',
+    color: colors.textTertiary,
   },
   manualButton: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 2,
     borderStyle: 'dashed',
     borderColor: 'rgba(228, 213, 203, 0.5)',
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
   manualButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#555',
+    color: colors.textSecondary,
   },
   decorationTop: {
     position: 'absolute',
