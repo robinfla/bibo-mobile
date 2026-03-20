@@ -54,7 +54,7 @@ export const HomeScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={colors.brand.wine} />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -73,7 +73,7 @@ export const HomeScreen = () => {
           <View>
             <View style={styles.greetingRow}>
               <Text style={styles.greeting}>Hello {userName} </Text>
-              <HandWaving weight="fill" color={colors.brand.waveYellow} size={32} />
+              <HandWaving weight="fill" color={colors.honey} size={32} />
             </View>
             <Text style={styles.subtitle}>What's calling you tonight?</Text>
           </View>
@@ -91,10 +91,10 @@ export const HomeScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Stats Card */}
+        {/* Stats Card — Coral to Honey gradient */}
         <View style={styles.statsCardContainer}>
           <LinearGradient
-            colors={['#fbc8d4', '#fde59a']}
+            colors={colors.gradient.statsCard}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.statsCard}
@@ -119,7 +119,7 @@ export const HomeScreen = () => {
               <View style={styles.statsColumnRight}>
                 <Text style={styles.statsLabel}>Last Month</Text>
                 <View style={styles.statsPill}>
-                  <TrendUp size={16} weight="bold" color={colors.brand.wine} />
+                  <TrendUp size={16} weight="bold" color={colors.coralDark} />
                   <Text style={styles.statsPillText}>+{lastMonthAdded}</Text>
                 </View>
               </View>
@@ -138,8 +138,8 @@ export const HomeScreen = () => {
               onPress={() => navigation.navigate('AddWineStep1')}
               activeOpacity={0.7}
             >
-              <View style={[styles.actionIconCircle, { backgroundColor: colors.brand.iconPinkBg }]}>
-                <Wine size={28} weight="fill" color={colors.brand.iconPinkFg} />
+              <View style={[styles.actionIconCircle, { backgroundColor: colors.coralLight }]}>
+                <Wine size={28} weight="fill" color={colors.coralDark} />
               </View>
               <Text style={styles.actionTitle}>Add a Wine</Text>
             </TouchableOpacity>
@@ -150,12 +150,8 @@ export const HomeScreen = () => {
               onPress={() => setShowConsumeModal(true)}
               activeOpacity={0.7}
             >
-              <LinearGradient
-                colors={['rgba(253, 229, 154, 0.3)', 'rgba(253, 229, 154, 0.1)']}
-                style={styles.actionCardGradientBg}
-              />
-              <View style={[styles.actionIconCircle, { backgroundColor: colors.brand.iconYellowBg }]}>
-                <Confetti size={28} weight="fill" color={colors.brand.iconYellowFg} />
+              <View style={[styles.actionIconCircle, { backgroundColor: colors.honeyLight }]}>
+                <Confetti size={28} weight="fill" color={colors.honeyDark} />
               </View>
               <Text style={styles.actionTitle}>Open a Bottle</Text>
             </TouchableOpacity>
@@ -166,8 +162,8 @@ export const HomeScreen = () => {
               onPress={() => navigation.navigate('Sommelier' as never)}
               activeOpacity={0.7}
             >
-              <View style={[styles.actionIconCircle, { backgroundColor: colors.brand.iconPinkBg }]}>
-                <Cylinder size={28} weight="fill" color={colors.brand.iconPinkFg} />
+              <View style={[styles.actionIconCircle, { backgroundColor: colors.coralLight }]}>
+                <Cylinder size={28} weight="fill" color={colors.coralDark} />
               </View>
               <Text style={styles.actionTitle}>Ask Sommelier</Text>
             </TouchableOpacity>
@@ -178,8 +174,8 @@ export const HomeScreen = () => {
               onPress={() => navigation.navigate('WineSearch' as never)}
               activeOpacity={0.7}
             >
-              <View style={[styles.actionIconCircle, { backgroundColor: colors.brand.iconYellowBg }]}>
-                <MagnifyingGlass size={28} weight="bold" color={colors.brand.iconYellowFg} />
+              <View style={[styles.actionIconCircle, { backgroundColor: colors.honeyLight }]}>
+                <MagnifyingGlass size={28} weight="bold" color={colors.honeyDark} />
               </View>
               <Text style={styles.actionTitle}>Search Wines</Text>
             </TouchableOpacity>
@@ -203,7 +199,7 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.brand.background,
+    backgroundColor: colors.linen,
   },
   scroll: {
     flex: 1,
@@ -215,7 +211,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.brand.background,
+    backgroundColor: colors.linen,
   },
 
   // Header
@@ -232,15 +228,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   greeting: {
-    fontSize: 36,
-    fontWeight: '800',
-    color: '#1a1a1a',
-    letterSpacing: -1,
+    fontSize: 38,
+    fontFamily: 'NunitoSans_800ExtraBold',
+    color: colors.textPrimary,
+    letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: 17,
-    color: '#888',
-    fontWeight: '400',
+    fontFamily: 'NunitoSans_400Regular',
+    color: colors.textSecondary,
     marginTop: 4,
   },
   profileButton: {
@@ -252,14 +248,19 @@ const styles = StyleSheet.create({
     width: 54,
     height: 54,
     borderRadius: 27,
-    backgroundColor: colors.brand.pinkLight,
+    backgroundColor: colors.coral,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: colors.coral,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 4,
   },
   profileInitials: {
     fontSize: 20,
-    fontWeight: '800',
-    color: colors.brand.wine,
+    fontFamily: 'NunitoSans_700Bold',
+    color: colors.textInverse,
   },
 
   // Stats Card
@@ -268,14 +269,14 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   statsCard: {
-    borderRadius: 24,
-    padding: 24,
+    borderRadius: 28,
+    padding: 28,
     position: 'relative',
     overflow: 'hidden',
-    shadowColor: '#d4a0aa',
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 24,
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
     elevation: 8,
   },
   watermarkContainer: {
@@ -294,7 +295,7 @@ const styles = StyleSheet.create({
   statsDivider: {
     width: 1,
     height: 60,
-    backgroundColor: 'rgba(138, 59, 70, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     marginHorizontal: 20,
   },
   statsColumnRight: {
@@ -302,23 +303,23 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   statsLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.brand.wine,
-    letterSpacing: 0.3,
+    fontSize: 11,
+    fontFamily: 'NunitoSans_600SemiBold',
+    color: 'rgba(255, 255, 255, 0.8)',
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
     marginBottom: 4,
   },
   statsNumber: {
     fontSize: 64,
-    fontWeight: '800',
-    color: colors.brand.wine,
+    fontFamily: 'NunitoSans_800ExtraBold',
+    color: colors.textInverse,
     letterSpacing: -2,
   },
   statsPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     borderRadius: 16,
     paddingHorizontal: 14,
     paddingVertical: 8,
@@ -327,8 +328,8 @@ const styles = StyleSheet.create({
   },
   statsPillText: {
     fontSize: 20,
-    fontWeight: '700',
-    color: colors.brand.wine,
+    fontFamily: 'NunitoSans_700Bold',
+    color: colors.textInverse,
   },
 
   // Sections
@@ -338,8 +339,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 22,
-    fontWeight: '700',
-    color: '#1a1a1a',
+    fontFamily: 'NunitoSans_700Bold',
+    color: colors.textPrimary,
     letterSpacing: -0.5,
     marginBottom: 16,
   },
@@ -348,40 +349,37 @@ const styles = StyleSheet.create({
   actionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 14,
+    gap: 16,
   },
   actionCard: {
     width: '47%',
     flexGrow: 1,
-    backgroundColor: '#fff',
+    aspectRatio: 1,
+    backgroundColor: colors.surface,
     borderRadius: 28,
-    paddingVertical: 28,
-    paddingHorizontal: 16,
+    padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.borderSubtle,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
+    shadowOpacity: 0.03,
     shadowRadius: 12,
     elevation: 2,
   },
-  actionCardGradientBg: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: 28,
-  },
   actionIconCircle: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 14,
   },
   actionTitle: {
     fontSize: 16,
-    fontWeight: '700',
-    color: '#1a1a1a',
+    fontFamily: 'NunitoSans_700Bold',
+    color: colors.textPrimary,
     textAlign: 'center',
   },
 })

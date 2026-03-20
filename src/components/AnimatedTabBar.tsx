@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableOpacity, Platform, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, Platform, StyleSheet } from 'react-native'
 import { CornersOut } from 'phosphor-react-native'
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { colors } from '../theme/colors'
@@ -23,9 +23,43 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
     return null
   }
 
+  const tabLabels: Record<string, string> = {
+    HomeTab: 'Home',
+    InventoryTab: 'Inventory',
+    SommelierTab: 'Somm',
+    CellarsTab: 'Cellars',
+  }
+
   return (
     <View style={styles.container}>
-      {/* Tab pill */}
+      {/* Scan button — standalone coral circle (left) */}
+      {scanTab && (() => {
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: scanTab.key,
+            canPreventDefault: true,
+          })
+
+          if (!event.defaultPrevented) {
+            navigation.navigate(scanTab.name)
+          }
+        }
+
+        return (
+          <TouchableOpacity
+            key={scanTab.key}
+            accessibilityRole="button"
+            accessibilityLabel="Scan wine label"
+            onPress={onPress}
+            style={styles.scanButton}
+          >
+            <CornersOut size={28} weight="bold" color={colors.textInverse} />
+          </TouchableOpacity>
+        )
+      })()}
+
+      {/* Nav pill (right) */}
       <View style={styles.tabPill}>
         {regularTabs.map((route) => {
           const { options } = descriptors[route.key]
@@ -52,6 +86,7 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
           }
 
           const IconComponent = options.tabBarIcon
+          const label = tabLabels[route.name] || route.name
 
           return (
             <TouchableOpacity
@@ -65,40 +100,20 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
             >
               {IconComponent && IconComponent({
                 focused: isFocused,
-                color: isFocused ? colors.brand.wine : colors.brand.tabInactive,
+                color: isFocused ? colors.coral : colors.textTertiary,
                 size: 22,
               })}
+              <Text style={[
+                styles.tabLabel,
+                { color: isFocused ? colors.coral : colors.textTertiary },
+                isFocused && styles.tabLabelActive,
+              ]}>
+                {label}
+              </Text>
             </TouchableOpacity>
           )
         })}
       </View>
-
-      {/* Scan button — standalone pink circle */}
-      {scanTab && (() => {
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: scanTab.key,
-            canPreventDefault: true,
-          })
-
-          if (!event.defaultPrevented) {
-            navigation.navigate(scanTab.name)
-          }
-        }
-
-        return (
-          <TouchableOpacity
-            key={scanTab.key}
-            accessibilityRole="button"
-            accessibilityLabel="Scan wine label"
-            onPress={onPress}
-            style={styles.scanButton}
-          >
-            <CornersOut size={26} weight="bold" color={colors.brand.wine} />
-          </TouchableOpacity>
-        )
-      })()}
     </View>
   )
 }
@@ -117,12 +132,12 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: colors.brand.pinkLight,
+    backgroundColor: colors.coral,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
+    shadowColor: colors.coralShadow,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 6,
   },
@@ -134,10 +149,12 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     alignItems: 'center',
     paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(243, 244, 246, 0.6)',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.08,
-    shadowRadius: 16,
+    shadowRadius: 40,
     elevation: 8,
   },
   tab: {
@@ -145,5 +162,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
+    gap: 2,
+  },
+  tabLabel: {
+    fontSize: 10,
+    fontFamily: 'NunitoSans_500Medium',
+  },
+  tabLabelActive: {
+    fontFamily: 'NunitoSans_700Bold',
   },
 })
