@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   cancelText: {
     fontSize: 16,
     color: '#fff',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   imageContainer: {
     width: 280,
@@ -315,11 +315,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#fff',
     marginBottom: 8,
-    fontFamily: 'Nunito_500',
+    fontFamily: 'NunitoSans_500Medium',
   },
   subText: {
     fontSize: 14,
     color: 'rgba(255, 255, 255, 0.6)',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
 })

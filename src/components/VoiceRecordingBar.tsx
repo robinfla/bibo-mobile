@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: '#722F37',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
     fontVariant: ['tabular-nums'],
     minWidth: 40,
   },
@@ -226,6 +226,6 @@ const styles = StyleSheet.create({
     color: 'rgba(45, 45, 45, 0.5)',
     textAlign: 'center',
     marginTop: 6,
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
 })

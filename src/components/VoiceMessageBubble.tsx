@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   duration: {
     fontSize: 13,
     color: 'rgba(255, 255, 255, 0.9)',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
     fontVariant: ['tabular-nums'],
   },
   timestamp: {
@@ -158,6 +158,6 @@ const styles = StyleSheet.create({
     color: 'rgba(45, 45, 45, 0.5)',
     marginTop: 4,
     textAlign: 'right',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
 })

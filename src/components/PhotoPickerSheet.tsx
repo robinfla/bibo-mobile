@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: '#722F37',
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'NunitoSans_700Bold',
   },
   closeButton: {
     width: 32,
@@ -222,11 +222,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#2c1810',
     marginBottom: 2,
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   optionSubtitle: {
     fontSize: 13,
     color: '#8a7568',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
 })

@@ -204,12 +204,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#722F37',
     marginBottom: 6,
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'NunitoSans_700Bold',
   },
   subtitle: {
     fontSize: 14,
     color: 'rgba(45, 45, 45, 0.6)',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   actions: {
     gap: 12,
@@ -243,12 +243,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#2c1810',
     marginBottom: 2,
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   actionDescription: {
     fontSize: 13,
     color: '#8a7568',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   cancelButton: {
     marginTop: 16,
@@ -268,6 +268,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#722F37',
     textAlign: 'center',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
 })

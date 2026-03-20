@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: '#722F37',
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'NunitoSans_700Bold',
   },
   scrollView: {
     flex: 1,
@@ -202,12 +202,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#722F37',
     marginBottom: 6,
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'NunitoSans_700Bold',
   },
   wineVintage: {
     fontSize: 17,
     color: '#8a7568',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   section: {
     marginBottom: 28,
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#722F37',
     marginBottom: 12,
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   ratingNumberText: {
     fontSize: 14,
     color: '#8a7568',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   ratingNumberTextActive: {
     color: '#722F37',
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '700',
     color: '#722F37',
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'NunitoSans_700Bold',
     minWidth: 48,
     textAlign: 'center',
   },
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 15,
     color: '#2c1810',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
     minHeight: 120,
   },
   dateInput: {
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     fontSize: 15,
     color: '#2c1810',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   saveButton: {
     borderRadius: 16,
@@ -305,6 +305,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
     color: '#fff',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
 })

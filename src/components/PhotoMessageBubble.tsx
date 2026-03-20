@@ -85,13 +85,13 @@ const styles = StyleSheet.create({
   caption: {
     fontSize: 14,
     color: '#fff',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   timestamp: {
     fontSize: 11,
     color: 'rgba(45, 45, 45, 0.5)',
     marginTop: 4,
     textAlign: 'right',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
 })

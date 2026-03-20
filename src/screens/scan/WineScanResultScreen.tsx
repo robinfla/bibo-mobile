@@ -337,13 +337,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#2d2d2d',
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'NunitoSans_700Bold',
   },
   region: {
     fontSize: 15,
     color: 'rgba(45, 45, 45, 0.6)',
     marginBottom: 8,
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   wineName: {
     fontSize: 28,
@@ -351,13 +351,13 @@ const styles = StyleSheet.create({
     color: '#722F37',
     lineHeight: 34,
     marginBottom: 8,
-    fontFamily: 'Nunito_800ExtraBold',
+    fontFamily: 'NunitoSans_800ExtraBold',
   },
   producer: {
     fontSize: 17,
     color: 'rgba(45, 45, 45, 0.7)',
     marginBottom: 24,
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   vintageSection: {
     marginBottom: 24,
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#722F37',
     marginBottom: 12,
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   vintageScrollContent: {
     gap: 8,
@@ -393,13 +393,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#2c1810',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   vintageChipTextActive: {
     fontSize: 16,
     fontWeight: '600',
     color: '#2d2d2d',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   maturitySection: {
     flexDirection: 'row',
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
   maturityLabel: {
     fontSize: 14,
     color: 'rgba(45, 45, 45, 0.6)',
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   warningIcon: {
     width: 18,
@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#2c1810',
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'NunitoSans_700Bold',
   },
   bottomActions: {
     position: 'absolute',
@@ -478,7 +478,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#722F37',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   addButton: {
     flex: 1,
@@ -501,6 +501,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#fff',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
 })

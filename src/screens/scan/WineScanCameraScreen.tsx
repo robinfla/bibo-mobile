@@ -230,14 +230,14 @@ const styles = StyleSheet.create({
     color: '#722F37',
     marginTop: 24,
     marginBottom: 12,
-    fontFamily: 'Nunito_700Bold',
+    fontFamily: 'NunitoSans_700Bold',
   },
   permissionText: {
     fontSize: 16,
     color: '#8a7568',
     textAlign: 'center',
     marginBottom: 32,
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'NunitoSans_400Regular',
   },
   permissionButton: {
     backgroundColor: '#722F37',
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#fff',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   topBar: {
     flexDirection: 'row',
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     color: 'rgba(255, 255, 255, 0.7)',
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   modeTabTextActive: {
     color: '#722F37',
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.6)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 8,
-    fontFamily: 'Nunito_500',
+    fontFamily: 'NunitoSans_500Medium',
   },
   instructionsLink: {
     textDecorationLine: 'underline',
