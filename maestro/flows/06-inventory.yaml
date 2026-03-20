@@ -1,0 +1,37 @@
+# Flow: Test inventory management
+appId: com.bibo.winecellar
+---
+- launchApp
+
+# Navigate to inventory
+- tapOn: "Inventory"
+
+# Test search
+- tapOn:
+    text: ".*search.*"
+    optional: true
+- inputText: "Bordeaux"
+- assertVisible:
+    text: ".*"
+    timeout: 3000
+
+# Clear search
+- tapOn:
+    text: ".*clear.*|.*x.*"
+    optional: true
+
+# Test filters
+- tapOn:
+    text: ".*filter.*"
+    optional: true
+
+# Test wine card tap
+- tapOn:
+    index: 0
+    
+# Verify wine detail page
+- assertVisible:
+    text: ".*details.*|.*vintage.*|.*producer.*"
+    
+# Go back
+- back

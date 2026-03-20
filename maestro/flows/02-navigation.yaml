@@ -1,0 +1,25 @@
+# Flow: Test bottom navigation
+appId: com.bibo.winecellar
+---
+- launchApp
+
+# Test all bottom tabs
+- tapOn: "Home"
+- assertVisible: "Home"
+
+- tapOn: "Inventory"
+- assertVisible: "Inventory"
+
+- tapOn: "Scan"
+- assertVisible:
+    text: ".*camera.*"
+    optional: true
+
+- tapOn: "Sommelier"
+- assertVisible: "Sommelier"
+
+- tapOn: "Cellars"
+- assertVisible: "Cellars"
+
+# Return to home
+- tapOn: "Home"

@@ -1,0 +1,257 @@
+<html lang="en" vid="0"><head vid="1">
+ <meta charset="UTF-8" vid="2">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+ <title vid="4">Wine Cellar Redesign</title>
+ <script src="https://cdn.tailwindcss.com/3.4.17" vid="5"></script>
+ <script src="https://unpkg.com/@phosphor-icons/web" vid="6"></script>
+ <link rel="preconnect" href="https://fonts.googleapis.com" vid="7">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="8">
+ <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;display=swap" rel="stylesheet" vid="9">
+ 
+ <script vid="10">
+ tailwind.config = {
+ theme: {
+ extend: {
+ fontFamily: {
+ sans: ['"DM Sans"', 'sans-serif'],
+ serif: ['"Playfair Display"', 'serif'],
+ },
+ colors: {
+ wine: {
+ 50: '#fdf8f9',
+ 100: '#f9edef',
+ 200: '#f3dadd',
+ 300: '#e9bfc6',
+ 400: '#da9aa6',
+ 500: '#c57182',
+ 600: '#a75062',
+ 700: '#8c3d4e',
+ 800: '#763544',
+ 900: '#64303b',
+ 950: '#35161f',
+ DEFAULT: '#8a3b46', 
+ },
+ paper: {
+ DEFAULT: '#FAF9F7', 
+ dark: '#F3F2EE'
+ },
+ blush: '#da9aa6' 
+ },
+ boxShadow: {
+ 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.04)',
+ 'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+ }
+ }
+ }
+ }
+ </script>
+ <style vid="11">
+ .no-scrollbar::-webkit-scrollbar {
+ display: none;
+ }
+ .no-scrollbar {
+ -ms-overflow-style: none; 
+ scrollbar-width: none; 
+ }
+ .vintage-scrollbar::-webkit-scrollbar {
+ height: 2px;
+ }
+ .vintage-scrollbar::-webkit-scrollbar-track {
+ background: #f3dadd; 
+ border-radius: 10px;
+ }
+ .vintage-scrollbar::-webkit-scrollbar-thumb {
+ background: #8a3b46; 
+ border-radius: 10px;
+ }
+ </style>
+</head>
+<body class="bg-black flex items-center justify-center min-h-screen text-gray-800 font-sans" vid="12">
+
+ <div class="relative w-[401px] h-[874px] bg-paper rounded-[44px] overflow-hidden shadow-2xl ring-8 ring-gray-900 flex flex-col" vid="13">
+ 
+ <div class="h-12 w-full flex items-center justify-between px-6 pt-2 shrink-0 z-50 bg-paper/80 backdrop-blur-md absolute top-0 left-0" vid="14">
+ <div class="text-[15px] font-semibold tracking-tight text-gray-900" vid="15">01:16</div>
+ <div class="w-[120px] h-[32px] bg-black rounded-full absolute left-1/2 -translate-x-1/2 top-2" vid="16"></div>
+ <div class="flex items-center gap-1.5" vid="17">
+ <i class="ph-fill ph-cell-signal-full text-gray-900 text-sm" vid="18"></i>
+ <i class="ph-fill ph-wifi-high text-gray-900 text-sm" vid="19"></i>
+ <i class="ph-fill ph-battery-full text-gray-900 text-xl" vid="20"></i>
+ </div>
+ </div>
+
+ <div class="pt-16 px-6 pb-2 shrink-0 bg-paper relative z-40" vid="21">
+ <div class="flex items-center justify-between mb-6" vid="22">
+ <button class="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm hover:bg-gray-50 transition-colors" vid="23">
+ <i class="ph ph-caret-left text-lg text-gray-700" vid="24"></i>
+ </button>
+ <h1 class="text-2xl font-serif font-semibold text-gray-900" vid="25">My Cellar</h1>
+ <div class="w-10 h-10" vid="26"></div>
+ </div>
+
+ <div class="flex gap-3 mb-6" vid="27">
+ <div class="flex-1 relative group" vid="28">
+ <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg group-focus-within:text-wine transition-colors" vid="29"></i>
+ <input type="text" placeholder="Search your collection..." class="w-full h-12 bg-white rounded-2xl pl-11 pr-4 text-[15px] text-gray-700 placeholder-gray-400 border border-gray-200 shadow-sm focus:outline-none focus:border-wine/30 focus:ring-4 focus:ring-wine/10 transition-all" vid="30">
+ </div>
+ <button class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white border border-gray-200 shadow-sm text-gray-600 hover:text-wine hover:border-wine/30 transition-colors" vid="31">
+ <i class="ph ph-faders text-xl" vid="32"></i>
+ </button>
+ </div>
+
+ <div class="flex gap-8 border-b border-gray-200/80" vid="33">
+ <button class="pb-3 text-[15px] font-semibold text-wine border-b-2 border-wine relative" vid="34">
+ Cellar
+ <span class="absolute top-0 -right-2.5 w-1.5 h-1.5 bg-wine rounded-full" vid="35"></span>
+ </button>
+ <button class="pb-3 text-[15px] font-medium text-gray-400 hover:text-gray-700 transition-colors" vid="36">Wishlist</button>
+ <button class="pb-3 text-[15px] font-medium text-gray-400 hover:text-gray-700 transition-colors" vid="37">History</button>
+ </div>
+ </div>
+
+ <div class="flex-1 overflow-y-auto no-scrollbar px-5 pt-4 pb-32 z-10" vid="38">
+ <div class="flex flex-col gap-4" vid="39">
+
+ <!-- Card 1 -->
+ <div class="bg-white rounded-[24px] p-3.5 flex gap-4 shadow-soft border border-gray-100 relative group overflow-hidden" vid="40">
+ <div class="absolute -right-10 -top-10 w-32 h-32 bg-wine/5 rounded-full blur-2xl pointer-events-none" vid="41"></div>
+ <div class="w-[100px] h-[140px] rounded-2xl overflow-hidden shrink-0 relative bg-paper-dark" vid="42">
+ <img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?q=80&w=600&auto=format&fit=crop" alt="Porseleinberg Syrah" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" vid="43">
+ <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 mix-blend-multiply" vid="44"></div>
+ </div>
+ <div class="flex-1 flex flex-col py-1 overflow-hidden" vid="45">
+ <div class="flex justify-between items-start mb-1.5" vid="46">
+ <span class="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-400" vid="47">Porseleinberg</span>
+ <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#F0FDF4] border border-[#DCFCE7]" vid="48">
+ <span class="w-1.5 h-1.5 rounded-full bg-[#22C55E]" vid="49"></span>
+ <span class="text-[10px] font-semibold text-[#166534]" vid="50">Ready</span>
+ </div>
+ </div>
+ <h3 class="font-serif text-[22px] font-semibold text-gray-900 leading-tight tracking-tight mb-1" vid="51">Syrah</h3>
+ <p class="text-[13px] text-gray-500 font-serif italic mb-auto flex items-center gap-1" vid="52">
+ Swartland <span class="w-1 h-1 rounded-full bg-gray-300 mx-1 inline-block" vid="53"></span> Red
+ </p>
+ <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between" vid="54">
+ <div class="flex items-center gap-2 overflow-hidden max-w-[140px]" vid="55">
+ <div class="overflow-x-auto vintage-scrollbar pb-1.5 flex gap-1.5 snap-x" vid="56">
+ <button class="px-2.5 py-1 text-[11px] font-bold bg-[#8a3b46] text-white rounded-lg shadow-sm snap-start" vid="57">2023</button>
+ <button class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F7] text-gray-600 border border-gray-200 rounded-lg snap-start" vid="58">2022</button>
+ <button class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F7] text-gray-600 border border-gray-200 rounded-lg snap-start" vid="59">2021</button>
+ <button class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F7] text-gray-600 border border-gray-200 rounded-lg snap-start" vid="60">2020</button>
+ </div>
+ <span class="text-[10px] font-bold text-blush whitespace-nowrap" vid="61">+2 more</span>
+ </div>
+ <div class="flex items-center gap-1.5 bg-paper px-2.5 py-1 rounded-lg border border-gray-100 shrink-0" vid="62">
+ <i class="ph-fill ph-wine text-wine text-sm" vid="63"></i>
+ <span class="text-[13px] font-bold text-gray-900" vid="64">24</span>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Card 2 -->
+ <div class="bg-white rounded-[24px] p-3.5 flex gap-4 shadow-soft border border-gray-100 relative group overflow-hidden" vid="65">
+ <div class="absolute -right-10 -top-10 w-32 h-32 bg-wine/5 rounded-full blur-2xl pointer-events-none" vid="66"></div>
+ <div class="w-[100px] h-[140px] rounded-2xl overflow-hidden shrink-0 relative bg-paper-dark" vid="67">
+ <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop" alt="Boekenhoutskloof Cabernet Sauvignon" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" vid="68">
+ <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 mix-blend-multiply" vid="69"></div>
+ </div>
+ <div class="flex-1 flex flex-col py-1 overflow-hidden" vid="70">
+ <div class="flex justify-between items-start mb-1.5" vid="71">
+ <span class="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-400" vid="72">Boekenhoutskloof</span>
+ <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#F0FDF4] border border-[#DCFCE7]" vid="73">
+ <span class="w-1.5 h-1.5 rounded-full bg-[#22C55E]" vid="74"></span>
+ <span class="text-[10px] font-semibold text-[#166534]" vid="75">Ready</span>
+ </div>
+ </div>
+ <h3 class="font-serif text-[20px] font-semibold text-gray-900 leading-tight tracking-tight mb-1" vid="76">Cabernet Sauv.</h3>
+ <p class="text-[13px] text-gray-500 font-serif italic mb-auto flex items-center gap-1" vid="77">
+ Franschhoek <span class="w-1 h-1 rounded-full bg-gray-300 mx-1 inline-block" vid="78"></span> Red
+ </p>
+ <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between" vid="79">
+ <div class="flex items-center gap-2 overflow-hidden max-w-[140px]" vid="80">
+ <div class="overflow-x-auto vintage-scrollbar pb-1.5 flex gap-1.5 snap-x" vid="81">
+ <button class="px-2.5 py-1 text-[11px] font-bold bg-[#8a3b46] text-white rounded-lg shadow-sm snap-start" vid="82">2022</button>
+ <button class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F7] text-gray-600 border border-gray-200 rounded-lg snap-start" vid="83">2021</button>
+ <button class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F7] text-gray-600 border border-gray-200 rounded-lg snap-start" vid="84">2019</button>
+ <button class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F7] text-gray-600 border border-gray-200 rounded-lg snap-start" vid="85">2018</button>
+ </div>
+ <span class="text-[10px] font-bold text-blush whitespace-nowrap" vid="86">+1 more</span>
+ </div>
+ <div class="flex items-center gap-1.5 bg-paper px-2.5 py-1 rounded-lg border border-gray-100 shrink-0" vid="87">
+ <i class="ph-fill ph-wine text-wine text-sm" vid="88"></i>
+ <span class="text-[13px] font-bold text-gray-900" vid="89">6</span>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Card 3 -->
+ <div class="bg-white rounded-[24px] p-3.5 flex gap-4 shadow-soft border border-gray-100 relative group overflow-hidden" vid="90">
+ <div class="absolute -right-10 -top-10 w-32 h-32 bg-wine/5 rounded-full blur-2xl pointer-events-none" vid="91"></div>
+ <div class="w-[100px] h-[140px] rounded-2xl overflow-hidden shrink-0 relative bg-paper-dark" vid="92">
+ <img src="https://images.unsplash.com/photo-1569919659476-f0852f6834b7?q=80&w=600&auto=format&fit=crop" alt="Damascene Swartland Syrah" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out" vid="93">
+ <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 mix-blend-multiply" vid="94"></div>
+ </div>
+ <div class="flex-1 flex flex-col py-1 overflow-hidden" vid="95">
+ <div class="flex justify-between items-start mb-1.5" vid="96">
+ <span class="text-[10px] uppercase tracking-[0.15em] font-bold text-gray-400" vid="97">Damascene</span>
+ <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#EFF6FF] border border-[#DBEAFE]" vid="98">
+ <span class="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" vid="99"></span>
+ <span class="text-[10px] font-semibold text-[#1D4ED8]" vid="100">Young</span>
+ </div>
+ </div>
+ <h3 class="font-serif text-[22px] font-semibold text-gray-900 leading-tight tracking-tight mb-1" vid="101">Swartland Syrah</h3>
+ <p class="text-[13px] text-gray-500 font-serif italic mb-auto flex items-center gap-1" vid="102">
+ Franschhoek <span class="w-1 h-1 rounded-full bg-gray-300 mx-1 inline-block" vid="103"></span> Red
+ </p>
+ <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between" vid="104">
+ <div class="flex items-center gap-2 overflow-hidden max-w-[140px]" vid="105">
+ <div class="overflow-x-auto vintage-scrollbar pb-1.5 flex gap-1.5 snap-x" vid="106">
+ <button class="px-2.5 py-1 text-[11px] font-bold bg-[#8a3b46] text-white rounded-lg shadow-sm snap-start" vid="107">2024</button>
+ <button class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F7] text-gray-600 border border-gray-200 rounded-lg snap-start" vid="108">2023</button>
+ <button class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F7] text-gray-600 border border-gray-200 rounded-lg snap-start" vid="109">2020</button>
+ </div>
+ <span class="text-[10px] font-bold text-blush whitespace-nowrap" vid="110">+4 more</span>
+ </div>
+ <div class="flex items-center gap-1.5 bg-paper px-2.5 py-1 rounded-lg border border-gray-100 shrink-0" vid="111">
+ <i class="ph-fill ph-wine text-wine text-sm" vid="112"></i>
+ <span class="text-[13px] font-bold text-gray-900" vid="113">6</span>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ </div>
+ </div>
+
+ <!-- Bottom Tab Bar -->
+ <div class="absolute bottom-0 w-full z-50" vid="114">
+ <div class="h-12 bg-gradient-to-t from-white to-transparent w-full absolute -top-12 pointer-events-none" vid="115"></div>
+ <div class="bg-white/90 backdrop-blur-xl border-t border-gray-100 px-6 py-4 flex justify-between items-center pb-8 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]" vid="116">
+ <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-wine transition-colors" vid="117">
+ <i class="ph ph-house text-[26px]" vid="118"></i>
+ </button>
+ <button class="flex flex-col items-center gap-1 text-wine" vid="119">
+ <div class="relative" vid="120">
+ <i class="ph-fill ph-rows text-[26px]" vid="121"></i>
+ <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-wine rounded-full" vid="122"></div>
+ </div>
+ </button>
+ <div class="relative -mt-10 mx-2" vid="123">
+ <button class="w-[60px] h-[60px] bg-wine rounded-[20px] rotate-45 flex items-center justify-center shadow-lg shadow-wine/30 hover:bg-wine-600 transition-colors border-4 border-white" vid="124">
+ <i class="ph ph-plus text-2xl text-white -rotate-45" vid="125"></i>
+ </button>
+ </div>
+ <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-wine transition-colors" vid="126">
+ <i class="ph ph-compass text-[26px]" vid="127"></i>
+ </button>
+ <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-wine transition-colors" vid="128">
+ <i class="ph ph-user text-[26px]" vid="129"></i>
+ </button>
+ </div>
+ </div>
+
+ </div>
+</body>
+</html>

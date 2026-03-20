@@ -14,33 +14,14 @@ import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../../auth/AuthContext'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { HandWaving, Wine, Confetti, Cylinder, MagnifyingGlass, TrendUp } from 'phosphor-react-native'
 import { ConsumeWineModal } from '../../components/ConsumeWineModal'
-
-interface WineSuggestion {
-  id: string
-  wineId: number
-  name: string
-  vintage: number
-  region: string
-  imageUrl?: string
-  maturityStatus: 'peak' | 'approaching' | 'ready' | 'young' | 'past_prime'
-}
-
-interface AnalyticsData {
-  totalBottles: number
-  collectionValue: number
-  readyToDrink: number
-  regions: number
-  chartData: Array<{ label: string; value: number; maxValue: number }>
-}
 
 export const HomeScreen = () => {
   const { user } = useAuth()
   const navigation = useNavigation<any>()
   const [bottleCount, setBottleCount] = useState(0)
-  const [readyWines, setReadyWines] = useState<WineSuggestion[]>([])
-  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null)
+  const [lastMonthAdded, setLastMonthAdded] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [showConsumeModal, setShowConsumeModal] = useState(false)
@@ -50,31 +31,9 @@ export const HomeScreen = () => {
   const fetchData = useCallback(async () => {
     try {
       setIsLoading(true)
-      
-      // Fetch stats and ready wines
-      const [statsData, winesData] = await Promise.all([
-        apiFetch<any>('/api/reports/stats'),
-        apiFetch<{ wines: WineSuggestion[] }>('/api/wines/ready?limit=5'),
-      ])
-      
+      const statsData = await apiFetch<any>('/api/reports/stats')
       setBottleCount(statsData.totals.bottles)
-      setReadyWines(winesData.wines)
-
-      // Transform stats data for analytics widget
-      const topRegions = statsData.byRegion.slice(0, 5)
-      const maxBottles = Math.max(...topRegions.map((r: any) => r.bottles), 1)
-      
-      setAnalyticsData({
-        totalBottles: statsData.totals.bottles,
-        collectionValue: statsData.totals.estimatedValue,
-        readyToDrink: statsData.readyToDrink,
-        regions: statsData.byRegion.length,
-        chartData: topRegions.map((r: any) => ({
-          label: r.regionName,
-          value: r.bottles,
-          maxValue: maxBottles,
-        })),
-      })
+      setLastMonthAdded(statsData.lastMonthAdded ?? 0)
     } catch (error) {
       console.error('Failed to load home data:', error)
     } finally {
@@ -92,35 +51,10 @@ export const HomeScreen = () => {
     fetchData()
   }, [fetchData])
 
-  const getBadgeConfig = (status: string) => {
-    const configs: Record<string, {
-      label: string
-      gradient: readonly [string, string]
-      color: string
-    }> = {
-      peak: {
-        label: 'At Peak',
-        gradient: ['#e8f5e9', '#c8e6c9'] as const,
-        color: '#2e7d32',
-      },
-      approaching: {
-        label: 'Ready Now',
-        gradient: ['#fff3e0', '#ffe0b2'] as const,
-        color: '#ef6c00',
-      },
-      ready: {
-        label: 'Ready Now',
-        gradient: ['#fff3e0', '#ffe0b2'] as const,
-        color: '#ef6c00',
-      },
-    }
-    return configs[status] || configs.ready
-  }
-
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#722F37" />
+        <ActivityIndicator size="large" color={colors.brand.wine} />
       </View>
     )
   }
@@ -137,260 +71,120 @@ export const HomeScreen = () => {
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.greeting}>Hello {userName} 👋</Text>
+            <View style={styles.greetingRow}>
+              <Text style={styles.greeting}>Hello {userName} </Text>
+              <HandWaving weight="fill" color={colors.brand.waveYellow} size={32} />
+            </View>
             <Text style={styles.subtitle}>What's calling you tonight?</Text>
           </View>
-          
+
           <TouchableOpacity
             style={styles.profileButton}
             onPress={() => navigation.navigate('Profile' as never)}
             activeOpacity={0.8}
           >
-            <LinearGradient
-              colors={['#722F37', '#944654']}
-              style={styles.profileGradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-            >
+            <View style={styles.profileCircle}>
               <Text style={styles.profileInitials}>
                 {userName.substring(0, 2).toUpperCase()}
               </Text>
-            </LinearGradient>
+            </View>
           </TouchableOpacity>
         </View>
 
-        {/* Cellar Stats Card */}
+        {/* Stats Card */}
         <View style={styles.statsCardContainer}>
           <LinearGradient
-            colors={['#722F37', '#8b3a45']}
+            colors={['#fbc8d4', '#fde59a']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.statsCard}
           >
-            {/* Watermark */}
-            <Text style={styles.watermark}>🍷</Text>
-            
-            {/* Content */}
-            <Text style={styles.statsLabel}>YOUR COLLECTION</Text>
-            <Text style={styles.statsNumber}>{bottleCount}</Text>
-            <Text style={styles.statsSubtitle}>bottles in your cellar</Text>
+            {/* Wine glass watermark */}
+            <View style={styles.watermarkContainer}>
+              <Wine size={220} weight="fill" color="white" />
+            </View>
+
+            {/* Two-column layout */}
+            <View style={styles.statsColumns}>
+              {/* Left: Total Bottles */}
+              <View style={styles.statsColumnLeft}>
+                <Text style={styles.statsLabel}>Total Bottles</Text>
+                <Text style={styles.statsNumber}>{bottleCount}</Text>
+              </View>
+
+              {/* Vertical divider */}
+              <View style={styles.statsDivider} />
+
+              {/* Right: Last Month */}
+              <View style={styles.statsColumnRight}>
+                <Text style={styles.statsLabel}>Last Month</Text>
+                <View style={styles.statsPill}>
+                  <TrendUp size={16} weight="bold" color={colors.brand.wine} />
+                  <Text style={styles.statsPillText}>+{lastMonthAdded}</Text>
+                </View>
+              </View>
+            </View>
           </LinearGradient>
         </View>
 
-        {/* Quick Actions */}
+        {/* Quick Actions — 2x2 grid */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Quick Actions</Text>
 
-          {/* Add a Wine */}
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => navigation.navigate('AddWineStep1')}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionIcon}>
-              <Text style={styles.actionIconEmoji}>🍷</Text>
-            </View>
-            <View style={styles.actionContent}>
+          <View style={styles.actionsGrid}>
+            {/* Add a Wine */}
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => navigation.navigate('AddWineStep1')}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.actionIconCircle, { backgroundColor: colors.brand.iconPinkBg }]}>
+                <Wine size={28} weight="fill" color={colors.brand.iconPinkFg} />
+              </View>
               <Text style={styles.actionTitle}>Add a Wine</Text>
-              <Text style={styles.actionSubtitle}>Scan label or enter details</Text>
-            </View>
-            <Icon name="chevron-right" size={24} color="#999" />
-          </TouchableOpacity>
+            </TouchableOpacity>
 
-          {/* Open a Bottle */}
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => setShowConsumeModal(true)}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionIcon}>
-              <Text style={styles.actionIconEmoji}>🍾</Text>
-            </View>
-            <View style={styles.actionContent}>
+            {/* Open a Bottle */}
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => setShowConsumeModal(true)}
+              activeOpacity={0.7}
+            >
+              <LinearGradient
+                colors={['rgba(253, 229, 154, 0.3)', 'rgba(253, 229, 154, 0.1)']}
+                style={styles.actionCardGradientBg}
+              />
+              <View style={[styles.actionIconCircle, { backgroundColor: colors.brand.iconYellowBg }]}>
+                <Confetti size={28} weight="fill" color={colors.brand.iconYellowFg} />
+              </View>
               <Text style={styles.actionTitle}>Open a Bottle</Text>
-              <Text style={styles.actionSubtitle}>Mark one as consumed</Text>
-            </View>
-            <Icon name="chevron-right" size={24} color="#999" />
-          </TouchableOpacity>
+            </TouchableOpacity>
 
-          {/* Ask the Sommelier */}
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => navigation.navigate('Sommelier' as never)}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionIcon}>
-              <Text style={styles.actionIconEmoji}>🎩</Text>
-            </View>
-            <View style={styles.actionContent}>
-              <Text style={styles.actionTitle}>Ask the Sommelier</Text>
-              <Text style={styles.actionSubtitle}>Get personalized recommendations</Text>
-            </View>
-            <Icon name="chevron-right" size={24} color="#999" />
-          </TouchableOpacity>
+            {/* Ask Sommelier */}
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => navigation.navigate('Sommelier' as never)}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.actionIconCircle, { backgroundColor: colors.brand.iconPinkBg }]}>
+                <Cylinder size={28} weight="fill" color={colors.brand.iconPinkFg} />
+              </View>
+              <Text style={styles.actionTitle}>Ask Sommelier</Text>
+            </TouchableOpacity>
 
-          {/* Search Wines */}
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => navigation.navigate('WineSearch' as never)}
-            activeOpacity={0.7}
-          >
-            <View style={styles.actionIcon}>
-              <Text style={styles.actionIconEmoji}>🔍</Text>
-            </View>
-            <View style={styles.actionContent}>
+            {/* Search Wines */}
+            <TouchableOpacity
+              style={styles.actionCard}
+              onPress={() => navigation.navigate('WineSearch' as never)}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.actionIconCircle, { backgroundColor: colors.brand.iconYellowBg }]}>
+                <MagnifyingGlass size={28} weight="bold" color={colors.brand.iconYellowFg} />
+              </View>
               <Text style={styles.actionTitle}>Search Wines</Text>
-              <Text style={styles.actionSubtitle}>Browse 493K+ wines in our database</Text>
-            </View>
-            <Icon name="chevron-right" size={24} color="#999" />
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        {/* Analytics Widget */}
-        {analyticsData && (
-          <View style={styles.section}>
-            <View style={styles.analyticsWidget}>
-              {/* Header */}
-              <View style={styles.analyticsHeader}>
-                <View style={styles.analyticsHeaderLeft}>
-                  <Text style={styles.analyticsEmoji}>📊</Text>
-                  <Text style={styles.analyticsTitle}>Cellar Insights</Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Analytics' as never)}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.analyticsLink}>View Full Analytics ›</Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* Metrics Grid */}
-              <View style={styles.metricsGrid}>
-                <View style={styles.metricCard}>
-                  <Text style={styles.metricValue}>{analyticsData.totalBottles}</Text>
-                  <Text style={styles.metricLabel}>Bottles</Text>
-                </View>
-                <View style={styles.metricCard}>
-                  <Text style={styles.metricValue}>
-                    {analyticsData.collectionValue > 0 
-                      ? `€${analyticsData.collectionValue.toLocaleString()}` 
-                      : '—'}
-                  </Text>
-                  <Text style={styles.metricLabel}>Value</Text>
-                </View>
-                <View style={styles.metricCard}>
-                  <Text style={styles.metricValue}>{analyticsData.readyToDrink}</Text>
-                  <Text style={styles.metricLabel}>Ready</Text>
-                </View>
-                <View style={styles.metricCard}>
-                  <Text style={styles.metricValue}>{analyticsData.regions}</Text>
-                  <Text style={styles.metricLabel}>Regions</Text>
-                </View>
-              </View>
-
-              {/* Mini Bar Chart */}
-              <View style={styles.miniChart}>
-                {analyticsData.chartData.map((item, index) => {
-                  // Pastel color palette for each bar
-                  const pastelColors: readonly [string, string][] = [
-                    ['rgba(255, 182, 193, 0.6)', 'rgba(255, 182, 193, 0.9)'] as const, // Pastel pink
-                    ['rgba(173, 216, 230, 0.6)', 'rgba(173, 216, 230, 0.9)'] as const, // Pastel blue
-                    ['rgba(255, 218, 185, 0.6)', 'rgba(255, 218, 185, 0.9)'] as const, // Pastel peach
-                    ['rgba(221, 160, 221, 0.6)', 'rgba(221, 160, 221, 0.9)'] as const, // Pastel purple
-                    ['rgba(152, 251, 152, 0.6)', 'rgba(152, 251, 152, 0.9)'] as const, // Pastel green
-                  ]
-                  const barColors = pastelColors[index % pastelColors.length]
-                  
-                  return (
-                    <View key={index} style={styles.chartBarContainer}>
-                      <View style={styles.chartBarWrapper}>
-                        <LinearGradient
-                          colors={barColors}
-                          start={{ x: 0, y: 0 }}
-                          end={{ x: 0, y: 1 }}
-                          style={[
-                            styles.chartBar,
-                            { height: `${(item.value / item.maxValue) * 100}%` },
-                          ]}
-                        />
-                      </View>
-                      <Text style={styles.chartLabel} numberOfLines={1}>
-                        {item.label}
-                      </Text>
-                    </View>
-                  )
-                })}
-              </View>
-            </View>
-          </View>
-        )}
-
-        {/* Wine Suggestions */}
-        {readyWines.length > 0 && (
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Ready Tonight</Text>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('InventoryTab' as never, {
-                  screen: 'InventoryList',
-                  params: { tab: 'cellar', filter: { maturity: 'ready' } }
-                } as never)}
-              >
-                <Text style={styles.seeAllLink}>See all ›</Text>
-              </TouchableOpacity>
-            </View>
-
-            {readyWines.map((wine) => {
-              const badgeConfig = getBadgeConfig(wine.maturityStatus)
-              
-              return (
-                <TouchableOpacity
-                  key={wine.id}
-                  style={styles.wineCard}
-                  onPress={() => {
-                    // @ts-ignore - Navigate to nested WineDetail screen
-                    navigation.navigate('InventoryTab', {
-                      screen: 'WineDetail',
-                      params: { wineId: wine.wineId },
-                    })
-                  }}
-                  activeOpacity={0.7}
-                >
-                  {/* Wine Image */}
-                  <LinearGradient
-                    colors={['#722F37', '#944654']}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.wineImage}
-                  >
-                    <Text style={styles.wineImageEmoji}>🍷</Text>
-                  </LinearGradient>
-
-                  {/* Wine Info */}
-                  <View style={styles.wineInfo}>
-                    <Text style={styles.wineName} numberOfLines={1}>
-                      {wine.name}
-                    </Text>
-                    <Text style={styles.wineMeta}>
-                      {wine.vintage} • {wine.region}
-                    </Text>
-                    <LinearGradient
-                      colors={badgeConfig.gradient}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.maturityBadge}
-                    >
-                      <View style={[styles.badgeDot, { backgroundColor: badgeConfig.color }]} />
-                      <Text style={[styles.badgeText, { color: badgeConfig.color }]}>
-                        {badgeConfig.label}
-                      </Text>
-                    </LinearGradient>
-                  </View>
-                </TouchableOpacity>
-              )
-            })}
-          </View>
-        )}
       </ScrollView>
 
       {/* Modals */}
@@ -409,7 +203,7 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.brand.background,
   },
   scroll: {
     flex: 1,
@@ -421,9 +215,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fef9f5',
+    backgroundColor: colors.brand.background,
   },
-  
+
   // Header
   header: {
     flexDirection: 'row',
@@ -433,27 +227,9 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingBottom: 20,
   },
-  profileButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 6,
-  },
-  profileGradient: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
+  greetingRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-  },
-  profileInitials: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#fff',
   },
   greeting: {
     fontSize: 36,
@@ -467,8 +243,26 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: 4,
   },
+  profileButton: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+  },
+  profileCircle: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    backgroundColor: colors.brand.pinkLight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileInitials: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: colors.brand.wine,
+  },
 
-  // Cellar Stats Card
+  // Stats Card
   statsCardContainer: {
     paddingHorizontal: 24,
     marginBottom: 32,
@@ -478,37 +272,63 @@ const styles = StyleSheet.create({
     padding: 24,
     position: 'relative',
     overflow: 'hidden',
-    shadowColor: '#722F37',
+    shadowColor: '#d4a0aa',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
     shadowRadius: 24,
     elevation: 8,
   },
-  watermark: {
+  watermarkContainer: {
     position: 'absolute',
-    top: -20,
-    right: -20,
-    fontSize: 120,
-    opacity: 0.08,
+    top: -30,
+    right: -30,
+    opacity: 0.2,
+  },
+  statsColumns: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  statsColumnLeft: {
+    flex: 1,
+  },
+  statsDivider: {
+    width: 1,
+    height: 60,
+    backgroundColor: 'rgba(138, 59, 70, 0.2)',
+    marginHorizontal: 20,
+  },
+  statsColumnRight: {
+    flex: 1,
+    alignItems: 'flex-start',
   },
   statsLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: 'rgba(255, 255, 255, 0.7)',
-    letterSpacing: 0.5,
+    color: colors.brand.wine,
+    letterSpacing: 0.3,
     textTransform: 'uppercase',
+    marginBottom: 4,
   },
   statsNumber: {
-    fontSize: 48,
+    fontSize: 64,
     fontWeight: '800',
-    color: '#fff',
+    color: colors.brand.wine,
     letterSpacing: -2,
+  },
+  statsPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    gap: 6,
     marginTop: 4,
   },
-  statsSubtitle: {
-    fontSize: 15,
-    color: 'rgba(255, 255, 255, 0.8)',
-    marginTop: 4,
+  statsPillText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.brand.wine,
   },
 
   // Sections
@@ -516,221 +336,52 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     marginBottom: 32,
   },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
   sectionTitle: {
     fontSize: 22,
     fontWeight: '700',
     color: '#1a1a1a',
     letterSpacing: -0.5,
-  },
-  seeAllLink: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#722F37',
+    marginBottom: 16,
   },
 
-  // Action Buttons
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 18,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 16,
-    elevation: 3,
-  },
-  actionIcon: {
-    width: 52,
-    height: 52,
-    borderRadius: 16,
-    backgroundColor: '#f8f4f0',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  actionIconEmoji: {
-    fontSize: 28,
-  },
-  actionContent: {
-    flex: 1,
-  },
-  actionTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: '#1a1a1a',
-  },
-  actionSubtitle: {
-    fontSize: 14,
-    color: '#999',
-    marginTop: 2,
-  },
-
-  // Wine Cards
-  wineCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 16,
-    elevation: 3,
-  },
-  wineImage: {
-    width: 52,
-    height: 68,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 4,
-  },
-  wineImageEmoji: {
-    fontSize: 26,
-  },
-  wineInfo: {
-    flex: 1,
-    gap: 6,
-  },
-  wineName: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: '#1a1a1a',
-    letterSpacing: -0.3,
-  },
-  wineMeta: {
-    fontSize: 14,
-    color: '#999',
-  },
-  maturityBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    alignSelf: 'flex-start',
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 14,
-  },
-  badgeDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: '600',
-  },
-
-  // Analytics Widget
-  analyticsWidget: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.15)',
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 20,
-    elevation: 4,
-  },
-  analyticsHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  analyticsHeaderLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  analyticsEmoji: {
-    fontSize: 22,
-  },
-  analyticsTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1a1a1a',
-  },
-  analyticsLink: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#722F37',
-  },
-  metricsGrid: {
+  // Quick Actions Grid
+  actionsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
-    marginBottom: 20,
+    gap: 14,
   },
-  metricCard: {
-    width: '48%',
-    backgroundColor: '#f8f4f0',
-    borderRadius: 14,
-    padding: 16,
+  actionCard: {
+    width: '47%',
+    flexGrow: 1,
+    backgroundColor: '#fff',
+    borderRadius: 28,
+    paddingVertical: 28,
+    paddingHorizontal: 16,
     alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 12,
+    elevation: 2,
   },
-  metricValue: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#722F37',
-    marginBottom: 4,
+  actionCardGradientBg: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 28,
   },
-  metricLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#8a7568',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  miniChart: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    height: 80,
-    gap: 8,
-  },
-  chartBarContainer: {
-    flex: 1,
+  actionIconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: 'center',
-    gap: 6,
+    justifyContent: 'center',
+    marginBottom: 14,
   },
-  chartBarWrapper: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'flex-end',
-  },
-  chartBar: {
-    width: '100%',
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-    minHeight: 4,
-  },
-  chartLabel: {
-    fontSize: 10,
-    color: '#8a7568',
+  actionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1a1a1a',
     textAlign: 'center',
-    width: '100%',
   },
 })

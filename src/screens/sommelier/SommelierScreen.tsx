@@ -11,9 +11,10 @@ import {
   Platform,
   Image,
   Alert,
+  Animated,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft, DotsThreeVertical, Camera, Microphone, ChatCircleDots, Wine as WineIcon } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
@@ -54,11 +55,61 @@ const SUGGESTION_PROMPTS = [
   { emoji: '🍇', text: 'Grape varieties guide' },
 ]
 
+const C = {
+  cream: '#FEF6ED',
+  creamDark: '#F5EBE1',
+  brown: '#5A382E',
+  brownLight: '#8A5A4A',
+  brownMuted: '#A89F9A',
+  pink: '#FFB3C6',
+  pinkLight: '#FFD6E0',
+  pinkDark: '#E88B9E',
+  yellow: '#FFE57A',
+  rose: '#F28FA6',
+  frosted: 'rgba(255, 255, 255, 0.45)',
+  frostedBorder: 'rgba(255, 255, 255, 0.5)',
+}
+
+const TypingDots = () => {
+  const dot1 = useRef(new Animated.Value(0)).current
+  const dot2 = useRef(new Animated.Value(0)).current
+  const dot3 = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    const animate = (dot: Animated.Value, delay: number) => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.delay(delay),
+          Animated.timing(dot, { toValue: -4, duration: 300, useNativeDriver: true }),
+          Animated.timing(dot, { toValue: 0, duration: 300, useNativeDriver: true }),
+        ])
+      ).start()
+    }
+    animate(dot1, 0)
+    animate(dot2, 150)
+    animate(dot3, 300)
+  }, [])
+
+  return (
+    <View style={styles.typingDotsRow}>
+      {[dot1, dot2, dot3].map((dot, i) => (
+        <Animated.View key={i} style={[styles.typingDot, { transform: [{ translateY: dot }] }]} />
+      ))}
+    </View>
+  )
+}
+
+const BiboAvatar = () => (
+  <View style={styles.avatarCircle}>
+    <WineIcon size={16} weight="regular" color={C.rose} />
+  </View>
+)
+
 export const SommelierScreen = ({ route }: any) => {
   const navigation = useNavigation()
   const scrollViewRef = useRef<ScrollView>(null)
   const conversationId = route?.params?.conversationId
-  
+
   const [messages, setMessages] = useState<Message[]>([])
   const [inputText, setInputText] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -72,14 +123,12 @@ export const SommelierScreen = ({ route }: any) => {
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    // Fetch conversation history if conversationId exists
     if (conversationId) {
       fetchConversationHistory(conversationId)
     }
   }, [conversationId])
 
   useEffect(() => {
-    // Scroll to bottom when messages change
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true })
     }, 100)
@@ -90,7 +139,7 @@ export const SommelierScreen = ({ route }: any) => {
       const data = await apiFetch<{ messages: Array<{ role: string; content: string; timestamp: string }> }>(
         `/api/chat/${convId}`
       )
-      
+
       if (data.messages && data.messages.length > 0) {
         const formattedMessages: Message[] = data.messages.map((msg, idx) => ({
           id: `${idx}`,
@@ -126,16 +175,14 @@ export const SommelierScreen = ({ route }: any) => {
       const { recording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY
       )
-      
+
       setAudioRecording(recording)
       setIsRecording(true)
       setRecordingDuration(0)
 
-      // Start timer
       recordingTimerRef.current = setInterval(() => {
         setRecordingDuration((prev) => {
           if (prev >= 60) {
-            // Auto-send at 60 seconds
             sendVoiceMessage()
             return prev
           }
@@ -165,10 +212,9 @@ export const SommelierScreen = ({ route }: any) => {
     if (!audioRecording) return
 
     try {
-      // Stop recording
       await audioRecording.stopAndUnloadAsync()
       const uri = audioRecording.getURI()
-      
+
       if (recordingTimerRef.current) {
         clearInterval(recordingTimerRef.current)
         recordingTimerRef.current = null
@@ -178,7 +224,6 @@ export const SommelierScreen = ({ route }: any) => {
         throw new Error('No recording URI')
       }
 
-      // Upload audio file
       const formData = new FormData()
       formData.append('audio', {
         uri,
@@ -200,7 +245,6 @@ export const SommelierScreen = ({ route }: any) => {
 
       const { url } = await uploadResponse.json()
 
-      // Add voice message to chat
       const voiceMessage: Message = {
         id: Date.now().toString(),
         type: 'user',
@@ -217,7 +261,6 @@ export const SommelierScreen = ({ route }: any) => {
       setAudioRecording(null)
       setIsLoading(true)
 
-      // Send to sommelier
       const response = await apiFetch<{
         conversationId?: string
         message: string
@@ -304,7 +347,6 @@ export const SommelierScreen = ({ route }: any) => {
   }
 
   const handleScanLabel = async () => {
-    // Use existing wine scan functionality
     // @ts-ignore - navigation typing
     navigation.navigate('ScanWine')
   }
@@ -313,7 +355,6 @@ export const SommelierScreen = ({ route }: any) => {
     try {
       setIsLoading(true)
 
-      // Upload image
       const formData = new FormData()
       formData.append('image', {
         uri,
@@ -335,7 +376,6 @@ export const SommelierScreen = ({ route }: any) => {
 
       const { url } = await uploadResponse.json()
 
-      // Add photo message to chat
       const photoMessage: Message = {
         id: Date.now().toString(),
         type: 'user',
@@ -347,7 +387,6 @@ export const SommelierScreen = ({ route }: any) => {
 
       setMessages((prev) => [...prev, photoMessage])
 
-      // Send to sommelier
       const response = await apiFetch<{
         conversationId?: string
         message: string
@@ -383,7 +422,6 @@ export const SommelierScreen = ({ route }: any) => {
   }
 
   const getAuthToken = async () => {
-    // TODO: Get actual auth token from your auth system
     return '41040187dfc4b0bf953a62a83a8a4d1e658a330631f86697eab76e8438068715'
   }
 
@@ -403,7 +441,6 @@ export const SommelierScreen = ({ route }: any) => {
     setInputHeight(44)
     setIsLoading(true)
 
-    // Create placeholder message for streaming effect
     const assistantMessageId = (Date.now() + 1).toString()
     const placeholderMessage: Message = {
       id: assistantMessageId,
@@ -426,23 +463,20 @@ export const SommelierScreen = ({ route }: any) => {
         },
       })
 
-      // Store conversation ID if this is a new conversation
       if (response.conversationId && !currentConversationId) {
         setCurrentConversationId(response.conversationId)
       }
 
-      // Stream the response word by word
       const words = response.message.split(' ')
       let currentText = ''
-      
+
       for (let i = 0; i < words.length; i++) {
-        // Hide thinking bubble as soon as first word appears
         if (i === 0) {
           setIsLoading(false)
         }
-        
+
         currentText += (i > 0 ? ' ' : '') + words[i]
-        
+
         setMessages((prev) =>
           prev.map((msg) =>
             msg.id === assistantMessageId
@@ -450,8 +484,7 @@ export const SommelierScreen = ({ route }: any) => {
               : msg
           )
         )
-        
-        // Wait between words (faster for short words, slower for long ones)
+
         const delay = Math.min(50, 20 + words[i].length * 3)
         await new Promise(resolve => setTimeout(resolve, delay))
       }
@@ -477,13 +510,11 @@ export const SommelierScreen = ({ route }: any) => {
     navigation.navigate('WineDetail', { wineId })
   }
 
-  const renderMessage = (message: Message, index: number) => {
+  const renderMessage = (message: Message) => {
     if (message.type === 'assistant') {
       return (
-        <View
-          key={message.id}
-          style={[styles.messageContainer, styles.assistantContainer]}
-        >
+        <View key={message.id} style={styles.assistantRow}>
+          <BiboAvatar />
           <View style={styles.assistantBubble}>
             <Text style={styles.assistantText}>{message.text}</Text>
 
@@ -496,37 +527,21 @@ export const SommelierScreen = ({ route }: any) => {
                     onPress={() => handleWinePress(wine.wineId)}
                     activeOpacity={0.7}
                   >
-                    <LinearGradient
-                      colors={['#fef9f5', '#f8f4f0']}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.wineCardGradient}
-                    >
-                      <View style={styles.wineImageContainer}>
-                        {wine.imageUrl ? (
-                          <Image
-                            source={{ uri: wine.imageUrl }}
-                            style={styles.wineImage}
-                          />
-                        ) : (
-                          <View style={styles.wineImagePlaceholder}>
-                            <Icon name="bottle-wine" size={28} color="#999" />
-                          </View>
-                        )}
-                      </View>
+                    <View style={styles.wineImageContainer}>
+                      {wine.imageUrl ? (
+                        <Image source={{ uri: wine.imageUrl }} style={styles.wineImage} />
+                      ) : (
+                        <View style={styles.wineImagePlaceholder}>
+                          <WineIcon size={24} weight="regular" color="rgba(242, 143, 166, 0.7)" />
+                        </View>
+                      )}
+                    </View>
 
-                      <View style={styles.wineInfo}>
-                        <Text style={styles.wineName} numberOfLines={2}>
-                          {wine.name}
-                        </Text>
-                        <Text style={styles.wineRegion} numberOfLines={1}>
-                          {wine.region}
-                        </Text>
-                        <Text style={styles.pairingNote} numberOfLines={2}>
-                          {wine.pairingNote}
-                        </Text>
-                      </View>
-                    </LinearGradient>
+                    <View style={styles.wineInfo}>
+                      <Text style={styles.wineName} numberOfLines={1}>{wine.name}</Text>
+                      <Text style={styles.wineRegion} numberOfLines={1}>{wine.region}</Text>
+                      <Text style={styles.pairingNote} numberOfLines={2}>{wine.pairingNote}</Text>
+                    </View>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -562,7 +577,6 @@ export const SommelierScreen = ({ route }: any) => {
             minute: '2-digit',
           })}
           onPress={() => {
-            // TODO: Open full-screen image viewer
             console.log('Open image:', message.imageUrl)
           }}
         />
@@ -571,18 +585,10 @@ export const SommelierScreen = ({ route }: any) => {
 
     // Regular text message
     return (
-      <View
-        key={message.id}
-        style={[styles.messageContainer, styles.userContainer]}
-      >
-        <LinearGradient
-          colors={['#722F37', '#944654']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.userBubble}
-        >
+      <View key={message.id} style={styles.userRow}>
+        <View style={styles.userBubble}>
           <Text style={styles.userText}>{message.text}</Text>
-        </LinearGradient>
+        </View>
       </View>
     )
   }
@@ -596,53 +602,71 @@ export const SommelierScreen = ({ route }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Ambient blobs */}
+      <View style={styles.blobYellow} />
+      <View style={styles.blobPink} />
+
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
-          style={styles.menuButton}
+          style={styles.headerButton}
           onPress={() => setShowSidebar(true)}
           activeOpacity={0.7}
         >
-          <Icon name="menu" size={24} color="#2c1810" />
+          <CaretLeft size={24} weight="bold" color={C.brown} />
         </TouchableOpacity>
-        
-        <Text style={styles.headerTitle}>Bibo Sommelier</Text>
-        
-        {conversationId && (
-          <TouchableOpacity
-            style={styles.menuButton}
-            onPress={() => navigation.navigate('SommelierChat' as never)}
-            activeOpacity={0.7}
-          >
-            <Icon name="close" size={24} color="#2c1810" />
-          </TouchableOpacity>
-        )}
-        {!conversationId && <View style={styles.menuButton} />}
+
+        <View style={styles.headerCenter}>
+          <Text style={styles.headerTitle}>Bibo</Text>
+          <View style={styles.onlineRow}>
+            <View style={styles.onlineDot} />
+            <Text style={styles.onlineText}>Online</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => {
+            if (conversationId) {
+              navigation.navigate('SommelierChat' as never)
+            }
+          }}
+          activeOpacity={0.7}
+        >
+          <DotsThreeVertical size={24} weight="fill" color={C.brown} />
+        </TouchableOpacity>
       </View>
 
       {/* Chat Container */}
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
-        <LinearGradient
-          colors={['#fef9f5', '#f8f4f0']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.chatContainer}
-        >
+        <View style={styles.chatContainer}>
           <ScrollView
             ref={scrollViewRef}
             style={styles.messagesScroll}
             contentContainerStyle={styles.messagesContent}
             showsVerticalScrollIndicator={false}
           >
-            {messages.length === 0 ? renderEmptyState() : messages.map((message, index) => renderMessage(message, index))}
+            {/* Date separator */}
+            {messages.length > 0 && (
+              <View style={styles.dateSeparator}>
+                <View style={styles.datePill}>
+                  <Text style={styles.dateText}>
+                    Today, {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </Text>
+                </View>
+              </View>
+            )}
+
+            {messages.length === 0 ? renderEmptyState() : messages.map((message) => renderMessage(message))}
+
             {isLoading && (
-              <View style={[styles.messageContainer, styles.assistantContainer]}>
-                <View style={styles.assistantBubble}>
-                  <Text style={styles.typingText}>Thinking...</Text>
+              <View style={styles.assistantRow}>
+                <BiboAvatar />
+                <View style={[styles.assistantBubble, styles.typingBubble]}>
+                  <TypingDots />
                 </View>
               </View>
             )}
@@ -673,6 +697,13 @@ export const SommelierScreen = ({ route }: any) => {
 
           {/* Input Container */}
           <View style={styles.inputContainer}>
+            {/* Fade gradient above input */}
+            <LinearGradient
+              colors={['rgba(254, 246, 237, 0)', 'rgba(254, 246, 237, 0.95)']}
+              style={styles.inputFade}
+              pointerEvents="none"
+            />
+
             {isRecording ? (
               <VoiceRecordingBar
                 duration={recordingDuration}
@@ -681,61 +712,62 @@ export const SommelierScreen = ({ route }: any) => {
               />
             ) : (
               <View style={styles.inputRow}>
-                {/* Camera Icon */}
+                {/* Camera */}
                 <TouchableOpacity
-                  style={styles.iconButton}
+                  style={styles.frostedButton}
                   onPress={() => setShowPhotoPicker(true)}
                   activeOpacity={0.7}
                 >
-                  <Icon name="camera" size={20} color="#722F37" />
+                  <Camera size={24} weight="regular" color={C.brown} />
                 </TouchableOpacity>
 
                 {/* Text Input */}
-                <TextInput
-                  style={[styles.input, { height: Math.max(44, inputHeight) }]}
-                  value={inputText}
-                  onChangeText={setInputText}
-                  placeholder="Ask me anything about wine"
-                  placeholderTextColor="#999"
-                  multiline
-                  onContentSizeChange={(e) =>
-                    setInputHeight(Math.min(100, e.nativeEvent.contentSize.height))
-                  }
-                  returnKeyType="send"
-                  onSubmitEditing={() => handleSend()}
-                  blurOnSubmit={false}
-                />
-
-                {/* Mic Icon (or Send Button if text exists) */}
-                {inputText.trim() ? (
-                  <TouchableOpacity
-                    style={styles.sendButtonContainer}
-                    onPress={() => handleSend()}
-                    disabled={isLoading}
-                    activeOpacity={0.8}
-                  >
-                    <LinearGradient
-                      colors={['#722F37', '#944654']}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      style={styles.sendButton}
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    style={[styles.input, { height: Math.max(44, inputHeight) }]}
+                    value={inputText}
+                    onChangeText={setInputText}
+                    placeholder="Type a message..."
+                    placeholderTextColor={C.brownMuted}
+                    multiline
+                    onContentSizeChange={(e) =>
+                      setInputHeight(Math.min(100, e.nativeEvent.contentSize.height))
+                    }
+                    returnKeyType="send"
+                    onSubmitEditing={() => handleSend()}
+                    blurOnSubmit={false}
+                  />
+                  {!inputText.trim() && (
+                    <TouchableOpacity
+                      style={styles.micInsideInput}
+                      onPress={startRecording}
+                      activeOpacity={0.7}
                     >
-                      <Icon name="arrow-up" size={18} color="#fff" />
-                    </LinearGradient>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.iconButton}
-                    onPress={startRecording}
-                    activeOpacity={0.7}
+                      <Microphone size={20} weight="fill" color={C.brownMuted} />
+                    </TouchableOpacity>
+                  )}
+                </View>
+
+                {/* Send */}
+                <TouchableOpacity
+                  style={styles.sendButtonOuter}
+                  onPress={() => handleSend()}
+                  disabled={isLoading || !inputText.trim()}
+                  activeOpacity={0.8}
+                >
+                  <LinearGradient
+                    colors={[C.pink, C.rose]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.sendButton}
                   >
-                    <Icon name="microphone" size={20} color="#722F37" />
-                  </TouchableOpacity>
-                )}
+                    <ChatCircleDots size={24} weight="fill" color="#fff" />
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
             )}
           </View>
-        </LinearGradient>
+        </View>
       </KeyboardAvoidingView>
 
       {/* Sidebar */}
@@ -753,18 +785,15 @@ export const SommelierScreen = ({ route }: any) => {
         onProfilePress={async () => {
           try {
             const data = await apiFetch<{ profile: any; onboardingCompleted: boolean }>('/api/profile/taste')
-            
+
             if (!data.profile || !data.onboardingCompleted) {
-              // No profile exists, show empty state with options
               // @ts-ignore - Navigation typing
               navigation.navigate('TasteProfileEmpty')
             } else {
-              // Profile exists, go to summary
               // @ts-ignore - Navigation typing
               navigation.navigate('TasteProfile')
             }
           } catch (error) {
-            // On error (404 or other), assume no profile, show empty state
             // @ts-ignore - Navigation typing
             navigation.navigate('TasteProfileEmpty')
           }
@@ -790,30 +819,76 @@ export const SommelierScreen = ({ route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5',
+    backgroundColor: C.cream,
   },
+
+  // Ambient blobs
+  blobYellow: {
+    position: 'absolute',
+    top: '-10%',
+    left: '-20%',
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+    backgroundColor: C.yellow,
+    opacity: 0.25,
+  },
+  blobPink: {
+    position: 'absolute',
+    bottom: '10%',
+    right: '-20%',
+    width: 350,
+    height: 350,
+    borderRadius: 175,
+    backgroundColor: C.pink,
+    opacity: 0.15,
+  },
+
+  // Header
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
+    zIndex: 40,
   },
-  menuButton: {
-    width: 44,
-    height: 44,
+  headerButton: {
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#2c1810',
-    fontFamily: 'Nunito_700Bold',
+  headerCenter: {
+    alignItems: 'center',
   },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: C.brown,
+    letterSpacing: 0.5,
+  },
+  onlineRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 1,
+  },
+  onlineDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#22C55E',
+  },
+  onlineText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#16A34A',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+
+  // Chat
   keyboardAvoid: {
     flex: 1,
   },
@@ -824,9 +899,173 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   messagesContent: {
-    padding: 16,
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 160,
     flexGrow: 1,
+    gap: 16,
   },
+
+  // Date separator
+  dateSeparator: {
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  datePill: {
+    backgroundColor: C.frosted,
+    borderWidth: 1,
+    borderColor: C.frostedBorder,
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+  },
+  dateText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: C.brownMuted,
+  },
+
+  // Assistant messages
+  assistantRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 8,
+  },
+  avatarCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: C.frosted,
+    borderWidth: 1,
+    borderColor: C.frostedBorder,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  assistantBubble: {
+    backgroundColor: C.frosted,
+    borderWidth: 1,
+    borderColor: C.frostedBorder,
+    borderRadius: 24,
+    borderBottomLeftRadius: 8,
+    padding: 16,
+    maxWidth: '82%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.03,
+    shadowRadius: 15,
+    elevation: 2,
+  },
+  assistantText: {
+    fontSize: 15,
+    lineHeight: 22.5,
+    color: C.brown,
+  },
+  typingBubble: {
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+  },
+  typingDotsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    height: 24,
+  },
+  typingDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(232, 139, 158, 0.6)',
+  },
+
+  // User messages
+  userRow: {
+    alignItems: 'flex-end',
+  },
+  userBubble: {
+    backgroundColor: 'rgba(255, 214, 224, 0.3)',
+    borderWidth: 1,
+    borderColor: C.frostedBorder,
+    borderRadius: 24,
+    borderBottomRightRadius: 8,
+    padding: 16,
+    maxWidth: '85%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.03,
+    shadowRadius: 15,
+    elevation: 2,
+  },
+  userText: {
+    fontSize: 15,
+    lineHeight: 22.5,
+    color: C.brown,
+  },
+
+  // Wine cards
+  suggestionsContainer: {
+    marginTop: 12,
+    gap: 10,
+  },
+  wineCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.4)',
+    borderRadius: 16,
+    padding: 10,
+    gap: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 8,
+    elevation: 1,
+  },
+  wineImageContainer: {
+    width: 52,
+    height: 68,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  wineImage: {
+    width: '100%',
+    height: '100%',
+  },
+  wineImagePlaceholder: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  wineInfo: {
+    flex: 1,
+  },
+  wineName: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: C.brown,
+    marginBottom: 2,
+  },
+  wineRegion: {
+    fontSize: 12,
+    color: C.brownMuted,
+    marginBottom: 4,
+  },
+  pairingNote: {
+    fontSize: 12,
+    color: C.brownLight,
+    fontStyle: 'italic',
+  },
+
+  // Empty state
   emptyState: {
     flex: 1,
     justifyContent: 'center',
@@ -840,136 +1079,33 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#722F37',
+    color: C.brown,
     textAlign: 'center',
-    fontFamily: 'Nunito_700Bold',
   },
-  messageContainer: {
-    marginBottom: 12,
-  },
-  assistantContainer: {
-    alignItems: 'flex-start',
-  },
-  userContainer: {
-    alignItems: 'flex-end',
-  },
-  assistantBubble: {
-    backgroundColor: '#fff',
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    padding: 14,
-    maxWidth: '85%',
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  assistantText: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: '#2c1810',
-    fontFamily: 'Nunito_400Regular',
-  },
-  userBubble: {
-    borderRadius: 18,
-    padding: 14,
-    maxWidth: '85%',
-  },
-  userText: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: '#fff',
-    fontFamily: 'Nunito_400Regular',
-  },
-  typingText: {
-    fontSize: 15,
-    color: '#8a7568',
-    fontStyle: 'italic',
-  },
-  suggestionsContainer: {
-    marginTop: 12,
-    gap: 10,
-  },
-  wineCard: {
-    borderRadius: 12,
-    overflow: 'hidden',
-    shadowColor: '#2c1810',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  wineCardGradient: {
-    flexDirection: 'row',
-    padding: 12,
-    gap: 12,
-  },
-  wineImageContainer: {
-    width: 60,
-    height: 80,
-    borderRadius: 8,
-    overflow: 'hidden',
-    backgroundColor: '#f5f5f5',
-  },
-  wineImage: {
-    width: '100%',
-    height: '100%',
-  },
-  wineImagePlaceholder: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  wineInfo: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  wineName: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#2c1810',
-    marginBottom: 4,
-    fontFamily: 'Nunito_700Bold',
-  },
-  wineRegion: {
-    fontSize: 12,
-    color: '#8a7568',
-    marginBottom: 6,
-    fontFamily: 'Nunito_400Regular',
-  },
-  pairingNote: {
-    fontSize: 12,
-    color: '#722F37',
-    fontStyle: 'italic',
-    fontFamily: 'Nunito_400Regular',
-  },
+
+  // Suggestion carousel
   carouselContainer: {
     paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(228, 213, 203, 0.3)',
   },
   carouselContent: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     gap: 10,
   },
   suggestionChip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#fff',
+    backgroundColor: C.frosted,
+    borderWidth: 1,
+    borderColor: C.frostedBorder,
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
+    shadowOpacity: 0.03,
     shadowRadius: 8,
-    elevation: 2,
+    elevation: 1,
   },
   suggestionEmoji: {
     fontSize: 18,
@@ -977,55 +1113,94 @@ const styles = StyleSheet.create({
   suggestionText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#2c1810',
-    fontFamily: 'Nunito_600SemiBold',
+    color: C.brown,
   },
+
+  // Input
   inputContainer: {
-    padding: 12,
-    paddingBottom: Platform.OS === 'ios' ? 100 : 90, // Space for floating tab bar
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(228, 213, 203, 0.3)',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 50,
+    paddingHorizontal: 20,
+    paddingBottom: Platform.OS === 'ios' ? 100 : 90,
+    paddingTop: 16,
+    backgroundColor: 'rgba(254, 246, 237, 0.8)',
+  },
+  inputFade: {
+    position: 'absolute',
+    top: -48,
+    left: 0,
+    right: 0,
+    height: 48,
   },
   inputRow: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 8,
-  },
-  iconButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(114, 47, 55, 0.08)',
     alignItems: 'center',
+    gap: 12,
+  },
+  frostedButton: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: C.frosted,
+    borderWidth: 1,
+    borderColor: C.frostedBorder,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  inputWrapper: {
+    flex: 1,
+    position: 'relative',
     justifyContent: 'center',
   },
   input: {
-    flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: C.frosted,
     borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    borderRadius: 22,
-    paddingHorizontal: 16,
+    borderColor: C.frostedBorder,
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    paddingRight: 44,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#2c1810',
+    color: C.brown,
+    fontWeight: '500',
     maxHeight: 100,
-    fontFamily: 'Nunito_400Regular',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  sendButtonContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+  micInsideInput: {
+    position: 'absolute',
+    right: 16,
+    top: '50%',
+    marginTop: -10,
   },
-  sendButtonDisabled: {
-    opacity: 0.4,
+  sendButtonOuter: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    shadowColor: C.pink,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 25,
+    elevation: 6,
   },
   sendButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(254, 246, 237, 0.5)',
   },
 })

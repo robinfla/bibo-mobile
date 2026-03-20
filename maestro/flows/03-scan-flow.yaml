@@ -1,0 +1,23 @@
+# Flow: Test scan and wine recognition
+appId: com.bibo.winecellar
+---
+- launchApp
+
+# Navigate to scan
+- tapOn: "Scan"
+
+# Note: Camera testing is limited in simulator
+# This tests the UI flow, not actual scanning
+
+# Check scan UI elements
+- assertVisible:
+    text: ".*scan.*|.*camera.*"
+    optional: true
+
+# Test manual entry fallback (if available)
+- tapOn:
+    text: ".*manual.*|.*search.*"
+    optional: true
+
+# Go back
+- back

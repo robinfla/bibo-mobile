@@ -1,0 +1,23 @@
+# Flow: Test cellar/rack management
+appId: com.bibo.winecellar
+---
+- launchApp
+
+# Navigate to cellars
+- tapOn: "Cellars"
+
+# Test cellar selection
+- tapOn:
+    index: 0  # First cellar
+
+# Verify cellar view
+- assertVisible:
+    text: ".*space.*|.*rack.*|.*bottles.*"
+
+# Test rack view (if available)
+- tapOn:
+    text: ".*rack.*|.*view.*"
+    optional: true
+
+# Go back
+- back

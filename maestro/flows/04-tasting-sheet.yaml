@@ -1,0 +1,63 @@
+# Flow: Test comprehensive tasting sheet
+appId: com.bibo.winecellar
+---
+- launchApp
+
+# Navigate to a wine (assumes inventory has wines)
+- tapOn: "Inventory"
+- tapOn:
+    index: 0  # First wine in list
+
+# Open tasting sheet
+- tapOn:
+    text: ".*tasting.*|.*review.*"
+    
+# Test rating slider
+- tapOn: "Rating"
+- swipe:
+    direction: RIGHT
+    duration: 500
+- tapOn: "Done"
+
+# Test Visual section
+- scrollUntilVisible:
+    element: "Visual"
+- tapOn: "Visual"
+
+# Test color picker (swipe on gradient)
+- swipe:
+    start: 20%, 50%
+    end: 80%, 50%
+    duration: 300
+
+# Test sliders
+- scrollUntilVisible:
+    element: "Intensity"
+
+# Test Nose section
+- scrollUntilVisible:
+    element: "Nose"
+
+# Test Palate section  
+- scrollUntilVisible:
+    element: "Palate"
+
+# Test Context section
+- scrollUntilVisible:
+    element: "Context"
+
+# Test Notes section
+- scrollUntilVisible:
+    element: "Notes"
+- tapOn: "Notes"
+- inputText: "Automated test tasting note"
+
+# Save tasting
+- scrollUntilVisible:
+    element: "Save"
+- tapOn: "Save"
+
+# Verify save success
+- assertVisible:
+    text: ".*saved.*|.*success.*"
+    timeout: 5000

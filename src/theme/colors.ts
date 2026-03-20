@@ -46,6 +46,18 @@ export const colors = {
     dessert: '#fb923c',
     fortified: '#a855f7',
   },
+  brand: {
+    background: '#faf9f7',
+    wine: '#8a3b46',
+    pinkLight: '#fbc8d4',
+    yellowLight: '#fde59a',
+    iconPinkBg: '#fde4eb',
+    iconPinkFg: '#c73b4b',
+    iconYellowBg: '#fef9c3',
+    iconYellowFg: '#b45309',
+    waveYellow: '#F6C343',
+    tabInactive: '#9ca3af',
+  },
 } as const
 
 export const chartColors = {

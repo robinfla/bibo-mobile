@@ -1,0 +1,20 @@
+# Flow: Launch app and login
+appId: com.bibo.winecellar
+---
+- launchApp:
+    clearState: true
+
+# Wait for app to load
+- assertVisible: "Sign in"
+
+# Login flow
+- tapOn: "Email"
+- inputText: ${TEST_USER_EMAIL}
+- tapOn: "Password"
+- inputText: ${TEST_USER_PASSWORD}
+- tapOn: "Sign In"
+
+# Verify home screen loaded
+- assertVisible:
+    text: "Home"
+    timeout: 10000

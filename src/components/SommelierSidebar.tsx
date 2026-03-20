@@ -11,7 +11,7 @@ import {
   SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { Gear, Plus, MagnifyingGlass, XCircle, User } from 'phosphor-react-native'
 import { apiFetch } from '../api/client'
 
 interface Conversation {
@@ -32,6 +32,17 @@ interface SommelierSidebarProps {
   onSettingsPress: () => void
 }
 
+const C = {
+  cream: '#FEF6ED',
+  burgundy: '#6B2D3D',
+  burgundyDark: '#4A1F2A',
+  pink: '#FFB3C6',
+  pinkLight: '#FFD9E2',
+  yellow: '#FFE57A',
+  warmgray: '#8C7A7E',
+  warmgrayLight: '#A8999C',
+}
+
 export const SommelierSidebar = ({
   visible,
   onClose,
@@ -44,7 +55,7 @@ export const SommelierSidebar = ({
   const [filteredConversations, setFilteredConversations] = useState<Conversation[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [slideAnim] = useState(new Animated.Value(-300))
+  const [slideAnim] = useState(new Animated.Value(-320))
 
   useEffect(() => {
     if (visible) {
@@ -56,7 +67,7 @@ export const SommelierSidebar = ({
       }).start()
     } else {
       Animated.timing(slideAnim, {
-        toValue: -300,
+        toValue: -320,
         duration: 200,
         useNativeDriver: true,
       }).start()
@@ -91,19 +102,19 @@ export const SommelierSidebar = ({
 
   const getConversationTitle = (item: Conversation) => {
     if (item.title) return item.title
-    return item.lastMessage.length > 40 
+    return item.lastMessage.length > 40
       ? item.lastMessage.substring(0, 40) + '...'
       : item.lastMessage
   }
 
   const formatDate = (dateString: string) => {
     if (!dateString) return ''
-    
+
     const isoString = dateString.replace(' ', 'T')
     const date = new Date(isoString)
-    
+
     if (isNaN(date.getTime())) return ''
-    
+
     const now = new Date()
     const diffMs = now.getTime() - date.getTime()
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
@@ -176,80 +187,84 @@ export const SommelierSidebar = ({
                   }}
                   activeOpacity={0.7}
                 >
-                  <Icon name="cog-outline" size={20} color="#722F37" />
+                  <Gear size={20} weight="regular" color={C.burgundy} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.newChatButton}
+                  style={styles.headerIconButton}
                   onPress={() => {
                     onNewChat()
                     onClose()
                   }}
                   activeOpacity={0.7}
                 >
-                  <Icon name="plus" size={20} color="#722F37" />
+                  <Plus size={20} weight="regular" color={C.burgundy} />
                 </TouchableOpacity>
               </View>
             </View>
 
-          {/* Search Bar */}
-          <View style={styles.searchContainer}>
-            <Icon name="magnify" size={20} color="#8a7568" style={styles.searchIcon} />
-            <TextInput
-              style={styles.searchInput}
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              placeholder="Search conversations..."
-              placeholderTextColor="#b5a89e"
-            />
-            {searchQuery.length > 0 && (
-              <TouchableOpacity onPress={() => setSearchQuery('')} activeOpacity={0.7}>
-                <Icon name="close-circle" size={20} color="#b5a89e" />
-              </TouchableOpacity>
-            )}
-          </View>
+            {/* Search Bar */}
+            <View style={styles.searchContainer}>
+              <View style={styles.searchBar}>
+                <MagnifyingGlass size={18} weight="regular" color={C.warmgray} />
+                <TextInput
+                  style={styles.searchInput}
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder="Search conversations..."
+                  placeholderTextColor="rgba(140, 122, 126, 0.6)"
+                />
+                {searchQuery.length > 0 && (
+                  <TouchableOpacity onPress={() => setSearchQuery('')} activeOpacity={0.7}>
+                    <XCircle size={18} weight="fill" color={C.warmgray} />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
 
-          {/* Conversation List */}
-          <View style={styles.listContainer}>
-            {isLoading ? (
-              <View style={styles.loadingContainer}>
-                <Text style={styles.loadingText}>Loading...</Text>
-              </View>
-            ) : filteredConversations.length === 0 ? (
-              <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>
-                  {searchQuery ? 'No conversations found' : 'No conversations yet'}
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={filteredConversations}
-                renderItem={renderConversation}
-                keyExtractor={(item) => item.conversationId}
-                contentContainerStyle={styles.listContent}
-                showsVerticalScrollIndicator={false}
+            {/* Conversation List */}
+            <View style={styles.listContainer}>
+              {isLoading ? (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>Loading...</Text>
+                </View>
+              ) : filteredConversations.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyText}>
+                    {searchQuery ? 'No conversations found' : 'No conversations yet'}
+                  </Text>
+                </View>
+              ) : (
+                <FlatList
+                  data={filteredConversations}
+                  renderItem={renderConversation}
+                  keyExtractor={(item) => item.conversationId}
+                  contentContainerStyle={styles.listContent}
+                  showsVerticalScrollIndicator={false}
+                />
+              )}
+            </View>
+
+            {/* Profile Button — frosted pink glass */}
+            <View style={styles.profileContainer}>
+              <LinearGradient
+                colors={[C.cream, 'rgba(254, 246, 237, 0.95)', 'transparent']}
+                style={styles.profileFade}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 0, y: 0 }}
+                pointerEvents="none"
               />
-            )}
-          </View>
-
-          {/* Profile Button */}
-          <TouchableOpacity
-            style={styles.profileButton}
-            onPress={() => {
-              onProfilePress()
-              onClose()
-            }}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={['#722F37', '#944654']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.profileGradient}
-            >
-              <Icon name="account" size={20} color="#fff" />
-              <Text style={styles.profileText}>Taste Profile</Text>
-            </LinearGradient>
-          </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.profileButton}
+                onPress={() => {
+                  onProfilePress()
+                  onClose()
+                }}
+                activeOpacity={0.8}
+              >
+                <User size={22} weight="fill" color={C.burgundy} />
+                <Text style={styles.profileText}>Taste Profile</Text>
+              </TouchableOpacity>
+            </View>
           </SafeAreaView>
         </Animated.View>
       </TouchableOpacity>
@@ -260,111 +275,93 @@ export const SommelierSidebar = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   sidebar: {
     position: 'absolute',
     left: 0,
     top: 0,
     bottom: 0,
-    width: 300,
-    backgroundColor: '#fef9f5',
+    width: '85%',
+    backgroundColor: C.cream,
+    borderTopRightRadius: 36,
+    borderBottomRightRadius: 36,
     shadowColor: '#000',
-    shadowOffset: { width: 4, height: 0 },
+    shadowOffset: { width: 15, height: 0 },
     shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 10,
+    shadowRadius: 30,
+    elevation: 12,
   },
   sidebarContent: {
     flex: 1,
   },
+
+  // Header
   sidebarHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 12,
+    paddingBottom: 16,
   },
   sidebarTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#2c1810',
+    fontSize: 26,
+    fontWeight: '700',
+    color: C.burgundy,
+    letterSpacing: -0.3,
   },
   headerButtons: {
     flexDirection: 'row',
     gap: 8,
   },
   headerIconButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.06,
     shadowRadius: 4,
     elevation: 2,
   },
-  newChatButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
-  },
+
+  // Search
   searchContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+  },
+  searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginHorizontal: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  searchIcon: {
-    marginRight: 8,
+    borderRadius: 24,
+    paddingHorizontal: 16,
+    height: 44,
+    gap: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
+    elevation: 1,
   },
   searchInput: {
     flex: 1,
     fontSize: 15,
-    color: '#2c1810',
+    color: C.burgundy,
+    fontWeight: '500',
   },
+
+  // List
   listContainer: {
     flex: 1,
   },
   listContent: {
-    padding: 16,
-    paddingTop: 0,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    fontSize: 14,
-    color: '#8a7568',
+    paddingHorizontal: 20,
+    paddingBottom: 120,
   },
   emptyContainer: {
     flex: 1,
@@ -374,64 +371,82 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 14,
-    color: '#8a7568',
+    color: C.warmgray,
     textAlign: 'center',
   },
+
+  // Conversation cards
   conversationCard: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(228, 213, 203, 0.3)',
-    shadowColor: '#722F37',
+    borderRadius: 20,
+    padding: 18,
+    marginBottom: 14,
+    shadowColor: 'rgba(107, 45, 61, 0.04)',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
+    shadowOpacity: 1,
     shadowRadius: 8,
     elevation: 2,
   },
   conversationHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'baseline',
     marginBottom: 6,
   },
   conversationTitle: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '700',
-    color: '#722F37',
-    marginRight: 8,
+    color: C.burgundy,
+    marginRight: 12,
   },
   conversationMeta: {
-    fontSize: 11,
-    color: '#b5a89e',
+    fontSize: 12,
+    fontWeight: '500',
+    color: C.warmgray,
   },
   conversationPreview: {
-    fontSize: 13,
-    color: '#8a7568',
-    lineHeight: 18,
+    fontSize: 14,
+    color: C.warmgray,
+    lineHeight: 19.6,
+  },
+
+  // Profile
+  profileContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 20,
+    paddingBottom: 32,
+    paddingTop: 48,
+  },
+  profileFade: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 120,
   },
   profileButton: {
-    margin: 16,
-    borderRadius: 12,
-    overflow: 'hidden',
-    shadowColor: '#722F37',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  profileGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    paddingVertical: 14,
+    backgroundColor: 'rgba(255, 179, 198, 0.4)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 16,
+    paddingVertical: 18,
+    shadowColor: C.pink,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 15,
+    elevation: 4,
   },
   profileText: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '700',
-    color: '#fff',
+    color: C.burgundy,
   },
 })

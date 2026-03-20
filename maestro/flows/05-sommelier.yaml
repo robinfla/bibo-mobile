@@ -1,0 +1,28 @@
+# Flow: Test sommelier chat
+appId: com.bibo.winecellar
+---
+- launchApp
+
+# Navigate to sommelier
+- tapOn: "Sommelier"
+
+# Verify chat UI
+- assertVisible:
+    text: ".*sommelier.*|.*chat.*|.*ask.*"
+
+# Send a message
+- tapOn:
+    text: ".*message.*|.*type.*"
+- inputText: "What wine pairs with steak?"
+- tapOn:
+    text: ".*send.*"
+    
+# Wait for response
+- assertVisible:
+    text: ".*"
+    timeout: 15000
+
+# Test suggestion tap (if wine cards appear)
+- tapOn:
+    text: ".*view.*|.*details.*"
+    optional: true

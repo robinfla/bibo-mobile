@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { View, Text, ActivityIndicator, StyleSheet, Platform } from 'react-native'
+import { View, ActivityIndicator, StyleSheet } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { House, List, Compass, HouseLine, CornersOut } from 'phosphor-react-native'
 import { useAuth } from '../auth/AuthContext'
 import { colors } from '../theme/colors'
 import { LoginScreen } from '../screens/LoginScreen'
@@ -61,53 +61,6 @@ const InventoryStack = createNativeStackNavigator<InventoryStackParamList>()
 const ScanStack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 
-const HomeIcon = ({ color, size }: { color: string; size: number }) => (
-  <Text style={{ fontSize: size + 4, color, lineHeight: size + 8 }}>⌂</Text>
-)
-
-const ListIcon = ({ color, size }: { color: string; size: number }) => (
-  <Text style={{ fontSize: size + 2, color, lineHeight: size + 6 }}>☰</Text>
-)
-
-const ChartIcon = ({ color, size }: { color: string; size: number }) => (
-  <Text style={{ fontSize: size + 2, color, lineHeight: size + 6 }}>📊</Text>
-)
-
-const SommelierIcon = ({ color, size }: { color: string; size: number }) => (
-  <Icon name="message-text-outline" size={size} color={color} />
-)
-
-// Scan button — flat bordeaux circle, centered in tab bar
-const ScanButton = () => (
-  <View
-    style={{
-      width: 48,
-      height: 48,
-      borderRadius: 24,
-      backgroundColor: '#722F37',
-      justifyContent: 'center',
-      alignItems: 'center',
-      shadowColor: '#722F37',
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3,
-      shadowRadius: 8,
-      elevation: 8,
-    }}
-  >
-    {/* Scan/viewfinder icon */}
-    <View style={{ width: 24, height: 24, position: 'relative' }}>
-      <View style={{ position: 'absolute', top: 0, left: 0, width: 7, height: 7, borderTopWidth: 2.5, borderLeftWidth: 2.5, borderColor: '#fff', borderTopLeftRadius: 2 }} />
-      <View style={{ position: 'absolute', top: 0, right: 0, width: 7, height: 7, borderTopWidth: 2.5, borderRightWidth: 2.5, borderColor: '#fff', borderTopRightRadius: 2 }} />
-      <View style={{ position: 'absolute', bottom: 0, left: 0, width: 7, height: 7, borderBottomWidth: 2.5, borderLeftWidth: 2.5, borderColor: '#fff', borderBottomLeftRadius: 2 }} />
-      <View style={{ position: 'absolute', bottom: 0, right: 0, width: 7, height: 7, borderBottomWidth: 2.5, borderRightWidth: 2.5, borderColor: '#fff', borderBottomRightRadius: 2 }} />
-    </View>
-  </View>
-)
-
-// Cellars icon
-const CellarIcon = ({ color, size }: { color: string; size: number }) => (
-  <Text style={{ fontSize: size + 2, color, lineHeight: size + 6 }}>🏠</Text>
-)
 
 // Scan Stack Screen
 const ScanStackScreen = () => (
@@ -307,7 +260,7 @@ const AuthenticatedTabs = () => {
           })}
           options={{
             tabBarLabel: 'Home',
-            tabBarIcon: ({ color }) => <HomeIcon color={color} size={24} />,
+            tabBarIcon: ({ color, focused }) => <House size={24} weight={focused ? 'fill' : 'regular'} color={color} />,
           }}
         />
         <Tab.Screen
@@ -331,7 +284,7 @@ const AuthenticatedTabs = () => {
             
             return {
               tabBarLabel: 'Inventory',
-              tabBarIcon: ({ color }) => <ListIcon color={color} size={24} />,
+              tabBarIcon: ({ color, focused }) => <List size={24} weight={focused ? 'fill' : 'regular'} color={color} />,
               tabBarStyle: hideTabBar ? { display: 'none' } : undefined,
             }
           }}
@@ -347,7 +300,7 @@ const AuthenticatedTabs = () => {
           })}
           options={{
             tabBarLabel: '',
-            tabBarIcon: () => <ScanButton />,
+            tabBarIcon: () => <CornersOut size={24} weight="bold" color="#722F37" />,
           }}
         />
         <Tab.Screen
@@ -365,8 +318,8 @@ const AuthenticatedTabs = () => {
             },
           })}
           options={{
-            tabBarLabel: 'Sommelier',
-            tabBarIcon: ({ color }) => <SommelierIcon color={color} size={24} />,
+            tabBarLabel: 'Guide',
+            tabBarIcon: ({ color, focused }) => <Compass size={24} weight={focused ? 'fill' : 'regular'} color={color} />,
           }}
         />
         <Tab.Screen
@@ -385,7 +338,7 @@ const AuthenticatedTabs = () => {
           })}
           options={{
             tabBarLabel: 'Cellars',
-            tabBarIcon: ({ color }) => <CellarIcon color={color} size={24} />,
+            tabBarIcon: ({ color, focused }) => <HouseLine size={24} weight={focused ? 'fill' : 'regular'} color={color} />,
           }}
         />
       </Tab.Navigator>

@@ -1,0 +1,13 @@
+# Maestro Configuration for Bibo Wine Cellar
+# https://maestro.mobile.dev
+
+appId: com.bibo.winecellar  # Update with actual bundle ID
+name: Bibo Wine Cellar Tests
+
+# Default settings
+env:
+  TEST_USER_EMAIL: "test@bibo.wine"
+  TEST_USER_PASSWORD: "testpass123"
+
+# iOS Simulator settings (for local Mac testing)
+# Run: maestro test maestro/flows/
