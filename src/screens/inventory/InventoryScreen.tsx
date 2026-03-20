@@ -10,7 +10,6 @@ import {
   RefreshControl,
   SafeAreaView,
 } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { apiFetch } from '../../api/client'
@@ -44,7 +43,7 @@ export const InventoryScreen = ({ route }: any) => {
     priceMin: 0,
     priceMax: 200,
   })
-  
+
   // Check if any filters are active
   const hasActiveFilters = !!(
     filters.color ||
@@ -71,15 +70,15 @@ export const InventoryScreen = ({ route }: any) => {
     if (route?.params?.tab) {
       setActiveTab(route.params.tab)
     }
-    
+
     if (route?.params?.filter) {
-      console.log('📍 Applying route filter:', route.params.filter)
+      console.log('Applying route filter:', route.params.filter)
       setFilters((prev) => {
         const newFilters = {
           ...prev,
           ...route.params.filter,
         }
-        console.log('📍 New filters state:', newFilters)
+        console.log('New filters state:', newFilters)
         return newFilters
       })
     }
@@ -114,9 +113,7 @@ export const InventoryScreen = ({ route }: any) => {
         params.append('lotIds', filters.lotIds.join(','))
       }
 
-      console.log('📡 Fetching cards with params:', params.toString())
       const response = await apiFetch<WineCardsResponse>(`/api/inventory/cards?${params}`)
-      console.log('📦 Received cards:', response.cards.length, 'total:', response.total)
       setCards(response.cards)
     } catch (err: any) {
       setError(err.message || 'Failed to load inventory')
@@ -142,30 +139,18 @@ export const InventoryScreen = ({ route }: any) => {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      {/* Title with Back Button */}
+      {/* Title */}
       <View style={styles.headerTop}>
-        <TouchableOpacity 
-          style={styles.backButton} 
-          onPress={() => {
-            // @ts-ignore - Navigate to Home tab
-            navigation.navigate('HomeTab')
-          }}
-          hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-          activeOpacity={0.6}
-        >
-          <Icon name="chevron-left" size={32} color="#722F37" />
-        </TouchableOpacity>
-        <Text style={styles.title}>My Wines</Text>
-        <View style={styles.backButton} />
+        <Text style={styles.title}>My Cellar</Text>
       </View>
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Icon name="magnify" size={20} color={colors.muted[400]} style={styles.searchIcon} />
+        <Icon name="magnify" size={20} color={colors.textTertiary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search wines..."
-          placeholderTextColor={colors.muted[400]}
+          placeholderTextColor={colors.textTertiary}
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
@@ -183,25 +168,25 @@ export const InventoryScreen = ({ route }: any) => {
         <View style={styles.filterChipContainer}>
           {filters.maturity && (
             <View style={styles.filterChip}>
-              <Icon name="filter-check" size={16} color="#722F37" />
+              <Icon name="filter-check" size={16} color={colors.coral} />
               <Text style={styles.filterChipText}>Ready to drink</Text>
               <TouchableOpacity
                 onPress={() => setFilters((prev) => ({ ...prev, maturity: undefined }))}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Icon name="close-circle" size={18} color="#722F37" />
+                <Icon name="close-circle" size={18} color={colors.coral} />
               </TouchableOpacity>
             </View>
           )}
           {filters.label && (
             <View style={styles.filterChip}>
-              <Icon name="filter-check" size={16} color="#722F37" />
+              <Icon name="filter-check" size={16} color={colors.coral} />
               <Text style={styles.filterChipText}>{filters.label}</Text>
               <TouchableOpacity
                 onPress={() => setFilters((prev) => ({ ...prev, lotIds: undefined, label: undefined }))}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Icon name="close-circle" size={18} color="#722F37" />
+                <Icon name="close-circle" size={18} color={colors.coral} />
               </TouchableOpacity>
             </View>
           )}
@@ -242,7 +227,7 @@ export const InventoryScreen = ({ route }: any) => {
     if (isLoading && !refreshing) {
       return (
         <View style={styles.centerContent}>
-          <ActivityIndicator size="large" color={colors.primary[600]} />
+          <ActivityIndicator size="large" color={colors.coral} />
         </View>
       )
     }
@@ -309,7 +294,7 @@ export const InventoryScreen = ({ route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef9f5', // Warm gradient background (can be enhanced with LinearGradient)
+    backgroundColor: colors.linen,
   },
   header: {
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -318,27 +303,13 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   headerTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     paddingBottom: 12,
-    position: 'relative',
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#722F37',
+    fontSize: 28,
+    fontFamily: 'NunitoSans_700Bold',
+    color: colors.textPrimary,
     letterSpacing: -0.3,
   },
   searchContainer: {
@@ -348,34 +319,29 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 16,
     height: 48,
-    backgroundColor: '#fff',
-    borderRadius: 14,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
+    backgroundColor: colors.surface,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.muted[200],
   },
   searchIcon: {
     marginRight: 8,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
-    color: '#1a1a1a',
+    fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
+    color: colors.textPrimary,
   },
   filterButton: {
-    width: 44,
-    height: 44,
-    backgroundColor: '#fff',
-    borderRadius: 14,
+    width: 48,
+    height: 48,
+    backgroundColor: colors.surface,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: colors.muted[200],
     position: 'relative',
   },
   filterBadge: {
@@ -385,32 +351,29 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: colors.danger,
+    backgroundColor: colors.coral,
   },
   tabs: {
     flexDirection: 'row',
     paddingHorizontal: 16,
-    borderBottomWidth: 2,
-    borderBottomColor: 'rgba(228, 213, 203, 0.3)',
+    gap: 32,
   },
   tab: {
     paddingVertical: 12,
-    paddingHorizontal: 0,
-    marginRight: 24,
-    borderBottomWidth: 3,
+    borderBottomWidth: 2,
     borderBottomColor: 'transparent',
   },
   tabActive: {
-    borderBottomColor: '#722F37',
+    borderBottomColor: colors.coral,
   },
   tabText: {
     fontSize: 15,
-    fontWeight: '600',
-    color: '#999',
+    fontFamily: 'NunitoSans_500Medium',
+    color: colors.textTertiary,
   },
   tabTextActive: {
-    color: '#722F37',
-    fontWeight: '700',
+    color: colors.coral,
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   listContent: {
     padding: 16,
@@ -424,7 +387,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: colors.muted[600],
+    fontFamily: 'NunitoSans_400Regular',
+    color: colors.textSecondary,
     textAlign: 'center',
     marginTop: 12,
   },
@@ -432,28 +396,29 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: '#722F37',
-    borderRadius: 14,
-    shadowColor: '#722F37',
+    backgroundColor: colors.coral,
+    borderRadius: 16,
+    shadowColor: colors.coralShadow,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 1,
     shadowRadius: 8,
     elevation: 3,
   },
   retryButtonText: {
-    color: '#fff',
+    color: colors.textInverse,
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'NunitoSans_600SemiBold',
   },
   emptyText: {
     fontSize: 20,
-    fontWeight: '700',
-    color: '#1a1a1a',
+    fontFamily: 'NunitoSans_700Bold',
+    color: colors.textPrimary,
     marginTop: 16,
   },
   emptySubtext: {
     fontSize: 15,
-    color: '#666',
+    fontFamily: 'NunitoSans_400Regular',
+    color: colors.textSecondary,
     marginTop: 8,
     textAlign: 'center',
     lineHeight: 22.5,
@@ -465,9 +430,9 @@ const styles = StyleSheet.create({
   filterChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: '#722F37',
+    borderColor: colors.coral,
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -476,7 +441,7 @@ const styles = StyleSheet.create({
   },
   filterChipText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#722F37',
+    fontFamily: 'NunitoSans_600SemiBold',
+    color: colors.coral,
   },
 })
