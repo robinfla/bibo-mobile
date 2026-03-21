@@ -39,49 +39,56 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
   const getWineColorStyle = () => {
     switch (wineColor) {
       case 'red':
-        return { 
-          backgroundColor: '#6B2D3E', 
-          iconColor: '#8b3a3a',
-          cardBg: '#fff',
-          borderColor: 'rgba(107, 45, 62, 0.15)',
-          shadowColor: '#6B2D3E',
+        return {
+          backgroundColor: 'rgba(242, 132, 130, 0.15)',
+          iconColor: colors.coralDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(242, 132, 130, 0.15)',
+          shadowColor: colors.wine.red,
         }
       case 'white':
-        return { 
-          backgroundColor: '#fef9e7', 
-          iconColor: '#d4af37',
-          cardBg: '#fffef9',
-          borderColor: 'rgba(212, 175, 55, 0.15)',
-          shadowColor: '#d4af37',
+        return {
+          backgroundColor: 'rgba(246, 189, 96, 0.15)',
+          iconColor: colors.honeyDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(246, 189, 96, 0.15)',
+          shadowColor: colors.wine.white,
         }
       case 'rose':
-        return { 
-          backgroundColor: '#ffe0e6', 
-          iconColor: '#ff69b4',
-          cardBg: '#fff9fa',
-          borderColor: 'rgba(255, 105, 180, 0.15)',
-          shadowColor: '#ff69b4',
+        return {
+          backgroundColor: 'rgba(245, 202, 195, 0.15)',
+          iconColor: colors.coralDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(245, 202, 195, 0.15)',
+          shadowColor: colors.wine.rose,
         }
       case 'sparkling':
-        return { 
-          backgroundColor: '#fffacd', 
-          iconColor: '#ffd700',
-          cardBg: '#fffef8',
-          borderColor: 'rgba(255, 215, 0, 0.15)',
-          shadowColor: '#ffd700',
+        return {
+          backgroundColor: 'rgba(246, 189, 96, 0.15)',
+          iconColor: colors.honeyDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(246, 189, 96, 0.15)',
+          shadowColor: colors.wine.sparkling,
         }
       case 'dessert':
+        return {
+          backgroundColor: 'rgba(212, 140, 0, 0.15)',
+          iconColor: colors.honeyDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(212, 140, 0, 0.15)',
+          shadowColor: colors.wine.dessert,
+        }
       case 'fortified':
-        return { 
-          backgroundColor: '#3d2314', 
-          iconColor: '#8b4513',
-          cardBg: '#faf7f5',
-          borderColor: 'rgba(139, 69, 19, 0.15)',
-          shadowColor: '#8b4513',
+        return {
+          backgroundColor: 'rgba(132, 165, 157, 0.15)',
+          iconColor: colors.teal,
+          cardBg: colors.surface,
+          borderColor: 'rgba(132, 165, 157, 0.15)',
+          shadowColor: colors.wine.fortified,
         }
       default:
-        return { 
-          backgroundColor: '#e0e0e0', 
+        return {
+          backgroundColor: colors.muted[100],
           iconColor: colors.textTertiary,
           cardBg: colors.surface,
           borderColor: 'rgba(228, 213, 203, 0.2)',

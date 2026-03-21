@@ -20,33 +20,33 @@ interface WineCardNewProps {
 
 const MATURITY_CONFIG = {
   peak: {
-    gradient: ['#e8f5e9', '#c8e6c9'] as const,
-    color: '#2e7d32',
+    bg: colors.status.peakBg,
+    fg: colors.status.peak,
     label: 'Peak',
   },
   approaching: {
-    gradient: ['#e8f5e9', '#c8e6c9'] as const,
-    color: '#2e7d32',
-    label: 'Ready',
+    bg: colors.status.approachingBg,
+    fg: colors.status.approaching,
+    label: 'Approaching',
   },
   past_prime: {
-    gradient: ['#fff3e0', '#ffe0b2'] as const,
-    color: '#ef6c00',
+    bg: colors.status.pastPrimeBg,
+    fg: colors.status.pastPrime,
     label: 'Drink Now',
   },
   declining: {
-    gradient: ['#fff3e0', '#ffe0b2'] as const,
-    color: '#ef6c00',
+    bg: colors.status.pastPrimeBg,
+    fg: colors.status.pastPrime,
     label: 'Drink Now',
   },
   to_age: {
-    gradient: ['#e3f2fd', '#bbdefb'] as const,
-    color: '#1565c0',
+    bg: colors.status.youngBg,
+    fg: colors.status.young,
     label: 'Young',
   },
   unknown: {
-    gradient: ['#f5f5f5', '#e0e0e0'] as const,
-    color: '#757575',
+    bg: colors.muted[100],
+    fg: colors.muted[400],
     label: 'Unknown',
   },
 }
@@ -75,15 +75,11 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
               key={`${vintage.vintage}-${index}`}
               onPress={() => setSelectedVintageIndex(index)}
               activeOpacity={0.8}
+              style={styles.vintageChipActive}
             >
-              <LinearGradient
-                colors={['#6B2D3E', '#5A2535']}
-                style={styles.vintageChipActive}
-              >
-                <Text style={styles.vintageChipTextActive}>
-                  {vintage.vintage || 'NV'}
-                </Text>
-              </LinearGradient>
+              <Text style={styles.vintageChipTextActive}>
+                {vintage.vintage || 'NV'}
+              </Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
@@ -106,45 +102,52 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
   const getWineColorStyle = () => {
     switch (card.wineColor) {
       case 'red':
-        return { 
-          backgroundColor: '#6B2D3E', 
-          iconColor: '#8b3a3a',
-          cardBg: '#fff',
-          borderColor: 'rgba(107, 45, 62, 0.15)',
-          shadowColor: '#6B2D3E',
+        return {
+          backgroundColor: 'rgba(242, 132, 130, 0.15)',
+          iconColor: colors.coralDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(242, 132, 130, 0.15)',
+          shadowColor: colors.wine.red,
         }
       case 'white':
-        return { 
-          backgroundColor: '#fef9e7', 
-          iconColor: '#d4af37',
-          cardBg: '#fffef9',
-          borderColor: 'rgba(212, 175, 55, 0.15)',
-          shadowColor: '#d4af37',
+        return {
+          backgroundColor: 'rgba(246, 189, 96, 0.15)',
+          iconColor: colors.honeyDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(246, 189, 96, 0.15)',
+          shadowColor: colors.wine.white,
         }
       case 'rose':
-        return { 
-          backgroundColor: '#ffe0e6', 
-          iconColor: '#ff69b4',
-          cardBg: '#fff9fa',
-          borderColor: 'rgba(255, 105, 180, 0.15)',
-          shadowColor: '#ff69b4',
+        return {
+          backgroundColor: 'rgba(245, 202, 195, 0.15)',
+          iconColor: colors.coralDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(245, 202, 195, 0.15)',
+          shadowColor: colors.wine.rose,
         }
       case 'sparkling':
-        return { 
-          backgroundColor: '#fffacd', 
-          iconColor: '#ffd700',
-          cardBg: '#fffef8',
-          borderColor: 'rgba(255, 215, 0, 0.15)',
-          shadowColor: '#ffd700',
+        return {
+          backgroundColor: 'rgba(246, 189, 96, 0.15)',
+          iconColor: colors.honeyDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(246, 189, 96, 0.15)',
+          shadowColor: colors.wine.sparkling,
         }
       case 'dessert':
+        return {
+          backgroundColor: 'rgba(212, 140, 0, 0.15)',
+          iconColor: colors.honeyDark,
+          cardBg: colors.surface,
+          borderColor: 'rgba(212, 140, 0, 0.15)',
+          shadowColor: colors.wine.dessert,
+        }
       case 'fortified':
-        return { 
-          backgroundColor: '#3d2314', 
-          iconColor: '#8b4513',
-          cardBg: '#faf7f5',
-          borderColor: 'rgba(139, 69, 19, 0.15)',
-          shadowColor: '#8b4513',
+        return {
+          backgroundColor: 'rgba(132, 165, 157, 0.15)',
+          iconColor: colors.teal,
+          cardBg: colors.surface,
+          borderColor: 'rgba(132, 165, 157, 0.15)',
+          shadowColor: colors.wine.fortified,
         }
       default:
         return {
@@ -160,22 +163,31 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
   const colorStyle = getWineColorStyle()
 
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={[
-        styles.card, 
-        { 
+        styles.card,
+        {
           backgroundColor: colorStyle.cardBg,
           borderColor: colorStyle.borderColor,
           shadowColor: colorStyle.shadowColor,
         }
-      ]} 
-      onPress={onPress} 
+      ]}
+      onPress={onPress}
       activeOpacity={0.7}
     >
+      {/* Decorative blur blob */}
+      <View style={styles.blurBlob} />
+
       {/* Wine Image */}
       <View style={styles.imageContainer}>
         {card.bottleImageUrl ? (
-          <Image source={{ uri: card.bottleImageUrl }} style={styles.image} />
+          <>
+            <Image source={{ uri: card.bottleImageUrl }} style={styles.image} />
+            <LinearGradient
+              colors={['rgba(0,0,0,0.1)', 'transparent', 'rgba(0,0,0,0.4)']}
+              style={styles.imageOverlay}
+            />
+          </>
         ) : (
           <View style={[styles.image, styles.placeholderImage, { backgroundColor: colorStyle.backgroundColor }]}>
             <Wine size={36} weight="fill" color={colorStyle.iconColor} />
@@ -189,17 +201,12 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
           <Text style={styles.wineName} numberOfLines={2}>
             {card.wineName}
           </Text>
-          <LinearGradient
-            colors={maturityConfig.gradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.maturityBadge}
-          >
-            <View style={[styles.maturityDot, { backgroundColor: maturityConfig.color }]} />
-            <Text style={[styles.maturityLabel, { color: maturityConfig.color }]}>
+          <View style={[styles.maturityBadge, { backgroundColor: maturityConfig.bg }]}>
+            <View style={[styles.maturityDot, { backgroundColor: maturityConfig.fg }]} />
+            <Text style={[styles.maturityLabel, { color: maturityConfig.fg }]}>
               {maturityConfig.label}
             </Text>
-          </LinearGradient>
+          </View>
         </View>
 
         {/* Producer */}
@@ -217,7 +224,7 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
 
         {/* Bottle Count */}
         <View style={styles.bottleCount}>
-          <Text style={styles.bottleEmoji}>🍷</Text>
+          <Wine size={14} weight="fill" color={colors.wine.red} />
           <Text style={styles.bottleCountText}>
             {selectedVintage?.bottleCount || card.totalBottles} {(selectedVintage?.bottleCount || card.totalBottles) === 1 ? 'bottle' : 'bottles'}
           </Text>
@@ -231,7 +238,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     backgroundColor: colors.surface,
-    borderRadius: 18,
+    borderRadius: 24,
     marginBottom: 14,
     padding: 16,
     borderWidth: 1,
@@ -241,11 +248,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 16,
     elevation: 4,
+    overflow: 'hidden',
+  },
+  blurBlob: {
+    position: 'absolute',
+    right: -10,
+    top: -10,
+    width: 128,
+    height: 128,
+    borderRadius: 64,
+    backgroundColor: 'rgba(242, 132, 130, 0.05)',
   },
   imageContainer: {
-    width: 72,
-    height: 90,
-    borderRadius: 12,
+    width: 100,
+    height: 140,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
@@ -254,12 +271,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 12,
     elevation: 3,
+    overflow: 'hidden',
   },
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 12,
+    borderRadius: 16,
     resizeMode: 'cover',
+  },
+  imageOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 16,
   },
   content: {
     flex: 1,
@@ -281,10 +303,12 @@ const styles = StyleSheet.create({
     lineHeight: 23.4,
   },
   producer: {
-    fontSize: 15,
-    fontFamily: 'NunitoSans_500Medium',
-    fontWeight: '500',
-    color: '#4A3A35',
+    fontSize: 10,
+    fontFamily: 'NunitoSans_600SemiBold',
+    fontWeight: '600',
+    color: colors.textTertiary,
+    textTransform: 'uppercase',
+    letterSpacing: 2.4,
   },
   region: {
     fontSize: 13,
@@ -320,14 +344,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 14,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: '#D9D0C8',
+    backgroundColor: colors.linen,
   },
   vintageChipActive: {
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 14,
+    backgroundColor: colors.coral,
     transform: [{ scale: 1.05 }],
     shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 3 },
@@ -352,15 +375,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     marginTop: 2,
-  },
-  bottleEmoji: {
-    fontSize: 16,
+    backgroundColor: colors.linen,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.muted[100],
+    alignSelf: 'flex-start',
   },
   bottleCountText: {
     fontSize: 14,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: '#3A2A25',
+    color: colors.textPrimary,
   },
   placeholderImage: {
     alignItems: 'center',
