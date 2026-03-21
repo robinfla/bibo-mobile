@@ -14,7 +14,7 @@ import {
   Animated,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { List, DotsThreeVertical, Camera, Microphone, PaperPlaneTilt, Wine as WineIcon } from 'phosphor-react-native'
+import { List, Camera, Microphone, PaperPlaneTilt, Wine as WineIcon } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
@@ -605,23 +605,9 @@ export const SommelierScreen = ({ route }: any) => {
 
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>Bibo</Text>
-          <View style={styles.onlineRow}>
-            <View style={styles.onlineDot} />
-            <Text style={styles.onlineText}>Online</Text>
-          </View>
         </View>
 
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => {
-            if (conversationId) {
-              navigation.navigate('SommelierChat' as never)
-            }
-          }}
-          activeOpacity={0.7}
-        >
-          <DotsThreeVertical size={24} weight="fill" color={colors.textPrimary} />
-        </TouchableOpacity>
+        <View style={styles.headerButton} />
       </View>
 
       {/* Chat Container */}
@@ -854,26 +840,6 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
-    letterSpacing: 0.5,
-  },
-  onlineRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    marginTop: 1,
-  },
-  onlineDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: colors.teal,
-  },
-  onlineText: {
-    fontSize: 11,
-    fontFamily: 'NunitoSans_700Bold',
-    fontWeight: '700',
-    color: colors.teal,
-    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
 
