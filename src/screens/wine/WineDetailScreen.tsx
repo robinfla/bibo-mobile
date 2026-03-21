@@ -11,6 +11,7 @@ import {
   Share,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
+import { CaretLeft } from 'phosphor-react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -292,7 +293,7 @@ export const WineDetailScreen = () => {
           onPress={() => navigation.goBack()}
           activeOpacity={0.7}
         >
-          <Text style={styles.backIcon}>←</Text>
+          <CaretLeft size={24} weight="bold" color={colors.textSecondary} />
         </TouchableOpacity>
         <Text style={styles.navTitle} numberOfLines={1}>
           {wine.name} {selectedVintage}

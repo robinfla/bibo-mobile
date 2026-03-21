@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../../auth/AuthContext'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
-import { HandWaving, Wine, Confetti, Cylinder, MagnifyingGlass, TrendUp } from 'phosphor-react-native'
+import { HandWaving, Wine, Cylinder, MagnifyingGlass, TrendUp } from 'phosphor-react-native'
 import { ConsumeWineModal } from '../../components/ConsumeWineModal'
 
 export const HomeScreen = () => {
@@ -151,7 +151,7 @@ export const HomeScreen = () => {
               activeOpacity={0.7}
             >
               <View style={[styles.actionIconCircle, { backgroundColor: colors.honeyLight }]}>
-                <Confetti size={28} weight="fill" color={colors.honeyDark} />
+                <Wine size={28} weight="fill" color={colors.honeyDark} />
               </View>
               <Text style={styles.actionTitle}>Open a Bottle</Text>
             </TouchableOpacity>

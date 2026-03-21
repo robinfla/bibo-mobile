@@ -110,7 +110,7 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
                   onPress={() => handleMenuPress(onRemove)}
                   activeOpacity={0.7}
                 >
-                  <Trash size={20} weight="regular" color="#d32f2f" />
+                  <Trash size={20} weight="regular" color={colors.danger} />
                   <Text style={[styles.menuItemText, styles.menuItemDanger]}>
                     Remove from Cellar
                   </Text>
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   menuItemDanger: {
-    color: '#d32f2f',
+    color: colors.danger,
   },
   menuDivider: {
     height: 1,

@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../auth/AuthContext'
 import { CaretLeft, CaretRight, UploadSimple, DownloadSimple, Bell, Sliders, Shield, Question, Info, SignOut } from 'phosphor-react-native'
@@ -89,14 +88,9 @@ export const ProfileScreen = () => {
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
         {/* User Info Card */}
         <View style={styles.userCard}>
-          <LinearGradient
-            colors={[colors.coral, colors.coralDark]}
-            style={styles.avatar}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
+          <View style={styles.avatar}>
             <Text style={styles.avatarInitials}>{initials}</Text>
-          </LinearGradient>
+          </View>
           
           <Text style={styles.userName}>{userName}</Text>
           <Text style={styles.userEmail}>{userEmail}</Text>
@@ -266,6 +260,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
+    backgroundColor: colors.coral,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,

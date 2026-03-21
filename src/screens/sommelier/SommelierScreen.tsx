@@ -56,20 +56,6 @@ const SUGGESTION_PROMPTS = [
   { emoji: '🍇', text: 'Grape varieties guide' },
 ]
 
-const C = {
-  cream: colors.linen,
-  creamDark: colors.linen,
-  brown: colors.textPrimary,
-  brownLight: colors.textSecondary,
-  brownMuted: colors.textTertiary,
-  pink: colors.rose,
-  pinkLight: colors.rose,
-  pinkDark: colors.coral,
-  yellow: colors.honey,
-  rose: colors.coral,
-  frosted: 'rgba(255, 255, 255, 0.45)',
-  frostedBorder: 'rgba(255, 255, 255, 0.5)',
-}
 
 const TypingDots = () => {
   const dot1 = useRef(new Animated.Value(0)).current
@@ -102,7 +88,7 @@ const TypingDots = () => {
 
 const BiboAvatar = () => (
   <View style={styles.avatarCircle}>
-    <WineIcon size={16} weight="regular" color={C.rose} />
+    <WineIcon size={16} weight="regular" color={colors.coral} />
   </View>
 )
 
@@ -614,7 +600,7 @@ export const SommelierScreen = ({ route }: any) => {
           onPress={() => setShowSidebar(true)}
           activeOpacity={0.7}
         >
-          <List size={24} weight="bold" color={C.brown} />
+          <List size={24} weight="bold" color={colors.textPrimary} />
         </TouchableOpacity>
 
         <View style={styles.headerCenter}>
@@ -634,7 +620,7 @@ export const SommelierScreen = ({ route }: any) => {
           }}
           activeOpacity={0.7}
         >
-          <DotsThreeVertical size={24} weight="fill" color={C.brown} />
+          <DotsThreeVertical size={24} weight="fill" color={colors.textPrimary} />
         </TouchableOpacity>
       </View>
 
@@ -720,7 +706,7 @@ export const SommelierScreen = ({ route }: any) => {
                     value={inputText}
                     onChangeText={setInputText}
                     placeholder="Type a message..."
-                    placeholderTextColor={C.brownMuted}
+                    placeholderTextColor={colors.textTertiary}
                     multiline
                     onContentSizeChange={(e) =>
                       setInputHeight(Math.min(100, e.nativeEvent.contentSize.height))
@@ -735,7 +721,7 @@ export const SommelierScreen = ({ route }: any) => {
                       onPress={startRecording}
                       activeOpacity={0.7}
                     >
-                      <Microphone size={20} weight="fill" color={C.brownMuted} />
+                      <Microphone size={20} weight="fill" color={colors.textTertiary} />
                     </TouchableOpacity>
                   )}
                 </View>
@@ -746,7 +732,7 @@ export const SommelierScreen = ({ route }: any) => {
                   onPress={() => setShowPhotoPicker(true)}
                   activeOpacity={0.7}
                 >
-                  <Camera size={24} weight="regular" color={C.brown} />
+                  <Camera size={24} weight="regular" color={colors.textPrimary} />
                 </TouchableOpacity>
 
                 {/* Send */}
@@ -757,7 +743,7 @@ export const SommelierScreen = ({ route }: any) => {
                   activeOpacity={0.8}
                 >
                   <LinearGradient
-                    colors={[C.pink, C.rose]}
+                    colors={[colors.rose, colors.coral]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.sendButton}
@@ -820,7 +806,7 @@ export const SommelierScreen = ({ route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: C.cream,
+    backgroundColor: colors.linen,
   },
 
   // Ambient blobs
@@ -831,7 +817,7 @@ const styles = StyleSheet.create({
     width: 400,
     height: 400,
     borderRadius: 200,
-    backgroundColor: C.yellow,
+    backgroundColor: colors.honey,
     opacity: 0.25,
   },
   blobPink: {
@@ -841,7 +827,7 @@ const styles = StyleSheet.create({
     width: 350,
     height: 350,
     borderRadius: 175,
-    backgroundColor: C.pink,
+    backgroundColor: colors.rose,
     opacity: 0.15,
   },
 
@@ -867,7 +853,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: C.brown,
+    color: colors.textPrimary,
     letterSpacing: 0.5,
   },
   onlineRow: {
@@ -880,13 +866,13 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#22C55E',
+    backgroundColor: colors.teal,
   },
   onlineText: {
     fontSize: 11,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: '#16A34A',
+    color: colors.teal,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -915,9 +901,9 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   datePill: {
-    backgroundColor: C.frosted,
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
     borderWidth: 1,
-    borderColor: C.frostedBorder,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 6,
@@ -926,7 +912,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: C.brownMuted,
+    color: colors.textTertiary,
   },
 
   // Assistant messages
@@ -939,9 +925,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: C.frosted,
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
     borderWidth: 1,
-    borderColor: C.frostedBorder,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
@@ -952,9 +938,9 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   assistantBubble: {
-    backgroundColor: C.frosted,
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
     borderWidth: 1,
-    borderColor: C.frostedBorder,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 24,
     borderBottomLeftRadius: 8,
     padding: 16,
@@ -969,7 +955,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'NunitoSans_400Regular',
     lineHeight: 22.5,
-    color: C.brown,
+    color: colors.textPrimary,
   },
   typingBubble: {
     paddingVertical: 14,
@@ -995,7 +981,7 @@ const styles = StyleSheet.create({
   userBubble: {
     backgroundColor: 'rgba(255, 214, 224, 0.3)',
     borderWidth: 1,
-    borderColor: C.frostedBorder,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 24,
     borderBottomRightRadius: 8,
     padding: 16,
@@ -1010,7 +996,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'NunitoSans_400Regular',
     lineHeight: 22.5,
-    color: C.brown,
+    color: colors.textPrimary,
   },
 
   // Wine cards
@@ -1058,19 +1044,19 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: C.brown,
+    color: colors.textPrimary,
     marginBottom: 2,
   },
   wineRegion: {
     fontSize: 12,
     fontFamily: 'NunitoSans_400Regular',
-    color: C.brownMuted,
+    color: colors.textTertiary,
     marginBottom: 4,
   },
   pairingNote: {
     fontSize: 12,
     fontFamily: 'NunitoSans_400Regular',
-    color: C.brownLight,
+    color: colors.textSecondary,
     fontStyle: 'italic',
   },
 
@@ -1089,7 +1075,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: C.brown,
+    color: colors.textPrimary,
     textAlign: 'center',
   },
 
@@ -1105,9 +1091,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: C.frosted,
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
     borderWidth: 1,
-    borderColor: C.frostedBorder,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 16,
@@ -1124,7 +1110,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
-    color: C.brown,
+    color: colors.textPrimary,
   },
 
   // Input
@@ -1155,9 +1141,9 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: C.frosted,
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
     borderWidth: 1,
-    borderColor: C.frostedBorder,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -1172,15 +1158,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   input: {
-    backgroundColor: C.frosted,
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
     borderWidth: 1,
-    borderColor: C.frostedBorder,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
     borderRadius: 25,
     paddingHorizontal: 20,
     paddingRight: 44,
     paddingVertical: 12,
     fontSize: 15,
-    color: C.brown,
+    color: colors.textPrimary,
     fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
     maxHeight: 100,
@@ -1200,7 +1186,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    shadowColor: C.pink,
+    shadowColor: colors.rose,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 25,

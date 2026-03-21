@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   infoBox: {
     backgroundColor: 'rgba(255, 243, 224, 0.5)',
     borderLeftWidth: 3,
-    borderLeftColor: '#f9a825',
+    borderLeftColor: colors.honey,
     borderRadius: 12,
     padding: 14,
     flexDirection: 'row',

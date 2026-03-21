@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native'
 import { CaretLeft } from 'phosphor-react-native'
 import Svg, { Circle, G } from 'react-native-svg'
 import { apiFetch } from '../../api/client'
-import { colors as themeColors } from '../../theme/colors'
+import { colors } from '../../theme/colors'
 
 interface ColorData {
   red: number
@@ -45,7 +45,7 @@ export const AnalyticsScreen = () => {
 
   // Mock data
   const [stats, setStats] = useState({ bottles: 882, lots: 329, ready: 768 })
-  const [colors, setColors] = useState<ColorData>({ red: 458, white: 423, rose: 1 })
+  const [wineColors, setWineColors] = useState<ColorData>({ red: 458, white: 423, rose: 1 })
   const [grapes, setGrapes] = useState<GrapeData[]>([
     { id: 'cabernet-sauvignon', name: 'Cabernet Sauvignon', count: 156, percentage: 18 },
     { id: 'chardonnay', name: 'Chardonnay', count: 142, percentage: 16 },
@@ -77,7 +77,7 @@ export const AnalyticsScreen = () => {
         if (item.color === 'white') colorMap.white = item.bottles
         if (item.color === 'rose') colorMap.rose = item.bottles
       })
-      setColors({
+      setWineColors({
         red: colorMap.red || 0,
         white: colorMap.white || 0,
         rose: colorMap.rose || 0,
@@ -142,10 +142,10 @@ export const AnalyticsScreen = () => {
   }
 
   // Calculate pie chart segments
-  const total = colors.red + colors.white + colors.rose
-  const redPercent = (colors.red / total) * 100
-  const whitePercent = (colors.white / total) * 100
-  const rosePercent = (colors.rose / total) * 100
+  const total = wineColors.red + wineColors.white + wineColors.rose
+  const redPercent = (wineColors.red / total) * 100
+  const whitePercent = (wineColors.white / total) * 100
+  const rosePercent = (wineColors.rose / total) * 100
 
   const PieChart = () => {
     const size = 130
@@ -166,7 +166,7 @@ export const AnalyticsScreen = () => {
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke={themeColors.wine.red}
+            stroke={colors.wine.red}
             strokeWidth={strokeWidth}
             fill="none"
             strokeDasharray={`${redLength} ${circumference}`}
@@ -178,7 +178,7 @@ export const AnalyticsScreen = () => {
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke={themeColors.wine.white}
+            stroke={colors.wine.white}
             strokeWidth={strokeWidth}
             fill="none"
             strokeDasharray={`${whiteLength} ${circumference}`}
@@ -191,7 +191,7 @@ export const AnalyticsScreen = () => {
               cx={size / 2}
               cy={size / 2}
               r={radius}
-              stroke={themeColors.wine.rose}
+              stroke={colors.wine.rose}
               strokeWidth={strokeWidth}
               fill="none"
               strokeDasharray={`${roseLength} ${circumference}`}
@@ -207,7 +207,7 @@ export const AnalyticsScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={themeColors.coral} />
+        <ActivityIndicator size="large" color={colors.coral} />
       </View>
     )
   }
@@ -229,7 +229,7 @@ export const AnalyticsScreen = () => {
               onPress={() => navigation.goBack()}
               activeOpacity={0.7}
             >
-              <CaretLeft size={28} weight="bold" color={themeColors.coral} />
+              <CaretLeft size={28} weight="bold" color={colors.coral} />
             </TouchableOpacity>
             <Text style={styles.title}>Analytics</Text>
             <View style={styles.backButton} />
@@ -243,7 +243,7 @@ export const AnalyticsScreen = () => {
             >
               {activeTab === 'composition' ? (
                 <LinearGradient
-                  colors={[themeColors.coral, themeColors.coralDark]}
+                  colors={[colors.coral, colors.coralDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.tabGradient}
@@ -261,7 +261,7 @@ export const AnalyticsScreen = () => {
             >
               {activeTab === 'finance' ? (
                 <LinearGradient
-                  colors={[themeColors.coral, themeColors.coralDark]}
+                  colors={[colors.coral, colors.coralDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.tabGradient}
@@ -292,7 +292,7 @@ export const AnalyticsScreen = () => {
               <View style={styles.statCard}>
                 <Text style={styles.statLabel}>READY</Text>
                 <LinearGradient
-                  colors={[themeColors.coral, themeColors.coralDark]}
+                  colors={[colors.coral, colors.coralDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.statValueGradient}
@@ -320,11 +320,11 @@ export const AnalyticsScreen = () => {
                     activeOpacity={0.7}
                   >
                     <View style={styles.legendLeft}>
-                      <View style={[styles.legendDot, { backgroundColor: themeColors.wine.red }]} />
+                      <View style={[styles.legendDot, { backgroundColor: colors.wine.red }]} />
                       <Text style={styles.legendLabel}>Red</Text>
                     </View>
                     <View style={styles.legendRight}>
-                      <Text style={styles.legendValue}>{colors.red}</Text>
+                      <Text style={styles.legendValue}>{wineColors.red}</Text>
                       <Text style={styles.legendArrow}>›</Text>
                     </View>
                   </TouchableOpacity>
@@ -335,11 +335,11 @@ export const AnalyticsScreen = () => {
                     activeOpacity={0.7}
                   >
                     <View style={styles.legendLeft}>
-                      <View style={[styles.legendDot, { backgroundColor: themeColors.wine.white }]} />
+                      <View style={[styles.legendDot, { backgroundColor: colors.wine.white }]} />
                       <Text style={styles.legendLabel}>White</Text>
                     </View>
                     <View style={styles.legendRight}>
-                      <Text style={styles.legendValue}>{colors.white}</Text>
+                      <Text style={styles.legendValue}>{wineColors.white}</Text>
                       <Text style={styles.legendArrow}>›</Text>
                     </View>
                   </TouchableOpacity>
@@ -350,11 +350,11 @@ export const AnalyticsScreen = () => {
                     activeOpacity={0.7}
                   >
                     <View style={styles.legendLeft}>
-                      <View style={[styles.legendDot, { backgroundColor: themeColors.wine.rose }]} />
+                      <View style={[styles.legendDot, { backgroundColor: colors.wine.rose }]} />
                       <Text style={styles.legendLabel}>Rosé</Text>
                     </View>
                     <View style={styles.legendRight}>
-                      <Text style={styles.legendValue}>{colors.rose}</Text>
+                      <Text style={styles.legendValue}>{wineColors.rose}</Text>
                       <Text style={styles.legendArrow}>›</Text>
                     </View>
                   </TouchableOpacity>
@@ -398,7 +398,7 @@ export const AnalyticsScreen = () => {
                     <View style={styles.progressBarContainer}>
                       <View style={styles.progressBarTrack}>
                         <LinearGradient
-                          colors={[themeColors.coral, themeColors.coralDark]}
+                          colors={[colors.coral, colors.coralDark]}
                           start={{ x: 0, y: 0 }}
                           end={{ x: 1, y: 0 }}
                           style={[styles.progressBarFill, { width: `${barWidth}%` }]}
@@ -446,7 +446,7 @@ export const AnalyticsScreen = () => {
                     <View style={styles.progressBarContainer}>
                       <View style={styles.progressBarTrack}>
                         <LinearGradient
-                          colors={[themeColors.coral, themeColors.coralDark]}
+                          colors={[colors.coral, colors.coralDark]}
                           start={{ x: 0, y: 0 }}
                           end={{ x: 1, y: 0 }}
                           style={[styles.progressBarFill, { width: `${barWidth}%` }]}
@@ -475,7 +475,7 @@ export const AnalyticsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: themeColors.linen,
+    backgroundColor: colors.linen,
   },
   scroll: {
     flex: 1,
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: themeColors.linen,
+    backgroundColor: colors.linen,
   },
   
   // Header
@@ -512,7 +512,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
-    color: themeColors.textPrimary,
+    color: colors.textPrimary,
     textAlign: 'center',
     flex: 1,
   },
@@ -534,7 +534,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
-    color: themeColors.textTertiary,
+    color: colors.textTertiary,
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
-    color: themeColors.textInverse,
+    color: colors.textInverse,
   },
 
   // Stats Overview
@@ -554,13 +554,13 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: themeColors.surface,
+    backgroundColor: colors.surface,
     borderRadius: 18,
     paddingVertical: 16,
     paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: themeColors.borderSubtle,
-    shadowColor: themeColors.coral,
+    borderColor: colors.borderSubtle,
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 16,
@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
-    color: themeColors.textTertiary,
+    color: colors.textTertiary,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
     marginBottom: 8,
@@ -580,7 +580,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
-    color: themeColors.textPrimary,
+    color: colors.textPrimary,
     letterSpacing: -1,
   },
   statValueGradient: {
@@ -591,7 +591,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
-    color: themeColors.textInverse,
+    color: colors.textInverse,
     letterSpacing: -1,
   },
 
@@ -610,25 +610,25 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: themeColors.textPrimary,
+    color: colors.textPrimary,
   },
   seeAllLink: {
     fontSize: 14,
     fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
-    color: themeColors.coral,
+    color: colors.coral,
   },
 
   // Color Pie Chart
   colorCard: {
     flexDirection: 'row',
-    backgroundColor: themeColors.surface,
+    backgroundColor: colors.surface,
     borderRadius: 20,
     padding: 20,
     gap: 24,
     borderWidth: 1,
-    borderColor: themeColors.borderSubtle,
-    shadowColor: themeColors.coral,
+    borderColor: colors.borderSubtle,
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 16,
@@ -667,32 +667,32 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
-    color: themeColors.textPrimary,
+    color: colors.textPrimary,
   },
   legendValue: {
     fontSize: 13,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: themeColors.textPrimary,
+    color: colors.textPrimary,
   },
   legendArrow: {
     fontSize: 14,
     fontFamily: 'NunitoSans_400Regular',
-    color: themeColors.textTertiary,
+    color: colors.textTertiary,
   },
 
   // List Cards
   listCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: themeColors.surface,
+    backgroundColor: colors.surface,
     borderRadius: 18,
     padding: 16,
     marginBottom: 12,
     gap: 16,
     borderWidth: 1,
-    borderColor: themeColors.borderSubtle,
-    shadowColor: themeColors.coral,
+    borderColor: colors.borderSubtle,
+    shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 16,
@@ -702,7 +702,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: themeColors.muted[100],
+    backgroundColor: colors.muted[100],
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -717,12 +717,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: themeColors.textPrimary,
+    color: colors.textPrimary,
   },
   listSubtitle: {
     fontSize: 12,
     fontFamily: 'NunitoSans_400Regular',
-    color: themeColors.textTertiary,
+    color: colors.textTertiary,
     marginTop: 2,
   },
   progressBarContainer: {
@@ -730,7 +730,7 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     height: 8,
-    backgroundColor: themeColors.muted[100],
+    backgroundColor: colors.muted[100],
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -756,14 +756,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
-    color: themeColors.textPrimary,
+    color: colors.textPrimary,
     marginBottom: 8,
     textAlign: 'center',
   },
   comingSoonText: {
     fontSize: 15,
     fontFamily: 'NunitoSans_400Regular',
-    color: themeColors.textSecondary,
+    color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 22.5,
   },
