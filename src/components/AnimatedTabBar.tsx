@@ -26,40 +26,13 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
   const tabLabels: Record<string, string> = {
     HomeTab: 'Home',
     InventoryTab: 'Inventory',
-    SommelierTab: 'Somm',
+    SommelierTab: 'Chat',
     CellarsTab: 'Cellars',
   }
 
   return (
     <View style={styles.container}>
-      {/* Scan button — standalone coral circle (left) */}
-      {scanTab && (() => {
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: scanTab.key,
-            canPreventDefault: true,
-          })
-
-          if (!event.defaultPrevented) {
-            navigation.navigate(scanTab.name)
-          }
-        }
-
-        return (
-          <TouchableOpacity
-            key={scanTab.key}
-            accessibilityRole="button"
-            accessibilityLabel="Scan wine label"
-            onPress={onPress}
-            style={styles.scanButton}
-          >
-            <CornersOut size={28} weight="bold" color={colors.textInverse} />
-          </TouchableOpacity>
-        )
-      })()}
-
-      {/* Nav pill (right) */}
+      {/* Nav pill (left) */}
       <View style={styles.tabPill}>
         {regularTabs.map((route) => {
           const { options } = descriptors[route.key]
@@ -114,6 +87,33 @@ export const AnimatedTabBar = ({ state, descriptors, navigation }: BottomTabBarP
           )
         })}
       </View>
+
+      {/* Scan button — standalone coral circle (right) */}
+      {scanTab && (() => {
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: scanTab.key,
+            canPreventDefault: true,
+          })
+
+          if (!event.defaultPrevented) {
+            navigation.navigate(scanTab.name)
+          }
+        }
+
+        return (
+          <TouchableOpacity
+            key={scanTab.key}
+            accessibilityRole="button"
+            accessibilityLabel="Scan wine label"
+            onPress={onPress}
+            style={styles.scanButton}
+          >
+            <CornersOut size={28} weight="bold" color={colors.textInverse} />
+          </TouchableOpacity>
+        )
+      })()}
     </View>
   )
 }

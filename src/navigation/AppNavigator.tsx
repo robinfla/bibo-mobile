@@ -3,7 +3,7 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
-import { House, List, Compass, HouseLine, CornersOut } from 'phosphor-react-native'
+import { House, List, ChatCircle, HouseLine, CornersOut } from 'phosphor-react-native'
 import { useAuth } from '../auth/AuthContext'
 import { colors } from '../theme/colors'
 import { LoginScreen } from '../screens/LoginScreen'
@@ -290,20 +290,6 @@ const AuthenticatedTabs = () => {
           }}
         />
         <Tab.Screen
-          name="ScanTab"
-          component={ScanStackScreen}
-          listeners={({ navigation }) => ({
-            tabPress: (e) => {
-              // Navigate to camera screen
-              navigation.navigate('ScanTab', { screen: 'WineScanCamera' })
-            },
-          })}
-          options={{
-            tabBarLabel: '',
-            tabBarIcon: () => <CornersOut size={24} weight="bold" color={colors.coral} />,
-          }}
-        />
-        <Tab.Screen
           name="SommelierTab"
           component={SommelierStackScreen}
           listeners={({ navigation }) => ({
@@ -318,8 +304,8 @@ const AuthenticatedTabs = () => {
             },
           })}
           options={{
-            tabBarLabel: 'Guide',
-            tabBarIcon: ({ color, focused }) => <Compass size={24} weight={focused ? 'fill' : 'regular'} color={color} />,
+            tabBarLabel: 'Chat',
+            tabBarIcon: ({ color, focused }) => <ChatCircle size={24} weight={focused ? 'fill' : 'regular'} color={color} />,
           }}
         />
         <Tab.Screen
@@ -339,6 +325,20 @@ const AuthenticatedTabs = () => {
           options={{
             tabBarLabel: 'Cellars',
             tabBarIcon: ({ color, focused }) => <HouseLine size={24} weight={focused ? 'fill' : 'regular'} color={color} />,
+          }}
+        />
+        <Tab.Screen
+          name="ScanTab"
+          component={ScanStackScreen}
+          listeners={({ navigation }) => ({
+            tabPress: (e) => {
+              // Navigate to camera screen
+              navigation.navigate('ScanTab', { screen: 'WineScanCamera' })
+            },
+          })}
+          options={{
+            tabBarLabel: '',
+            tabBarIcon: () => <CornersOut size={24} weight="bold" color={colors.coral} />,
           }}
         />
       </Tab.Navigator>
