@@ -14,7 +14,7 @@ import {
   Animated,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { List, DotsThreeVertical, Camera, Microphone, ChatCircleDots, Wine as WineIcon } from 'phosphor-react-native'
+import { List, DotsThreeVertical, Camera, Microphone, PaperPlaneTilt, Wine as WineIcon } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
@@ -659,29 +659,6 @@ export const SommelierScreen = ({ route }: any) => {
             )}
           </ScrollView>
 
-          {/* Suggestion Carousel (only show when no messages) */}
-          {messages.length === 0 && (
-            <View style={styles.carouselContainer}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.carouselContent}
-              >
-                {SUGGESTION_PROMPTS.map((suggestion, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={styles.suggestionChip}
-                    onPress={() => handleSuggestionPress(suggestion)}
-                    activeOpacity={0.7}
-                  >
-                    <Text style={styles.suggestionEmoji}>{suggestion.emoji}</Text>
-                    <Text style={styles.suggestionText}>{suggestion.text}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
-          )}
-
           {/* Input Container */}
           <View style={styles.inputContainer}>
             {/* Fade gradient above input */}
@@ -726,15 +703,6 @@ export const SommelierScreen = ({ route }: any) => {
                   )}
                 </View>
 
-                {/* Camera */}
-                <TouchableOpacity
-                  style={styles.frostedButton}
-                  onPress={() => setShowPhotoPicker(true)}
-                  activeOpacity={0.7}
-                >
-                  <Camera size={24} weight="regular" color={colors.textPrimary} />
-                </TouchableOpacity>
-
                 {/* Send */}
                 <TouchableOpacity
                   style={styles.sendButtonOuter}
@@ -748,12 +716,44 @@ export const SommelierScreen = ({ route }: any) => {
                     end={{ x: 1, y: 1 }}
                     style={styles.sendButton}
                   >
-                    <ChatCircleDots size={24} weight="fill" color="#fff" />
+                    <PaperPlaneTilt size={24} weight="fill" color="#fff" />
                   </LinearGradient>
+                </TouchableOpacity>
+
+                {/* Camera */}
+                <TouchableOpacity
+                  style={styles.frostedButton}
+                  onPress={() => setShowPhotoPicker(true)}
+                  activeOpacity={0.7}
+                >
+                  <Camera size={24} weight="regular" color={colors.textPrimary} />
                 </TouchableOpacity>
               </View>
             )}
           </View>
+
+          {/* Suggestion Carousel (show below input when no messages) */}
+          {messages.length === 0 && (
+            <View style={styles.carouselContainer}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.carouselContent}
+              >
+                {SUGGESTION_PROMPTS.map((suggestion, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.suggestionChip}
+                    onPress={() => handleSuggestionPress(suggestion)}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.suggestionEmoji}>{suggestion.emoji}</Text>
+                    <Text style={styles.suggestionText}>{suggestion.text}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
         </View>
       </KeyboardAvoidingView>
 
@@ -1081,7 +1081,12 @@ const styles = StyleSheet.create({
 
   // Suggestion carousel
   carouselContainer: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 174 : 164,
+    left: 0,
+    right: 0,
     paddingVertical: 12,
+    zIndex: 45,
   },
   carouselContent: {
     paddingHorizontal: 20,
