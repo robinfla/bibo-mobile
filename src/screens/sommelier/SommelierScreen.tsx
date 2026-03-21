@@ -863,7 +863,7 @@ const styles = StyleSheet.create({
   messagesContent: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: Platform.OS === 'ios' ? 200 : 190,
+    paddingBottom: Platform.OS === 'ios' ? 180 : 170,
     flexGrow: 1,
     gap: 16,
   },
@@ -1094,7 +1094,7 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 50,
     paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'ios' ? 100 : 90,
+    paddingBottom: Platform.OS === 'ios' ? 80 : 70,
     paddingTop: 16,
     backgroundColor: 'rgba(254, 246, 237, 0.95)',
   },
