@@ -315,10 +315,12 @@ const styles = StyleSheet.create({
   backButton: {
     fontSize: 17,
     color: colors.coral,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   headerTitle: {
     fontSize: 17,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
@@ -332,6 +334,7 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
     letterSpacing: -0.8,
@@ -339,6 +342,7 @@ const styles = StyleSheet.create({
   },
   heroSubtitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     lineHeight: 24,
   },
@@ -347,6 +351,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 20,
@@ -356,6 +361,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
     marginBottom: 8,
@@ -369,6 +375,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
   },
   textArea: {
@@ -392,6 +399,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     lineHeight: 21,
   },
@@ -424,11 +432,13 @@ const styles = StyleSheet.create({
   },
   sourceChipText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textSecondary,
   },
   sourceChipTextActive: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textInverse,
   },
@@ -448,6 +458,7 @@ const styles = StyleSheet.create({
   },
   submitText: {
     fontSize: 17,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },

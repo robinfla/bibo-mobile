@@ -391,19 +391,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, paddingVertical: 16,
     borderBottomWidth: 1, borderBottomColor: colors.muted[100],
   },
-  title: { fontSize: 24, fontWeight: '800', color: colors.muted[900] },
+  title: { fontSize: 24, fontWeight: '800', fontFamily: 'NunitoSans_800ExtraBold', color: colors.muted[900] },
   closeBtn: {
     width: 36, height: 36, borderRadius: 18,
     borderWidth: 1, borderColor: colors.muted[300],
     justifyContent: 'center', alignItems: 'center',
   },
-  closeBtnText: { fontSize: 16, color: colors.muted[600] },
+  closeBtnText: { fontSize: 16, fontFamily: 'NunitoSans_400Regular', color: colors.muted[600] },
 
   scroll: { flex: 1 },
   scrollContent: { padding: 20 },
 
   section: { marginBottom: 28 },
-  sectionTitle: { fontSize: 18, fontWeight: '700', color: colors.muted[900], marginBottom: 12 },
+  sectionTitle: { fontSize: 18, fontWeight: '700', fontFamily: 'NunitoSans_700Bold', color: colors.muted[900], marginBottom: 12 },
 
   // Sort options
   sortRow: {
@@ -412,10 +412,10 @@ const styles = StyleSheet.create({
     borderRadius: 10, marginBottom: 4,
   },
   sortRowActive: { backgroundColor: colors.honeyLight },
-  sortIcon: { fontSize: 16, marginRight: 10 },
-  sortLabel: { fontSize: 15, color: colors.muted[500], flex: 1 },
-  sortLabelActive: { color: colors.muted[900], fontWeight: '600' },
-  checkmark: { fontSize: 16, color: colors.coral, fontWeight: '700' },
+  sortIcon: { fontSize: 16, fontFamily: 'NunitoSans_400Regular', marginRight: 10 },
+  sortLabel: { fontSize: 15, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], flex: 1 },
+  sortLabelActive: { color: colors.muted[900], fontWeight: '600', fontFamily: 'NunitoSans_600SemiBold' },
+  checkmark: { fontSize: 16, color: colors.coral, fontWeight: '700', fontFamily: 'NunitoSans_700Bold' },
 
   // Chips
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
@@ -427,8 +427,8 @@ const styles = StyleSheet.create({
   chipActive: {
     backgroundColor: colors.coralLight, borderColor: colors.coral,
   },
-  chipText: { fontSize: 14, fontWeight: '500', color: colors.muted[700] },
-  chipTextActive: { color: colors.coralDark, fontWeight: '600' },
+  chipText: { fontSize: 14, fontWeight: '500', fontFamily: 'NunitoSans_500Medium', color: colors.muted[700] },
+  chipTextActive: { color: colors.coralDark, fontWeight: '600', fontFamily: 'NunitoSans_600SemiBold' },
 
   // Slider
   sliderContainer: { marginTop: 4 },
@@ -436,10 +436,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4,
   },
   sliderValue: {
-    fontSize: 15, fontWeight: '700', color: colors.coral,
+    fontSize: 15, fontWeight: '700', fontFamily: 'NunitoSans_700Bold', color: colors.coral,
   },
   sliderHint: {
-    fontSize: 12, color: colors.muted[500], marginBottom: 2, marginTop: 8,
+    fontSize: 12, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], marginBottom: 2, marginTop: 8,
   },
 
   // Dropdown
@@ -451,9 +451,9 @@ const styles = StyleSheet.create({
   dropdownActive: {
     borderColor: colors.coral, backgroundColor: colors.coralLight,
   },
-  dropdownText: { fontSize: 15, color: colors.muted[500] },
-  dropdownTextActive: { color: colors.coralDark, fontWeight: '600' },
-  dropdownArrow: { fontSize: 12, color: colors.muted[400] },
+  dropdownText: { fontSize: 15, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500] },
+  dropdownTextActive: { color: colors.coralDark, fontWeight: '600', fontFamily: 'NunitoSans_600SemiBold' },
+  dropdownArrow: { fontSize: 12, fontFamily: 'NunitoSans_400Regular', color: colors.muted[400] },
   dropdownList: {
     marginTop: 6, backgroundColor: colors.white,
     borderWidth: 1, borderColor: colors.muted[200], borderRadius: 10,
@@ -465,13 +465,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1, borderBottomColor: colors.muted[50],
   },
   dropdownItemActive: { backgroundColor: colors.coralLight },
-  dropdownItemText: { fontSize: 14, color: colors.muted[700] },
-  dropdownItemTextActive: { color: colors.coralDark, fontWeight: '600' },
-  dropdownItemClear: { fontSize: 14, color: colors.muted[500], fontWeight: '600' },
+  dropdownItemText: { fontSize: 14, fontFamily: 'NunitoSans_400Regular', color: colors.muted[700] },
+  dropdownItemTextActive: { color: colors.coralDark, fontWeight: '600', fontFamily: 'NunitoSans_600SemiBold' },
+  dropdownItemClear: { fontSize: 14, color: colors.muted[500], fontWeight: '600', fontFamily: 'NunitoSans_600SemiBold' },
 
   // Reset
   resetBtn: { alignSelf: 'center', paddingVertical: 12 },
-  resetText: { fontSize: 14, fontWeight: '600', color: colors.muted[500] },
+  resetText: { fontSize: 14, fontWeight: '600', fontFamily: 'NunitoSans_600SemiBold', color: colors.muted[500] },
 
   // CTA
   ctaContainer: {
@@ -483,5 +483,5 @@ const styles = StyleSheet.create({
     borderRadius: 14, paddingVertical: 16,
     alignItems: 'center',
   },
-  ctaText: { color: colors.white, fontSize: 17, fontWeight: '700' },
+  ctaText: { color: colors.white, fontSize: 17, fontWeight: '700', fontFamily: 'NunitoSans_700Bold' },
 })

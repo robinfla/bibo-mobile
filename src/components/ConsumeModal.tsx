@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.muted[900],
   },
@@ -263,6 +264,7 @@ const styles = StyleSheet.create({
   },
   closeText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.muted[600],
   },
@@ -294,11 +296,13 @@ const styles = StyleSheet.create({
   },
   wineName: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.muted[900],
   },
   wineMeta: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[500],
     marginTop: 2,
   },
@@ -310,11 +314,13 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.danger,
     textAlign: 'center',
   },
   fieldLabel: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.muted[700],
     marginBottom: 6,
@@ -337,11 +343,13 @@ const styles = StyleSheet.create({
   },
   qtyButtonText: {
     fontSize: 20,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.muted[700],
   },
   qtyValue: {
     fontSize: 20,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.muted[900],
     minWidth: 30,
@@ -355,6 +363,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 10,
     fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[900],
   },
   textArea: {
@@ -377,6 +386,7 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: colors.muted[700],
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   confirmButton: {
@@ -389,6 +399,7 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     color: colors.white,
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   buttonDisabled: {

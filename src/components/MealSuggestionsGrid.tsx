@@ -93,11 +93,13 @@ const styles = StyleSheet.create({
   },
   scoreText: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },
   mealName: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
     textAlign: 'center',
@@ -120,6 +122,7 @@ const styles = StyleSheet.create({
   noteText: {
     flex: 1,
     fontSize: 13,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[600],
   },
   noteTextItalic: {

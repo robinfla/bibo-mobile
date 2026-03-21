@@ -364,11 +364,13 @@ const styles = StyleSheet.create({
   },
   headerProgress: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textSecondary,
   },
   skipText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.coral,
   },
@@ -398,12 +400,14 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 28,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
     marginBottom: 8,
   },
   cardSubtitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     marginBottom: 32,
   },
@@ -435,10 +439,12 @@ const styles = StyleSheet.create({
   },
   optionEmoji: {
     fontSize: 40,
+    fontFamily: 'NunitoSans_400Regular',
     marginBottom: 12,
   },
   optionLabel: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
     textAlign: 'center',
@@ -467,9 +473,11 @@ const styles = StyleSheet.create({
   },
   sliderEmoji: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_400Regular',
   },
   sliderLabel: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
   },
@@ -493,6 +501,7 @@ const styles = StyleSheet.create({
   },
   optionFlag: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_400Regular',
     marginBottom: 8,
   },
   colorDot: {
@@ -503,6 +512,7 @@ const styles = StyleSheet.create({
   },
   multiOptionLabel: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
     textAlign: 'center',
@@ -530,6 +540,7 @@ const styles = StyleSheet.create({
   },
   continueText: {
     fontSize: 17,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },
@@ -546,6 +557,7 @@ const styles = StyleSheet.create({
   },
   completeEmoji: {
     fontSize: 50,
+    fontFamily: 'NunitoSans_400Regular',
   },
   completeButton: {
     marginTop: 40,
@@ -565,6 +577,7 @@ const styles = StyleSheet.create({
   },
   completeButtonText: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },

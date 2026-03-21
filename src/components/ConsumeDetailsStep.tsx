@@ -311,6 +311,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
     letterSpacing: -0.5,
@@ -360,6 +361,7 @@ const styles = StyleSheet.create({
   },
   wineName: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 6,
@@ -378,17 +380,20 @@ const styles = StyleSheet.create({
   },
   vintageText: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textSecondary,
   },
   regionText: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
     color: colors.textTertiary,
     flex: 1,
   },
   stockText: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: '#10b981',
   },
@@ -397,6 +402,7 @@ const styles = StyleSheet.create({
   },
   sectionLabel: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textSecondary,
     marginBottom: 12,
@@ -428,6 +434,7 @@ const styles = StyleSheet.create({
   },
   quantityDisplay: {
     fontSize: 48,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     marginHorizontal: 40,
     color: colors.coral,
@@ -443,10 +450,12 @@ const styles = StyleSheet.create({
   },
   ratingPlaceholder: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textTertiary,
   },
   ratingValue: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.coral,
   },
@@ -459,6 +468,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 16,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
     minHeight: 100,
   },
@@ -478,6 +488,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
     letterSpacing: 0.5,

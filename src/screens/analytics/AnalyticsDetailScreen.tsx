@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
     letterSpacing: -0.5,
@@ -228,6 +229,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 11,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textTertiary,
     letterSpacing: 0.5,
@@ -236,6 +238,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.coral,
     letterSpacing: -1,
@@ -259,6 +262,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
   },
   listContent: {
@@ -291,12 +295,14 @@ const styles = StyleSheet.create({
   },
   itemIconEmoji: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_400Regular',
   },
   itemContent: {
     flex: 1,
   },
   itemName: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     letterSpacing: -0.2,
@@ -304,6 +310,7 @@ const styles = StyleSheet.create({
   itemCount: {
     fontSize: 13,
     color: colors.textTertiary,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     marginTop: 2,
   },
@@ -326,6 +333,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textTertiary,
   },
 })

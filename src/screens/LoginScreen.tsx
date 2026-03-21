@@ -118,12 +118,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.muted[900],
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[500],
   },
   errorBox: {
@@ -137,6 +139,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: colors.danger,
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     textAlign: 'center',
   },
   form: {
@@ -144,6 +147,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.muted[700],
     marginBottom: -4,
@@ -156,6 +160,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[900],
   },
   button: {
@@ -171,6 +176,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.white,
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
 })

@@ -237,10 +237,12 @@ const styles = StyleSheet.create({
   closeButtonText: {
     fontSize: 24,
     color: colors.textSecondary,
-    fontWeight: '300',
+    fontFamily: 'NunitoSans_400Regular',
+    fontWeight: '400',
   },
   headerTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
@@ -250,6 +252,7 @@ const styles = StyleSheet.create({
   },
   deleteButtonText: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: '#dc2626',
   },
@@ -266,6 +269,7 @@ const styles = StyleSheet.create({
   },
   wineName: {
     fontSize: 20,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     textAlign: 'center',
@@ -273,6 +277,7 @@ const styles = StyleSheet.create({
   },
   wineMeta: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     textAlign: 'center',
   },
@@ -281,6 +286,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
     marginBottom: 12,
@@ -319,11 +325,13 @@ const styles = StyleSheet.create({
   },
   priorityChipText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textSecondary,
   },
   priorityChipTextActive: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },
@@ -335,6 +343,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
   },
   textArea: {
@@ -362,6 +371,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },

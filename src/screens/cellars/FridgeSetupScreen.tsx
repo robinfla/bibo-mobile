@@ -121,12 +121,12 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.muted[50] },
   header: { paddingHorizontal: 20, paddingBottom: 12 },
   backBtn: { paddingVertical: 8 },
-  backText: { fontSize: 16, color: colors.coral, fontWeight: '600' },
-  title: { fontSize: 24, fontWeight: '800', color: colors.textPrimary, marginTop: 4 },
-  subtitle: { fontSize: 13, color: colors.textSecondary, marginTop: 4 },
+  backText: { fontSize: 16, color: colors.coral, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600' },
+  title: { fontSize: 24, fontFamily: 'NunitoSans_800ExtraBold', fontWeight: '800', color: colors.textPrimary, marginTop: 4 },
+  subtitle: { fontSize: 13, fontFamily: 'NunitoSans_400Regular', color: colors.textSecondary, marginTop: 4 },
   content: { padding: 20 },
 
-  fieldLabel: { fontSize: 13, fontWeight: '600', color: colors.textSecondary, marginBottom: 12 },
+  fieldLabel: { fontSize: 13, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.textSecondary, marginBottom: 12 },
 
   // Stepper
   stepperRow: {
@@ -141,8 +141,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 10,
   },
-  stepperLabel: { fontSize: 15, fontWeight: '600', color: colors.textPrimary },
-  stepperSub: { fontSize: 11, color: colors.textSecondary, marginTop: 1 },
+  stepperLabel: { fontSize: 15, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.textPrimary },
+  stepperSub: { fontSize: 11, fontFamily: 'NunitoSans_400Regular', color: colors.textSecondary, marginTop: 1 },
   stepperControls: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   stepperBtn: {
     width: 36,
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   stepperBtnDisabled: { opacity: 0.3 },
-  stepperBtnText: { fontSize: 20, color: colors.textSecondary },
-  stepperValue: { fontSize: 20, fontWeight: '800', color: colors.textPrimary, minWidth: 28, textAlign: 'center' },
+  stepperBtnText: { fontSize: 20, fontFamily: 'NunitoSans_400Regular', color: colors.textSecondary },
+  stepperValue: { fontSize: 20, fontFamily: 'NunitoSans_800ExtraBold', fontWeight: '800', color: colors.textPrimary, minWidth: 28, textAlign: 'center' },
 
   // Fridge preview
   fridgePreview: {
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   shelfGroup: { marginBottom: 8 },
-  shelfLabel: { fontSize: 9, color: colors.textTertiary, fontWeight: '600', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.3 },
+  shelfLabel: { fontSize: 9, fontFamily: 'NunitoSans_600SemiBold', color: colors.textTertiary, fontWeight: '600', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.3 },
   shelfRow: { flexDirection: 'row', gap: 4, justifyContent: 'center', flexWrap: 'wrap' },
   fridgeSlot: {
     width: 28,
@@ -181,10 +181,10 @@ const styles = StyleSheet.create({
     borderColor: colors.muted[300],
     borderStyle: 'dashed',
   },
-  moreText: { fontSize: 10, color: colors.textTertiary, alignSelf: 'center', marginLeft: 4 },
-  moreShelves: { fontSize: 11, color: colors.textTertiary, textAlign: 'center', marginTop: 4 },
+  moreText: { fontSize: 10, fontFamily: 'NunitoSans_400Regular', color: colors.textTertiary, alignSelf: 'center', marginLeft: 4 },
+  moreShelves: { fontSize: 11, fontFamily: 'NunitoSans_400Regular', color: colors.textTertiary, textAlign: 'center', marginTop: 4 },
 
-  totalLabel: { textAlign: 'center', fontSize: 13, color: colors.textSecondary, marginTop: 12, marginBottom: 8 },
+  totalLabel: { textAlign: 'center', fontSize: 13, fontFamily: 'NunitoSans_400Regular', color: colors.textSecondary, marginTop: 12, marginBottom: 8 },
 
   createBtn: {
     backgroundColor: colors.coral,
@@ -194,5 +194,5 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   createBtnDisabled: { opacity: 0.6 },
-  createBtnText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
+  createBtnText: { color: colors.textInverse, fontSize: 16, fontFamily: 'NunitoSans_700Bold', fontWeight: '700' },
 })

@@ -510,6 +510,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: themeColors.textPrimary,
     textAlign: 'center',
@@ -531,6 +532,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: themeColors.textTertiary,
     paddingHorizontal: 20,
@@ -538,6 +540,7 @@ const styles = StyleSheet.create({
   },
   tabTextActive: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: themeColors.textInverse,
   },
@@ -566,6 +569,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 11,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: themeColors.textTertiary,
     letterSpacing: 0.5,
@@ -574,6 +578,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: themeColors.textPrimary,
     letterSpacing: -1,
@@ -584,6 +589,7 @@ const styles = StyleSheet.create({
   },
   statValueReady: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: themeColors.textInverse,
     letterSpacing: -1,
@@ -602,11 +608,13 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 17,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: themeColors.textPrimary,
   },
   seeAllLink: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: themeColors.coral,
   },
@@ -657,16 +665,19 @@ const styles = StyleSheet.create({
   },
   legendLabel: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
     color: themeColors.textPrimary,
   },
   legendValue: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: themeColors.textPrimary,
   },
   legendArrow: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: themeColors.textTertiary,
   },
 
@@ -697,17 +708,20 @@ const styles = StyleSheet.create({
   },
   listIconEmoji: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_400Regular',
   },
   listContent: {
     flex: 1,
   },
   listTitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: themeColors.textPrimary,
   },
   listSubtitle: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_400Regular',
     color: themeColors.textTertiary,
     marginTop: 2,
   },
@@ -735,10 +749,12 @@ const styles = StyleSheet.create({
   },
   comingSoonEmoji: {
     fontSize: 64,
+    fontFamily: 'NunitoSans_400Regular',
     marginBottom: 16,
   },
   comingSoonTitle: {
     fontSize: 20,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: themeColors.textPrimary,
     marginBottom: 8,
@@ -746,6 +762,7 @@ const styles = StyleSheet.create({
   },
   comingSoonText: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
     color: themeColors.textSecondary,
     textAlign: 'center',
     lineHeight: 22.5,

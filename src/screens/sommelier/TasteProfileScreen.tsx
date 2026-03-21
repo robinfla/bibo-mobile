@@ -281,6 +281,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
   },
@@ -291,6 +292,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
   },
   scrollView: {
@@ -304,6 +306,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 16,
@@ -343,15 +346,18 @@ const styles = StyleSheet.create({
   },
   typeEmoji: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_400Regular',
   },
   typeLabel: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
     flex: 1,
   },
   typePercentage: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.coral,
     marginTop: 8,
@@ -385,15 +391,18 @@ const styles = StyleSheet.create({
   },
   preferenceLabel: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     marginBottom: 4,
   },
   preferenceValue: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
   styleEmoji: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_400Regular',
   },
 })

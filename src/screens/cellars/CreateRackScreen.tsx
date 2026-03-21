@@ -210,10 +210,10 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.muted[50] },
   header: { paddingHorizontal: 20, paddingBottom: 12 },
   backBtn: { paddingVertical: 8 },
-  backText: { fontSize: 16, color: colors.coral, fontWeight: '600' },
-  title: { fontSize: 28, fontWeight: '800', color: colors.textPrimary, marginTop: 4 },
+  backText: { fontSize: 16, color: colors.coral, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600' },
+  title: { fontSize: 28, fontFamily: 'NunitoSans_800ExtraBold', fontWeight: '800', color: colors.textPrimary, marginTop: 4 },
   content: { padding: 20 },
-  label: { fontSize: 14, fontWeight: '600', color: colors.muted[700], marginBottom: 8 },
+  label: { fontSize: 14, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.muted[700], marginBottom: 8 },
 
   // Type selector
   typeRow: { flexDirection: 'row', gap: 12 },
@@ -222,10 +222,10 @@ const styles = StyleSheet.create({
     alignItems: 'center', borderWidth: 2, borderColor: colors.muted[200],
   },
   typeCardActive: { borderColor: colors.coral, backgroundColor: colors.coralLight },
-  typeIcon: { fontSize: 28, marginBottom: 6 },
-  typeName: { fontSize: 14, fontWeight: '700', color: colors.muted[700] },
+  typeIcon: { fontSize: 28, fontFamily: 'NunitoSans_400Regular', marginBottom: 6 },
+  typeName: { fontSize: 14, fontFamily: 'NunitoSans_700Bold', fontWeight: '700', color: colors.muted[700] },
   typeNameActive: { color: colors.coral },
-  typeDesc: { fontSize: 11, color: colors.muted[400], marginTop: 2 },
+  typeDesc: { fontSize: 11, fontFamily: 'NunitoSans_400Regular', color: colors.muted[400], marginTop: 2 },
 
   // Wall chips
   wallRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
@@ -234,20 +234,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface, borderWidth: 1.5, borderColor: colors.muted[300],
   },
   wallChipActive: { borderColor: colors.coral, backgroundColor: colors.coralLight },
-  wallChipText: { fontSize: 13, fontWeight: '600', color: colors.muted[600] },
+  wallChipText: { fontSize: 13, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.muted[600] },
   wallChipTextActive: { color: colors.coral },
 
   // Stepper
   stepperRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 },
-  stepperLabel: { fontSize: 16, color: colors.muted[800] },
+  stepperLabel: { fontSize: 16, fontFamily: 'NunitoSans_400Regular', color: colors.muted[800] },
   stepperControls: { flexDirection: 'row', alignItems: 'center', gap: 16 },
   stepperBtn: {
     width: 36, height: 36, borderRadius: 18, backgroundColor: colors.surface,
     justifyContent: 'center', alignItems: 'center', borderWidth: 1.5, borderColor: colors.muted[300],
   },
   stepperBtnDisabled: { opacity: 0.3 },
-  stepperBtnText: { fontSize: 18, fontWeight: '600', color: colors.muted[700] },
-  stepperValue: { fontSize: 20, fontWeight: '700', color: colors.textPrimary, minWidth: 30, textAlign: 'center' },
+  stepperBtnText: { fontSize: 18, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.muted[700] },
+  stepperValue: { fontSize: 20, fontFamily: 'NunitoSans_700Bold', fontWeight: '700', color: colors.textPrimary, minWidth: 30, textAlign: 'center' },
 
   // Preview
   previewContainer: { backgroundColor: colors.surface, borderRadius: 12, padding: 16, alignItems: 'center' },
@@ -262,11 +262,11 @@ const styles = StyleSheet.create({
     borderWidth: 1.5, borderColor: colors.muted[300], borderStyle: 'dashed',
     justifyContent: 'center', alignItems: 'center',
   },
-  previewBinText: { fontSize: 9, color: colors.muted[400], fontWeight: '600' },
-  previewLabel: { marginTop: 12, fontSize: 13, color: colors.muted[500] },
+  previewBinText: { fontSize: 9, fontFamily: 'NunitoSans_600SemiBold', color: colors.muted[400], fontWeight: '600' },
+  previewLabel: { marginTop: 12, fontSize: 13, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500] },
 
   // Save
   saveBtn: { backgroundColor: colors.coral, borderRadius: 12, paddingVertical: 16, alignItems: 'center', marginTop: 28 },
   saveBtnDisabled: { opacity: 0.6 },
-  saveBtnText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
+  saveBtnText: { color: colors.textInverse, fontSize: 16, fontFamily: 'NunitoSans_700Bold', fontWeight: '700' },
 })

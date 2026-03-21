@@ -296,10 +296,12 @@ const styles = StyleSheet.create({
   backButton: {
     fontSize: 16,
     color: colors.coral,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   headerTitle: {
     fontSize: 17,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
@@ -311,6 +313,7 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     fontSize: 28,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 8,
@@ -318,6 +321,7 @@ const styles = StyleSheet.create({
   },
   heroSubtitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
   },
   wineCard: {
@@ -348,6 +352,7 @@ const styles = StyleSheet.create({
   },
   wineImageText: {
     fontSize: 36,
+    fontFamily: 'NunitoSans_400Regular',
   },
   wineInfo: {
     flex: 1,
@@ -355,6 +360,7 @@ const styles = StyleSheet.create({
   },
   wineName: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 4,
@@ -362,6 +368,7 @@ const styles = StyleSheet.create({
   },
   wineMeta: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
   },
   infoBanner: {
@@ -379,6 +386,7 @@ const styles = StyleSheet.create({
   },
   infoBannerText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     lineHeight: 20,
   },
@@ -387,6 +395,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textSecondary,
     marginBottom: 10,
@@ -417,6 +426,7 @@ const styles = StyleSheet.create({
   },
   priorityEmoji: {
     fontSize: 28,
+    fontFamily: 'NunitoSans_400Regular',
     marginBottom: 8,
     opacity: 0.6,
   },
@@ -426,6 +436,7 @@ const styles = StyleSheet.create({
   },
   priorityLabel: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textSecondary,
   },
@@ -438,6 +449,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -464,6 +476,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     fontSize: 17,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },

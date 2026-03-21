@@ -336,12 +336,14 @@ const styles = StyleSheet.create({
   },
   wineName: {
     fontSize: 17,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     letterSpacing: -0.3,
   },
   vintageRegion: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textTertiary,
   },
   consumedDateRow: {
@@ -354,6 +356,7 @@ const styles = StyleSheet.create({
   },
   consumedDate: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_600SemiBold',
     color: colors.coral,
     fontWeight: '600',
   },
@@ -380,11 +383,13 @@ const styles = StyleSheet.create({
   },
   scoreNumber: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },
   scoreDenominator: {
     fontSize: 9,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textInverse,
     opacity: 0.8,
     marginTop: -2,
@@ -405,6 +410,7 @@ const styles = StyleSheet.create({
   },
   notesText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     lineHeight: 21,
     color: colors.textSecondary,
   },
@@ -419,6 +425,7 @@ const styles = StyleSheet.create({
   },
   ctaText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
     color: colors.textTertiary,
     textDecorationLine: 'underline',

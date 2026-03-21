@@ -256,11 +256,13 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   errorText: {
+    fontFamily: 'NunitoSans_400Regular',
     fontSize: 16,
     color: colors.textPrimary,
     marginBottom: 16,
   },
   backLink: {
+    fontFamily: 'NunitoSans_600SemiBold',
     fontSize: 16,
     color: colors.coral,
     fontWeight: '600',
@@ -301,12 +303,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   wineName: {
+    fontFamily: 'NunitoSans_700Bold',
     fontSize: 24,
     fontWeight: '700',
     color: colors.textPrimary,
     textAlign: 'center',
   },
   producer: {
+    fontFamily: 'NunitoSans_400Regular',
     fontSize: 18,
     color: colors.textSecondary,
     marginTop: 4,
@@ -328,10 +332,12 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metaChipText: {
+    fontFamily: 'NunitoSans_400Regular',
     fontSize: 14,
     color: colors.textSecondary,
   },
   grapeText: {
+    fontFamily: 'NunitoSans_400Regular',
     fontSize: 14,
     color: colors.textSecondary,
     marginTop: 12,
@@ -341,6 +347,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   sectionTitle: {
+    fontFamily: 'NunitoSans_700Bold',
     fontSize: 18,
     fontWeight: '700',
     color: colors.textPrimary,
@@ -362,6 +369,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   tasteLabel: {
+    fontFamily: 'NunitoSans_400Regular',
     width: 80,
     fontSize: 14,
     color: colors.textSecondary,
@@ -379,6 +387,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   tasteValue: {
+    fontFamily: 'NunitoSans_600SemiBold',
     width: 30,
     fontSize: 14,
     color: colors.textPrimary,
@@ -391,10 +400,12 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   agingText: {
+    fontFamily: 'NunitoSans_400Regular',
     fontSize: 16,
     color: colors.textPrimary,
   },
   agingNote: {
+    fontFamily: 'NunitoSans_400Regular',
     fontSize: 14,
     color: colors.textSecondary,
     marginTop: 8,
@@ -412,6 +423,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   pairingText: {
+    fontFamily: 'NunitoSans_400Regular',
     fontSize: 14,
     color: colors.textPrimary,
   },
@@ -440,6 +452,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scoreText: {
+    fontFamily: 'NunitoSans_700Bold',
     fontSize: 18,
     fontWeight: '700',
     color: '#FFF',
@@ -448,16 +461,19 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   reviewVintage: {
+    fontFamily: 'NunitoSans_600SemiBold',
     fontSize: 16,
     fontWeight: '600',
     color: colors.textPrimary,
   },
   reviewCritic: {
+    fontFamily: 'NunitoSans_400Regular',
     fontSize: 14,
     color: colors.textSecondary,
     marginTop: 2,
   },
   tastingNote: {
+    fontFamily: 'NunitoSans_400Regular',
     fontSize: 14,
     color: colors.textPrimary,
     lineHeight: 22,
@@ -485,6 +501,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   addButtonText: {
+    fontFamily: 'NunitoSans_700Bold',
     fontSize: 18,
     fontWeight: '700',
     color: '#FFF',

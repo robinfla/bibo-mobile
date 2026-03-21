@@ -734,12 +734,12 @@ const styles = StyleSheet.create({
   header: { paddingHorizontal: 20, paddingBottom: 12 },
   headerTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   backBtn: { paddingVertical: 8 },
-  backText: { fontSize: 16, color: colors.coral, fontWeight: '600' },
+  backText: { fontSize: 16, color: colors.coral, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600' },
   deleteBtn: { padding: 8 },
-  deleteText: { fontSize: 20 },
-  breadcrumb: { fontSize: 13, color: colors.muted[400], marginTop: 4 },
-  title: { fontSize: 24, fontWeight: '800', color: colors.muted[900], marginTop: 2 },
-  subtitle: { fontSize: 13, color: colors.muted[500], marginTop: 2 },
+  deleteText: { fontSize: 20, fontFamily: 'NunitoSans_400Regular' },
+  breadcrumb: { fontSize: 13, fontFamily: 'NunitoSans_400Regular', color: colors.muted[400], marginTop: 4 },
+  title: { fontSize: 24, fontFamily: 'NunitoSans_800ExtraBold', fontWeight: '800', color: colors.muted[900], marginTop: 2 },
+  subtitle: { fontSize: 13, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], marginTop: 2 },
   content: { padding: 20, paddingTop: 8 },
 
   // Grid
@@ -757,8 +757,8 @@ const styles = StyleSheet.create({
   },
   binCellSelected: { borderColor: colors.coral, borderWidth: 2.5 },
   binFill: { position: 'absolute', bottom: 0, left: 0, right: 0, borderRadius: 10 },
-  binLabel: { fontSize: 9, fontWeight: '600', color: colors.muted[600], zIndex: 1, marginBottom: 1 },
-  binCount: { fontSize: 12, fontWeight: '700', color: colors.muted[400], zIndex: 1 },
+  binLabel: { fontSize: 9, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.muted[600], zIndex: 1, marginBottom: 1 },
+  binCount: { fontSize: 12, fontFamily: 'NunitoSans_700Bold', fontWeight: '700', color: colors.muted[400], zIndex: 1 },
 
   // Bin panel
   binPanel: {
@@ -768,26 +768,26 @@ const styles = StyleSheet.create({
   },
   binPanelHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   binLabelInput: {
-    fontSize: 18, fontWeight: '700', color: colors.muted[900], borderBottomWidth: 1.5,
+    fontSize: 18, fontFamily: 'NunitoSans_700Bold', fontWeight: '700', color: colors.muted[900], borderBottomWidth: 1.5,
     borderBottomColor: colors.coral, paddingVertical: 4, marginBottom: 4,
   },
-  binPanelTitle: { fontSize: 18, fontWeight: '700', color: colors.muted[900] },
-  binPanelSub: { fontSize: 13, color: colors.muted[500], marginTop: 2 },
+  binPanelTitle: { fontSize: 18, fontFamily: 'NunitoSans_700Bold', fontWeight: '700', color: colors.muted[900] },
+  binPanelSub: { fontSize: 13, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], marginTop: 2 },
   binPanelBar: { height: 6, backgroundColor: colors.muted[200], borderRadius: 3, marginTop: 12, marginBottom: 12 },
   binPanelBarFill: { height: 6, backgroundColor: colors.coral, borderRadius: 3 },
   binPanelList: { maxHeight: 200 },
   binPanelItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: colors.muted[100] },
-  binPanelItemName: { fontSize: 14, fontWeight: '600', color: colors.muted[900] },
-  binPanelItemSub: { fontSize: 11, color: colors.muted[500], marginTop: 1 },
-  binPanelEmpty: { fontSize: 13, color: colors.muted[400], textAlign: 'center', paddingVertical: 20 },
+  binPanelItemName: { fontSize: 14, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.muted[900] },
+  binPanelItemSub: { fontSize: 11, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], marginTop: 1 },
+  binPanelEmpty: { fontSize: 13, fontFamily: 'NunitoSans_400Regular', color: colors.muted[400], textAlign: 'center', paddingVertical: 20 },
   binRemoveBtn: { padding: 8 },
-  binRemoveText: { fontSize: 14, color: colors.muted[400] },
+  binRemoveText: { fontSize: 14, fontFamily: 'NunitoSans_400Regular', color: colors.muted[400] },
   binAddBtn: { backgroundColor: colors.coral, borderRadius: 10, paddingVertical: 12, alignItems: 'center', marginTop: 12 },
-  binAddBtnText: { color: colors.textInverse, fontSize: 15, fontWeight: '700' },
+  binAddBtnText: { color: colors.textInverse, fontSize: 15, fontFamily: 'NunitoSans_700Bold', fontWeight: '700' },
 
   // Wine list link
   wineListLink: { alignItems: 'center', marginTop: 16, paddingVertical: 8 },
-  wineListLinkText: { fontSize: 14, color: colors.coral, fontWeight: '600' },
+  wineListLinkText: { fontSize: 14, color: colors.coral, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600' },
 
   // Peek card (grid)
   peekCard: {
@@ -797,13 +797,13 @@ const styles = StyleSheet.create({
   },
   peekHeader: { flexDirection: 'row', alignItems: 'center' },
   peekDot: { width: 16, height: 16, borderRadius: 8, marginRight: 12 },
-  peekName: { fontSize: 17, fontWeight: '700', color: colors.muted[900] },
-  peekVintage: { fontSize: 13, color: colors.muted[500], marginTop: 2 },
+  peekName: { fontSize: 17, fontFamily: 'NunitoSans_700Bold', fontWeight: '700', color: colors.muted[900] },
+  peekVintage: { fontSize: 13, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], marginTop: 2 },
   peekClose: { padding: 8 },
-  peekCloseText: { fontSize: 18, color: colors.muted[400] },
+  peekCloseText: { fontSize: 18, fontFamily: 'NunitoSans_400Regular', color: colors.muted[400] },
   peekActions: { flexDirection: 'row', gap: 12, marginTop: 16 },
   peekBtn: { flex: 1, paddingVertical: 12, borderRadius: 10, backgroundColor: colors.muted[100], alignItems: 'center' },
-  peekBtnText: { fontSize: 15, fontWeight: '600', color: colors.muted[700] },
+  peekBtnText: { fontSize: 15, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.muted[700] },
   peekBtnDanger: { backgroundColor: '#fef2f2' },
   peekBtnDangerText: { color: '#DC2626' },
 
@@ -813,23 +813,23 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface, padding: 20,
   },
   searchHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  searchTitle: { fontSize: 18, fontWeight: '700', color: colors.muted[900] },
-  searchCancel: { fontSize: 16, color: colors.coral, fontWeight: '600' },
+  searchTitle: { fontSize: 18, fontFamily: 'NunitoSans_700Bold', fontWeight: '700', color: colors.muted[900] },
+  searchCancel: { fontSize: 16, color: colors.coral, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600' },
   searchBarContainer: { marginBottom: 12 },
   searchBar: {
     backgroundColor: colors.muted[100], borderRadius: 10, paddingHorizontal: 14,
-    paddingVertical: 10, fontSize: 15, color: colors.muted[900],
+    paddingVertical: 10, fontSize: 15, fontFamily: 'NunitoSans_400Regular', color: colors.muted[900],
     borderWidth: 1, borderColor: colors.muted[200],
   },
   searchList: { flex: 1 },
-  searchEmpty: { fontSize: 14, color: colors.muted[500], textAlign: 'center', marginTop: 40 },
+  searchEmpty: { fontSize: 14, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], textAlign: 'center', marginTop: 40 },
   searchItem: {
     flexDirection: 'row', alignItems: 'center', paddingVertical: 12,
     borderBottomWidth: 1, borderBottomColor: colors.muted[100],
   },
   colorDot: { width: 12, height: 12, borderRadius: 6, marginRight: 12 },
-  searchItemName: { fontSize: 15, fontWeight: '600', color: colors.muted[900] },
-  searchItemSub: { fontSize: 12, color: colors.muted[500], marginTop: 2 },
+  searchItemName: { fontSize: 15, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.muted[900] },
+  searchItemSub: { fontSize: 12, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], marginTop: 2 },
 
   // Qty stepper
   qtyStepper: { flexDirection: 'row', alignItems: 'center', gap: 8, marginLeft: 8 },
@@ -837,18 +837,18 @@ const styles = StyleSheet.create({
     width: 28, height: 28, borderRadius: 14, backgroundColor: colors.muted[100],
     justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: colors.muted[300],
   },
-  qtyBtnText: { fontSize: 16, fontWeight: '600', color: colors.muted[700] },
-  qtyValue: { fontSize: 16, fontWeight: '700', color: colors.coral, minWidth: 20, textAlign: 'center' },
+  qtyBtnText: { fontSize: 16, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.muted[700] },
+  qtyValue: { fontSize: 16, fontFamily: 'NunitoSans_700Bold', fontWeight: '700', color: colors.coral, minWidth: 20, textAlign: 'center' },
   addChip: {
     width: 28, height: 28, borderRadius: 14, backgroundColor: colors.coralLight,
     justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: colors.coral, marginLeft: 8,
   },
-  addChipText: { fontSize: 16, fontWeight: '600', color: colors.coral },
+  addChipText: { fontSize: 16, fontFamily: 'NunitoSans_600SemiBold', fontWeight: '600', color: colors.coral },
 
   // Confirm button
   confirmBtn: {
     backgroundColor: colors.coral, borderRadius: 12, paddingVertical: 16,
     alignItems: 'center', marginTop: 12,
   },
-  confirmBtnText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
+  confirmBtnText: { color: colors.textInverse, fontSize: 16, fontFamily: 'NunitoSans_700Bold', fontWeight: '700' },
 })

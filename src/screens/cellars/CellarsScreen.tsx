@@ -214,8 +214,8 @@ const styles = StyleSheet.create({
   content: { paddingBottom: 32 },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.muted[50] },
   header: { paddingHorizontal: 20, marginBottom: 16 },
-  title: { fontSize: 28, fontWeight: '800', color: colors.muted[900] },
-  subtitle: { fontSize: 14, color: colors.muted[500], marginTop: 4 },
+  title: { fontSize: 28, fontWeight: '800', fontFamily: 'NunitoSans_800ExtraBold', color: colors.muted[900] },
+  subtitle: { fontSize: 14, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], marginTop: 4 },
 
   // Hero cards
   heroCard: {
@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
   },
   heroFlag: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_400Regular',
     marginBottom: 8,
   },
   heroRow: {
@@ -236,21 +237,25 @@ const styles = StyleSheet.create({
   heroName: {
     fontSize: 22,
     fontWeight: '800',
+    fontFamily: 'NunitoSans_800ExtraBold',
     color: colors.textInverse,
   },
   heroLocation: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_400Regular',
     color: 'rgba(255,255,255,0.7)',
     marginTop: 2,
   },
   heroCount: {
     fontSize: 48,
     fontWeight: '800',
+    fontFamily: 'NunitoSans_800ExtraBold',
     color: colors.textInverse,
     lineHeight: 48,
   },
   heroCountLabel: {
     fontSize: 11,
+    fontFamily: 'NunitoSans_400Regular',
     color: 'rgba(255,255,255,0.7)',
     textAlign: 'right',
   },
@@ -276,12 +281,14 @@ const styles = StyleSheet.create({
   },
   maturityStat: {
     fontSize: 11,
+    fontFamily: 'NunitoSans_400Regular',
     color: 'rgba(255,255,255,0.8)',
   },
   maturityStatBold: {
     fontWeight: '700',
+    fontFamily: 'NunitoSans_700Bold',
     color: colors.textInverse,
   },
 
-  empty: { textAlign: 'center', color: colors.muted[400], marginTop: 32, fontSize: 15 },
+  empty: { textAlign: 'center', fontFamily: 'NunitoSans_400Regular', color: colors.muted[400], marginTop: 32, fontSize: 15 },
 })

@@ -123,12 +123,14 @@ const styles = StyleSheet.create({
   },
   labelYear: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 2,
   },
   labelText: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[500],
   },
 })

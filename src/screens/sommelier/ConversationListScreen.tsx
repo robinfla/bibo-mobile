@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
   },
@@ -248,12 +249,14 @@ const styles = StyleSheet.create({
   },
   conversationTitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 4,
   },
   conversationDate: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
   },
   emptyState: {
@@ -272,9 +275,11 @@ const styles = StyleSheet.create({
   },
   emptyEmoji: {
     fontSize: 40,
+    fontFamily: 'NunitoSans_400Regular',
   },
   emptyTitle: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 8,
@@ -282,6 +287,7 @@ const styles = StyleSheet.create({
   },
   emptySubtitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     marginBottom: 32,
     textAlign: 'center',
@@ -303,6 +309,7 @@ const styles = StyleSheet.create({
   },
   newChatText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },

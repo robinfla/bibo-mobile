@@ -232,6 +232,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.coral,
     letterSpacing: -0.5,
@@ -271,17 +272,20 @@ const styles = StyleSheet.create({
   },
   avatarInitials: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textInverse,
   },
   userName: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 4,
   },
   userEmail: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textTertiary,
     marginBottom: 20,
   },
@@ -294,6 +298,7 @@ const styles = StyleSheet.create({
   },
   editButtonText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.coral,
   },
@@ -305,6 +310,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textTertiary,
     letterSpacing: 0.5,
@@ -327,6 +333,7 @@ const styles = StyleSheet.create({
   menuItemText: {
     flex: 1,
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
     marginLeft: 16,

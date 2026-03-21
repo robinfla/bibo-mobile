@@ -175,16 +175,19 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
   },
   headerTitle: {
     fontSize: 17,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
   skipButton: {
     fontSize: 16,
     color: colors.coral,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   scrollContent: {
@@ -196,6 +199,7 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     fontSize: 28,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 8,
@@ -203,6 +207,7 @@ const styles = StyleSheet.create({
   },
   heroSubtitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     marginBottom: 16,
   },
@@ -221,6 +226,7 @@ const styles = StyleSheet.create({
   aiBadgeText: {
     color: colors.textInverse,
     fontSize: 13,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
   },
   searchContainer: {
@@ -232,6 +238,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 18,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
     shadowColor: colors.coral,
     shadowOffset: { width: 0, height: 4 },
@@ -244,6 +251,7 @@ const styles = StyleSheet.create({
   },
   recentTitle: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textTertiary,
     letterSpacing: 1,
@@ -267,6 +275,7 @@ const styles = StyleSheet.create({
   },
   chipText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
   },
   divider: {
@@ -281,6 +290,7 @@ const styles = StyleSheet.create({
   },
   dividerText: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textTertiary,
     marginHorizontal: 16,
@@ -303,6 +313,7 @@ const styles = StyleSheet.create({
   },
   manualButtonText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.coral,
   },

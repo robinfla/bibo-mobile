@@ -274,6 +274,7 @@ const styles = StyleSheet.create({
   wineName: {
     flex: 1,
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     letterSpacing: -0.3,
@@ -281,11 +282,13 @@ const styles = StyleSheet.create({
   },
   producer: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
     color: '#4A3A35',
   },
   region: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_400Regular',
     color: '#8A7E78',
   },
   maturityBadge: {
@@ -304,6 +307,7 @@ const styles = StyleSheet.create({
   },
   maturityLabel: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
   },
   vintageChipsContainer: {
@@ -333,11 +337,13 @@ const styles = StyleSheet.create({
   },
   vintageChipText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: '#5A4A42',
   },
   vintageChipTextActive: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },
@@ -352,6 +358,7 @@ const styles = StyleSheet.create({
   },
   bottleCountText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: '#3A2A25',
   },

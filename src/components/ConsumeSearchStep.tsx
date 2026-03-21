@@ -277,6 +277,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
     letterSpacing: -0.5,
@@ -319,6 +320,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: '#2d2d2d',
     padding: 0,
   },
@@ -363,6 +365,7 @@ const styles = StyleSheet.create({
   },
   wineEmoji: {
     fontSize: 28,
+    fontFamily: 'NunitoSans_400Regular',
   },
   colorBadge: {
     position: 'absolute',
@@ -380,6 +383,7 @@ const styles = StyleSheet.create({
   },
   wineName: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 6,
@@ -397,11 +401,13 @@ const styles = StyleSheet.create({
   },
   vintageText: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textSecondary,
   },
   regionText: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
     color: colors.textSecondary,
     flex: 1,
@@ -416,6 +422,7 @@ const styles = StyleSheet.create({
   },
   stockText: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: '#2E7D32',
   },
@@ -427,6 +434,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 22,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
     marginTop: 8,
@@ -434,6 +442,7 @@ const styles = StyleSheet.create({
   },
   emptySubtext: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
     color: colors.textSecondary,
     marginTop: 8,

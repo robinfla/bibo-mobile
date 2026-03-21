@@ -236,6 +236,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
@@ -247,6 +248,7 @@ const styles = StyleSheet.create({
   },
   saveButtonText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.coral,
   },
@@ -263,16 +265,19 @@ const styles = StyleSheet.create({
   },
   introEmoji: {
     fontSize: 48,
+    fontFamily: 'NunitoSans_400Regular',
     marginBottom: 12,
   },
   introTitle: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
     marginBottom: 8,
   },
   introText: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 22,
@@ -283,12 +288,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 4,
   },
   sectionDescription: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     marginBottom: 16,
   },
@@ -309,10 +316,12 @@ const styles = StyleSheet.create({
   },
   optionEmoji: {
     fontSize: 28,
+    fontFamily: 'NunitoSans_400Regular',
     marginBottom: 8,
   },
   optionLabel: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 4,
@@ -322,6 +331,7 @@ const styles = StyleSheet.create({
   },
   optionDescription: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     lineHeight: 18,
   },

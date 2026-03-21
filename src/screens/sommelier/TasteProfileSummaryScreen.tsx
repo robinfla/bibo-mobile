@@ -316,6 +316,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
@@ -326,6 +327,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
   },
   keyboardAvoid: {
@@ -359,6 +361,7 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textSecondary,
     textTransform: 'uppercase',
@@ -367,6 +370,7 @@ const styles = StyleSheet.create({
   },
   summaryText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     lineHeight: 24,
     color: colors.textPrimary,
   },
@@ -392,12 +396,14 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.coral,
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     textAlign: 'center',
   },
@@ -406,6 +412,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 12,
@@ -435,6 +442,7 @@ const styles = StyleSheet.create({
   },
   chipText: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
   },
@@ -449,6 +457,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textPrimary,
     marginBottom: 10,
@@ -467,6 +476,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
     maxHeight: 100,
   },

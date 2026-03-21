@@ -93,12 +93,12 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.muted[50] },
   header: { paddingHorizontal: 20, paddingBottom: 12 },
   backBtn: { paddingVertical: 8 },
-  backText: { fontSize: 28, color: colors.muted[400] },
-  title: { fontSize: 24, fontWeight: '800', color: colors.textPrimary, marginTop: 4 },
-  subtitle: { fontSize: 13, color: colors.textSecondary, marginTop: 4, lineHeight: 18 },
+  backText: { fontSize: 28, color: colors.muted[400], fontFamily: 'NunitoSans_400Regular' },
+  title: { fontSize: 24, fontWeight: '800', fontFamily: 'NunitoSans_800ExtraBold', color: colors.textPrimary, marginTop: 4 },
+  subtitle: { fontSize: 13, fontFamily: 'NunitoSans_400Regular', color: colors.textSecondary, marginTop: 4, lineHeight: 18 },
 
   content: { padding: 20 },
-  label: { fontSize: 13, fontWeight: '600', color: colors.textSecondary, marginBottom: 8 },
+  label: { fontSize: 13, fontWeight: '600', fontFamily: 'NunitoSans_600SemiBold', color: colors.textSecondary, marginBottom: 8 },
 
   input: {
     backgroundColor: colors.surface,
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
     borderWidth: 2,
     borderColor: colors.muted[200],
@@ -136,8 +137,8 @@ const styles = StyleSheet.create({
   },
   typeIconActive: { backgroundColor: colors.coralLight },
   typeContent: { flex: 1 },
-  typeName: { fontSize: 16, fontWeight: '700', color: colors.textPrimary },
-  typeDesc: { fontSize: 12, color: colors.textSecondary, marginTop: 4, lineHeight: 17 },
+  typeName: { fontSize: 16, fontWeight: '700', fontFamily: 'NunitoSans_700Bold', color: colors.textPrimary },
+  typeDesc: { fontSize: 12, fontFamily: 'NunitoSans_400Regular', color: colors.textSecondary, marginTop: 4, lineHeight: 17 },
   typeCheck: {
     position: 'absolute',
     top: 12,
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  typeCheckText: { color: colors.textInverse, fontSize: 13, fontWeight: '700' },
+  typeCheckText: { color: colors.textInverse, fontSize: 13, fontWeight: '700', fontFamily: 'NunitoSans_700Bold' },
 
   nextBtn: {
     backgroundColor: colors.coral,
@@ -159,5 +160,5 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   nextBtnDisabled: { opacity: 0.4 },
-  nextBtnText: { color: colors.textInverse, fontSize: 16, fontWeight: '700' },
+  nextBtnText: { color: colors.textInverse, fontSize: 16, fontWeight: '700', fontFamily: 'NunitoSans_700Bold' },
 })

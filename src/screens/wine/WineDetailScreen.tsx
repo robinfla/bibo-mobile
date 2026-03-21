@@ -513,11 +513,13 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
   },
   navTitle: {
     flex: 1,
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
@@ -536,6 +538,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: colors.danger,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -547,6 +550,7 @@ const styles = StyleSheet.create({
   },
   retryText: {
     color: colors.white,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   header: {
@@ -561,6 +565,7 @@ const styles = StyleSheet.create({
   },
   bottleFallback: {
     fontSize: 80,
+    fontFamily: 'NunitoSans_400Regular',
     opacity: 0.6,
   },
   colorBadge: {
@@ -575,6 +580,7 @@ const styles = StyleSheet.create({
   colorBadgeText: {
     color: colors.white,
     fontSize: 13,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
   },
   titleSection: {
@@ -583,12 +589,14 @@ const styles = StyleSheet.create({
   },
   wineName: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     textAlign: 'center',
   },
   producerName: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.coral,
     marginTop: 4,
     textAlign: 'center',
@@ -604,12 +612,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     marginBottom: 8,
   },
   sectionSubtitle: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[500],
     marginBottom: 12,
   },
@@ -636,6 +646,7 @@ const styles = StyleSheet.create({
   },
   vintageTabText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.muted[700],
   },
@@ -644,6 +655,7 @@ const styles = StyleSheet.create({
   },
   vintageFormatText: {
     fontSize: 11,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[500],
     textAlign: 'center',
   },
@@ -659,6 +671,7 @@ const styles = StyleSheet.create({
   },
   maturityBadgeText: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   drinkingWindow: {
@@ -666,11 +679,13 @@ const styles = StyleSheet.create({
   },
   drinkingWindowLabel: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[500],
     marginBottom: 2,
   },
   drinkingWindowDate: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
@@ -681,16 +696,19 @@ const styles = StyleSheet.create({
   },
   valueChangeCenter: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.teal,
   },
   valueLabel: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[500],
     marginBottom: 4,
   },
   valueAmount: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
@@ -700,11 +718,13 @@ const styles = StyleSheet.create({
   valueChange: {
     fontSize: 13,
     color: colors.teal,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     marginTop: 4,
   },
   notesText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[700],
     lineHeight: 20,
     fontStyle: 'italic',
@@ -722,11 +742,13 @@ const styles = StyleSheet.create({
   },
   curveLabelYear: {
     fontSize: 11,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.muted[600],
   },
   curveLabelText: {
     fontSize: 10,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.muted[500],
     marginTop: 2,
   },
@@ -739,6 +761,7 @@ const styles = StyleSheet.create({
   },
   commentsText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     lineHeight: 20,
     color: colors.textPrimary,
   },
@@ -756,6 +779,7 @@ const styles = StyleSheet.create({
   grapeText: {
     fontSize: 13,
     color: colors.muted[700],
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
   },
 })

@@ -179,16 +179,19 @@ const styles = StyleSheet.create({
   backButton: {
     fontSize: 17,
     color: colors.coral,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   headerTitle: {
     fontSize: 17,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
   skipButton: {
     fontSize: 17,
     color: colors.coral,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   scrollContent: {
@@ -201,6 +204,7 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
     letterSpacing: -0.8,
@@ -208,6 +212,7 @@ const styles = StyleSheet.create({
   },
   heroSubtitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     lineHeight: 24,
     marginBottom: 16,
@@ -220,6 +225,7 @@ const styles = StyleSheet.create({
   },
   aiBadgeText: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textInverse,
   },
@@ -235,6 +241,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 18,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
   },
   searchingOverlay: {
@@ -251,6 +258,7 @@ const styles = StyleSheet.create({
   searchingText: {
     fontSize: 16,
     color: colors.coral,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
   },
   recentSection: {
@@ -258,6 +266,7 @@ const styles = StyleSheet.create({
   },
   recentLabel: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textTertiary,
     letterSpacing: 1,
@@ -285,6 +294,7 @@ const styles = StyleSheet.create({
   recentChipText: {
     fontSize: 14,
     color: colors.textSecondary,
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
   },
   divider: {
@@ -300,6 +310,7 @@ const styles = StyleSheet.create({
   },
   dividerText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textTertiary,
   },
@@ -315,6 +326,7 @@ const styles = StyleSheet.create({
   },
   manualButtonText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textSecondary,
   },

@@ -407,6 +407,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textTertiary,
   },
   header: {
@@ -433,11 +434,13 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
   },
   headerSubtitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textSecondary,
     marginTop: 2,
@@ -462,6 +465,7 @@ const styles = StyleSheet.create({
   },
   filterChipText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textInverse,
   },
@@ -486,17 +490,20 @@ const styles = StyleSheet.create({
   },
   rackTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
   },
   rackSubtitle: {
     fontSize: 13,
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
     color: colors.textSecondary,
     marginTop: 2,
   },
   zoomLabel: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textTertiary,
     letterSpacing: 0.5,
@@ -566,9 +573,11 @@ const styles = StyleSheet.create({
   },
   positionIcon: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
   },
   positionText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.coral,
   },

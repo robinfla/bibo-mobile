@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.coral,
   },
@@ -233,6 +234,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textPrimary,
     padding: 0,
   },
@@ -254,18 +256,21 @@ const styles = StyleSheet.create({
   },
   noResultsTitle: {
     fontSize: 20,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.coral,
     marginBottom: 12,
   },
   noResultsMessage: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
     color: 'rgba(45, 45, 45, 0.6)',
     textAlign: 'center',
     lineHeight: 22.5,
     marginBottom: 32,
   },
   queryText: {
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.coral,
   },
@@ -293,6 +298,7 @@ const styles = StyleSheet.create({
   },
   addManuallyText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textInverse,
   },
@@ -318,6 +324,7 @@ const styles = StyleSheet.create({
   },
   tryScanText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.coral,
   },

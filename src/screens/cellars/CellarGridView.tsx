@@ -254,11 +254,13 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_800ExtraBold',
     fontWeight: '800',
     color: colors.textPrimary,
   },
   headerSubtitle: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textSecondary,
     marginTop: 2,
@@ -284,6 +286,7 @@ const styles = StyleSheet.create({
   },
   filterChipText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: colors.textInverse,
   },
@@ -301,9 +304,11 @@ const styles = StyleSheet.create({
   },
   infoBannerText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     color: '#ef6c00',
   },
   infoBannerBold: {
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
   },
   scroll: {
@@ -330,6 +335,7 @@ const styles = StyleSheet.create({
   },
   rowLabelText: {
     fontSize: 16,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textInverse,
   },

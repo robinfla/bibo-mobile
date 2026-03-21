@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
   },
@@ -163,9 +164,11 @@ const styles = StyleSheet.create({
   },
   emptyIcon: {
     fontSize: 80,
+    fontFamily: 'NunitoSans_400Regular',
   },
   title: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.coral,
     textAlign: 'center',
@@ -173,6 +176,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
     color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 22,
@@ -201,15 +205,18 @@ const styles = StyleSheet.create({
   },
   optionIcon: {
     fontSize: 32,
+    fontFamily: 'NunitoSans_400Regular',
   },
   optionTitle: {
     fontSize: 18,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: colors.textPrimary,
     flex: 1,
   },
   optionDescription: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_400Regular',
     lineHeight: 20,
     color: colors.textSecondary,
   },
@@ -227,6 +234,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     color: colors.coral,
     fontWeight: '600',
   },

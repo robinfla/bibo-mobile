@@ -865,6 +865,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: C.brown,
     letterSpacing: 0.5,
@@ -883,6 +884,7 @@ const styles = StyleSheet.create({
   },
   onlineText: {
     fontSize: 11,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: '#16A34A',
     textTransform: 'uppercase',
@@ -922,6 +924,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: C.brownMuted,
   },
@@ -964,6 +967,7 @@ const styles = StyleSheet.create({
   },
   assistantText: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
     lineHeight: 22.5,
     color: C.brown,
   },
@@ -1004,6 +1008,7 @@ const styles = StyleSheet.create({
   },
   userText: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_400Regular',
     lineHeight: 22.5,
     color: C.brown,
   },
@@ -1051,17 +1056,20 @@ const styles = StyleSheet.create({
   },
   wineName: {
     fontSize: 15,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: C.brown,
     marginBottom: 2,
   },
   wineRegion: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_400Regular',
     color: C.brownMuted,
     marginBottom: 4,
   },
   pairingNote: {
     fontSize: 12,
+    fontFamily: 'NunitoSans_400Regular',
     color: C.brownLight,
     fontStyle: 'italic',
   },
@@ -1079,6 +1087,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 24,
+    fontFamily: 'NunitoSans_700Bold',
     fontWeight: '700',
     color: C.brown,
     textAlign: 'center',
@@ -1113,6 +1122,7 @@ const styles = StyleSheet.create({
   },
   suggestionText: {
     fontSize: 14,
+    fontFamily: 'NunitoSans_600SemiBold',
     fontWeight: '600',
     color: C.brown,
   },
@@ -1171,6 +1181,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     fontSize: 15,
     color: C.brown,
+    fontFamily: 'NunitoSans_500Medium',
     fontWeight: '500',
     maxHeight: 100,
     shadowColor: '#000',
