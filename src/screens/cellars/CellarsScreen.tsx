@@ -34,10 +34,10 @@ const COUNTRY_NAMES: Record<string, string> = {
 }
 
 const HERO_GRADIENTS: [string, string][] = [
-  ['#1a1a2e', '#16213e'],
-  [colors.coral, '#4a1a1f'],
-  ['#1e3a2f', '#0f2620'],
-  ['#2d1b4e', '#1a0f30'],
+  [colors.coral, colors.honey],
+  [colors.teal, colors.honey],
+  [colors.linen, colors.rose],
+  [colors.coral, colors.rose],
 ]
 
 const MATURITY_COLORS = {
@@ -210,9 +210,9 @@ export const CellarsScreen = () => {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.muted[50] },
+  container: { flex: 1, backgroundColor: colors.linen },
   content: { paddingBottom: 32 },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.muted[50] },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.linen },
   header: { paddingHorizontal: 20, marginBottom: 16 },
   title: { fontSize: 28, fontWeight: '800', fontFamily: 'NunitoSans_800ExtraBold', color: colors.muted[900] },
   subtitle: { fontSize: 14, fontFamily: 'NunitoSans_400Regular', color: colors.muted[500], marginTop: 4 },

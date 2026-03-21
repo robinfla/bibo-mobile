@@ -135,12 +135,12 @@ export const CellarLocateScreen = () => {
 
   const getHighlightGradient = (): [string, string] => {
     // Always use green for highlighted bottles
-    return ['#4caf50', '#2e7d32']
+    return [colors.teal, colors.teal]
   }
 
   const getGlowColor = (): string => {
     // Green glow for highlighted bottles
-    return 'rgba(76, 175, 80, 0.4)'
+    return 'rgba(132, 165, 157, 0.4)'
   }
 
   const getBottleColor = (color: string): string => {

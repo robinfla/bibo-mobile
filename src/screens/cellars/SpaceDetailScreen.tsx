@@ -59,12 +59,12 @@ const WALL_LABELS: Record<string, string> = {
 }
 
 const WINE_COLORS: Record<string, string> = {
-  red: '#DC2626',
-  white: '#FBBF24',
-  rose: '#F472B6',
-  sparkling: '#FDE047',
-  dessert: '#FB923C',
-  fortified: '#A855F7',
+  red: colors.wine.red,
+  white: colors.wine.white,
+  rose: colors.wine.rose,
+  sparkling: colors.wine.sparkling,
+  dessert: colors.wine.dessert,
+  fortified: colors.wine.fortified,
 }
 
 export const SpaceDetailScreen = () => {
@@ -208,7 +208,7 @@ export const SpaceDetailScreen = () => {
                   ? colors.muted[300]
                   : fillPct > 0.7 ? colors.coral
                   : fillPct > 0.3 ? colors.coralDark
-                  : fillPct > 0 ? '#b86b72'
+                  : fillPct > 0 ? colors.coral
                   : colors.rose
 
                 return (

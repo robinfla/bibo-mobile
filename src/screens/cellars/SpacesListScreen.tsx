@@ -118,7 +118,7 @@ export const SpacesListScreen = () => {
                 activeOpacity={0.7}
               >
                 <LinearGradient
-                  colors={space.type === 'room' ? ['#1a1a2e', '#16213e'] : ['#1a1a2e', '#0f3460']}
+                  colors={space.type === 'room' ? [colors.coral, colors.honey] : [colors.teal, colors.honey]}
                   style={styles.spaceGradient}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}

@@ -100,8 +100,8 @@ export const CellarGridView = () => {
     
     switch (slot.color) {
       case 'red': return colors.coralDark
-      case 'white': return '#f4e8d0'
-      case 'rose': return '#ff9999'
+      case 'white': return colors.wine.white
+      case 'rose': return colors.wine.rose
       default: return colors.textTertiary
     }
   }
@@ -156,12 +156,12 @@ export const CellarGridView = () => {
       {/* Info Banner */}
       {highlightedCount > 0 && (
         <LinearGradient
-          colors={['#fff3e0', '#ffe0b2']}
+          colors={[colors.linen, colors.linen]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.infoBanner}
         >
-          <Info size={20} weight="regular" color="#ef6c00" />
+          <Info size={20} weight="regular" color={colors.honeyDark} />
           <Text style={styles.infoBannerText}>
             <Text style={styles.infoBannerBold}>{highlightedCount} bottle{highlightedCount > 1 ? 's' : ''}</Text> found matching filters
           </Text>
@@ -180,7 +180,7 @@ export const CellarGridView = () => {
 
               {/* Shelf */}
               <LinearGradient
-                colors={['#e8d4a8', '#d4c094']}
+                colors={[colors.rose, colors.linen]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.shelf}
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   filterChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#c68a5e',
+    backgroundColor: colors.honey,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
@@ -299,13 +299,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#ef6c00',
+    borderColor: colors.honey,
     gap: 8,
   },
   infoBannerText: {
     fontSize: 14,
     fontFamily: 'NunitoSans_400Regular',
-    color: '#ef6c00',
+    color: colors.honeyDark,
   },
   infoBannerBold: {
     fontFamily: 'NunitoSans_700Bold',
