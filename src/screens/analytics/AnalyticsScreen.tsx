@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft } from 'phosphor-react-native'
 import Svg, { Circle, G } from 'react-native-svg'
 import { apiFetch } from '../../api/client'
 import { colors as themeColors } from '../../theme/colors'
@@ -229,7 +229,7 @@ export const AnalyticsScreen = () => {
               onPress={() => navigation.goBack()}
               activeOpacity={0.7}
             >
-              <Icon name="chevron-left" size={28} color={themeColors.coral} />
+              <CaretLeft size={28} weight="bold" color={themeColors.coral} />
             </TouchableOpacity>
             <Text style={styles.title}>Analytics</Text>
             <View style={styles.backButton} />

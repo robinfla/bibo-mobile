@@ -10,7 +10,7 @@ import {
   SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft, Funnel, Info } from 'phosphor-react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -127,7 +127,7 @@ export const CellarGridView = () => {
           onPress={() => navigation.goBack()}
           activeOpacity={0.7}
         >
-          <Icon name="chevron-left" size={24} color={colors.textSecondary} />
+          <CaretLeft size={24} weight="bold" color={colors.textSecondary} />
         </TouchableOpacity>
 
         <View style={styles.headerContent}>
@@ -142,7 +142,7 @@ export const CellarGridView = () => {
       {locateInfo && (
         <View style={styles.filtersContainer}>
           <View style={styles.filterChip}>
-            <Icon name="filter-check" size={16} color={colors.textInverse} />
+            <Funnel size={16} weight="regular" color={colors.textInverse} />
             <Text style={styles.filterChipText}>{locateInfo.filters.wineName}</Text>
           </View>
           {locateInfo.filters.vintage && (
@@ -161,7 +161,7 @@ export const CellarGridView = () => {
           end={{ x: 1, y: 1 }}
           style={styles.infoBanner}
         >
-          <Icon name="information-outline" size={20} color="#ef6c00" />
+          <Info size={20} weight="regular" color="#ef6c00" />
           <Text style={styles.infoBannerText}>
             <Text style={styles.infoBannerBold}>{highlightedCount} bottle{highlightedCount > 1 ? 's' : ''}</Text> found matching filters
           </Text>

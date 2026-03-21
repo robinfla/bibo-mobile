@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft, CurrencyDollar } from 'phosphor-react-native'
 import Svg, { Polygon, Circle, Line, Text as SvgText } from 'react-native-svg'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
@@ -187,7 +187,7 @@ export const TasteProfileScreen = () => {
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
           >
-            <Icon name="chevron-left" size={28} color={colors.textPrimary} />
+            <CaretLeft size={28} weight="bold" color={colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Your Wine DNA</Text>
           <View style={styles.backButton} />
@@ -229,7 +229,7 @@ export const TasteProfileScreen = () => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Price Range</Text>
             <View style={styles.preferenceCard}>
-              <Icon name="cash" size={24} color={colors.coral} />
+              <CurrencyDollar size={24} weight="regular" color={colors.coral} />
               <View style={styles.preferenceText}>
                 <Text style={styles.preferenceLabel}>Most comfortable</Text>
                 <Text style={styles.preferenceValue}>${profile.priceRange.min}–${profile.priceRange.max}</Text>

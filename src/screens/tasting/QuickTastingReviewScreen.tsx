@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { X } from 'phosphor-react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -60,7 +60,7 @@ export const QuickTastingReviewScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-          <Icon name="close" size={24} color={colors.coral} />
+          <X size={24} weight="regular" color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Quick Tasting Review</Text>
         <View style={{ width: 44 }} />

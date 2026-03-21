@@ -10,7 +10,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft, X, Wine, Minus, Plus, Star } from 'phosphor-react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { apiFetch } from '../api/client'
 import { ScorePickerModal } from './ScorePickerModal'
@@ -115,7 +115,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
             onPress={onBack}
             activeOpacity={0.7}
           >
-            <Icon name="chevron-left" size={24} color={colors.textSecondary} />
+            <CaretLeft size={24} weight="bold" color={colors.textSecondary} />
           </TouchableOpacity>
           <Text style={styles.title}>Mark as Consumed</Text>
           <TouchableOpacity
@@ -123,7 +123,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
             onPress={onClose}
             activeOpacity={0.7}
           >
-            <Icon name="close" size={20} color={colors.textSecondary} />
+            <X size={20} weight="bold" color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
 
@@ -137,7 +137,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
           >
             <View style={styles.wineImageContainer}>
               <View style={[styles.wineImagePlaceholder, { backgroundColor: '#f5f5f5' }]}>
-                <Icon name="bottle-wine" size={40} color="#ccc" />
+                <Wine size={40} weight="fill" color="#ccc" />
                 <View style={[styles.colorBadge, { backgroundColor: getWineColor(wine.color) }]} />
               </View>
             </View>
@@ -175,7 +175,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
                 disabled={quantity === 1}
                 activeOpacity={0.7}
               >
-                <Icon name="minus" size={24} color={quantity === 1 ? colors.muted[300] : colors.coral} />
+                <Minus size={24} weight="bold" color={quantity === 1 ? colors.muted[300] : colors.coral} />
               </TouchableOpacity>
 
               <Text style={styles.quantityDisplay}>{quantity}</Text>
@@ -189,7 +189,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
                 disabled={quantity === wine.stock}
                 activeOpacity={0.7}
               >
-                <Icon name="plus" size={24} color={quantity === wine.stock ? colors.muted[300] : colors.coral} />
+                <Plus size={24} weight="bold" color={quantity === wine.stock ? colors.muted[300] : colors.coral} />
               </TouchableOpacity>
             </View>
           </View>
@@ -207,10 +207,10 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
                   <Text style={styles.ratingValue}>{rating}/10</Text>
                   <View style={styles.ratingStars}>
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <Icon
+                      <Star
                         key={star}
-                        name={star <= rating / 2 ? 'star' : 'star-outline'}
                         size={24}
+                        weight={star <= rating / 2 ? 'fill' : 'regular'}
                         color="#FFD700"
                       />
                     ))}
@@ -221,7 +221,7 @@ export const ConsumeDetailsStep: React.FC<ConsumeDetailsStepProps> = ({
                   <Text style={styles.ratingPlaceholder}>Tap to rate</Text>
                   <View style={styles.ratingStars}>
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <Icon key={star} name="star-outline" size={24} color={colors.muted[300]} />
+                      <Star key={star} size={24} weight="regular" color={colors.muted[300]} />
                     ))}
                   </View>
                 </>

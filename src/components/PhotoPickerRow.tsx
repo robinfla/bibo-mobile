@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
-import { Ionicons } from '@expo/vector-icons'
+import { Camera, XCircle } from 'phosphor-react-native'
 import { colors } from '../theme/colors'
 
 interface PhotoPickerRowProps {
@@ -37,7 +37,7 @@ export const PhotoPickerRow: React.FC<PhotoPickerRowProps> = ({ photos, onChange
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.addButton} onPress={pickImage}>
-        <Ionicons name="camera" size={20} color={colors.coral} />
+        <Camera size={20} weight="regular" color={colors.coral} />
         <Text style={styles.addButtonText}>Add Photos</Text>
       </TouchableOpacity>
 
@@ -50,7 +50,7 @@ export const PhotoPickerRow: React.FC<PhotoPickerRowProps> = ({ photos, onChange
                 style={styles.removeButton}
                 onPress={() => removePhoto(index)}
               >
-                <Ionicons name="close-circle" size={24} color={colors.coral} />
+                <XCircle size={24} weight="fill" color={colors.coral} />
               </TouchableOpacity>
             </View>
           ))}

@@ -11,7 +11,7 @@ import {
   SafeAreaView,
 } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { MagnifyingGlass, Faders, Funnel, XCircle, WarningCircle, Wine } from 'phosphor-react-native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
 import { WineCardNew } from '../../components/WineCardNew'
@@ -146,7 +146,7 @@ export const InventoryScreen = ({ route }: any) => {
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Icon name="magnify" size={20} color={colors.textTertiary} style={styles.searchIcon} />
+        <MagnifyingGlass size={20} weight="regular" color={colors.textTertiary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search wines..."
@@ -158,7 +158,7 @@ export const InventoryScreen = ({ route }: any) => {
           style={styles.filterButton}
           onPress={() => setShowFilterModal(true)}
         >
-          <Icon name="filter-variant" size={20} color={colors.muted[600]} />
+          <Faders size={20} weight="regular" color={colors.muted[600]} />
           {hasActiveFilters && <View style={styles.filterBadge} />}
         </TouchableOpacity>
       </View>
@@ -168,25 +168,25 @@ export const InventoryScreen = ({ route }: any) => {
         <View style={styles.filterChipContainer}>
           {filters.maturity && (
             <View style={styles.filterChip}>
-              <Icon name="filter-check" size={16} color={colors.coral} />
+              <Funnel size={16} weight="regular" color={colors.coral} />
               <Text style={styles.filterChipText}>Ready to drink</Text>
               <TouchableOpacity
                 onPress={() => setFilters((prev) => ({ ...prev, maturity: undefined }))}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Icon name="close-circle" size={18} color={colors.coral} />
+                <XCircle size={18} weight="regular" color={colors.coral} />
               </TouchableOpacity>
             </View>
           )}
           {filters.label && (
             <View style={styles.filterChip}>
-              <Icon name="filter-check" size={16} color={colors.coral} />
+              <Funnel size={16} weight="regular" color={colors.coral} />
               <Text style={styles.filterChipText}>{filters.label}</Text>
               <TouchableOpacity
                 onPress={() => setFilters((prev) => ({ ...prev, lotIds: undefined, label: undefined }))}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Icon name="close-circle" size={18} color={colors.coral} />
+                <XCircle size={18} weight="regular" color={colors.coral} />
               </TouchableOpacity>
             </View>
           )}
@@ -235,7 +235,7 @@ export const InventoryScreen = ({ route }: any) => {
     if (error) {
       return (
         <View style={styles.centerContent}>
-          <Icon name="alert-circle" size={48} color={colors.danger} />
+          <WarningCircle size={48} weight="regular" color={colors.danger} />
           <Text style={styles.errorText}>{error}</Text>
           <TouchableOpacity style={styles.retryButton} onPress={fetchCards}>
             <Text style={styles.retryButtonText}>Retry</Text>
@@ -247,7 +247,7 @@ export const InventoryScreen = ({ route }: any) => {
     if (cards.length === 0) {
       return (
         <View style={styles.centerContent}>
-          <Icon name="bottle-wine" size={64} color={colors.muted[300]} />
+          <Wine size={64} weight="regular" color={colors.muted[300]} />
           <Text style={styles.emptyText}>No wines in your cellar yet</Text>
           <Text style={styles.emptySubtext}>Tap the + button to add your first bottle</Text>
         </View>

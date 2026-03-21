@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+import { Wine, MagnifyingGlass, XCircle, CaretRight } from 'phosphor-react-native'
 import debounce from 'lodash.debounce'
 import { apiFetch } from '../../api/client'
 import { KBSearchResult, KBSearchResponse } from '../../types/api'
@@ -81,7 +81,7 @@ const WineSearchScreen: React.FC = () => {
         <Image source={{ uri: item.thumbnailUrl }} style={styles.wineImage} resizeMode="contain" />
       ) : (
         <View style={[styles.wineImage, styles.placeholderImage]}>
-          <Ionicons name="wine-outline" size={32} color={colors.muted[200]} />
+          <Wine size={32} weight="regular" color={colors.muted[200]} />
         </View>
       )}
       
@@ -113,7 +113,7 @@ const WineSearchScreen: React.FC = () => {
         )}
       </View>
       
-      <Ionicons name="chevron-forward" size={20} color={colors.muted[200]} />
+      <CaretRight size={20} weight="bold" color={colors.muted[200]} />
     </TouchableOpacity>
   )
 
@@ -125,7 +125,7 @@ const WineSearchScreen: React.FC = () => {
       </View>
 
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
+        <MagnifyingGlass size={20} weight="regular" color={colors.textSecondary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search by wine, producer, or region..."
@@ -138,7 +138,7 @@ const WineSearchScreen: React.FC = () => {
         />
         {query.length > 0 && (
           <TouchableOpacity onPress={() => { setQuery(''); setResults([]); setSearched(false); }}>
-            <Ionicons name="close-circle" size={20} color={colors.textSecondary} />
+            <XCircle size={20} weight="regular" color={colors.textSecondary} />
           </TouchableOpacity>
         )}
       </View>
@@ -151,7 +151,7 @@ const WineSearchScreen: React.FC = () => {
 
       {!loading && searched && results.length === 0 && (
         <View style={styles.emptyContainer}>
-          <Ionicons name="search-outline" size={48} color={colors.muted[200]} />
+          <MagnifyingGlass size={48} weight="regular" color={colors.muted[200]} />
           <Text style={styles.emptyText}>No wines found for "{query}"</Text>
           <Text style={styles.emptySubtext}>Try a different search term</Text>
         </View>
@@ -170,7 +170,7 @@ const WineSearchScreen: React.FC = () => {
 
       {!searched && !loading && (
         <View style={styles.emptyContainer}>
-          <Ionicons name="wine-outline" size={48} color={colors.muted[200]} />
+          <Wine size={48} weight="regular" color={colors.muted[200]} />
           <Text style={styles.emptyText}>Search our wine database</Text>
           <Text style={styles.emptySubtext}>Find wines to add to your cellar</Text>
         </View>

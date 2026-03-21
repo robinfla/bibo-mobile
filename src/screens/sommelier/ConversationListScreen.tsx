@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretRight, Plus } from 'phosphor-react-native'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -108,7 +108,7 @@ export const ConversationListScreen = () => {
         </Text>
         <Text style={styles.conversationDate}>{formatDate(item.updatedAt)}</Text>
       </View>
-      <Icon name="chevron-right" size={20} color={colors.textTertiary} />
+      <CaretRight size={20} weight="bold" color={colors.textTertiary} />
     </TouchableOpacity>
   )
 
@@ -131,7 +131,7 @@ export const ConversationListScreen = () => {
           end={{ x: 1, y: 1 }}
           style={styles.newChatGradient}
         >
-          <Icon name="plus" size={20} color={colors.textInverse} />
+          <Plus size={20} weight="regular" color={colors.textInverse} />
           <Text style={styles.newChatText}>New Chat</Text>
         </LinearGradient>
       </TouchableOpacity>
@@ -160,7 +160,7 @@ export const ConversationListScreen = () => {
               end={{ x: 1, y: 1 }}
               style={styles.newChatButtonGradient}
             >
-              <Icon name="plus" size={18} color={colors.textInverse} />
+              <Plus size={18} weight="regular" color={colors.textInverse} />
             </LinearGradient>
           </TouchableOpacity>
         </View>

@@ -8,7 +8,7 @@ import {
   Animated,
   Dimensions,
 } from 'react-native'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { X, CaretRight } from 'phosphor-react-native'
 import { colors } from '../theme/colors'
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -74,7 +74,7 @@ export const PhotoPickerSheet: React.FC<PhotoPickerSheetProps> = ({
             <View style={styles.header}>
               <Text style={styles.title}>Send Photo</Text>
               <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-                <Icon name="close" size={20} color={colors.coral} />
+                <X size={20} weight="bold" color={colors.coral} />
               </TouchableOpacity>
             </View>
 
@@ -97,7 +97,7 @@ export const PhotoPickerSheet: React.FC<PhotoPickerSheetProps> = ({
                     Scan label or snap a picture
                   </Text>
                 </View>
-                <Icon name="chevron-right" size={20} color="rgba(45, 45, 45, 0.3)" />
+                <CaretRight size={20} weight="bold" color="rgba(45, 45, 45, 0.3)" />
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -115,7 +115,7 @@ export const PhotoPickerSheet: React.FC<PhotoPickerSheetProps> = ({
                   <Text style={styles.optionTitle}>Choose from Gallery</Text>
                   <Text style={styles.optionSubtitle}>Pick existing photo</Text>
                 </View>
-                <Icon name="chevron-right" size={20} color="rgba(45, 45, 45, 0.3)" />
+                <CaretRight size={20} weight="bold" color="rgba(45, 45, 45, 0.3)" />
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -133,7 +133,7 @@ export const PhotoPickerSheet: React.FC<PhotoPickerSheetProps> = ({
                   <Text style={styles.optionTitle}>Scan Wine Label</Text>
                   <Text style={styles.optionSubtitle}>Quick add to cellar</Text>
                 </View>
-                <Icon name="chevron-right" size={20} color="rgba(45, 45, 45, 0.3)" />
+                <CaretRight size={20} weight="bold" color="rgba(45, 45, 45, 0.3)" />
               </TouchableOpacity>
             </View>
           </TouchableOpacity>

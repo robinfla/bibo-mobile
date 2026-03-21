@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { Wine } from 'phosphor-react-native'
 import { colors } from '../theme/colors'
 import type { WineCard } from '../types/api'
 
@@ -178,7 +178,7 @@ export const WineCardNew: React.FC<WineCardNewProps> = ({ card, onPress }) => {
           <Image source={{ uri: card.bottleImageUrl }} style={styles.image} />
         ) : (
           <View style={[styles.image, styles.placeholderImage, { backgroundColor: colorStyle.backgroundColor }]}>
-            <Icon name="bottle-wine" size={36} color={colorStyle.iconColor} />
+            <Wine size={36} weight="fill" color={colorStyle.iconColor} />
           </View>
         )}
       </View>

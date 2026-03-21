@@ -7,7 +7,7 @@ import {
   Animated,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { X, ArrowUp } from 'phosphor-react-native'
 import { colors } from '../theme/colors'
 
 interface VoiceRecordingBarProps {
@@ -121,7 +121,7 @@ export const VoiceRecordingBar: React.FC<VoiceRecordingBarProps> = ({
           onPress={onCancel}
           activeOpacity={0.7}
         >
-          <Icon name="close" size={20} color="#ea0027" />
+          <X size={20} weight="bold" color="#ea0027" />
         </TouchableOpacity>
 
         {/* Send button */}
@@ -136,7 +136,7 @@ export const VoiceRecordingBar: React.FC<VoiceRecordingBarProps> = ({
             end={{ x: 1, y: 1 }}
             style={styles.sendButton}
           >
-            <Icon name="arrow-up" size={18} color={colors.textInverse} />
+            <ArrowUp size={18} weight="bold" color={colors.textInverse} />
           </LinearGradient>
         </TouchableOpacity>
       </View>

@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -59,7 +59,7 @@ export const TasteProfileEmptyScreen = () => {
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
           >
-            <Icon name="chevron-left" size={28} color={colors.textPrimary} />
+            <CaretLeft size={28} weight="bold" color={colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Taste Profile</Text>
           <View style={styles.backButton} />

@@ -8,7 +8,7 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
 } from 'react-native'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { DotsThree, PencilSimple, ShareNetwork, Trash } from 'phosphor-react-native'
 import { colors } from '../theme/colors'
 
 interface WineMenuDropdownProps {
@@ -49,7 +49,7 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
         onPress={handleButtonPress}
         activeOpacity={0.7}
       >
-        <Icon name="dots-horizontal" size={24} color={colors.textPrimary} />
+        <DotsThree size={24} weight="bold" color={colors.textPrimary} />
       </TouchableOpacity>
 
       {/* Dropdown Menu */}
@@ -77,7 +77,7 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
                   onPress={() => handleMenuPress(onEditDetails)}
                   activeOpacity={0.7}
                 >
-                  <Icon name="pencil" size={20} color={colors.coral} />
+                  <PencilSimple size={20} weight="regular" color={colors.coral} />
                   <Text style={styles.menuItemText}>Edit Details</Text>
                 </TouchableOpacity>
 
@@ -99,7 +99,7 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
                   onPress={() => handleMenuPress(onShare)}
                   activeOpacity={0.7}
                 >
-                  <Icon name="share-variant" size={20} color={colors.coral} />
+                  <ShareNetwork size={20} weight="regular" color={colors.coral} />
                   <Text style={styles.menuItemText}>Share Wine</Text>
                 </TouchableOpacity>
 
@@ -110,7 +110,7 @@ export const WineMenuDropdown: React.FC<WineMenuDropdownProps> = ({
                   onPress={() => handleMenuPress(onRemove)}
                   activeOpacity={0.7}
                 >
-                  <Icon name="delete" size={20} color="#d32f2f" />
+                  <Trash size={20} weight="regular" color="#d32f2f" />
                   <Text style={[styles.menuItemText, styles.menuItemDanger]}>
                     Remove from Cellar
                   </Text>

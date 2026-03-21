@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft, Funnel } from 'phosphor-react-native'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { apiFetch, ApiError } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -309,7 +309,7 @@ export const CellarLocateScreen = () => {
           }}
           activeOpacity={0.7}
         >
-          <Icon name="chevron-left" size={24} color={colors.textSecondary} />
+          <CaretLeft size={24} weight="bold" color={colors.textSecondary} />
         </TouchableOpacity>
 
         <View style={styles.headerContent}>
@@ -328,7 +328,7 @@ export const CellarLocateScreen = () => {
           end={{ x: 1, y: 1 }}
           style={styles.filterChip}
         >
-          <Icon name="filter-check" size={16} color={colors.textInverse} />
+          <Funnel size={16} weight="regular" color={colors.textInverse} />
           <Text style={styles.filterChipText}>{data.filters.wineName}</Text>
         </LinearGradient>
         {data.filters.vintage && (

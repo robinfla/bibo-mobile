@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native'
-import { Ionicons } from '@expo/vector-icons'
+import { ArrowLeft, Wine, MapPin, Clock, PlusCircle } from 'phosphor-react-native'
 import { apiFetch } from '../../api/client'
 import { KBWineEnrichment } from '../../types/api'
 import { colors } from '../../theme/colors'
@@ -102,7 +102,7 @@ const KBWineDetailScreen: React.FC = () => {
         {/* Header with back button */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color={colors.textPrimary} />
+            <ArrowLeft size={24} weight="bold" color={colors.textPrimary} />
           </TouchableOpacity>
         </View>
 
@@ -112,7 +112,7 @@ const KBWineDetailScreen: React.FC = () => {
             <Image source={{ uri: wine.imageUrl }} style={styles.wineImage} resizeMode="contain" />
           ) : (
             <View style={[styles.wineImage, styles.placeholderImage]}>
-              <Ionicons name="wine-outline" size={80} color={colors.muted[200]} />
+              <Wine size={80} weight="regular" color={colors.muted[200]} />
             </View>
           )}
         </View>
@@ -125,7 +125,7 @@ const KBWineDetailScreen: React.FC = () => {
           <View style={styles.metaRow}>
             {wine.region && (
               <View style={styles.metaChip}>
-                <Ionicons name="location-outline" size={14} color={colors.textSecondary} />
+                <MapPin size={14} weight="regular" color={colors.textSecondary} />
                 <Text style={styles.metaChipText}>{wine.region}</Text>
               </View>
             )}
@@ -165,7 +165,7 @@ const KBWineDetailScreen: React.FC = () => {
             <Text style={styles.sectionTitle}>Drinking Window</Text>
             <View style={styles.card}>
               <View style={styles.agingRow}>
-                <Ionicons name="time-outline" size={20} color={colors.coral} />
+                <Clock size={20} weight="regular" color={colors.coral} />
                 <Text style={styles.agingText}>
                   Best enjoyed {wine.agingPeakMin}–{wine.agingPeakMax} years from vintage
                 </Text>
@@ -231,7 +231,7 @@ const KBWineDetailScreen: React.FC = () => {
       {/* Add to Cellar button */}
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.addButton} onPress={handleAddToCellar}>
-          <Ionicons name="add-circle-outline" size={24} color="#FFF" />
+          <PlusCircle size={24} weight="regular" color="#FFF" />
           <Text style={styles.addButtonText}>Add to Cellar</Text>
         </TouchableOpacity>
       </View>

@@ -11,7 +11,7 @@ import {
   Platform,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft, PaperPlaneTilt } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -172,7 +172,7 @@ export const TasteProfileSummaryScreen = () => {
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
           >
-            <Icon name="chevron-left" size={28} color={colors.textPrimary} />
+            <CaretLeft size={28} weight="bold" color={colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Taste Profile</Text>
           <View style={styles.backButton} />
@@ -279,7 +279,7 @@ export const TasteProfileSummaryScreen = () => {
                   end={{ x: 1, y: 1 }}
                   style={styles.sendButton}
                 >
-                  <Icon name="send" size={18} color={colors.textInverse} />
+                  <PaperPlaneTilt size={18} weight="regular" color={colors.textInverse} />
                 </LinearGradient>
               </TouchableOpacity>
             </View>

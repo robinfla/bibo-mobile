@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { X, Bell, Heart } from 'phosphor-react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -73,7 +73,7 @@ export const AddToWishlistScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-          <Icon name="close" size={24} color={colors.coral} />
+          <X size={24} weight="regular" color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Add to Wishlist</Text>
         <View style={{ width: 44 }} />
@@ -161,9 +161,9 @@ export const AddToWishlistScreen = () => {
           activeOpacity={0.7}
         >
           <View style={styles.notifyToggleLeft}>
-            <Icon
-              name={notify ? 'bell' : 'bell-outline'}
+            <Bell
               size={24}
+              weight={notify ? 'fill' : 'regular'}
               color={colors.coral}
             />
             <View style={styles.notifyToggleText}>
@@ -195,7 +195,7 @@ export const AddToWishlistScreen = () => {
             end={{ x: 1, y: 1 }}
             style={styles.saveButtonGradient}
           >
-            <Icon name="heart" size={18} color={colors.textInverse} />
+            <Heart size={18} weight="fill" color={colors.textInverse} />
             <Text style={styles.saveButtonText}>
               {isSaving ? 'Adding...' : 'Add to Wishlist'}
             </Text>

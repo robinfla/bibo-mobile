@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera'
 import * as ImagePicker from 'expo-image-picker'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CameraSlash, X, Lightning, LightningSlash, CameraRotate, Image as ImageIcon } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { colors } from '../../theme/colors'
 
@@ -36,7 +36,7 @@ export const WineScanCameraScreen = () => {
   if (!permission.granted) {
     return (
       <View style={styles.permissionContainer}>
-        <Icon name="camera-off" size={64} color={colors.coral} />
+        <CameraSlash size={64} weight="regular" color={colors.coral} />
         <Text style={styles.permissionTitle}>Camera Access Required</Text>
         <Text style={styles.permissionText}>
           Bibo needs camera access to scan wine labels
@@ -120,19 +120,19 @@ export const WineScanCameraScreen = () => {
         {/* Top Bar */}
         <View style={styles.topBar}>
           <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-            <Icon name="close" size={28} color={colors.textInverse} />
+            <X size={28} weight="regular" color={colors.textInverse} />
           </TouchableOpacity>
 
           <View style={styles.topControls}>
             <TouchableOpacity style={styles.iconButton} onPress={toggleFlash}>
-              <Icon
-                name={flash ? 'flash' : 'flash-off'}
-                size={24}
-                color={colors.textInverse}
-              />
+              {flash ? (
+                <Lightning size={24} weight="fill" color={colors.textInverse} />
+              ) : (
+                <LightningSlash size={24} weight="regular" color={colors.textInverse} />
+              )}
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton} onPress={flipCamera}>
-              <Icon name="camera-flip" size={24} color={colors.textInverse} />
+              <CameraRotate size={24} weight="regular" color={colors.textInverse} />
             </TouchableOpacity>
           </View>
         </View>
@@ -195,7 +195,7 @@ export const WineScanCameraScreen = () => {
             onPress={handleGalleryPick}
             activeOpacity={0.8}
           >
-            <Icon name="image" size={28} color={colors.textInverse} />
+            <ImageIcon size={28} weight="regular" color={colors.textInverse} />
           </TouchableOpacity>
 
           <TouchableOpacity

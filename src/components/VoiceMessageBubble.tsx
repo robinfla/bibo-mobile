@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { Pause, Play } from 'phosphor-react-native'
 import { Audio } from 'expo-av'
 import { colors } from '../theme/colors'
 
@@ -85,11 +85,11 @@ export const VoiceMessageBubble: React.FC<VoiceMessageBubbleProps> = ({
           onPress={togglePlayback}
           activeOpacity={0.8}
         >
-          <Icon
-            name={isPlaying ? 'pause' : 'play'}
-            size={16}
-            color={colors.coral}
-          />
+          {isPlaying ? (
+            <Pause size={16} weight="fill" color={colors.coral} />
+          ) : (
+            <Play size={16} weight="fill" color={colors.coral} />
+          )}
         </TouchableOpacity>
 
         <View style={styles.waveform}>

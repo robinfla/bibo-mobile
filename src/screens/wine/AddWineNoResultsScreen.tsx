@@ -10,7 +10,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRoute, useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { X, XCircle, Plus } from 'phosphor-react-native'
 import Svg, { Path } from 'react-native-svg'
 import { colors } from '../../theme/colors'
 
@@ -66,7 +66,7 @@ export const AddWineNoResultsScreen = () => {
             onPress={() => navigation.goBack()}
             activeOpacity={0.7}
           >
-            <Icon name="close" size={20} color={colors.textPrimary} />
+            <X size={20} weight="regular" color={colors.textPrimary} />
           </TouchableOpacity>
 
           <Text style={styles.headerTitle}>Add Wine</Text>
@@ -105,7 +105,7 @@ export const AddWineNoResultsScreen = () => {
                 style={styles.clearButton}
                 activeOpacity={0.7}
               >
-                <Icon name="close-circle" size={18} color="rgba(45, 45, 45, 0.4)" />
+                <XCircle size={18} weight="regular" color="rgba(45, 45, 45, 0.4)" />
               </TouchableOpacity>
             )}
           </View>
@@ -132,7 +132,7 @@ export const AddWineNoResultsScreen = () => {
                 end={{ x: 1, y: 1 }}
                 style={styles.addManuallyGradient}
               >
-                <Icon name="plus" size={20} color="white" />
+                <Plus size={20} weight="regular" color="white" />
                 <Text style={styles.addManuallyText}>Add Manually</Text>
               </LinearGradient>
             </TouchableOpacity>

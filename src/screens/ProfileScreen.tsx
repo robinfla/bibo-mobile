@@ -11,7 +11,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../auth/AuthContext'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft, CaretRight, UploadSimple, DownloadSimple, Bell, Sliders, Shield, Question, Info, SignOut } from 'phosphor-react-native'
 import { colors } from '../theme/colors'
 
 export const ProfileScreen = () => {
@@ -78,7 +78,7 @@ export const ProfileScreen = () => {
           onPress={() => navigation.goBack()}
           activeOpacity={0.7}
         >
-          <Icon name="chevron-left" size={24} color={colors.textSecondary} />
+          <CaretLeft size={24} weight="bold" color={colors.textSecondary} />
         </TouchableOpacity>
         
         <Text style={styles.title}>Bibo</Text>
@@ -119,9 +119,9 @@ export const ProfileScreen = () => {
             onPress={handleImportCSV}
             activeOpacity={0.7}
           >
-            <Icon name="upload" size={24} color={colors.coral} />
+            <UploadSimple size={24} weight="regular" color={colors.coral} />
             <Text style={styles.menuItemText}>Import from CSV</Text>
-            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
+            <CaretRight size={24} weight="bold" color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -129,9 +129,9 @@ export const ProfileScreen = () => {
             onPress={handleExportCSV}
             activeOpacity={0.7}
           >
-            <Icon name="download" size={24} color={colors.coral} />
+            <DownloadSimple size={24} weight="regular" color={colors.coral} />
             <Text style={styles.menuItemText}>Export to CSV</Text>
-            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
+            <CaretRight size={24} weight="bold" color={colors.textTertiary} />
           </TouchableOpacity>
         </View>
 
@@ -144,9 +144,9 @@ export const ProfileScreen = () => {
             onPress={handleNotifications}
             activeOpacity={0.7}
           >
-            <Icon name="bell-outline" size={24} color={colors.coral} />
+            <Bell size={24} weight="regular" color={colors.coral} />
             <Text style={styles.menuItemText}>Notifications</Text>
-            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
+            <CaretRight size={24} weight="bold" color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -154,9 +154,9 @@ export const ProfileScreen = () => {
             onPress={handlePreferences}
             activeOpacity={0.7}
           >
-            <Icon name="tune" size={24} color={colors.coral} />
+            <Sliders size={24} weight="regular" color={colors.coral} />
             <Text style={styles.menuItemText}>Preferences</Text>
-            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
+            <CaretRight size={24} weight="bold" color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -164,9 +164,9 @@ export const ProfileScreen = () => {
             onPress={handlePrivacy}
             activeOpacity={0.7}
           >
-            <Icon name="shield-outline" size={24} color={colors.coral} />
+            <Shield size={24} weight="regular" color={colors.coral} />
             <Text style={styles.menuItemText}>Privacy</Text>
-            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
+            <CaretRight size={24} weight="bold" color={colors.textTertiary} />
           </TouchableOpacity>
         </View>
 
@@ -179,9 +179,9 @@ export const ProfileScreen = () => {
             onPress={handleHelp}
             activeOpacity={0.7}
           >
-            <Icon name="help-circle-outline" size={24} color={colors.coral} />
+            <Question size={24} weight="regular" color={colors.coral} />
             <Text style={styles.menuItemText}>Help & Support</Text>
-            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
+            <CaretRight size={24} weight="bold" color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -189,9 +189,9 @@ export const ProfileScreen = () => {
             onPress={handleAbout}
             activeOpacity={0.7}
           >
-            <Icon name="information-outline" size={24} color={colors.coral} />
+            <Info size={24} weight="regular" color={colors.coral} />
             <Text style={styles.menuItemText}>About Bibo</Text>
-            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
+            <CaretRight size={24} weight="bold" color={colors.textTertiary} />
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -199,9 +199,9 @@ export const ProfileScreen = () => {
             onPress={handleSignOut}
             activeOpacity={0.7}
           >
-            <Icon name="logout" size={24} color={colors.danger} />
+            <SignOut size={24} weight="regular" color={colors.danger} />
             <Text style={[styles.menuItemText, styles.signOutText]}>Sign Out</Text>
-            <Icon name="chevron-right" size={24} color={colors.textTertiary} />
+            <CaretRight size={24} weight="bold" color={colors.textTertiary} />
           </TouchableOpacity>
         </View>
       </ScrollView>

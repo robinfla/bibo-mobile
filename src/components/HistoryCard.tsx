@@ -7,7 +7,7 @@ import {
   Image,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { Wine } from 'phosphor-react-native'
 import { colors } from '../theme/colors'
 
 interface HistoryCardProps {
@@ -268,7 +268,7 @@ export const HistoryCard: React.FC<HistoryCardProps> = ({
               styles.placeholderImage,
               { backgroundColor: colorStyle.backgroundColor }
             ]}>
-              <Icon name="bottle-wine" size={32} color={colorStyle.iconColor} />
+              <Wine size={32} weight="fill" color={colorStyle.iconColor} />
             </View>
           )}
         </View>

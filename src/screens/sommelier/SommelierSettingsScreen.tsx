@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft, CheckCircle } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -141,7 +141,7 @@ export const SommelierSettingsScreen = () => {
                 <Text style={styles.optionDescription}>{option.description}</Text>
                 {isSelected && (
                   <View style={styles.checkmark}>
-                    <Icon name="check-circle" size={20} color={colors.coral} />
+                    <CheckCircle size={20} weight="fill" color={colors.coral} />
                   </View>
                 )}
               </TouchableOpacity>
@@ -169,7 +169,7 @@ export const SommelierSettingsScreen = () => {
           onPress={() => navigation.goBack()}
           activeOpacity={0.7}
         >
-          <Icon name="chevron-left" size={28} color={colors.coral} />
+          <CaretLeft size={28} weight="bold" color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Sommelier Personality</Text>
         <TouchableOpacity

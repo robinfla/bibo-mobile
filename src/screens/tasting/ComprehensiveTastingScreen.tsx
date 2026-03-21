@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Ionicons } from '@expo/vector-icons'
+import { X, Users, MapPin, ForkKnife, Thermometer, Wine } from 'phosphor-react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { tastingsApi } from '../../api/tastings'
 import { TastingSlider } from '../../components/TastingSlider'
@@ -197,7 +197,7 @@ export const ComprehensiveTastingScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="close" size={24} color={colors.coral} />
+          <X size={24} weight="regular" color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Tasting Review</Text>
         <View style={{ width: 44 }} />
@@ -370,7 +370,7 @@ export const ComprehensiveTastingScreen = () => {
           <Text style={styles.sectionTitle}>Context</Text>
 
           <View style={styles.contextRow}>
-            <Ionicons name="people" size={20} color={colors.coral} />
+            <Users size={20} weight="regular" color={colors.coral} />
             <TextInput
               style={styles.contextInput}
               value={contextPeople}
@@ -381,7 +381,7 @@ export const ComprehensiveTastingScreen = () => {
           </View>
 
           <View style={styles.contextRow}>
-            <Ionicons name="location" size={20} color={colors.coral} />
+            <MapPin size={20} weight="regular" color={colors.coral} />
             <TextInput
               style={styles.contextInput}
               value={contextPlace}
@@ -392,7 +392,7 @@ export const ComprehensiveTastingScreen = () => {
           </View>
 
           <View style={styles.contextRow}>
-            <Ionicons name="restaurant" size={20} color={colors.coral} />
+            <ForkKnife size={20} weight="regular" color={colors.coral} />
             <TextInput
               style={styles.contextInput}
               value={contextMeal}
@@ -404,7 +404,7 @@ export const ComprehensiveTastingScreen = () => {
 
           <View style={styles.servingGrid}>
             <View style={styles.servingItem}>
-              <Ionicons name="thermometer" size={20} color={colors.coral} />
+              <Thermometer size={20} weight="regular" color={colors.coral} />
               <TextInput
                 style={styles.servingInput}
                 value={contextTemperature}
@@ -416,7 +416,7 @@ export const ComprehensiveTastingScreen = () => {
             </View>
 
             <View style={styles.servingItem}>
-              <Ionicons name="wine" size={20} color={colors.coral} />
+              <Wine size={20} weight="regular" color={colors.coral} />
               <TextInput
                 style={styles.servingInput}
                 value={contextDecanted}

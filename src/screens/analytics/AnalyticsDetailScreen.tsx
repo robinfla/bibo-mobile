@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretLeft, MagnifyingGlass, XCircle } from 'phosphor-react-native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
 
@@ -105,7 +105,7 @@ export const AnalyticsDetailScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleBack} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-          <Icon name="chevron-left" size={28} color={colors.coral} />
+          <CaretLeft size={28} weight="bold" color={colors.coral} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{title}</Text>
         <View style={{ width: 40 }} />
@@ -125,7 +125,7 @@ export const AnalyticsDetailScreen = () => {
 
       {/* Search */}
       <View style={styles.searchContainer}>
-        <Icon name="magnify" size={20} color={colors.textTertiary} style={styles.searchIcon} />
+        <MagnifyingGlass size={20} weight="regular" color={colors.textTertiary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder={getPlaceholder()}
@@ -135,7 +135,7 @@ export const AnalyticsDetailScreen = () => {
         />
         {searchQuery.length > 0 && (
           <TouchableOpacity onPress={() => setSearchQuery('')}>
-            <Icon name="close-circle" size={20} color={colors.textTertiary} />
+            <XCircle size={20} weight="regular" color={colors.textTertiary} />
           </TouchableOpacity>
         )}
       </View>

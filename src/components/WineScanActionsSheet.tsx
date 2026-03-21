@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { CaretRight } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { colors } from '../theme/colors'
 
@@ -119,7 +119,7 @@ export const WineScanActionsSheet: React.FC<WineScanActionsSheetProps> = ({
                   <Text style={styles.actionTitle}>Quick Tasting Review</Text>
                   <Text style={styles.actionDescription}>Rate + quick notes (2 min)</Text>
                 </View>
-                <Icon name="chevron-right" size={20} color="rgba(45, 45, 45, 0.3)" />
+                <CaretRight size={20} weight="bold" color="rgba(45, 45, 45, 0.3)" />
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -137,7 +137,7 @@ export const WineScanActionsSheet: React.FC<WineScanActionsSheetProps> = ({
                   <Text style={styles.actionTitle}>Comprehensive Tasting Review</Text>
                   <Text style={styles.actionDescription}>Full tasting notes + pairing</Text>
                 </View>
-                <Icon name="chevron-right" size={20} color="rgba(45, 45, 45, 0.3)" />
+                <CaretRight size={20} weight="bold" color="rgba(45, 45, 45, 0.3)" />
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -155,7 +155,7 @@ export const WineScanActionsSheet: React.FC<WineScanActionsSheetProps> = ({
                   <Text style={styles.actionTitle}>Add to Wishlist</Text>
                   <Text style={styles.actionDescription}>Save for future purchase</Text>
                 </View>
-                <Icon name="chevron-right" size={20} color="rgba(45, 45, 45, 0.3)" />
+                <CaretRight size={20} weight="bold" color="rgba(45, 45, 45, 0.3)" />
               </TouchableOpacity>
             </View>
 

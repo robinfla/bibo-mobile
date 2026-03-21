@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { X, Wine, XCircle, ArrowsLeftRight } from 'phosphor-react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { apiFetch } from '../api/client'
 import { colors } from '../theme/colors'
@@ -217,7 +217,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <Icon name="close" size={20} color={colors.textSecondary} />
+              <X size={20} weight="bold" color={colors.textSecondary} />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Remove Bottle</Text>
             <View style={styles.headerSpacer} />
@@ -238,7 +238,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
                   { backgroundColor: getWineColor(wineColor) },
                 ]}
               >
-                <Icon name="bottle-wine" size={28} color={colors.textInverse} />
+                <Wine size={28} weight="fill" color={colors.textInverse} />
               </View>
 
               <View style={styles.wineInfo}>
@@ -276,7 +276,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
                   <ActivityIndicator color="#fff" size="small" />
                 ) : (
                   <>
-                    <Icon name="close-circle-outline" size={20} color={colors.textInverse} />
+                    <XCircle size={20} weight="regular" color={colors.textInverse} />
                     <Text style={styles.actionButtonText}>Remove{'\n'}Bottle</Text>
                   </>
                 )}
@@ -299,7 +299,7 @@ export const QuickConsumeModal: React.FC<QuickConsumeModalProps> = ({
                   <ActivityIndicator color="#fff" size="small" />
                 ) : (
                   <>
-                    <Icon name="swap-horizontal" size={20} color={colors.textInverse} />
+                    <ArrowsLeftRight size={20} weight="regular" color={colors.textInverse} />
                     <Text style={styles.actionButtonText}>Transfer to{'\n'}Another Storage</Text>
                   </>
                 )}

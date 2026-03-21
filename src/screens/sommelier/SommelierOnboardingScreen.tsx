@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { ArrowRight } from 'phosphor-react-native'
 import { useNavigation } from '@react-navigation/native'
 import { apiFetch } from '../../api/client'
 import { colors } from '../../theme/colors'
@@ -192,7 +192,7 @@ export const SommelierOnboardingScreen = () => {
                 style={styles.completeGradient}
               >
                 <Text style={styles.completeButtonText}>Start Chatting</Text>
-                <Icon name="arrow-right" size={20} color={colors.textInverse} />
+                <ArrowRight size={20} weight="bold" color={colors.textInverse} />
               </LinearGradient>
             </TouchableOpacity>
           </View>

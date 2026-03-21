@@ -7,7 +7,7 @@ import {
   Animated,
   TouchableWithoutFeedback,
 } from 'react-native'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { Wine, PencilSimple, Plus } from 'phosphor-react-native'
 import { colors } from '../theme/colors'
 
 interface WineActionFABProps {
@@ -89,7 +89,7 @@ export const WineActionFAB: React.FC<WineActionFABProps> = ({
               <Text style={styles.labelText}>Consume Wine</Text>
             </View>
             <View style={styles.secondaryFAB}>
-              <Icon name="glass-wine" size={22} color={colors.textInverse} />
+              <Wine size={22} weight="fill" color={colors.textInverse} />
             </View>
           </TouchableOpacity>
         </Animated.View>
@@ -112,7 +112,7 @@ export const WineActionFAB: React.FC<WineActionFABProps> = ({
               <Text style={styles.labelText}>Add Tasting Note</Text>
             </View>
             <View style={styles.secondaryFAB}>
-              <Icon name="note-edit" size={22} color={colors.textInverse} />
+              <PencilSimple size={22} weight="regular" color={colors.textInverse} />
             </View>
           </TouchableOpacity>
         </Animated.View>
@@ -124,7 +124,7 @@ export const WineActionFAB: React.FC<WineActionFABProps> = ({
           activeOpacity={0.8}
         >
           <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
-            <Icon name="plus" size={28} color={colors.textInverse} />
+            <Plus size={28} weight="bold" color={colors.textInverse} />
           </Animated.View>
         </TouchableOpacity>
       </View>

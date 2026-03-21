@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { ArrowLeft, ShareNetwork, Link, DotsThree, Plus } from 'phosphor-react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { WineScanActionsSheet } from '../../components/WineScanActionsSheet'
 import { colors } from '../../theme/colors'
@@ -88,14 +88,14 @@ export const WineScanResultScreen = () => {
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity style={styles.headerButton} onPress={() => navigation.goBack()}>
-              <Icon name="arrow-left" size={24} color={colors.coral} />
+              <ArrowLeft size={24} weight="bold" color={colors.coral} />
             </TouchableOpacity>
             <View style={styles.headerActions}>
               <TouchableOpacity style={styles.headerButton}>
-                <Icon name="share-variant" size={20} color={colors.coral} />
+                <ShareNetwork size={20} weight="regular" color={colors.coral} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.headerButton}>
-                <Icon name="link-variant" size={20} color={colors.coral} />
+                <Link size={20} weight="regular" color={colors.coral} />
               </TouchableOpacity>
             </View>
           </View>
@@ -214,7 +214,7 @@ export const WineScanResultScreen = () => {
           onPress={() => setShowActions(true)}
           activeOpacity={0.7}
         >
-          <Icon name="dots-horizontal" size={18} color={colors.coral} />
+          <DotsThree size={18} weight="regular" color={colors.coral} />
           <Text style={styles.actionsButtonText}>Actions</Text>
         </TouchableOpacity>
 
@@ -229,7 +229,7 @@ export const WineScanResultScreen = () => {
             end={{ x: 1, y: 1 }}
             style={styles.addButtonGradient}
           >
-            <Icon name="plus" size={18} color={colors.textInverse} />
+            <Plus size={18} weight="regular" color={colors.textInverse} />
             <Text style={styles.addButtonText}>Add</Text>
           </LinearGradient>
         </TouchableOpacity>
