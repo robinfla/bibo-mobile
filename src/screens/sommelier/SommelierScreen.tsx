@@ -95,6 +95,7 @@ const BiboAvatar = () => (
 export const SommelierScreen = ({ route }: any) => {
   const navigation = useNavigation()
   const scrollViewRef = useRef<ScrollView>(null)
+  const textInputRef = useRef<TextInput>(null)
   const conversationId = route?.params?.conversationId
 
   const [messages, setMessages] = useState<Message[]>([])
@@ -621,6 +622,7 @@ export const SommelierScreen = ({ route }: any) => {
             style={styles.messagesScroll}
             contentContainerStyle={styles.messagesContent}
             showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
           >
             {/* Date separator */}
             {messages.length > 0 && (
@@ -686,8 +688,13 @@ export const SommelierScreen = ({ route }: any) => {
             ) : (
               <View style={styles.inputRow}>
                 {/* Text Input */}
-                <View style={styles.inputWrapper}>
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => textInputRef.current?.focus()}
+                  style={styles.inputWrapper}
+                >
                   <TextInput
+                    ref={textInputRef}
                     style={[styles.input, { height: Math.max(44, inputHeight) }]}
                     value={inputText}
                     onChangeText={setInputText}
@@ -710,7 +717,7 @@ export const SommelierScreen = ({ route }: any) => {
                       <Microphone size={20} weight="fill" color={colors.textTertiary} />
                     </TouchableOpacity>
                   )}
-                </View>
+                </TouchableOpacity>
 
                 {/* Send */}
                 <TouchableOpacity
@@ -856,7 +863,7 @@ const styles = StyleSheet.create({
   messagesContent: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 160,
+    paddingBottom: Platform.OS === 'ios' ? 200 : 190,
     flexGrow: 1,
     gap: 16,
   },
@@ -1087,7 +1094,7 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 50,
     paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'ios' ? 34 : 24,
+    paddingBottom: Platform.OS === 'ios' ? 100 : 90,
     paddingTop: 16,
     backgroundColor: 'rgba(254, 246, 237, 0.95)',
   },
