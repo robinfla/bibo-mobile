@@ -654,6 +654,29 @@ export const SommelierScreen = ({ route }: any) => {
               pointerEvents="none"
             />
 
+            {/* Suggestion Carousel (show above input when no messages) */}
+            {messages.length === 0 && (
+              <View style={styles.carouselContainer}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.carouselContent}
+                >
+                  {SUGGESTION_PROMPTS.map((suggestion, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.suggestionChip}
+                      onPress={() => handleSuggestionPress(suggestion)}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={styles.suggestionEmoji}>{suggestion.emoji}</Text>
+                      <Text style={styles.suggestionText}>{suggestion.text}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
+
             {isRecording ? (
               <VoiceRecordingBar
                 duration={recordingDuration}
@@ -717,29 +740,6 @@ export const SommelierScreen = ({ route }: any) => {
               </View>
             )}
           </View>
-
-          {/* Suggestion Carousel (show below input when no messages) */}
-          {messages.length === 0 && (
-            <View style={styles.carouselContainer}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.carouselContent}
-              >
-                {SUGGESTION_PROMPTS.map((suggestion, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={styles.suggestionChip}
-                    onPress={() => handleSuggestionPress(suggestion)}
-                    activeOpacity={0.7}
-                  >
-                    <Text style={styles.suggestionEmoji}>{suggestion.emoji}</Text>
-                    <Text style={styles.suggestionText}>{suggestion.text}</Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
-          )}
         </View>
       </KeyboardAvoidingView>
 
@@ -1047,12 +1047,7 @@ const styles = StyleSheet.create({
 
   // Suggestion carousel
   carouselContainer: {
-    position: 'absolute',
-    bottom: Platform.OS === 'ios' ? 174 : 164,
-    left: 0,
-    right: 0,
-    paddingVertical: 12,
-    zIndex: 45,
+    paddingBottom: 12,
   },
   carouselContent: {
     paddingHorizontal: 20,
@@ -1092,9 +1087,9 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 50,
     paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'ios' ? 100 : 90,
+    paddingBottom: Platform.OS === 'ios' ? 34 : 24,
     paddingTop: 16,
-    backgroundColor: 'rgba(254, 246, 237, 0.8)',
+    backgroundColor: 'rgba(254, 246, 237, 0.95)',
   },
   inputFade: {
     position: 'absolute',
