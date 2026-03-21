@@ -433,7 +433,7 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 18, fontWeight: '700', color: colors.muted[700], marginBottom: 4 },
   emptySubtitle: { fontSize: 14, color: colors.muted[500], textAlign: 'center', marginBottom: 16 },
   emptyButton: {
-    backgroundColor: colors.coral, borderRadius: 8,
+    backgroundColor: colors.coral, borderRadius: 16,
     paddingHorizontal: 20, paddingVertical: 12,
   },
   emptyButtonText: { color: colors.white, fontSize: 15, fontWeight: '600' },
@@ -495,13 +495,13 @@ const styles = StyleSheet.create({
   label: { fontSize: 13, fontWeight: '600', color: colors.muted[700], marginBottom: 6, marginTop: 14 },
   input: {
     backgroundColor: colors.muted[50], borderWidth: 1, borderColor: colors.muted[300],
-    borderRadius: 8, paddingHorizontal: 14, paddingVertical: 10,
+    borderRadius: 16, paddingHorizontal: 14, paddingVertical: 10,
     fontSize: 15, color: colors.muted[900],
   },
 
   typeRow: { flexDirection: 'row', gap: 10 },
   typeBtn: {
-    flex: 1, paddingVertical: 10, borderRadius: 8,
+    flex: 1, paddingVertical: 10, borderRadius: 16,
     borderWidth: 1, borderColor: colors.muted[300], alignItems: 'center',
   },
   typeBtnActive: { borderColor: colors.coral, backgroundColor: colors.coralLight },
@@ -531,12 +531,12 @@ const styles = StyleSheet.create({
   modalButtons: { flexDirection: 'row', gap: 12, marginTop: 20 },
   cancelBtn: {
     flex: 1, borderWidth: 1, borderColor: colors.muted[300],
-    borderRadius: 8, paddingVertical: 14, alignItems: 'center',
+    borderRadius: 16, paddingVertical: 14, alignItems: 'center',
   },
   cancelText: { color: colors.muted[700], fontSize: 16, fontWeight: '600' },
   saveBtn: {
     flex: 1, backgroundColor: colors.coral,
-    borderRadius: 8, paddingVertical: 14, alignItems: 'center',
+    borderRadius: 16, paddingVertical: 14, alignItems: 'center',
   },
   saveText: { color: colors.white, fontSize: 16, fontWeight: '600' },
 })

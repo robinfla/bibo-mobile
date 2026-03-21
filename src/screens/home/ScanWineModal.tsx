@@ -655,7 +655,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: colors.muted[300],
-    borderRadius: 8,
+    borderRadius: 16,
     paddingVertical: 12,
     alignItems: 'center',
   },
@@ -667,7 +667,7 @@ const styles = StyleSheet.create({
   primaryButton: {
     flex: 1,
     backgroundColor: colors.coral,
-    borderRadius: 8,
+    borderRadius: 16,
     paddingVertical: 12,
     alignItems: 'center',
   },
@@ -766,7 +766,7 @@ const styles = StyleSheet.create({
   },
   consumeButton: {
     backgroundColor: colors.coral,
-    borderRadius: 8,
+    borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 8,
     minWidth: 120,
@@ -783,7 +783,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.muted[300],
-    borderRadius: 8,
+    borderRadius: 16,
     paddingVertical: 12,
     alignItems: 'center',
     marginTop: 8,
@@ -797,7 +797,7 @@ const styles = StyleSheet.create({
   
   addToCellarButton: {
     backgroundColor: colors.coral,
-    borderRadius: 8,
+    borderRadius: 16,
     paddingVertical: 14,
     alignItems: 'center',
     marginBottom: 20,
@@ -811,7 +811,7 @@ const styles = StyleSheet.create({
   cancelButton: {
     borderWidth: 1,
     borderColor: colors.muted[300],
-    borderRadius: 8,
+    borderRadius: 16,
     paddingVertical: 12,
     alignItems: 'center',
     marginTop: 8,
@@ -863,7 +863,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.muted[50],
     borderWidth: 1,
     borderColor: colors.muted[300],
-    borderRadius: 8,
+    borderRadius: 16,
     paddingHorizontal: 14,
     paddingVertical: 10,
     fontSize: 15,
