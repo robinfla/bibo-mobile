@@ -615,7 +615,7 @@ export const SommelierScreen = ({ route }: any) => {
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={66}
+        keyboardVerticalOffset={68}
       >
         <View style={styles.chatContainer}>
           <ScrollView
