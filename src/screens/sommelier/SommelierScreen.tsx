@@ -15,8 +15,8 @@ import {
   Keyboard,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { List, Camera, Microphone, PaperPlaneTilt, Wine as WineIcon } from 'phosphor-react-native'
-import { useNavigation } from '@react-navigation/native'
+import { List, Camera, Microphone, PaperPlaneTilt } from 'phosphor-react-native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { Audio } from 'expo-av'
 import * as ImagePicker from 'expo-image-picker'
 import { apiFetch } from '../../api/client'
@@ -88,9 +88,7 @@ const TypingDots = () => {
 }
 
 const BiboAvatar = () => (
-  <View style={styles.avatarCircle}>
-    <WineIcon size={16} weight="regular" color={colors.coral} />
-  </View>
+  <View style={styles.avatarCircle} />
 )
 
 export const SommelierScreen = ({ route }: any) => {
@@ -139,6 +137,15 @@ export const SommelierScreen = ({ route }: any) => {
       keyboardWillHide.remove()
     }
   }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Auto-focus input when navigating to this screen
+      setTimeout(() => {
+        textInputRef.current?.focus()
+      }, 300)
+    }, [])
+  )
 
   const fetchConversationHistory = async (convId: string) => {
     try {
@@ -538,7 +545,7 @@ export const SommelierScreen = ({ route }: any) => {
                         <Image source={{ uri: wine.imageUrl }} style={styles.wineImage} />
                       ) : (
                         <View style={styles.wineImagePlaceholder}>
-                          <WineIcon size={24} weight="regular" color="rgba(242, 143, 166, 0.7)" />
+                          <Text style={{ fontSize: 24, opacity: 0.7 }}>🍷</Text>
                         </View>
                       )}
                     </View>
