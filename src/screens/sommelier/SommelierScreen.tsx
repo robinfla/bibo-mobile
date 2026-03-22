@@ -863,7 +863,7 @@ const styles = StyleSheet.create({
   messagesContent: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: Platform.OS === 'ios' ? 180 : 170,
+    paddingBottom: Platform.OS === 'ios' ? 200 : 190,
     flexGrow: 1,
     gap: 16,
   },
@@ -1089,12 +1089,12 @@ const styles = StyleSheet.create({
   // Input
   inputContainer: {
     position: 'absolute',
-    bottom: 0,
+    bottom: Platform.OS === 'ios' ? 64 : 64,
     left: 0,
     right: 0,
     zIndex: 50,
     paddingHorizontal: 20,
-    paddingBottom: Platform.OS === 'ios' ? 80 : 70,
+    paddingBottom: Platform.OS === 'ios' ? 34 : 16,
     paddingTop: 16,
     backgroundColor: 'rgba(254, 246, 237, 0.95)',
   },
