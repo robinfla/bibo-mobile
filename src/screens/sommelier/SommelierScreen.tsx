@@ -12,6 +12,7 @@ import {
   Image,
   Alert,
   Animated,
+  Keyboard,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { List, Camera, Microphone, PaperPlaneTilt, Wine as WineIcon } from 'phosphor-react-native'
@@ -109,6 +110,7 @@ export const SommelierScreen = ({ route }: any) => {
   const [recordingDuration, setRecordingDuration] = useState(0)
   const [audioRecording, setAudioRecording] = useState<Audio.Recording | null>(null)
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const [keyboardVisible, setKeyboardVisible] = useState(false)
 
   useEffect(() => {
     if (conversationId) {
@@ -121,6 +123,22 @@ export const SommelierScreen = ({ route }: any) => {
       scrollViewRef.current?.scrollToEnd({ animated: true })
     }, 100)
   }, [messages])
+
+  useEffect(() => {
+    const keyboardWillShow = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => setKeyboardVisible(true)
+    )
+    const keyboardWillHide = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      () => setKeyboardVisible(false)
+    )
+
+    return () => {
+      keyboardWillShow.remove()
+      keyboardWillHide.remove()
+    }
+  }, [])
 
   const fetchConversationHistory = async (convId: string) => {
     try {
@@ -615,7 +633,6 @@ export const SommelierScreen = ({ route }: any) => {
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={68}
       >
         <View style={styles.chatContainer}>
           <ScrollView
@@ -649,7 +666,7 @@ export const SommelierScreen = ({ route }: any) => {
           </ScrollView>
 
           {/* Input Container */}
-          <View style={styles.inputContainer}>
+          <View style={[styles.inputContainer, !keyboardVisible && styles.inputContainerClosed]}>
             {/* Fade gradient above input */}
             <LinearGradient
               colors={['rgba(254, 246, 237, 0)', 'rgba(254, 246, 237, 0.95)']}
@@ -1098,6 +1115,9 @@ const styles = StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? 34 : 16,
     paddingTop: 16,
     backgroundColor: 'rgba(254, 246, 237, 0.95)',
+  },
+  inputContainerClosed: {
+    bottom: Platform.OS === 'ios' ? 68 : 64,
   },
   inputFade: {
     position: 'absolute',
